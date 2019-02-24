@@ -2,7 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 from .matlab_utils import find
 from .calc_equations import calc_equations
-from .calc_states4 import calc_states
+from .calc_states4 import calc_states, check_sd
 from .classification4 import classification
 from .calc_dict import calc_dict
 from .SCLP_pivot_caseI import SCLP_pivot_caseI
@@ -43,21 +43,29 @@ def SCLP_solver(x_0, del_x_0, q_N, del_q_N, T, del_T, prim_name, dual_name, Thet
         spdx = sp.hstack(base_sequence['dx'])
         spdq = sp.hstack(base_sequence['dq'])
 
+        if(len(set(base_sequence['places'])) < len(base_sequence['places'])):
+            print('hwew')
+
         sdx = spdx.sign().toarray()
         sdq = spdq.sign().toarray()
+        check_sd(sdx, True)
+        check_sd(sdq, False)
         dx = spdx.toarray()
         dq = spdq.toarray()
-        if STEPCOUNT == 1441:
+        if STEPCOUNT == 8757:
             print('bbb')
 
         tau, dtau = calc_equations(klist, jlist, pivots, x_0, del_x_0, q_N, del_q_N, T, del_T, dx, dq)
         x, del_x, q, del_q = calc_states(dx, dq, x_0, del_x_0, q_N, del_q_N, tau, dtau, sdx, sdq, tolerance)
         cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x, del_x, q, del_q,
                                                                prim_name, B1, B2, sdx, sdq, tolerance, 1)
-        if problem['result'] == 2 or problem['result'] == 3:
+        if problem['result'] == 1 or problem['result'] == 2 or problem['result'] == 3:
             tol_coeff = 10 * tol_coeff
             prevProblem = problem['result']
+            if 'data' in problem.keys():
+                print('Problem data: ',str(problem['data']))
         elif problem['result'] == 4:
+            print('More than two variables leave in time shrink ....')
             while tol_coeff <= 10000 and problem['result'] == 4:
                 if tol_coeff < 10 and prevProblem !=2:
                     if N2 - N1 == 2 or tol_coeff <= 0.001:
@@ -67,7 +75,7 @@ def SCLP_solver(x_0, del_x_0, q_N, del_q_N, T, del_T, prim_name, dual_name, Thet
                 else:
                     tol_coeff = 10 * tol_coeff
                 print('trying to resolve * ', tol_coeff, ' ...')
-            cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x, del_x, q, del_q,
+                cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x, del_x, q, del_q,
                                                                    prim_name, B1, B2, sdx, sdq, tolerance, tol_coeff)
             if problem['result'] == 0:
                 tol_coeff = 1
@@ -92,29 +100,32 @@ def SCLP_solver(x_0, del_x_0, q_N, del_q_N, T, del_T, prim_name, dual_name, Thet
                 N2 = lastCollision['N2']
                 #             v1 = lastCollision.v2 #change varible order
                 #             v2 = lastCollision.v1 #change varible order
-                Nold = N2 - N1 - 1
-                Nnew = Nold + lastCollision['Nnew']
-                lplaces = np.logical_and(base_sequence['places'] > N1, base_sequence['places'] <= N1 + Nnew)
+                Nnew = lastCollision['Nnew']
+                N2_cor = N2+Nnew
+                N2b = max(N2, N2_cor)
+                lplaces = np.logical_or(np.array(base_sequence['places']) <= N1,
+                                        np.array(base_sequence['places']) >= N2b)
                 places = find(lplaces)
-                if len(places) == len(base_sequence['places']):
-                    newMat, newPlace = calc_dict(base_sequence, N1, N1 + Nnew + 1, pivots)
+                if len(places) == 0:
+                    newMat, newPlace = calc_dict(base_sequence, N1, N2b, pivots)
                     base_sequence['bases'] = [newMat]
                     base_sequence['places'] = [newPlace]
                 else:
-                    for i in np.flip(np.sort(places)):
-                        del base_sequence['bases'][i]
-                    base_sequence['places'] = [p if p<N1 + Nnew + 1 else p - (Nnew - Nold) for i,p in enumerate(base_sequence['places']) if not lplaces[i]]
+                    base_sequence['bases'] = [base_sequence['bases'][i] for i in places]
+                    newPlace = [base_sequence['places'][i] for i in places]
+                    base_sequence['places'] = [v if v < N2b else v - Nnew for v in newPlace]
+                Npivots = len(lastCollision['old_pivots'])
                 if N1 > 0:
-                    if N1 + Nnew == len(base_sequence['dx']):
+                    if N2_cor - 1 == len(base_sequence['dx']):
                             pivots = pivots[0:N1] + lastCollision['old_pivots']
                     else:
-                        pivots = pivots[0:N1] + lastCollision['old_pivots'] + pivots[N1 + Nnew + 1:]
+                        pivots = pivots[0:N1] + lastCollision['old_pivots'] + pivots[N1 + Nnew + Npivots:]
                 else:
-                    pivots = lastCollision['old_pivots'] + pivots[(N1 + Nnew + 1):]
-                prim_name = np.hstack((prim_name[:, 0:N1+1], lastCollision['old_pn'], prim_name[:, (N1 + Nnew + 1):]))
-                dual_name = np.hstack((dual_name[:, 0:N1+1], lastCollision['old_dn'], dual_name[:, (N1 + Nnew + 1):]))
-                base_sequence['dx'] = base_sequence['dx'][0:N1+1] + lastCollision['old_dx'] + base_sequence['dx'][N1 + Nnew + 1:]
-                base_sequence['dq'] = base_sequence['dq'][0:N1+1] + lastCollision['old_dq'] + base_sequence['dq'][N1 + Nnew + 1:]
+                    pivots = lastCollision['old_pivots'] + pivots[(N1 + Nnew + Npivots):]
+                prim_name = np.hstack((prim_name[:, 0:N1+1], lastCollision['old_pn'], prim_name[:, N2_cor:]))
+                dual_name = np.hstack((dual_name[:, 0:N1+1], lastCollision['old_dn'], dual_name[:, N2_cor:]))
+                base_sequence['dx'] = base_sequence['dx'][0:N1+1] + lastCollision['old_dx'] + base_sequence['dx'][N2_cor:]
+                base_sequence['dq'] = base_sequence['dq'][0:N1+1] + lastCollision['old_dq'] + base_sequence['dq'][N2_cor:]
                 # Kset_0 = klist[np.logical_or(x_0 > 0, np.logical_and(x_0 == 0, del_x_0 > 0))]
                 # Jset_N = jlist[np.logical_or(q_N > 0, np.logical_and(q_N == 0, del_q_N > 0))]
                 # flag = True
@@ -182,8 +193,12 @@ def SCLP_solver(x_0, del_x_0, q_N, del_q_N, T, del_T, prim_name, dual_name, Thet
         ITERATION[DEPTH] = ITERATION[DEPTH] + 1
         theta1 = theta + Delta
 
+        if theta1 > 1 and DEPTH > 0:
+            print("Theta > 1....")
+            #cases = 'theta>1_'
+
         print(STEPCOUNT, DEPTH, ITERATION[DEPTH], JJ, 'x', KK, NN, theta, theta1, cases, N1, N2, v1, v2, len(base_sequence['places']))
-        lastCollision = {'cases', cases, 'theta', theta}
+        lastCollision = {'cases': cases, 'theta': theta}
         if cases == 'Case i__':
             base_sequence, pivots, prim_name, dual_name = SCLP_pivot_caseI(base_sequence, pivots, prim_name, dual_name, N1, N2, NN)
 
@@ -191,13 +206,13 @@ def SCLP_solver(x_0, del_x_0, q_N, del_q_N, T, del_T, prim_name, dual_name, Thet
             if cases == 'Case ii_':
                 cor_N1 = N1+1
                 if N1 > -1:
-                    old_pivots = pivots[N1:N2]
+                    old_pivots = pivots[N1:N2+1].copy()
                 else:
-                    old_pivots = pivots[N1+1:N2]
-                old_dx = base_sequence['dx'][cor_N1: N2]
-                old_dq = base_sequence['dq'][cor_N1: N2]
-                old_pn = prim_name[:, cor_N1: N2]
-                old_dn = dual_name[:, cor_N1: N2]
+                    old_pivots = pivots[N1+1:N2+1].copy()
+                old_dx = base_sequence['dx'][cor_N1: N2].copy()
+                old_dq = base_sequence['dq'][cor_N1: N2].copy()
+                old_pn = prim_name[:, cor_N1: N2].copy()
+                old_dn = dual_name[:, cor_N1: N2].copy()
 
             prim_name, dual_name, pivots, base_sequence, STEPCOUNT, ITERATION = SCLP_pivot(Kset_0, Jset_N, prim_name, dual_name, N1, N2, v1,
                                                                      v2, pivots, base_sequence, KK, JJ, NN, totalK, totalJ, DEPTH,
@@ -206,7 +221,7 @@ def SCLP_solver(x_0, del_x_0, q_N, del_q_N, T, del_T, prim_name, dual_name, Thet
             newNN = len(base_sequence['dx'])
             if cases == 'Case ii_':
                 lastCollision = {'cases': cases, 'Delta': Delta,
-                                 'N1': N1, 'N2': N2, 'v1': v1, 'v2': v2, 'Nnew': NN - newNN, 'old_pivots': old_pivots,
+                                 'N1': N1, 'N2': N2, 'v1': v1, 'v2': v2, 'Nnew': newNN-NN, 'old_pivots': old_pivots,
                                  'old_pn': old_pn, 'old_dn': old_dn, 'old_dx': old_dx, 'old_dq': old_dq}
 
             #statData = {'cases': cases, 'N1': N1, 'N2': N2, 'minBases': settings['minBases'],

@@ -126,7 +126,7 @@ def SCLP_pivot(Kset_0, Jset_N, prim_name, dual_name, N1, N2, v1, v2, pivots, bas
             Jexclude = -np.intersect1d(dbaseDD[dbaseDD < 0], dbaseB2[dbaseB2 < 0], assume_unique=True)
         elif N2 == NN:
             Kexclude =  np.intersect1d(pbaseDD[pbaseDD > 0], pbaseB1[pbaseB1 > 0], assume_unique=True)
-            Jex1 =  np.intersect1d(dbaseDD[dbaseDD < 0], -Jset_N, assume_unique=True)
+            Jex1 =  np.intersect1d(dbaseDD[dbaseDD < 0], [-v for v in Jset_N], assume_unique=True)
             Jexclude = -np.intersect1d(Jex1, dbaseB1[dbaseB1 < 0], assume_unique=True)
         else:
             Kexclude =  np.intersect1d(pbaseB1[pbaseB1 > 0], pbaseB2[pbaseB2 > 0], assume_unique=True)
@@ -166,11 +166,11 @@ def SCLP_pivot(Kset_0, Jset_N, prim_name, dual_name, N1, N2, v1, v2, pivots, bas
     #print(N1, N2, Nnew)
     if len(places) == 0:
         if AAN1 is not None:
-            newPlace = N1
-            newMat = AAN1
+            newPlace = [N1]
+            newMat = [AAN1]
         else:
-            newPlace = N1 + Nnew + 1
-            newMat = AAN2
+            newPlace = [N1 + Nnew + 1]
+            newMat = [AAN2]
     else:
         newMat = [base_sequence['bases'][i] for i in places]
         newPlace = [base_sequence['places'][i] for i in places]
@@ -180,8 +180,8 @@ def SCLP_pivot(Kset_0, Jset_N, prim_name, dual_name, N1, N2, v1, v2, pivots, bas
                          'bases': newMat, 'places': newPlace}
     if N2 < NN and DEPTH == 0:
         new_base_sequence = insertMatrix(new_base_sequence, AAN2, N1+Nnew+1)
-    elif N1 == NN and DEPTH == 0:
-        new_base_sequence = insertMatrix(new_base_sequence, AAN2, N1+1)
+    # elif N1 == NN and DEPTH == 0:
+    #     new_base_sequence = insertMatrix(new_base_sequence, AAN2, N1+1)
     if Nnew == 1 and DEPTH == 0:
         new_base_sequence = insertMatrix(new_base_sequence, {'prim_name': pbaseDD, 'dual_name': dbaseDD, 'A': DD}, N1+Nnew)
     return pn_new, dn_new, pivots_new, new_base_sequence, STEPCOUNT, ITERATION

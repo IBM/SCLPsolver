@@ -70,7 +70,9 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
         while ptest.size > 0:
             i = ptest[0]
             mat = np.divide(-A[i + 1, 1:], A[0, 1:], out=np.zeros_like(A[i + 1, 1:]), where=A[0, 1:]!=0)
-            j = np.argmax(mat * (ds != 1))
+            mat[ds == 1] = 0
+            j = np.argmax(mat)
+            #j = np.argmax(mat * (ds != 1))
             if mat[j] <= 0:
                 A[0, 0] = -np.inf
                 err['result'] = 1
@@ -82,7 +84,9 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
         while dtest.size > 0:
             j = dtest[0]
             mat = np.divide(A[1:, j + 1], A[1:, 0], out=np.zeros_like(A[1:, j + 1]), where=A[1:, 0] != 0)
-            i = np.argmax(mat * (ps != 1))
+            mat[ps == 1] = 0
+            i = np.argmax(mat)
+            #i = np.argmax(mat * (ps != 1))
             if mat[i] <= 0:
                 A[0, 0] = np.inf
                 err['result'] = 2
@@ -92,28 +96,30 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
             dtest = find(np.logical_and(ds == 0, A[0, 1:] < 0))
     elif ptest.size > 0 and dtest.size > 0:
         B = np.zeros((mm+1,nn+1))
-        B[:-1,:-1] = A
         B[:-1,nn:nn+1] = np.random.rand(mm, 1) + 1
-        B[mm,:-1] = np.random.rand(1, nn) + 1
-        mat = np.divide(-A[0, 1:], B[mm, 1:-1], out=np.zeros_like(A[0, 1:]), where=B[mm, 1:-1] != 0 )
-        j = np.argmax(mat * (B[mm, 1:-1] > 0) * (ds !=1))
+        B[mm:mm+1,:-1] = np.random.rand(1, nn) + 1
+        B[:-1, :-1] = A
+        mat = np.divide(-A[0, 1:], B[mm, 1:-1], out=np.zeros_like(A[0, 1:]), where=np.logical_and(B[mm, 1:-1] > 0, ds != 1) )
+        j = np.argmax(mat)
         mu1 = mat[j]
-        mat = np.divide(-A[1:, 0], B[1:-1, nn], out=np.zeros_like(A[1:, 0]), where=B[1:-1, nn] != 0 )
-        i = np.argmax(mat * (B[1:-1,nn] > 0) * (ps !=1))
+        mat = np.divide(-A[1:, 0], B[1:-1, nn], out=np.zeros_like(A[1:, 0]), where=np.logical_and(B[1:-1, nn] >0, ps != 1) )
+        i = np.argmax(mat)
         mu2 = mat[i]
         mu = max(mu1,mu2)
         while mu > 0:
             if mu1 > mu2:
-                mat = np.divide(B[1:-1, j+1], B[1:-1, 0], out=np.zeros_like(B[1:-1, j+1]), where=B[1:-1, 0] != 0) + mu * B[1:-1, nn]
-                i = np.argmax(mat * (ps != 1))
+                mat = np.divide(B[1:-1, j+1], B[1:-1, 0] + mu * B[1:-1, nn], out=np.zeros_like(B[1:-1, j+1]), where=B[1:-1, 0] != 0)
+                mat[ps == 1] = 0
+                i = np.argmax(mat)
                 if mat[i] <= 0:
                     B[0, 0] = np.inf
                     err['result'] = 2
                     err['message'] = '***  problem is dual infeasible'
                     return B[:-1,:-1], pn, dn, ps, ds, err
             else:
-                mat = np.divide(B[i + 1, 1:-1], B[0, 1:-1], out=np.zeros_like(B[i + 1, 1:-1]), where=B[0, 1:-1] != 0) + mu * B[mm, 1:-1]
-                j = np.argmax(mat * (ds != 1))
+                mat = np.divide(-B[i + 1, 1:-1], B[0, 1:-1] + mu * B[mm, 1:-1], out=np.ones_like(B[i + 1, 1:-1])* -np.inf, where=B[0, 1:-1] != 0)
+                mat[ds ==1] = 0
+                j = np.argmax(mat)
                 if mat[j] <= 0:
                     B[0, 0] = - np.inf
                     err['result'] = 1
@@ -123,7 +129,7 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
             mat = np.divide(-B[0, 1:-1], B[mm, 1:-1], out=np.zeros_like(B[0, 1:-1]), where=np.logical_and(B[mm, 1:-1] > 0, ds != 1))
             j = np.argmax(mat)
             mu1 = mat[j]
-            mat = np.divide(-B[1:-1, 0], B[1:-1, nn], out=np.zeros_like(B[1:-1, 0]), where=np.logical_and(B[1:-1, nn] > 0, ps != 1))
+            mat = np.divide(-B[1:-1, 0], B[1:-1, nn], out=np.zeros_like(B[1:-1, 0]), where=np.logical_and(B[1:-1, nn] >0, ps != 1))
             i = np.argmax(mat)
             mu2 = mat[i]
             mu = max(mu1, mu2)

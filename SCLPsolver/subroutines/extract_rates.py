@@ -13,10 +13,8 @@ def extract_rates(prim_name, dual_name, dct, KK, JJ, totalK = None, totalJ = Non
     jn2 = -dual_name[jlist2]
     if KK < totalK:
         kn2 =  dual_name[dual_name > 0]
-        kord = np.argsort(np.hstack((kn1, kn2)))
-        isKn1 = kord < len(kn1)
-        dd = np.arange(KK)[isKn1][kord[isKn1]]
-        dx = coo_matrix((dct[klist1+1,0], (dd, np.zeros(len(dd)))), shape=(KK, 1))
+        kord = np.argsort(np.argsort(np.hstack((kn1, kn2))))[:len(kn1)]
+        dx = coo_matrix((dct[klist1+1,0], (kord, np.zeros(len(kord)))), shape=(KK, 1))
     else:
         dx = coo_matrix((dct[klist1+1,0], (kn1-1, np.zeros(len(kn1)))), shape=(KK, 1))
     if JJ < totalJ:

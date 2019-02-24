@@ -48,3 +48,30 @@ def _calc_primal(state, dstate, tau, state0, sd, tolerance):
 def _calc_dual(state, dstate, tau, state0, sd, tolerance):
     state[:, :] = np.fliplr(np.cumsum(np.fliplr(np.hstack((dstate * np.hstack(tau[:, None]), state0))), 1))
     state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+
+def check_state(state, tolerance):
+    test1 = state < -tolerance
+    if np.any(test1):
+        print('Negative state!')
+        print(np.where(test1))
+
+def check_sd(sd, is_primal):
+    xsd = sd == 0
+    if is_primal:
+        test1 = np.logical_and(xsd[:,1:], sd[:,:-1] == 1)
+        if np.any(test1):
+            print('Positive state jumping to 0!')
+            print(np.where(test1))
+        test2 = np.logical_and(xsd[:,:-1], sd[:,1:] == -1)
+        if np.any(test2):
+            print('State going to negative direction!')
+            print(np.where(test2))
+    else:
+        test1 = np.logical_and(xsd[:, :-1], sd[:, 1:] == 1)
+        if np.any(test1):
+            print('Positive state jumping to 0!')
+            print(np.where(test1))
+        test2 = np.logical_and(xsd[:, 1:], sd[:, :-1] == -1)
+        if np.any(test2):
+            print('State going to negative direction!')
+            print(np.where(test2))

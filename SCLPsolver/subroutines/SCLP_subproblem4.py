@@ -55,7 +55,7 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
             J_N = []
         if not isinstance(v2, list):
             if v2 < 0:
-                J_N = J_N.append(-v2)
+                J_N.append(-v2)
         from .SCLP_pivot4 import SCLP_pivot
         pn1,dn1,pivots,new_base_sequence, STEPCOUNT, ITERATION = SCLP_pivot(K_0,J_N,pn1,dn1,0,1,[],v1,pivots, new_base_sequence,
                                                                             lk, lj, 1, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
@@ -73,7 +73,7 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
             J_N = []
         if not isinstance(v1, list):
             if v1 > 0:
-                K_0 = K_0.append(v1)
+                K_0.append(v1)
         from .SCLP_pivot4 import SCLP_pivot
         pn1,dn1,pivots,new_base_sequence, STEPCOUNT, ITERATION = SCLP_pivot(K_0,J_N,pn1,dn1,-1,0,v2,[],pivots,new_base_sequence,
                                                                             lk, lj, 1, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
@@ -165,15 +165,42 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
     if N1 != -1 and Npivots > 0:
         pm1 = AAN1['prim_name']
         dm1 = AAN1['dual_name']
+        pp1 = np.setdiff1d(pn1[:,0], pm1)
+        pp2 = np.setdiff1d(dn1[:,0], dm1)
+        if len(pp1) > 1 or len(pp2) > 1:
+            print('Incomplete pivot...')
+            raise Exception()
+        elif len(pp1) == 0 and len(pp2) == 0:
+            pass
+        elif len(pp1) == 1 and len(pp2) == 1:
+            if pivots[0][0] == pp2[0] and pivots[0][1] == pp1[0]:
+                pass
+            elif pivots[0][0] != pp2[0] and pivots[0][1] != pp1[0]:
+                piv = [[pp2[0],pp1[0]]]
+                pivots = piv + pivots
+            else:
+                print('Incompatible pivots...')
+                raise Exception()
+        else:
+            print('Undefined pivot...')
+            raise Exception()
         DD1 = AAN1['A'].copy()
         k1 = len(pm1)
         l1 = len(dm1)
         if N2 != NN:
-            pivots = pivots[:-1]
-            Npivots -= 1
-        pn_new=np.empty(shape=(k1,Npivots), dtype=int)
+            pp1 = np.setdiff1d(pn1[:, -1], AAN2['prim_name'])
+            pp2 = np.setdiff1d(dn1[:, -1], AAN2['dual_name'])
+            if len(pp1) > 1 or len(pp2) > 1:
+                print('Incomplete pivot...')
+                raise Exception()
+            elif len(pp1) == 0 and len(pp2) == 0:
+                pivots = pivots[:-1]
+                Npivots -= 1
+            elif len(pp1) == 1 and len(pp2) == 1:
+                pass
+        pn_new=np.empty(shape=(k1,len(pivots)), dtype=int)
         #pn_new =np.union1d(pn1, Kexclude)
-        dn_new=np.empty(shape=(l1,Npivots), dtype=int)
+        dn_new=np.empty(shape=(l1,len(pivots)), dtype=int)
         new_base_sequence = {'dx': [], 'dq': [], 'bases': [], 'places': []}
         zz1 = np.zeros(k1)
         zz2 = np.zeros(l1)
@@ -197,11 +224,13 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
         zz2 = np.zeros(l1)
         for i,piv1 in enumerate(reversed(pivots)):
             [DD1,pm1,dm1,zz1,zz2] = full_pivot(DD1,find(pm1==piv1[1]),find(dm1==piv1[0]),pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
-            pn_new[:, i] = pm1
-            dn_new[:, i] = dm1
+            pn_new[:, Npivots-i-1] = pm1
+            dn_new[:, Npivots-i-1] = dm1
             dx, dq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
             new_base_sequence['dx'].append(dx)
             new_base_sequence['dq'].append(dq)
+        new_base_sequence['dx'].reverse()
+        new_base_sequence['dq'].reverse()
     else:
         pn_new = np.vstack(np.union1d(pn1[:,0], Kexclude))
         dn_new = np.vstack(np.union1d(dn1[:,0], -Jexclude))

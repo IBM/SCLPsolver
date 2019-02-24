@@ -12,8 +12,8 @@ def relative_to_project(file_path):
         proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
         return os.path.join(proj, file_path)
 
-seed = 1003
-K = 2000
+seed = 1001
+K = 1000
 I = 200
 G = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/G.dat'))
 F = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/F.dat'))

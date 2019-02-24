@@ -17,6 +17,12 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,prim_name,B1,B2, s
 #   result = 5 state problem + compound problem
 #   result = 6 time problem + compound problem
 #   result = 7 state problem + time problem + compound problem
+
+    max_tol_coeff = 0.01/tolerance
+    min_tol_coeff = 0.01
+    if tol_coeff == max_tol_coeff:
+        print("Maximum tolerance coefficient reached")
+        raise Exception()
     NN = dx.shape[1]
     problem = {'result': 0, 'stateProblem': [], 'timeProblem': [], 'compoundProblem': {'result':0, 'data': []}}
     Delta = 0
@@ -95,6 +101,11 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,prim_name,B1,B2, s
                 return case, Delta, N1, N2, v1, v2, problem
             elif vlist.size == 2:
                 case = 'Case ii_'
+                if (N2-N1)%2 > 0:
+                    if tol_coeff<100:
+                        pass
+                        #print("Incompatible interval number... resolving * ", tol_coeff*10)
+                        #return classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,prim_name,B1,B2, sdx, sdq, tolerance, tol_coeff*10)
                 order_ratio = calc_order_ratio(vlist[0],vlist[1],N1,N2,klist,jlist,dx,dq,x,del_x,q,del_q,tau,dtau,Delta/2)
                 if abs(order_ratio) < 1: #the strange case when R < 0 should be perferctly reviewed
                     v1 = vlist[0]
