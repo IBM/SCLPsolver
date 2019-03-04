@@ -1,22 +1,25 @@
 import numpy as np
-from .extract_rates import extract_rates
+from .extract_rates5 import extract_rates
+from .SCLP_base_sequence import SCLP_base_sequence
+from .SCLP_solution6 import SCLP_solution
+from .sparse_matrix_constructor import sparse_matrix_constructor
 from .pivot import full_pivot
 from .matlab_utils import find
 
 
+#'#@profile
 def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pbaseB2,
                      AAN1,AAN2, KK, JJ, NN, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
 
 
-    #[~, NN] = size(prim_name)
+
     # Excluding the k's and j's which are > 0
     lKDDin = np.logical_not(np.in1d(pbaseDD, Kexclude, assume_unique=True))
     lJDDin = np.logical_not(np.in1d(dbaseDD, -Jexclude, assume_unique=True))
-    # size(pbaseDD)
-    # size(dbaseDD)
     pbaseDDred = pbaseDD[lKDDin]
     dbaseDDred = dbaseDD[lJDDin]
     DDred = DD[find(np.hstack(([True],lKDDin)))[:,None], find(np.hstack(([True],lJDDin)))]
+    #DDred = DD[find(np.insert(lKDDin, 0, True))[:, None], find(np.insert(lJDDin, 0, True))]
     if len(pbaseB1) > 0:
         pbaseB1red = pbaseB1[np.logical_not(np.in1d(pbaseB1,Kexclude, assume_unique=True))]
     else:
@@ -33,12 +36,10 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
     lj = np.size(jlist)
 
     # The starting sequence
-    pn1 = np.vstack(pbaseDDred)
-    dn1 = np.vstack(dbaseDDred)
+    new_bs = SCLP_base_sequence({'prim_name': pbaseDDred, 'dual_name': dbaseDDred,'A': DDred.copy()})
     dx, dq = extract_rates(pbaseDDred, dbaseDDred, DDred, lk, lj, totalK, totalJ)
-    new_base_sequence = {'dx': [dx], 'dq': [dq], 'bases': [{'prim_name': pbaseDDred, 'dual_name': dbaseDDred,'A': DDred.copy()}],
-                         'places': [0]}
-    pivots=[]
+    #TODO: check if we need vstack
+    solution = SCLP_solution(None, new_bs, dx, dq)
     # performing the left and right first pivots
     #		the right pivot:
     if np.size(pbaseB2red) > 0:
@@ -55,9 +56,12 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
         if not isinstance(v2, list):
             if v2 < 0:
                 J_N.append(-v2)
-        from .SCLP_pivot4 import SCLP_pivot
-        pn1,dn1,pivots,new_base_sequence, STEPCOUNT, ITERATION = SCLP_pivot(K_0,J_N,pn1,dn1,0,1,[],v1,pivots, new_base_sequence,
-                                                                            lk, lj, 1, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+        from .SCLP_pivot6 import SCLP_pivot
+        solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(K_0,J_N,solution,0,1,[],v1, lk, lj, 1, totalK, totalJ,
+                                                    DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+        if pivot_problem['result'] == 1:
+            print('Problem during right pivot...')
+            return [], [], [], 0, STEPCOUNT, ITERATION, pivot_problem
     #		the left pivot:
     if np.size(pbaseB1red) > 0:
         if not isinstance(v2, list):
@@ -73,9 +77,12 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
         if not isinstance(v1, list):
             if v1 > 0:
                 K_0.append(v1)
-        from .SCLP_pivot4 import SCLP_pivot
-        pn1,dn1,pivots,new_base_sequence, STEPCOUNT, ITERATION = SCLP_pivot(K_0,J_N,pn1,dn1,-1,0,v2,[],pivots,new_base_sequence,
-                                                                            lk, lj, 1, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+        from .SCLP_pivot6 import SCLP_pivot
+        solution, STEPCOUNT, ITERATION, pivot_problem  = SCLP_pivot(K_0,J_N,solution,-1,0,v2,[], lk, lj, 1, totalK, totalJ,
+                                                    DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+        if pivot_problem['result'] == 1:
+            print('Problem during left pivot...')
+            return [], [], [], 0,  STEPCOUNT, ITERATION, pivot_problem
     # prepare the boundaries
     T = 1
     del_T = 0
@@ -152,85 +159,45 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
 
     #############################################
     # solving the subproblem
-    from .SCLP_solver4 import SCLP_solver
-    pn1,dn1, x_0, q_N, T, pivots,\
-    new_base_sequence, STEPCOUNT = SCLP_solver( x_0, del_x_0, q_N, del_q_N, T, del_T, pn1,dn1, 1,'sub_prob', pbaseB1red,
-                                                pbaseB2red, pivots, new_base_sequence, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
-    #############################################
-    # the list of pivots:
-    #[~, ~, pivots] = calc_pivots3(pn1, dn1)
-    Npivots = len(pivots)
-    #Warning this based on assumption that first basis in new_base_sequence is equal to the AAN1 and/or last basis is equal to the AAN2
-    if N1 != -1 and Npivots > 0:
-        pm1 = AAN1['prim_name']
-        dm1 = AAN1['dual_name']
-        pp1 = np.setdiff1d(pn1[:,0], pm1)
-        pp2 = np.setdiff1d(dn1[:,0], dm1)
-        if len(pp1) > 1 or len(pp2) > 1:
-            print('Incomplete pivot...')
-            raise Exception()
-        elif len(pp1) == 0 and len(pp2) == 0:
-            pass
-        elif len(pp1) == 1 and len(pp2) == 1:
-            if pivots[0][0] == pp2[0] and pivots[0][1] == pp1[0]:
-                pass
-            elif pivots[0][0] != pp2[0] and pivots[0][1] != pp1[0]:
-                piv = [[pp2[0],pp1[0]]]
-                pivots = piv + pivots
-            else:
-                print('Incompatible pivots...')
-                raise Exception()
-        else:
-            print('Undefined pivot...')
-            raise Exception()
-        DD1 = AAN1['A'].copy()
-        k1 = len(pm1)
-        l1 = len(dm1)
-        if N2 != NN:
-            pp1 = np.setdiff1d(pn1[:, -1], AAN2['prim_name'])
-            pp2 = np.setdiff1d(dn1[:, -1], AAN2['dual_name'])
-            if len(pp1) > 1 or len(pp2) > 1:
-                print('Incomplete pivot...')
-                raise Exception()
-            elif len(pp1) == 0 and len(pp2) == 0:
-                pivots = pivots[:-1]
-                Npivots -= 1
-            elif len(pp1) == 1 and len(pp2) == 1:
-                pass
-        pn_new=np.empty(shape=(k1,len(pivots)), dtype=int)
-        #pn_new =np.union1d(pn1, Kexclude)
-        dn_new=np.empty(shape=(l1,len(pivots)), dtype=int)
-        new_base_sequence = {'dx': [], 'dq': [], 'bases': [], 'places': []}
-        zz1 = np.zeros(k1)
-        zz2 = np.zeros(l1)
-        for i,piv1 in enumerate(pivots):
-            DD1,pm1,dm1,zz1,zz2 = full_pivot(DD1,find(pm1==piv1[0])[0],find(dm1==piv1[1])[0],pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
-            pn_new[:,i] = pm1
-            dn_new[:,i] = dm1
-            dx, dq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
-            new_base_sequence['dx'].append(dx)
-            new_base_sequence['dq'].append(dq)
-    elif Npivots >0:
-        pm1 = AAN2['prim_name']
-        dm1 = AAN2['dual_name']
-        DD1 = AAN2['A'].copy()
-        k1 = len(pm1)
-        l1 = len(dm1)
-        pn_new = np.empty(shape=(k1, Npivots), dtype=int)
-        dn_new = np.empty(shape=(l1, Npivots), dtype=int)
-        new_base_sequence = {'dx': [], 'dq': [], 'bases': [], 'places': []}
-        zz1 = np.zeros(k1)
-        zz2 = np.zeros(l1)
-        for i,piv1 in enumerate(reversed(pivots)):
-            [DD1,pm1,dm1,zz1,zz2] = full_pivot(DD1,find(pm1==piv1[1]),find(dm1==piv1[0]),pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
-            pn_new[:, Npivots-i-1] = pm1
-            dn_new[:, Npivots-i-1] = dm1
-            dx, dq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
-            new_base_sequence['dx'].append(dx)
-            new_base_sequence['dq'].append(dq)
-        new_base_sequence['dx'].reverse()
-        new_base_sequence['dq'].reverse()
+    from .SCLP_solver6 import SCLP_solver
+    solution, x_0, q_N, T, STEPCOUNT, pivot_problem = SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, 1,'sub_prob', pbaseB1red,
+                                                pbaseB2red, klist, jlist, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+    if pivot_problem['result'] == 1:
+        return [], [], [],0, STEPCOUNT, ITERATION, pivot_problem
     else:
-        pn_new = np.vstack(np.union1d(pn1[:,0], Kexclude))
-        dn_new = np.vstack(np.union1d(dn1[:,0], -Jexclude))
-    return  pn_new,dn_new, new_base_sequence, STEPCOUNT, ITERATION
+        pivot_problem = {'result': 0}
+    #############################################
+
+    Npivots = len(solution.pivots)
+    #Warning this based on assumption that first basis in new_base_sequence is equal to the AAN1 and/or last basis is equal to the AAN2
+    if Npivots > 0:
+        dx = sparse_matrix_constructor(None, None, KK)
+        dq = sparse_matrix_constructor(None, None, JJ)
+        if N1 != -1:
+            pm1 = AAN1['prim_name']
+            dm1 = AAN1['dual_name']
+            DD1 = AAN1['A'].copy()
+            zz1 = np.zeros(len(pm1))
+            zz2 = np.zeros(len(dm1))
+            if N2 != NN:
+                Npivots -=1
+                ran = enumerate(solution.pivots[:-1])
+            else:
+                ran = enumerate(solution.pivots)
+            for i,piv1 in ran:
+                DD1,pm1,dm1,zz1,zz2 = full_pivot(DD1,find(pm1==piv1[0])[0],find(dm1==piv1[1])[0],pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
+                ndx, ndq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
+                dx.append(ndx)
+                dq.append(ndq)
+        else:
+            pm1 = AAN2['prim_name']
+            dm1 = AAN2['dual_name']
+            DD1 = AAN2['A'].copy()
+            zz1 = np.zeros(len(pm1))
+            zz2 = np.zeros(len(dm1))
+            for i,piv1 in enumerate(reversed(solution.pivots)):
+                DD1,pm1,dm1,zz1,zz2 = full_pivot(DD1,find(pm1==piv1[1]),find(dm1==piv1[0]),pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
+                ndx, ndq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
+                dx.prepend(ndx)
+                dq.prepend(ndq)
+    return  dx, dq, solution.pivots, Npivots, STEPCOUNT, ITERATION, pivot_problem

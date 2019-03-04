@@ -5,8 +5,8 @@ from .calc_order_ratio import calc_order_ratio
 
 #function [ cases, Delta, N1, N2, v1,v2, problem ] =
 
-
-def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,prim_name,B1,B2, sdx, sdq, tolerance, tol_coeff):
+#'#@profile
+def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sdx, sdq, tolerance, tol_coeff):
 #idenitfy next collision and classify it
 #problem
 #   result = 0 Ok
@@ -34,17 +34,14 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,prim_name,B1,B2, s
 
     test1 = 0
     test2 = 0
-    tflag = False
-    if len(B1) > 0:
-        test1 = np.setdiff1d(prim_name[:,0],B1, assume_unique=True).size
-        tflag = True
-    if len(B2) > 0:
-        test2 = np.setdiff1d(prim_name[:,-1:],B2, assume_unique=True).size
-        tflag = True
-    if tflag:
-        if test1 == 0 and test2 ==0:
-            case = 'complete'
-            return case, Delta, N1, N2, v1, v2, problem
+    if len(B1) > 0 or len(B2) > 0:
+        if len(B1) > 0:
+            test1 = solution.get_name_diff_with0(B1).size
+        if len(B2) > 0:
+            test2 = solution.get_name_diff_withN(B2).size
+    if (len(B1) > 0 or len(B2) > 0) and test1 == 0 and test2 == 0:
+        return 'complete', 0, -1, NN, [], [], problem
+
 
     CC1, prob = calc_statecollide(klist,jlist,x,del_x,q,del_q, sdx, sdq, tolerance)
     problem['stateProblem'] = prob
@@ -89,17 +86,15 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,prim_name,B1,B2, s
         if N1 == -1 or N2 == NN:
             case = 'Case i__'
         else:
-            base1 = prim_name[:,N1]
-            base2 = prim_name[:,N2]
-            vlist = np.setdiff1d(base1, base2, assume_unique=True)
-            if vlist.size > 2:
+            vlist = solution.pivots.get_difference(N1,N2)
+            if len(vlist) > 2:
                 problem['result'] = problem['result'] + 4
                 problem['compoundProblem']['result'] = 2
                 return '', Delta, N1, N2, v1, v2, problem
-            elif vlist.size == 1:
+            elif len(vlist) == 1:
                 case = 'Case i__'
                 return case, Delta, N1, N2, v1, v2, problem
-            elif vlist.size == 2:
+            elif len(vlist) == 2:
                 case = 'Case ii_'
                 if (N2-N1)%2 > 0:
                     if tol_coeff<100:

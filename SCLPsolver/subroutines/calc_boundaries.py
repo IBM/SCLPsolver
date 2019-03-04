@@ -2,6 +2,7 @@ import numpy as np
 from .simplex_procedures import *
 
 
+#'#@profile
 def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
     K, J = np.shape(G)
     L = np.shape(F)[1]

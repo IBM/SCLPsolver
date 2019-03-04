@@ -1,6 +1,6 @@
 from .simplex_procedures import *
 
-
+#'#@profile
 def calc_init_basis(G,F,H,a,b,c,d,x_0,q_N, tolerance = 0):
     K, J = np.shape(G)
     L = np.shape(F)[1]

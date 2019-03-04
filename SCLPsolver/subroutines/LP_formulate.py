@@ -3,7 +3,7 @@ from .matlab_utils import *
 from .simplex_procedures import *
 
 
-
+####'#@profile
 def LP_formulate(AA, prim_name, dual_name,  Kset, Jset, tolerance = 0):
     nJset = [-v for v in Jset]
     prim_sign = np.zeros((len(prim_name),1), dtype = int)

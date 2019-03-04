@@ -2,6 +2,7 @@ from .matlab_utils import *
 from .pivot import dict_pivot
 
 
+#'#@profile
 def get_new_dict(oldDict, oldPlace, newPlace, pivots):
     L = len(pivots)
     if isinstance(oldPlace, list):

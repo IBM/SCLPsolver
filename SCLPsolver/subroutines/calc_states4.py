@@ -1,6 +1,8 @@
 import numpy as np
 from multiprocessing import Process, Value, Array
 
+
+#'#@profile
 def calc_states(dx,dq,x_0,del_x_0,q_N,del_q_N,tau,dtau,sdx, sdq, tolerance):
     K1, N1  = dx.shape
     if K1 == 0:
@@ -25,13 +27,15 @@ def calc_states(dx,dq,x_0,del_x_0,q_N,del_q_N,tau,dtau,sdx, sdq, tolerance):
     # TODO: parallelize
     _calc_states(x, del_x, K1, x_0, del_x_0, tau, dtau, dx, sdx, tolerance, True)
     _calc_states(q, del_q, J1, q_N, del_q_N, tau, dtau, dq, sdq, tolerance, False)
-    return x, del_x, q, del_q
+    return x, del_x, np.fliplr(q), np.fliplr(del_q)
 
 
+#'#@profile
 def _calc_states(state, del_state, vdim, state0, del_state0, tau, dtau, dstate, sdstate, tolerance, is_primal):
     if vdim > 0:
-        sdstate = sdstate == 0
-        sdstate = np.logical_or(np.hstack((np.full((vdim, 1), False), sdstate)), np.hstack((sdstate, np.full((vdim, 1), False))))
+        sstate = sdstate == 0
+        #sdstate = np.logical_or(np.hstack((np.full((vdim, 1), False), sdstate)), np.hstack((sdstate, np.full((vdim, 1), False))))
+        sdstate = np.logical_or(sstate[:,:-1],sstate[:,1:])
         if is_primal:
             #TODO: parallelize
             _calc_primal(state, dstate, tau, state0, sdstate, tolerance)
@@ -41,13 +45,20 @@ def _calc_states(state, del_state, vdim, state0, del_state0, tau, dtau, dstate, 
             _calc_dual(state, dstate, tau, state0, sdstate, tolerance)
             _calc_dual(del_state, dstate, dtau, del_state0, sdstate, tolerance)
 
+#'#@profile
 def _calc_primal(state, dstate, tau, state0, sd, tolerance):
-    state[:, :] = np.cumsum(np.hstack((state0, dstate * np.hstack(tau[:, None]))), 1)
-    state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    #state[:, :] = np.cumsum(np.hstack((state0, dstate * np.hstack(tau[:, None]))), 1)
+    np.cumsum(np.hstack((state0, dstate * tau)), 1, out=state)
+    #state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    state[sd] = 0
 
+
+####'#@profile
 def _calc_dual(state, dstate, tau, state0, sd, tolerance):
-    state[:, :] = np.fliplr(np.cumsum(np.fliplr(np.hstack((dstate * np.hstack(tau[:, None]), state0))), 1))
-    state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    np.cumsum(np.fliplr(np.hstack((dstate * tau, state0))), 1, out=state)
+    #state[:,:] = np.fliplr(np.cumsum(np.fliplr(np.hstack((dstate * tau, state0))),1))
+    #state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    state[np.fliplr(sd)] = 0
 
 def check_state(state, tolerance):
     test1 = state < -tolerance

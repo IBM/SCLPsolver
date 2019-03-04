@@ -1,6 +1,6 @@
 import sys
 sys.path.append('C:\DataD\Work\CERBERO\CLP\SCLPsolver')
-from SCLP4 import SCLP
+from SCLP5 import SCLP
 import os
 import numpy as np
 

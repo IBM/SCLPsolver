@@ -1,5 +1,8 @@
 import numpy as np
+#from scipy.linalg.blas import dger
 
+
+#'#@profile
 def base_pivot(A, i, j):
     i = i + 1
     j = j + 1
@@ -8,13 +11,14 @@ def base_pivot(A, i, j):
         raise Exception('pivot on zero')
     rp = (A[i,:] / p).copy()
     c = A[:, j].copy()
-    A -= np.dot(np.reshape(c, (np.size(c), 1)), np.reshape(rp, (1, np.size(rp))))
+    A -= np.outer(c,rp)
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
     return A
 
 
+#'#@profile
 def full_pivot(A, i, j, pn, dn, ps, ds):
     nam = pn[i]
     pn[i] = dn[j]
@@ -29,12 +33,16 @@ def full_pivot(A, i, j, pn, dn, ps, ds):
         raise Exception('pivot on zero')
     rp = (A[i,:] / p).copy()
     c = A[:, j].copy()
-    A -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
+    A -= np.outer(c, rp)
+    #A = dger(-1.0, c, rp, a=A, overwrite_a= 1)
+    #A -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
     return A, pn, dn, ps, ds
 
+
+#'#@profile
 def dict_pivot(dct, i, j):
     nam = dct['prim_name'][i]
     dct['prim_name'][i] = dct['dual_name'][j]
@@ -46,7 +54,8 @@ def dict_pivot(dct, i, j):
         raise Exception('pivot on zero')
     rp = (dct['A'][i, :] / p).copy()
     c = dct['A'][:, j].copy()
-    dct['A'] -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
+    dct['A'] -= np.outer(c, rp)
+    #dct['A'] -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
     dct['A'][i, :] = rp
     dct['A'][:, j] = c / -p
     dct['A'][i, j] = 1. / p
