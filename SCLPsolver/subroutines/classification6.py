@@ -97,7 +97,7 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
             elif len(vlist) == 2:
                 case = 'Case ii_'
                 order_ratio = calc_order_ratio(vlist[0],vlist[1],N1,N2,klist,jlist,dx,dq,x,del_x,q,del_q,tau,dtau,Delta/2)
-                if abs(order_ratio)-1 < tolerance * tol_coeff:
+                if abs(abs(order_ratio)-1) < tolerance * tol_coeff:
                     print('Tolerance in R unclear...')
                 if abs(order_ratio) < 1: #the strange case when R < 0 should be perferctly reviewed
                     v1 = vlist[0]

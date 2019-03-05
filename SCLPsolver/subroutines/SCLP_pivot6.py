@@ -46,7 +46,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
         if not isinstance(v2, list):
             Kset = Kset[Kset!=v2]
             if v2 < 0:
-                Jset = np.append(Jset, -v2)
+                Jset = np.append(Jset, v2)
         else:
             print('v2', v2)
         pbaseDD, dbaseDD, DD = LP_formulate(BB1, pbaseB1, dbaseB1, Kset, Jset, tolerance)

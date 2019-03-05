@@ -35,7 +35,7 @@ def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases,
         np.sign(dq, out=sdq[:,1:-1])
         check_sd(sdx[:,1:-1], True)
         check_sd(sdq[:,1:-1], False)
-        if STEPCOUNT == 91:
+        if DEPTH == 3:
             print('bbb')
 
         lastN1 =lastCollision['N1']
@@ -155,7 +155,7 @@ def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases,
                                                                      STEPCOUNT, ITERATION, settings, tolerance)
 
 
-            while pivot_problem['result'] == 1 and tol_coeff < 0.001/tolerance: # theta > 1
+            while pivot_problem['result'] == 1 and tol_coeff < 0.0001/tolerance: # theta > 1
                 tol_coeff = tol_coeff * 10
                 print('trying to resolve * ', tol_coeff, '...')
                 cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x,
@@ -163,6 +163,8 @@ def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases,
                                                                            B2, sdx, sdq, lastN1, lastN2, tolerance, tol_coeff)
                 print(STEPCOUNT, DEPTH, ITERATION[DEPTH], JJ, 'x', KK, NN, theta, theta1, cases, N1, N2, v1, v2,
                       len(solution.base_sequence.places))
+                lastCollision = {'cases': cases, 'theta': theta, 'Delta': Delta,
+                                 'N1': N1, 'N2': N2, 'v1': v1, 'v2': v2, 'lastN1': lastN1, 'lastN2': lastN2}
                 if cases == 'Case i__':
                     solution.update_caseI(N1, N2)
                     pivot_problem['result'] = 0
@@ -173,10 +175,21 @@ def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases,
                                                                            v2, KK, JJ, NN, totalK, totalJ, DEPTH,
                                                                            STEPCOUNT, ITERATION, settings,
                                                                            tolerance)
+                if DEPTH > 1:
+                    break
 
             if pivot_problem['result'] == 1:
                 if DEPTH > 0:
                     return solution, x_0, q_N, T, STEPCOUNT, pivot_problem
+                else:
+                    print('Changing variables order...')
+                    lastCollision['v1'] = v2
+                    lastCollision['v2'] = v1
+                    tol_coeff = 1
+                    solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v2,
+                                                                               v1, KK, JJ, NN, totalK, totalJ, DEPTH,
+                                                                               STEPCOUNT, ITERATION, settings,
+                                                                               tolerance)
 
             #statData = {'cases': cases, 'N1': N1, 'N2': N2, 'minBases': settings['minBases'],
             #            'maxBases': settings['maxBases'], 'basesRate': settings['basesRate']}

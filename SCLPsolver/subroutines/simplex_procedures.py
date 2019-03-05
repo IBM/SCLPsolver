@@ -96,19 +96,19 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
             dtest = find(np.logical_and(ds == 0, A[0, 1:] < 0))
     elif ptest.size > 0 and dtest.size > 0:
         B = np.zeros((mm+1,nn+1))
-        B[:-1,nn:nn+1] = np.random.rand(mm, 1) + 1
-        B[mm:mm+1,:-1] = np.random.rand(1, nn) + 1
+        B[:-1,-1:] = np.random.rand(mm, 1) + 1
+        B[-1:,:-1] = np.random.rand(1, nn) + 1
         B[:-1, :-1] = A
-        mat = np.divide(-A[0, 1:], B[mm, 1:-1], out=np.zeros_like(A[0, 1:]), where=np.logical_and(B[mm, 1:-1] > 0, ds != 1) )
+        mat = np.divide(-A[0, 1:], B[-1, 1:-1], out=np.zeros_like(A[0, 1:]), where=np.logical_and(B[-1, 1:-1] > 0, ds != 1) )
         j = np.argmax(mat)
         mu1 = mat[j]
-        mat = np.divide(-A[1:, 0], B[1:-1, nn], out=np.zeros_like(A[1:, 0]), where=np.logical_and(B[1:-1, nn] >0, ps != 1) )
+        mat = np.divide(-A[1:, 0], B[1:-1, -1], out=np.zeros_like(A[1:, 0]), where=np.logical_and(B[1:-1, -1] >0, ps != 1) )
         i = np.argmax(mat)
         mu2 = mat[i]
         mu = max(mu1,mu2)
         while mu > 0:
             if mu1 > mu2:
-                div = B[1:-1, 0] + mu * B[1:-1, nn]
+                div = B[1:-1, 0] + mu * B[1:-1, -1]
                 mat = np.divide(B[1:-1, j+1], div , out=np.full_like(B[1:-1, j+1], -1), where= np.logical_and(div !=0, ps != 1))
                 i = np.argmax(mat)
                 if mat[i] <= 0:
@@ -117,7 +117,7 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                     err['message'] = '***  problem is dual infeasible'
                     return B[:-1,:-1], pn, dn, ps, ds, err
             else:
-                div = B[0, 1:-1] + mu * B[mm, 1:-1]
+                div = B[0, 1:-1] + mu * B[-1, 1:-1]
                 mat = np.divide(-B[i + 1, 1:-1], div, out=np.full_like(B[i + 1, 1:-1], -1), where= np.logical_and(div !=0, ds != 1))
                 j = np.argmax(mat)
                 if mat[j] <= 0:
@@ -126,10 +126,10 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                     err['message'] = '***  problem is primal infeasible'
                     return B[:-1, :-1], pn, dn, ps, ds, err
             B, pn, dn, ps, ds = full_pivot(B, i, j, pn, dn, ps, ds)
-            mat = np.divide(-B[0, 1:-1], B[mm, 1:-1], out=np.zeros_like(B[0, 1:-1]), where=np.logical_and(B[mm, 1:-1] > 0, ds != 1))
+            mat = np.divide(-B[0, 1:-1], B[-1, 1:-1], out=np.zeros_like(B[0, 1:-1]), where=np.logical_and(B[-1, 1:-1] > 0, ds != 1))
             j = np.argmax(mat)
             mu1 = mat[j]
-            mat = np.divide(-B[1:-1, 0], B[1:-1, nn], out=np.zeros_like(B[1:-1, 0]), where=np.logical_and(B[1:-1, nn] > 0, ps != 1))
+            mat = np.divide(-B[1:-1, 0], B[1:-1, -1], out=np.zeros_like(B[1:-1, 0]), where=np.logical_and(B[1:-1, -1] > 0, ps != 1))
             i = np.argmax(mat)
             mu2 = mat[i]
             mu = max(mu1, mu2)
