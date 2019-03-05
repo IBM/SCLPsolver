@@ -5,7 +5,7 @@ from .calc_order_ratio import calc_order_ratio
 
 #function [ cases, Delta, N1, N2, v1,v2, problem ] =
 
-#'#@profile
+@profile
 def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sdx, sdq, tolerance, tol_coeff):
 #idenitfy next collision and classify it
 #problem

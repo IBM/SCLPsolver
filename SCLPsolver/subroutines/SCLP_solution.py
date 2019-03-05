@@ -39,7 +39,7 @@ class SCLP_solution():
     def NN(self):
         return len(self._pivots) + 1
 
-    ####'#@profile
+    ###@profile
     def update_caseI(self, N1, N2):
         self._base_sequence.remove_bases(N1, N2, self._pivots)
         self._dx.remove(N1 + 1, N2)
@@ -57,7 +57,7 @@ class SCLP_solution():
         self._prim_name = np.hstack((self._prim_name[:, 0:N1 + 1], self._prim_name[:, N2:]))
         #self._dual_name = np.hstack((self._dual_name[:, 0:N1 + 1], self._dual_name[:, N2:]))
 
-    ####'#@profile
+    ###@profile
     def update_caseII(self, N1, N2, prim_name, dual_name, dx, dq, AAN1, AAN2, pivots, basis = None):
         Nnew = prim_name.shape[1]
         self._base_sequence.replace_bases(N1, N2, Nnew, AAN1, AAN2)
@@ -93,7 +93,7 @@ class SCLP_solution():
         self._dx.replace_matrix(N1 + 1, N2, dx)
         self._dq.replace_matrix(N1 + 1, N2, dq)
 
-    ####'#@profile
+    ###@profile
     def update_rewind(self, N1, N2, Nnew, prim_name, dual_name, dx, dq, pivots):
         N2_cor = N2 + Nnew
         N2b = max(N2, N2_cor)
@@ -111,13 +111,13 @@ class SCLP_solution():
         self._dx.replace_matrix(N1 + 1, N2_cor, dx)
         self._dq.replace_matrix(N1 + 1, N2_cor, dq)
 
-    ####'#@profile
+    ###@profile
     def get_basis_at(self, place):
         new_mat, new_place = self._base_sequence.get_basis_at(place, self._pivots)
         self._base_sequence.insert_basis(new_mat, new_place)
         return new_mat
 
-    ####'#@profile
+    ###@profile
     def get_bases(self, N1, N2):
         new_mat, new_place = self._base_sequence.get_nearby_basis(N1, N2, self._pivots)
         self._base_sequence.insert_basis(new_mat, new_place)
@@ -128,6 +128,6 @@ class SCLP_solution():
         else:
             raise Exception('Cannot calculate correct bases!')
 
-    ####'#@profile
+    ###@profile
     def get_next_basis_for_solution(self, basis, place):
         return self._base_sequence.get_next_basis(basis, place, self._pivots)

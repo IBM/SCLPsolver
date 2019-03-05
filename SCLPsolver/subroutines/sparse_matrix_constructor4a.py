@@ -36,7 +36,7 @@ class sparse_matrix_constructor():
     def indptr(self):
         return self._indptr
 
-    ####'#@profile
+    ###@profile
     def insert(self, after, data, indexes, indptr = None):
         if after == -1:
             self._data = data + self._data
@@ -69,7 +69,7 @@ class sparse_matrix_constructor():
                 sxx = indptr[-1]
                 self._indptr = self._indptr[:after + 1]+[x + sx for x in indptr] + [i+ sxx for i in self._indptr[after + 1:]]
 
-    ####'#@profile
+    ###@profile
     def remove(self, from_, to_):
         if from_ <= 0:
             self._data = self._data[to_:]
@@ -86,7 +86,7 @@ class sparse_matrix_constructor():
             sx =  self._indptr[from_ +1] - self._indexes[to_-1]
             self._indptr = self._indptr[:from_ + 1] + [x - sx for x in self._indptr[to_:]]
 
-    ####'#@profile
+    ###@profile
     def replace(self, from_, to_, data, indexes, indptr = None):
         if from_ <= 0:
             self._data = data + self._data[to_:]
@@ -120,7 +120,7 @@ class sparse_matrix_constructor():
                 sxx = indptr[-1]
                 self._indptr = self._indptr[:from_ + 1]+[x + sx for x in indptr[1:]] + [i+ sxx for i in self._indptr[from_ + 1:]]
 
-    ####'#@profile
+    ###@profile
     def get_sub_matrix(self, from_, to_):
         if from_ <= 0:
             return sparse_matrix_constructor(self._data[:to_], self._indexes[:to_], self._row_num, self._indptr[:to_+1], True)
@@ -130,14 +130,14 @@ class sparse_matrix_constructor():
             indptr = [x-self._indptr[from_] for x in self._indptr[from_:to_+1]]
             return sparse_matrix_constructor(self._data[from_:to_], self._indexes[from_:to_], self._row_num, indptr, True)
 
-    ####'#@profile
+    ###@profile
     def insert_matrix(self, after, other):
         if isinstance(other, sparse_matrix_constructor):
             if other.row_num != self._row_num:
                 raise ValueError('Row numbers must be equal!')
             self.insert(after, other.data, other.indexes, other.indptr)
 
-    ####'#@profile
+    ###@profile
     def append(self, other):
         if isinstance(other, sparse_matrix_constructor):
             if other.row_num != self._row_num:
@@ -147,7 +147,7 @@ class sparse_matrix_constructor():
             sx = self._indptr[-1]
             self._indptr += [x+sx for x in other.indptr[1:]]
 
-    ####'#@profile
+    ###@profile
     def prepend(self, other):
         if isinstance(other, sparse_matrix_constructor):
             if other.row_num != self._row_num:
@@ -157,14 +157,14 @@ class sparse_matrix_constructor():
             sx = other.indptr[-1]
             self._indptr = other.indptr + [x + sx for x in self._indptr[1:]]
 
-    ####'#@profile
+    ###@profile
     def replace_matrix(self, from_, to_, other):
         if isinstance(other, sparse_matrix_constructor):
             if other.row_num != self._row_num:
                 raise ValueError('Row numbers must be equal!')
         self.replace(from_, to_, other.data, other.indexes, other.indptr)
 
-    ####'#@profile
+    ###@profile
     def get_csc_matrix(self):
         col_num = len(self._indexes)
         if col_num > 1:
@@ -174,6 +174,6 @@ class sparse_matrix_constructor():
         else:
             return csc_matrix((self._data[0], self._indexes[0], self._indptr), shape=(self._row_num, col_num))
 
-    ####'#@profile
+    ###@profile
     def get_matrix(self):
         return self.get_csc_matrix().toarray()

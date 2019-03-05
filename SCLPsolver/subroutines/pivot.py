@@ -9,9 +9,9 @@ def base_pivot(A, i, j):
     p = A[i, j]
     if p == 0:
         raise Exception('pivot on zero')
-    rp = (A[i,:] / p).copy()
+    rp = A[i,:] / p
     c = A[:, j].copy()
-    A -= np.outer(c,rp)
+    A -= np.outer(c, rp)
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
@@ -31,11 +31,10 @@ def full_pivot(A, i, j, pn, dn, ps, ds):
     p = A[i, j]
     if p == 0:
         raise Exception('pivot on zero')
-    rp = (A[i,:] / p).copy()
+    rp = A[i,:] / p
     c = A[:, j].copy()
     A -= np.outer(c, rp)
     #A = dger(-1.0, c, rp, a=A, overwrite_a= 1)
-    #A -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
@@ -52,10 +51,9 @@ def dict_pivot(dct, i, j):
     p = dct['A'][i, j]
     if p == 0:
         raise Exception('pivot on zero')
-    rp = (dct['A'][i, :] / p).copy()
+    rp = dct['A'][i, :] / p
     c = dct['A'][:, j].copy()
     dct['A'] -= np.outer(c, rp)
-    #dct['A'] -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
     dct['A'][i, :] = rp
     dct['A'][:, j] = c / -p
     dct['A'][i, j] = 1. / p

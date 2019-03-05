@@ -8,7 +8,7 @@ from .matlab_utils import find
 
 
 #function [pn_new,dn_new, MatrixAA_new] =
-####'#@profile
+###@profile
 def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pbaseB2,
                      AAN1,AAN2, KK, JJ, NN, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
 

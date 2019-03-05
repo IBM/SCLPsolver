@@ -16,9 +16,9 @@ def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases,
     theta = 0
     tol_coeff = 1  # tolerance multiplier
     prevProblem = 0
-    lastCollision = {'N1': -1,'N2':1,'Nnew':1}
-    pivot_problem = {'result' : 0}
-
+    lastCollision = {'N1': -1, 'N2': 1, 'Nnew': 1}
+    pivot_problem = {'result': 0}
+    print(STEPCOUNT, DEPTH, ITERATION[DEPTH], JJ, 'x', KK, solution.NN, 0, 0, cases)
     Kset_0 = klist[np.hstack(np.logical_or(x_0 > 0, np.logical_and(x_0 == 0, del_x_0 > 0)))]
     Jset_N = jlist[np.hstack(np.logical_or(q_N > 0, np.logical_and(q_N == 0, del_q_N > 0)))]
 
@@ -35,8 +35,6 @@ def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases,
         np.sign(dq, out=sdq[:,1:-1])
         check_sd(sdx[:,1:-1], True)
         check_sd(sdq[:,1:-1], False)
-        if DEPTH == 3:
-            print('bbb')
 
         lastN1 =lastCollision['N1']
         lastN2 = lastCollision['N2'] + lastCollision['Nnew']

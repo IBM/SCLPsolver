@@ -2,7 +2,7 @@ import numpy as np
 from .get_new_dict import get_new_dict
 
 
-##'#@profile
+#@profile
 def calc_dict(base_sequence, N1, N2, pivots):
     NN = len(pivots)
     if N1 >= 0:

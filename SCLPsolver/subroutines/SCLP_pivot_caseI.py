@@ -2,7 +2,7 @@ import numpy as np
 from .matlab_utils import find
 from .calc_dict import calc_dict
 
-####'#@profile
+###@profile
 def SCLP_pivot_caseI(base_sequence, pivots, prim_name, dual_name, N1, N2, NN):
     lplaces = np.logical_or(np.array(base_sequence['places']) <= N1, np.array(base_sequence['places']) >= N2)
     places = find(lplaces)

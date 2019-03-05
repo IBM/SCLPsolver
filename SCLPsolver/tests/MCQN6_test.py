@@ -12,7 +12,7 @@ def relative_to_project(file_path):
         proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
         return os.path.join(proj, file_path)
 
-seed = 1000
+seed = 1013
 K = 2000
 I = 200
 G = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/G.dat'))
@@ -31,10 +31,10 @@ print(F.shape)
 alpha = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/alpha.dat')))
 gamma = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/gamma.dat')))
 import time
-start_time = time.time()
 import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
+start_time = time.time()
 t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, {}, 1E-11)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))

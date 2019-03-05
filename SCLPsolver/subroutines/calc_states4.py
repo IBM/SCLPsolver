@@ -1,5 +1,5 @@
 import numpy as np
-from multiprocessing import Process, Value, Array
+#from multiprocessing import Process, Value, Array
 
 
 #'#@profile
@@ -34,7 +34,6 @@ def calc_states(dx,dq,x_0,del_x_0,q_N,del_q_N,tau,dtau,sdx, sdq, tolerance):
 def _calc_states(state, del_state, vdim, state0, del_state0, tau, dtau, dstate, sdstate, tolerance, is_primal):
     if vdim > 0:
         sstate = sdstate == 0
-        #sdstate = np.logical_or(np.hstack((np.full((vdim, 1), False), sdstate)), np.hstack((sdstate, np.full((vdim, 1), False))))
         sdstate = np.logical_or(sstate[:,:-1],sstate[:,1:])
         if is_primal:
             #TODO: parallelize
@@ -47,17 +46,17 @@ def _calc_states(state, del_state, vdim, state0, del_state0, tau, dtau, dstate, 
 
 #'#@profile
 def _calc_primal(state, dstate, tau, state0, sd, tolerance):
-    #state[:, :] = np.cumsum(np.hstack((state0, dstate * np.hstack(tau[:, None]))), 1)
-    np.cumsum(np.hstack((state0, dstate * tau)), 1, out=state)
-    #state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    state[:, 0:1] = state0
+    np.multiply(dstate, tau, out=state[:, 1:])
+    np.cumsum(state, 1, out=state)
     state[sd] = 0
 
 
-####'#@profile
+#'#@profile
 def _calc_dual(state, dstate, tau, state0, sd, tolerance):
-    np.cumsum(np.fliplr(np.hstack((dstate * tau, state0))), 1, out=state)
-    #state[:,:] = np.fliplr(np.cumsum(np.fliplr(np.hstack((dstate * tau, state0))),1))
-    #state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    state[:, 0:1] = state0
+    np.multiply(np.fliplr(dstate), tau[::-1], out=state[:, 1:])
+    np.cumsum(state, 1, out=state)
     state[np.fliplr(sd)] = 0
 
 def check_state(state, tolerance):
