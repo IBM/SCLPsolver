@@ -5,13 +5,12 @@ from .SCLP_solution6 import SCLP_solution
 from .sparse_matrix_constructor import sparse_matrix_constructor
 from .pivot import full_pivot
 from .matlab_utils import find
+from .parametric_line import parametric_line
 
 
 #'#@profile
 def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pbaseB2,
                      AAN1,AAN2, KK, JJ, NN, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
-
-
 
     # Excluding the k's and j's which are > 0
     lKDDin = np.logical_not(np.in1d(pbaseDD, Kexclude, assume_unique=True))
@@ -38,7 +37,7 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
     # The starting sequence
     new_bs = SCLP_base_sequence({'prim_name': pbaseDDred, 'dual_name': dbaseDDred,'A': DDred.copy()})
     dx, dq = extract_rates(pbaseDDred, dbaseDDred, DDred, lk, lj, totalK, totalJ)
-    #TODO: check if we need vstack
+
     solution = SCLP_solution(None, new_bs, dx, dq)
     # performing the left and right first pivots
     #		the right pivot:
@@ -83,9 +82,8 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
         if pivot_problem['result'] == 1:
             print('Problem during left pivot...')
             return [], [], [], 0,  STEPCOUNT, ITERATION, pivot_problem
+
     # prepare the boundaries
-    T = 1
-    del_T = 0
 
     x_0=np.zeros((lk,1))
     q_N=np.zeros((lj,1))
@@ -157,11 +155,13 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pb
             dq_B2_v2 = AAN2['A'][0,1:][AAN2['dual_name'] == v2][0]
             del_q_N[lj2] = -0.5*dq_B2_v2 + dq_DD_v2
 
+    param_line = parametric_line(x_0, q_N, klist, jlist, 1, 0, del_x_0, del_q_N)
+
     #############################################
     # solving the subproblem
     from .SCLP_solver6 import SCLP_solver
-    solution, x_0, q_N, T, STEPCOUNT, pivot_problem = SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, 1,'sub_prob', pbaseB1red,
-                                                pbaseB2red, klist, jlist, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+    solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 1,'sub_prob', pbaseB1red, pbaseB2red,
+                                                     totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
     if pivot_problem['result'] == 1:
         return [], [], [],0, STEPCOUNT, ITERATION, pivot_problem
     else:

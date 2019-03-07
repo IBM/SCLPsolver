@@ -6,10 +6,11 @@ from subroutines.extract_rates5 import extract_rates
 from subroutines.SCLP_base_sequence import SCLP_base_sequence
 from subroutines.SCLP_solution6 import SCLP_solution
 from subroutines.calc_controls5 import calc_controls
-from subroutines.calc_states4 import calc_states
-from subroutines.calc_equations import calc_equations
+from subroutines.calc_states6 import calc_states
+from subroutines.calc_equations6 import calc_equations
 from subroutines.calc_objective import calc_objective
 from subroutines.SCLP_solver6 import SCLP_solver
+from subroutines.parametric_line import parametric_line
 
 #function[t, x, q, u, p, firstbase, lastbase, pivots, Obj, Err, NN, stepcount, flopss, ecpu] = ...
 #'#@profile
@@ -99,11 +100,13 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance):
     jlist = np.sort(-np.append(pn[pn < 0], dn[dn < 0]))
 
     # Solve the problem, by a sequence of parametric steps
-    #prim_name, dual_name, x_0, q_N, T, pivots, base_sequence = ...
 
+    # default constructor creates main parametric line
+    # np.vstack(x_0), np.zeros((len(x_0),1)), np.vstack(q_N), np.zeros((len(q_N),1)), 0, 1,
+    param_line = parametric_line(np.vstack(x_0), np.vstack(q_N), klist, jlist)
 
-    solution, x_0, q_N, T, STEPCOUNT, pivot_problem = SCLP_solver(solution, np.vstack(x_0), np.zeros((len(x_0),1)), np.vstack(q_N), np.zeros((len(q_N),1)), 0, 1, TT, 'toplevel',
-                                           [], [], klist, jlist, K_DIM + L_DIM, J_DIM + I_DIM, 0, 0, dict(), settings, tolerance)
+    solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, TT, 'toplevel',
+                                           [], [], K_DIM + L_DIM, J_DIM + I_DIM, 0, 0, dict(), settings, tolerance)
 
     # extract solution for output
 
@@ -119,9 +122,9 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance):
 
     u, p = calc_controls(solution, J_DIM + I_DIM, K_DIM + L_DIM)
 
-    tau, dtau = calc_equations(np.arange(1, K_DIM+L_DIM+1), np.arange(1,J_DIM+I_DIM+1), solution.pivots, x_0, np.zeros(len(x_0)), q_N, np.zeros(len(q_N)), T, 0, dx, dq)
+    tau, dtau = calc_equations(param_line, solution.pivots, dx, dq)
 
-    x, dum, q, dum = calc_states(dx, dq, x_0, np.zeros((len(x_0),1)), q_N, np.zeros((len(q_N),1)), tau, dtau, sdx, sdq, tolerance)
+    x, dum, q, dum = calc_states(dx, dq, param_line, tau, dtau, sdx, sdq)
 
     NN = len(tau)
     t = np.cumsum(np.hstack((0, tau)))

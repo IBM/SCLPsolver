@@ -2,6 +2,7 @@ import numpy as np
 from .calc_statecollide5 import calc_statecollide
 from .calc_timecollide6 import calc_timecollide
 from .calc_order_ratio import calc_order_ratio
+from .collision_info import collision_info
 
 #function [ cases, Delta, N1, N2, v1,v2, problem ] =
 
@@ -40,25 +41,25 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
         if len(B2) > 0:
             test2 = solution.get_name_diff_withN(B2).size
     if (len(B1) > 0 or len(B2) > 0) and test1 == 0 and test2 == 0:
-        return 'complete', 0, -1, NN, [], [], problem
+        return collision_info('complete', 0, -1, NN, [], []), problem
 
 
     CC1, prob = calc_statecollide(klist,jlist,x,del_x,q,del_q, sdx, sdq, tolerance)
     problem['stateProblem'] = prob
     if prob['result'] != 0:
         problem['result'] = 1
-        return '', Delta, N1, N2, v1, v2, problem
+        return collision_info('', Delta, N1, N2, v1, v2), problem
 
     CC2, prob = calc_timecollide(tau,dtau, lastN1, lastN2, tolerance, tol_coeff)
     problem['timeProblem'] = prob
     if prob['result'] != 0:
         problem['result'] = problem['result'] + 2
-        return '', Delta, N1, N2, v1, v2, problem
+        return collision_info('', Delta, N1, N2, v1, v2), problem
 
     if 	len(CC1) == 0 and len(CC2) == 0:
         case = 'complete'
         Delta = np.inf
-        return case, Delta, N1, N2, v1, v2, problem
+        return collision_info(case, Delta, N1, N2, v1, v2), problem
 
     Didle = 0
     if	len(CC1) > 0 and len(CC2) > 0:
@@ -69,7 +70,7 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
             print('time shrink as well as state hits zero elsewhere\n')
             problem['result'] = problem['result'] + 4
             problem['compoundProblem']['result'] = 1
-            return '', Delta, N1, N2, v1, v2, problem
+            return collision_info('', Delta, N1, N2, v1, v2), problem
     if	(len(CC1) > 0 and len(CC2) == 0) or Didle < 0:
         case = 'Case iii'
         Delta = CC1[0]
@@ -90,10 +91,10 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
             if len(vlist) > 2:
                 problem['result'] = problem['result'] + 4
                 problem['compoundProblem']['result'] = 2
-                return '', Delta, N1, N2, v1, v2, problem
+                return collision_info('', Delta, N1, N2, v1, v2), problem
             elif len(vlist) == 1:
                 case = 'Case i__'
-                return case, Delta, N1, N2, v1, v2, problem
+                return collision_info(case, Delta, N1, N2, v1, v2), problem
             elif len(vlist) == 2:
                 case = 'Case ii_'
                 order_ratio = calc_order_ratio(vlist[0],vlist[1],N1,N2,klist,jlist,dx,dq,x,del_x,q,del_q,tau,dtau,Delta/2)
@@ -105,5 +106,5 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
                 else:
                     v1 = vlist[1]
                     v2 = vlist[0]
-                return case, Delta, N1, N2, v1, v2, problem
-    return case, Delta, N1, N2, v1, v2, problem
+                return collision_info(case, Delta, N1, N2, v1, v2), problem
+    return collision_info(case, Delta, N1, N2, v1, v2), problem

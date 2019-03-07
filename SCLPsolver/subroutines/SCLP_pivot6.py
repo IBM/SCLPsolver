@@ -32,6 +32,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
         piv1 = pivot_storage(pp21.tolist(),pp22.tolist())
         if np.size(pp21) == 0 and np.size(pp22) == 0:
             print('Basis B2 is optimal')
+            pivot_problem['result'] = 1
             return solution, STEPCOUNT, ITERATION, pivot_problem
     elif N2 == NN:
         pbaseB2 = np.array([])
@@ -55,6 +56,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
         #piv1 = [pp11.tolist()+ pp12.tolist()]
         piv1 = pivot_storage(pp11.tolist(), pp12.tolist())
         if np.size(pp11) == 0 and np.size(pp12) == 0:
+            pivot_problem['result'] = 1
             print('Basis B1 is optimal')
             return solution, STEPCOUNT, ITERATION, pivot_problem
     else:
@@ -81,6 +83,14 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
         pp11 = np.setdiff1d(pbaseB1, pbaseDD, assume_unique=True)
         pp12 = np.setdiff1d(dbaseB1, dbaseDD, assume_unique=True)
         piv1 = pivot_storage(pp11.tolist() + pp21.tolist(), pp12.tolist()  + pp22.tolist())
+        if np.size(pp11) == 0 and np.size(pp12) == 0:
+            pivot_problem['result'] = 1
+            print('Basis B1 is optimal')
+            return solution, STEPCOUNT, ITERATION, pivot_problem
+        elif np.size(pp21) == 0 and np.size(pp22) == 0:
+            print('Basis B2 is optimal')
+            pivot_problem['result'] = 1
+            return solution, STEPCOUNT, ITERATION, pivot_problem
         #piv1 = [pp11.tolist()+ pp12.tolist(),pp21.tolist()+ pp22.tolist()]
     objective = DD[0, 0]
 
@@ -113,7 +123,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
             Jexclude = -np.intersect1d(dbaseDD[dbaseDD < 0], dbaseB2[dbaseB2 < 0], assume_unique=True)
         elif N2 == NN:
             Kexclude =  np.intersect1d(pbaseDD[pbaseDD > 0], pbaseB1[pbaseB1 > 0], assume_unique=True)
-            Jex1 =  np.intersect1d(dbaseDD[dbaseDD < 0], [-v for v in Jset_N], assume_unique=True)
+            Jex1 =  np.intersect1d(dbaseDD[dbaseDD < 0], np.asarray([-v for v in Jset_N]), assume_unique=True)
             Jexclude = -np.intersect1d(Jex1, dbaseB1[dbaseB1 < 0], assume_unique=True)
         else:
             Kexclude =  np.intersect1d(pbaseB1[pbaseB1 > 0], pbaseB2[pbaseB2 > 0], assume_unique=True)

@@ -46,7 +46,7 @@ class sparse_matrix_constructor():
         if from_ <= 0:
             self._data = self._data[to_:]
             self._indexes = self._indexes[to_:]
-        elif to_ >= len(self._data):
+        elif to_ >= len(self._data)-1:
             self._data = self._data[:from_]
             self._indexes = self._indexes[:from_]
         else:

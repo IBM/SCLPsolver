@@ -15,7 +15,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance, tol_coeff):
 
     tol2 = 10 * tolerance
     tol1 = tol2 * tol_coeff
-    max_neg_coeff = 100
+    max_neg_coeff = 10000
 
     NN = len(TAU)
     iposTAU = TAU > tol2

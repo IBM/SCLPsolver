@@ -122,8 +122,24 @@ class SCLP_base_sequence():
                 return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots), N2
 
 
-    def clear_base_sequense(self, strategy):
-        pass
+    def clear_base_sequense(self, strategy, NN):
+        basesActive = len(self._places)
+        basesToSave = min(max(round(strategy['basesRate'] * NN), strategy['minBases']), strategy['maxBases'])
+        numBasesToRemove = basesActive - basesToSave
+        if (numBasesToRemove > 0):
+            orderedSequence = sorted(self._places)
+            order = sorted(range(len(self._places)), key=lambda i: self._places[i])
+            diffSeq = [orderedSequence[1]] + [orderedSequence[i+2] - p for i,p in enumerate(orderedSequence[:-2])].append(NN-orderedSequence[-1])
+            if 2 * numBasesToRemove < basesActive:
+                candidates = sorted(range(len(diffSeq)), key=lambda i: diffSeq[i])[:2*numBasesToRemove+1]
+                to_remove = candidates[0]
+                for i in range(1,len(candidates)):
+                    if  candidates[i] - candidates[i-1] > 1 or candidates[i-1] not in to_remove:
+                        to_remove.append(candidates[i])
+                    if len(to_remove) >= numBasesToRemove:
+                        break
+                self._bases = [self._bases[i] for i in order if self._places[i] not in to_remove]
+                self._places = [p for p in orderedSequence if p not in to_remove]
 
     def check_places(self):
         return len(self._places) == len(set(self._places))

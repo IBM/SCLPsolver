@@ -50,14 +50,14 @@ class SCLP_solution():
             self._base_sequence.insert_basis(basis,N1+1)
 
     #'#@profile
-    def update_rewind(self, N1, N2, Nnew, dx, dq, pivots):
-        N2_cor = N2 + Nnew
-        N2b = max(N2, N2_cor)
-        self._base_sequence.remove_bases(N1, N2b, self._pivots, Nnew)
-        Npivots = len(pivots)
-        self._pivots.replace_pivots(N1, N1 + Nnew + Npivots, pivots)
-        self._dx.replace_matrix(N1 + 1, N2_cor, dx)
-        self._dq.replace_matrix(N1 + 1, N2_cor, dq)
+    def update_rewind(self, col_info):
+        N2_cor = col_info.N2 + col_info.Nnew
+        N2b = max(col_info.N2, N2_cor)
+        self._base_sequence.remove_bases(col_info.N1, N2b, self._pivots, col_info.Nnew)
+        Npivots = len(col_info.rewind_info.pivots)
+        self._pivots.replace_pivots(col_info.N1, col_info.N1 + col_info.Nnew + Npivots, col_info.rewind_info.pivots)
+        self._dx.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dx)
+        self._dq.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dq)
 
     #'#@profile
     def get_basis_at(self, place):
