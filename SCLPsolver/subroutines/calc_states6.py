@@ -72,18 +72,26 @@ def check_sd(sd, is_primal):
     if is_primal:
         test1 = np.logical_and(xsd[:,1:], sd[:,:-1] == 1)
         if np.any(test1):
-            print('Positive state jumping to 0!')
+            print('Positive dx jumping to 0!')
             print(np.where(test1))
+            return False
         test2 = np.logical_and(xsd[:,:-1], sd[:,1:] == -1)
         if np.any(test2):
-            print('State going to negative direction!')
+            print('Zero dx going to negative direction!')
             print(np.where(test2))
+            return False
+        else:
+            return True
     else:
         test1 = np.logical_and(xsd[:, :-1], sd[:, 1:] == 1)
         if np.any(test1):
-            print('Positive state jumping to 0!')
+            print('Positive dq jumping to 0!')
             print(np.where(test1))
+            return False
         test2 = np.logical_and(xsd[:, 1:], sd[:, :-1] == -1)
         if np.any(test2):
-            print('State going to negative direction!')
+            print('Zero dq going to negative direction!')
             print(np.where(test2))
+            return False
+        else:
+            return True

@@ -1,13 +1,13 @@
 import numpy as np
 from .calc_statecollide5 import calc_statecollide
 from .calc_timecollide6 import calc_timecollide
-from .calc_order_ratio import calc_order_ratio
+from .calc_order_ratio6 import calc_order_ratio
 from .collision_info import collision_info
 
 #function [ cases, Delta, N1, N2, v1,v2, problem ] =
 
 #'#@profile
-def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sdx, sdq, lastN1, lastN2, tolerance, tol_coeff):
+def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sdx, sdq, lastN1, lastN2, last_case, tolerance, tol_coeff):
 #idenitfy next collision and classify it
 #problem
 #   result = 0 Ok
@@ -50,9 +50,9 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
         problem['result'] = 1
         return collision_info('', Delta, N1, N2, v1, v2), problem
 
-    CC2, prob = calc_timecollide(tau,dtau, lastN1, lastN2, tolerance, tol_coeff)
+    CC2, prob = calc_timecollide(tau,dtau, lastN1, lastN2, last_case, tolerance, tol_coeff)
     problem['timeProblem'] = prob
-    if prob['result'] != 0:
+    if prob['result'] != 0 and prob['result'] != 6:
         problem['result'] = problem['result'] + 2
         return collision_info('', Delta, N1, N2, v1, v2), problem
 
@@ -89,6 +89,7 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
         else:
             vlist = solution.pivots.get_difference(N1,N2)
             if len(vlist) > 2:
+                print('More than two variables leave in time shrink ....')
                 problem['result'] = problem['result'] + 4
                 problem['compoundProblem']['result'] = 2
                 return collision_info('', Delta, N1, N2, v1, v2), problem
@@ -97,7 +98,7 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
                 return collision_info(case, Delta, N1, N2, v1, v2), problem
             elif len(vlist) == 2:
                 case = 'Case ii_'
-                order_ratio = calc_order_ratio(vlist[0],vlist[1],N1,N2,klist,jlist,dx,dq,x,del_x,q,del_q,tau,dtau,Delta/2)
+                order_ratio, correct = calc_order_ratio(vlist[0],vlist[1],N1,N2,klist,jlist,dx,dq,x,del_x,q,del_q,tau,dtau,Delta/2)
                 if abs(abs(order_ratio)-1) < tolerance * tol_coeff:
                     print('Tolerance in R unclear...')
                 if abs(order_ratio) < 1: #the strange case when R < 0 should be perferctly reviewed
@@ -106,5 +107,9 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
                 else:
                     v1 = vlist[1]
                     v2 = vlist[0]
-                return collision_info(case, Delta, N1, N2, v1, v2), problem
+                if correct:
+                    return collision_info(case, Delta, N1, N2, v1, v2), problem
+                else:
+                    problem['result'] = 5
+                    return collision_info(case, Delta, N1, N2, v1, v2), problem
     return collision_info(case, Delta, N1, N2, v1, v2), problem

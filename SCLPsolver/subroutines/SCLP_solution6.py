@@ -93,3 +93,13 @@ class SCLP_solution():
     #'#@profile
     def get_next_basis_for_solution(self, basis, place):
         return self._base_sequence.get_next_basis(basis, place, self._pivots)
+
+    # '#@profile
+    def get_state_slopes(self):
+        dx = self.dx.get_matrix()
+        dq = self.dq.get_matrix()
+        sdx = np.ones((dx.shape[0], dx.shape[1] + 2))
+        sdq = np.ones((dq.shape[0], dq.shape[1] + 2))
+        np.sign(dx, out=sdx[:, 1:-1])
+        np.sign(dq, out=sdq[:, 1:-1])
+        return dx, dq, sdx, sdq

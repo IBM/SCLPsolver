@@ -3,9 +3,12 @@ import numpy as np
 
 
 #'#@profile
-def base_pivot(A, i, j):
-    i = i + 1
-    j = j + 1
+def base_pivot(A, i, j, pn, dn):
+    nam = pn[i]
+    pn[i] = dn[j]
+    dn[j] = nam
+    i += 1
+    j += 1
     p = A[i, j]
     if p == 0:
         raise Exception('pivot on zero')
@@ -15,7 +18,7 @@ def base_pivot(A, i, j):
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
-    return A
+    return A, pn, dn
 
 
 #'#@profile
@@ -26,8 +29,8 @@ def full_pivot(A, i, j, pn, dn, ps, ds):
     sam = ps[i]
     ps[i] = - ds[j]
     ds[j] = - sam
-    i = i + 1
-    j = j + 1
+    i += 1
+    j += 1
     p = A[i, j]
     if p == 0:
         raise Exception('pivot on zero')
@@ -46,8 +49,8 @@ def dict_pivot(dct, i, j):
     nam = dct['prim_name'][i]
     dct['prim_name'][i] = dct['dual_name'][j]
     dct['dual_name'][j] = nam
-    i = i + 1
-    j = j + 1
+    i += 1
+    j += 1
     p = dct['A'][i, j]
     if p == 0:
         raise Exception('pivot on zero')

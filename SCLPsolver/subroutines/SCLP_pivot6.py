@@ -11,7 +11,6 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
 
     pivot_problem = {'result': 0}
     if N1 == -1:
-        pbaseB1 = np.array([])
         AAN1 = None
         AAN2 = solution.get_basis_at(N2)
         BB2 = AAN2['A']
@@ -35,13 +34,11 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
             pivot_problem['result'] = 1
             return solution, STEPCOUNT, ITERATION, pivot_problem
     elif N2 == NN:
-        pbaseB2 = np.array([])
         AAN1 = solution.get_basis_at(N1)
         AAN2 = None
         BB1 = AAN1['A']
         pbaseB1 = AAN1['prim_name']
         dbaseB1 = AAN1['dual_name']
-        dbaseB2 = np.array([])
         Kset = pbaseB1[pbaseB1 > 0]
         Jset = [-v for v in Jset_N]
         if not isinstance(v2, list):
@@ -110,33 +107,30 @@ def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, tot
     i2 = 1
     if N1 >= 0:
         i1 = np.size(pp11)
+        # check that positive dq not jumping to 0
+        if i1 == 1:
+            if pp11[0] < 0:
+                if DD[0, 1:][dbaseDD == pp11[0]][0] > 0:
+                    print('Positive dq jumping to 0!')
+                    pivot_problem['result'] = 1
+                    return solution, STEPCOUNT, ITERATION, pivot_problem
     if N2 < NN:
         i2 = np.size(pp21)
+        # check that positive dx not jumping to 0
+        if i2 == 1:
+            if pp21[0] > 0:
+                if DD[1:, 0][pbaseDD == pp21[0]][0] > 0:
+                    print('Positive dx jumping to 0!')
+                    pivot_problem['result'] = 1
+                    return solution, STEPCOUNT, ITERATION, pivot_problem
     if i1 == 1 and i2 == 1:
         dx, dq = extract_rates(pbaseDD, dbaseDD, DD, KK, JJ, totalK, totalJ)
         solution.update_caseII(N1, N2, dx, dq, AAN1, AAN2, piv1, 1, {'prim_name': pbaseDD, 'dual_name': dbaseDD, 'A': DD})
         return solution, STEPCOUNT, ITERATION, pivot_problem
     else:
-        if N1 == -1:
-            Kex1 =  np.intersect1d(pbaseDD[pbaseDD > 0], Kset_0, assume_unique=True)
-            Kexclude =  np.intersect1d(Kex1, pbaseB2[pbaseB2 > 0], assume_unique=True)
-            Jexclude = -np.intersect1d(dbaseDD[dbaseDD < 0], dbaseB2[dbaseB2 < 0], assume_unique=True)
-        elif N2 == NN:
-            Kexclude =  np.intersect1d(pbaseDD[pbaseDD > 0], pbaseB1[pbaseB1 > 0], assume_unique=True)
-            Jex1 =  np.intersect1d(dbaseDD[dbaseDD < 0], np.asarray([-v for v in Jset_N]), assume_unique=True)
-            Jexclude = -np.intersect1d(Jex1, dbaseB1[dbaseB1 < 0], assume_unique=True)
-        else:
-            Kexclude =  np.intersect1d(pbaseB1[pbaseB1 > 0], pbaseB2[pbaseB2 > 0], assume_unique=True)
-            Jexclude = -np.intersect1d(dbaseB1[dbaseB1 < 0], dbaseB2[dbaseB2 < 0], assume_unique=True)
-            if not isinstance(v1, list):
-                Kexclude = Kexclude[Kexclude != v1]
-                Jexclude = Jexclude[Jexclude != -v1]
-            if not isinstance(v2, list):
-                Kexclude = Kexclude[Kexclude != v2]
-                Jexclude = Jexclude[Jexclude != -v2]
         dx, dq, pivots, Nnew, STEPCOUNT, ITERATION, pivot_problem =\
-         SCLP_subproblem(pbaseDD, dbaseDD, DD, N1, N2, v1, v2, Kexclude, Jexclude, pbaseB1, pbaseB2, AAN1, AAN2, KK, JJ,
-                            NN, totalK, totalJ, DEPTH+1, STEPCOUNT, ITERATION, settings, tolerance)
+         SCLP_subproblem(pbaseDD, dbaseDD, DD, v1, v2, Kset_0, Jset_N, AAN1, AAN2, KK, JJ,
+                            totalK, totalJ, DEPTH+1, STEPCOUNT, ITERATION, settings, tolerance)
         if pivot_problem['result'] == 0:
             solution.update_caseII(N1, N2, dx, dq, AAN1, AAN2, pivots, Nnew)
     return solution, STEPCOUNT, ITERATION, pivot_problem
