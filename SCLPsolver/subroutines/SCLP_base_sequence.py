@@ -144,3 +144,7 @@ class SCLP_base_sequence():
     def check_places(self):
         return len(self._places) == len(set(self._places))
 
+    def keep_only_one(self):
+        self._places = [self._places[0]]
+        self._bases = [self._bases[0]]
+

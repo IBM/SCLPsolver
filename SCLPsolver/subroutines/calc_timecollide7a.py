@@ -2,7 +2,7 @@ import numpy as np
 from .matlab_utils import *
 
 
-def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff):
+def calc_timecollide(TAU, DTAU, pivots, lastN1, lastN2, last_case, tolerance, tol_coeff):
 # calculate time collisions, and performs tests
 # problem    result = 0  Ok
 #            result = 1  negative interval length       data = negative intervals
@@ -11,7 +11,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
 #            result = 4  multiple location shrinks      data = shrinking intervals
 #            result = 5  zero interval does not expand  data = non-expanding interval
 
-    problem = {'result': 0, 'data': []}
+    problem = {'result': 0, 'data': [], 'had_resolution': False, 'resolved_types':[]}
 
     tol2 = 10 * tolerance
     tol1 = tol2 * tol_coeff
@@ -25,6 +25,8 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
 
     while np.any(inegTAU):
         print('negative interval length...')
+        problem['had_resolution'] = True
+        problem['resolved_types'].append(1)
         d = d * 10
         if d > max_neg_coeff:
             print('fail!')
@@ -48,6 +50,8 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
     ztau_ind = np.asarray([])
     last_col_int= np.arange(lastN1+1,lastN2, dtype=int)
     if zflag:
+        problem['had_resolution'] = True
+        problem['resolved_types'].append(2)
         ztau_ind = find(test1)
         print('zero length interval shrinks:', ztau_ind, 'last N1:', lastN1, ' N2:', lastN2, 'case:', last_case)
         ind1 = len(np.intersect1d(ztau_ind, last_col_int, assume_unique=True)) == 0
@@ -59,10 +63,21 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
                 elif np.sum(DTAU[np.arange(locposTAU + 1,NN)]) < 0:
                     return [0, locposTAU + 1, locposTAU], problem
         elif ind1:
+            if last_case == 'rewind':
+                zmin = np.min(ztau_ind)
+                zmax = np.max(ztau_ind)
+                if len(ztau_ind) / (zmax - zmin + 1) >= 0.75 and len(ztau_ind) > 3:
+                    if np.all(izerTAU[zmin: zmax+1]):
+                        print('trying to remove zero intervals...')
+                        rz = np.divide(-DTAU, TAU, where=inegDTAU, out=np.zeros_like(TAU))
+                        zz_ind = np.argmax(rz)
+                        zz = rz[zz_ind]
+                        return [1 / zz, zmin, zmax], problem
             tol_coeff = 0.1
-            while tol_coeff >= 0.001 and zflag:
+            while tol_coeff >= tolerance and zflag:
                 print('trying to resolve * ', tol_coeff, ' ...')
                 iposTAU = TAU > tol2 * tol_coeff
+                inegTAU = TAU < tol2 * tol_coeff
                 izerTAU = np.fabs(TAU) <= tol2 * tol_coeff
                 test1 = np.logical_and(izerTAU, inegDTAU)
                 zflag = np.any(test1)
@@ -91,11 +106,14 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
     test2 = np.logical_and(izerTAU, izerDTAU)
     zflag = np.any(test2)
     if zflag:
+        problem['had_resolution'] = True
+        problem['resolved_types'].append(5)
         if len(np.intersect1d(find(test1), np.arange(lastN1 + 1, lastN2, dtype=int), assume_unique=True)) == 0:
             print('zero length interval does not expand')
             tol_coeff = 0.1
             while tol_coeff >= 0.001 and zflag:
                 print('trying to resolve * ', tol_coeff, ' ...')
+                inegTAU = TAU < tol2 * tol_coeff
                 iposTAU = TAU > tol2 * tol_coeff
                 izerTAU = np.fabs(TAU) <= tol2 * tol_coeff
                 test2 = np.logical_and(izerTAU, izerDTAU)
@@ -115,11 +133,15 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
             print('zero length interval does not expand\n')
             return [], problem
 
-    test3 = np.logical_and(iposTAU, inegDTAU)
+    #test3 = np.logical_and(iposTAU, inegDTAU)
+    #inegDTAU = DTAU < -tol2 * tol_coeff
+    test3 = inegDTAU
     if not np.any(test3):
         return [], problem
 
-    rz = np.divide(-DTAU, TAU, where=test3, out=np.zeros_like(TAU))
+    xTAU = TAU.copy()
+    xTAU[inegTAU] = tol2 * tol_coeff
+    rz = np.divide(-DTAU, xTAU, where=test3, out=np.zeros_like(TAU))
     zz_ind = np.argmax(rz)
     zz = rz[zz_ind]
     if abs(1 / zz) < tol2:
@@ -129,6 +151,8 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
             if last_case == 'Case ii_':
                 problem['result'] = 6
                 problem['data'] = zz_ztau_ind
+                problem['had_resolution'] = True
+                problem['resolved_types'].append(6)
                 #return [], problem
         if tol_coeff >= 1:
             tol_coeff = 0.1
@@ -173,6 +197,8 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, last_case, tolerance, tol_coeff)
         nn1 = np.min(ishrink)
         nn2 = np.max(ishrink)
         if len(ishrink) < nn2 - nn1:
+            problem['had_resolution'] = True
+            problem['resolved_types'].append(4)
             print('multiple location shrinks\n')
             print('resolving * 0.1... ')
             ishrink = find(test < tol1/10)
