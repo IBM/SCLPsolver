@@ -1,7 +1,7 @@
 import numpy as np
 from .pivot_storage import pivot_storage
 from .col_info_stack import col_info_stack
-from .extract_rates8 import extract_rates_from_basis, extract_rates_from_subproblem
+from .extract_rates8a import extract_rates_from_basis, extract_rates_from_subproblem
 from .SCLP_base_sequence import SCLP_base_sequence
 from .rewind_info7 import rewind_info
 from .problem_dimensions import problem_dimensions
@@ -16,10 +16,10 @@ class SCLP_solution():
         self._pivots = pivot_storage()
         self._base_sequence = SCLP_base_sequence({'prim_name': prim_name, 'dual_name': dual_name, 'A': dct})
         dx, dq = extract_rates_from_basis(prim_name, dual_name, dct, self._problem_dims)
-        self._dx = dx
-        self._dq = dq
-        # self._dx = matrix_constructor(dx[0], dx[1], KK)
-        # self._dq = matrix_constructor(dq[0], dq[1], JJ)
+        # self._dx = dx
+        # self._dq = dq
+        self._dx = matrix_constructor(dx[0], dx[1], KK)
+        self._dq = matrix_constructor(dq[0], dq[1], JJ)
         self._col_info_stack = col_info_stack()
         self._last_collision = None
         self._state = None
@@ -73,7 +73,7 @@ class SCLP_solution():
     def update_from_basis(self, col_info, piv, AAN1, AAN2, prim_name, dual_name, dct):
         dx, dq = extract_rates_from_basis(prim_name, dual_name, dct, self._problem_dims)
         self._update_caseII(col_info, dx, dq, AAN1, AAN2, piv, 1,
-                           {'prim_name': prim_name, 'dual_name': dual_name, 'A': dct})
+                           {'prim_name': prim_name, 'dual_name': dual_name, 'A': dct}, False)
 
     #'#@profile
     def update_caseI(self, col_info):
@@ -209,5 +209,6 @@ class SCLP_solution():
         self._state = None
 
     def clear_collision_stack(self):
+        self._last_collision = None
         self._col_info_stack.clear()
 

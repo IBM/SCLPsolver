@@ -19,8 +19,6 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
 
         if not solution.base_sequence.check_places():
             raise Exception('Bases placement failure!')
-        if STEPCOUNT == 258:
-            print('here')
         if not rewind_required:
             solution.update_state(param_line)
             if solution.check_if_complete(param_line):

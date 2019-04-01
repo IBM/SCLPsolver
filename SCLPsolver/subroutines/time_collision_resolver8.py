@@ -277,7 +277,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
                 if np.sum(DTAU[np.arange(0,locposTAU)]) < 0:
                     return [0, [1, locposTAU]], problem
                 elif np.sum(DTAU[np.arange(locposTAU + 1,NN)]) < 0:
-                    return [0, [locposTAU + 1, locposTAU]], problem
+                    return [0, [locposTAU + 1, NN-1]], problem
         elif ind1:
             # if last_case == 'rewind':
             #     zmin = np.min(ztau_ind)
@@ -304,7 +304,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
                             if np.sum(DTAU[np.arange(0, locposTAU)]) < 0:
                                 return [0, [1, locposTAU]], problem
                             elif np.sum(DTAU[np.arange(locposTAU + 1, NN)]) < 0:
-                                return [0, [locposTAU + 1, locposTAU]], problem
+                                return [0, [locposTAU + 1, NN-1]], problem
                 else:
                     break
                 tol_coeff = tol_coeff * 0.1
