@@ -6,7 +6,7 @@ def calc_controls(solution, JJ, KK):
 
     new_dict = solution.get_basis_at(0)
     u = matrix_constructor(None, None, JJ, -1, solution.NN)
-    p = matrix_constructor(None, None, JJ, -1, solution.NN)
+    p = matrix_constructor(None, None, KK, -1, solution.NN)
 
     for place in range(solution.NN):
         klist2 = find(new_dict['dual_name'] > 0)
