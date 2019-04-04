@@ -1,7 +1,8 @@
 import sys
-sys.path.append('C:\DataD\Work\CERBERO\CLP\SCLPsolver')
-from SCLP8 import SCLP
 import os
+proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+sys.path.append(proj)
+from SCLP8 import SCLP
 import numpy as np
 
 
@@ -15,7 +16,8 @@ def relative_to_project(file_path):
 seed = 1000
 K = 600
 I = 200
-tmp_path =  relative_to_project('tests/data/reentrant/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/')
+#tmp_path =  relative_to_project('tests/data/reentrant/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/')
+tmp_path =  'C:/Users/evgensh/Box Sync/SCLP comparison/data/reentrant/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/'
 G = np.load(tmp_path + 'G.dat')
 F = np.load(tmp_path + 'F.dat')
 H = np.load(tmp_path + 'H.dat')

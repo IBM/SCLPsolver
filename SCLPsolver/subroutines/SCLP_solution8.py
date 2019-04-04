@@ -5,8 +5,10 @@ from .extract_rates8a import extract_rates_from_basis, extract_rates_from_subpro
 from .SCLP_base_sequence import SCLP_base_sequence
 from .rewind_info7 import rewind_info
 from .problem_dimensions import problem_dimensions
-from .solution_state import solution_state
+from .solution_state8 import solution_state
 from .matrix_constructor8 import matrix_constructor
+from .calc_equations6 import calc_equations
+from .calc_states6 import calc_states
 
 
 class SCLP_solution():
@@ -22,7 +24,7 @@ class SCLP_solution():
         self._dq = matrix_constructor(dq[0], dq[1], JJ)
         self._col_info_stack = col_info_stack()
         self._last_collision = None
-        self._state = None
+        self._state = solution_state()
 
     @property
     def last_collision(self):
@@ -61,7 +63,16 @@ class SCLP_solution():
         return self._problem_dims.totalJ
 
     def update_state(self, param_line):
-        self._state = solution_state(self._dx, self._dq, self._pivots, param_line)
+        self._state.dx = self._dx.get_matrix()
+        self._state.dq = self._dq.get_matrix()
+        self._state.sdx = np.ones((self._state.dx.shape[0], self._state.dx.shape[1] + 2))
+        self._state.sdq = np.ones((self._state.dq.shape[0], self._state.dq.shape[1] + 2))
+        np.sign(self._state.dx, out=self._state.sdx[:, 1:-1])
+        np.sign(self._state.dq, out=self._state.sdq[:, 1:-1])
+        self._state.tau, self._state.dtau = calc_equations(param_line, self._pivots, self._state.dx, self._state.dq)
+        self._state.x, self._state.del_x, self._state.q, self._state.del_q\
+            = calc_states(self._state.dx, self._state.dq, param_line, self._state.tau, self._state.dtau, self._state.sdx, self._state.sdq)
+        #self._state = solution_state(self._dx, self._dq, self._pivots, param_line)
 
     def update_from_subproblem(self, col_info, pivots, AAN1, AAN2):
         dx, dq = extract_rates_from_subproblem(pivots, AAN1, AAN2, self._problem_dims)
