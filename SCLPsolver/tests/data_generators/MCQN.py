@@ -1,7 +1,5 @@
 import numpy as np
 
-# function_MCQN
-
 # General Multi - Class Queueing Network:
 # buffers numbered k = 1, ..., K.
 # Each buffer is served by one of the I machines,
@@ -20,9 +18,9 @@ import numpy as np
 # random holding costs cost(k) = ~U(0, 2).
 # resource limits: b(i) = 1, with sum_k M(i, k) * u(k) <= b(i).
 
-def MCLP(K, I, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_max_rate = 0.6, hdist = np.random.rand,
-         hdist_params = (), alpha_rate = 40, alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist
-         = np.random.rand, a_dist_params = ()):
+def generate_MCQN_data(K, I, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_rate = 0.6, hdist = np.random.rand,
+                       hdist_params = (), alpha_rate = 40, alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist
+                       = np.random.rand, a_dist_params = ()):
 
     np.random.RandomState(seed)
     b = np.ones(I)
@@ -43,8 +41,8 @@ def MCLP(K, I, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=
     cols = np.arange(K)
     np.random.shuffle(cols)
     H = np.zeros(I, K)
-    rows = np.concatenate(np.arange(I),np.random.choice(I,I,True))
-    H[rows,cols] = h_max_rate * hdist(*hdist_params, K)
+    rows = np.concatenate(np.arange(I),np.random.choice(I,K-I,True))
+    H[rows,cols] = h_rate * hdist(*hdist_params, K)
 
     # initial fluid
     alpha = alpha_rate * alpha_dist(*alpha_dist_params, K)
@@ -52,11 +50,13 @@ def MCLP(K, I, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=
     # exogenous input rate
     a = a_rate * a_dist(*a_dist_params, K)
 
-    cost = 2 * np.random.rand(K)
-    c = cost * G
-
     F = np.empty((K,0))
     d = np.empty(0)
-    gamma = np.zeros(K)
 
-    return G,H,F,gamma,c,d,alpha,a,b
+    #TODO: externalize or parametrize
+    gamma = np.zeros(K)
+    cost = 2 * np.random.rand(K)
+    #this produce negative and positive costs!
+    c = cost * G
+
+    return G,H,F,gamma,c,d,alpha,a,b,None

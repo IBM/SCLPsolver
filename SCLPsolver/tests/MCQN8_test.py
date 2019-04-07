@@ -3,7 +3,7 @@ import os
 proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 sys.path.append(proj)
 from SCLP8 import SCLP
-import numpy as np
+from data_generators.data_loader import load_data
 
 
 def relative_to_project(file_path):
@@ -16,23 +16,9 @@ def relative_to_project(file_path):
 seed = 1013
 K = 2000
 I = 200
-#tmp_path =  relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/')
-tmp_path =  'C:/Users/evgensh/Box Sync/SCLP comparison/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/'
-G = np.load(tmp_path + 'G.dat')
-F = np.load(tmp_path + 'F.dat')
-H = np.load(tmp_path + 'H.dat')
-a = np.hstack(np.load(tmp_path + 'a.dat'))
-b = np.hstack(np.load(tmp_path + 'b.dat'))
-c = np.hstack(np.load(tmp_path + 'c.dat'))
-d = np.load(tmp_path + 'd.dat')
-if np.size(d) ==0:
-    d = np.empty(shape=(0))
-if np.size(F) ==0:
-    F = np.empty(shape=(G.shape[0], 0))
-print(F.shape)
-#d = np.hstack(dd)
-alpha = np.hstack(np.load(tmp_path + 'alpha.dat'))
-gamma = np.hstack(np.load(tmp_path + 'gamma.dat'))
+#tmp_path =  relative_to_project('tests/data/MCQN')
+tmp_path =  'C:/Users/evgensh/Box/SCLP comparison/data/MCQN'
+G, H, F, gamma, c, d, alpha, a, b, T = load_data(K, I, seed, tmp_path)
 import time
 import cProfile, pstats, io
 pr = cProfile.Profile()
