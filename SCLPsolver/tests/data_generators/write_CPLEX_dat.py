@@ -1,63 +1,50 @@
-def write_CPLEX_dat(file_name, T, varDim, constrDimH, constrDimG, G, H, alpha, a, b, gamma, c )
-    fileID = fopen(file_name,'w');
-    fprintf(fileID,'T = %6.2f;\r\n',T);
-    fprintf(fileID,'VarDimension = %8u;\r\n',varDim);
-    fprintf(fileID,'ConstrDimensionH = %8u;\r\n',constrDimH);
-    fprintf(fileID,'ConstrDimensionG = %8u;\r\n',constrDimG);
-    [row, col] = size(G);
-    fprintf(fileID,'G = {\r\n');
-    for i = 1:row
-        for j = 1:col
-            if ~ G(i,j)==0
-                fprintf(fileID,'<%8u %8u %8g>\r\n',i, j, G(i,j));
-            end
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fprintf(fileID,'H = {\r\n');
-    [row, col] = size(H);
-    for i = 1:row
-        for j = 1:col
-            if ~ H(i,j)==0
-                fprintf(fileID,'<%8u %8u %8g>\r\n',i, j, H(i,j));
-            end
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fprintf(fileID,'alpha = {\r\n');
-    for i = 1:length(alpha)
-        if ~ alpha(i)==0
-            fprintf(fileID,'<%8u %8u %8g>\r\n',i, 1, alpha(i));
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fprintf(fileID,'a = {\r\n');
-    for i = 1:length(a)
-        if ~ a(i)==0
-            fprintf(fileID,'<%8u %8u %8g>\r\n',i, 1, a(i));
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fprintf(fileID,'b = {\r\n');
-    for i = 1:length(b)
-        if ~ b(i)==0
-            fprintf(fileID,'<%8u %8u %8g>\r\n',i, 1, b(i));
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fprintf(fileID,'c = {\r\n');
-    for i = 1:length(c)
-        if ~ c(i)==0
-            fprintf(fileID,'<%8u %8u %8g>\r\n',i, 1, c(i));
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fprintf(fileID,'gamma = {\r\n');
-    for i = 1:length(gamma)
-        if ~ gamma(i)==0
-            fprintf(fileID,'<%8u %8u %8g>\r\n',i, 1, gamma(i));
-        end
-    end
-    fprintf(fileID,'};\r\n\r\n');
-    fclose(fileID);
-    end
+from scipy.io import mmwrite
+from scipy.sparse import csr_matrix
+import numpy as np
+
+
+def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c):
+    f1 = file_name + 'g.mtx'
+    mmwrite(f1, csr_matrix(G))
+    f2 = file_name + 'h.mtx'
+    mmwrite(f2, csr_matrix(H))
+    fout = open(file_name, 'w')
+    fout.write('T = {:f};\r\n'.format(T))
+    fout.write('VarDimension = {:d};\r\n'.format(G.shape[1]))
+    fout.write('ConstrDimensionH = {:d};\r\n'.format(H.shape[0]))
+    fout.write('ConstrDimensionG = {:d};\r\n'.format(G.shape[0]))
+    fout.write('G = {\r\n')
+    with open(f1,'r') as fp:
+        line = fp.readline()
+        while line:
+            fout.write('<'+ line +'>\r\n')
+        fp.close()
+    fout.write( '};\r\n\r\n')
+    fout.write('H = {\r\n')
+    with open(f2, 'r') as fp:
+        line = fp.readline()
+        while line:
+            fout.write('<' + line + '>\r\n')
+        fp.close()
+    fout.write('};\r\n\r\n')
+    fout.write('alpha = {\r\n')
+    for i in np.nonzero(alpha):
+        fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i,1,alpha[i]))
+    fout.write('};\r\n\r\n')
+    fout.write('a = {\r\n')
+    for i in np.nonzero(a):
+        fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, a[i]))
+    fout.write('};\r\n\r\n')
+    fout.write('b = {\r\n')
+    for i in np.nonzero(b):
+        fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, b[i]))
+    fout.write('};\r\n\r\n')
+    fout.write('c = {\r\n')
+    for i in np.nonzero(c):
+        fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, c[i]))
+    fout.write('};\r\n\r\n')
+    fout.write('gamma = {\r\n')
+    for i in np.nonzero(gamma):
+        fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, gamma[i]))
+    fout.write('};\r\n\r\n')
+    fout.close()
