@@ -18,9 +18,9 @@ import numpy as np
 # random holding costs cost(k) = ~U(0, 2).
 # resource limits: b(i) = 1, with sum_k M(i, k) * u(k) <= b(i).
 
-def generate_MCQN_data(K, I, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_rate = 0.6, hdist = np.random.rand,
+def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_rate = 0.6, hdist = np.random.rand,
                        hdist_params = (), alpha_rate = 40, alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist
-                       = np.random.rand, a_dist_params = ()):
+                       = np.random.rand, a_dist_params = (), gamma = None, c = None):
 
     np.random.RandomState(seed)
     b = np.ones(I)
@@ -53,10 +53,11 @@ def generate_MCQN_data(K, I, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     F = np.empty((K,0))
     d = np.empty(0)
 
-    #TODO: externalize or parametrize
-    gamma = np.zeros(K)
-    cost = 2 * np.random.rand(K)
-    #this produce negative and positive costs!
-    c = cost * G
+    if gamma is None:
+        gamma = np.zeros(K)
+    if c is None:
+        cost = 2 * np.random.rand(K)
+        #this produce negative and positive costs!
+        c = cost * G
 
     return G,H,F,gamma,c,d,alpha,a,b,None

@@ -20,8 +20,9 @@ import numpy as np
 # holding costs rates for fluid in buffer k:
 #  cost(k) = ~U(0,2) .
 
-def generate_rentrant_data(K, I, seed, h_rate = 0.3, hdist = np.random.rand, hdist_params = (), first_alpha = 100, alpha_rate = 40,
-                           alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params = ()):
+def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hdist_params = (), first_alpha = 100, alpha_rate = 40,
+                            alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params = (),
+                            gamma = None, c = None):
 
     np.random.RandomState(seed)
     b = np.ones(I)
@@ -44,10 +45,11 @@ def generate_rentrant_data(K, I, seed, h_rate = 0.3, hdist = np.random.rand, hdi
     F = np.empty((K, 0))
     d = np.empty(0)
 
-    # TODO: externalize or parametrize
-    gamma = np.zeros(K)
-    cost = 2 * np.random.rand(K)
-    # this produce negative and positive costs!
-    c = cost * G
+    if gamma is None:
+        gamma = np.zeros(K)
+    if c is None:
+        cost = 2 * np.random.rand(K)
+        # this produce negative and positive costs!
+        c = cost * G
 
     return G, H, F, gamma, c, d, alpha, a, b, None

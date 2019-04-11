@@ -30,9 +30,10 @@ import numpy as np
 # We solve this problem for a finite time horizon T
 # T is calculated to be approximately the draining time of the sysem
 
-def generate_MCQN_routing_data(K, I, J, seed, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_0 = 0,
+def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_0 = 0,
                                h_rate = 3, hdist = np.random.rand, hdist_params = (), alpha_rate = 40, alpha_dist =
-                               np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params = ()):
+                               np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params =
+                               (), gamma = None, c = None):
 
 
     np.random.RandomState(seed)
@@ -76,11 +77,12 @@ def generate_MCQN_routing_data(K, I, J, seed, nz = 0.4, sum_rate=0.8, gdist=np.r
     F = np.empty((K, 0))
     d = np.empty(0)
 
-    # TODO: externalize or parametrize
-    gamma = np.zeros(J)
-    cost = 2 * np.random.rand(K)
-    # this produce negative and positive costs!
-    c = cost * G + 0.02 * np.random.rand(J)
+    if gamma is None:
+        gamma = np.zeros(J)
+    if c is None:
+        cost = 2 * np.random.rand(K)
+        # this produce negative and positive costs!
+        c = cost * G + 0.02 * np.random.rand(J)
 
     # Calculating a value for T
     #  ~0.2 is probability of leaving system at each service

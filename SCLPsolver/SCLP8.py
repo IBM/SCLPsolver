@@ -9,7 +9,7 @@ from subroutines.parametric_line8 import parametric_line
 
 #function[t, x, q, u, p, firstbase, lastbase, pivots, Obj, Err, NN, stepcount, flopss, ecpu] = ...
 #'#@profile
-def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, tmp_path='', hot_start =False, save_solution = False):
+def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_line =True, tmp_path='', hot_start =False, save_solution = False):
 #
 #	[t,x,q,u,p,firstbase,lastbase,pivots,Obj,Err,NN,stepcount,flopss,ecpu] = ...
 #		SCLP(G,H,F,a,b,c,d,alpha,gamma,TT,messagelevel,graphlevel,tol1,tol2,taxis,xaxis,qaxis)
@@ -96,14 +96,14 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, tmp_path=''
     else:
         import pickle
         print('Loading solution!')
-        solution = pickle.load(open(tmp_path + 'solution.dat', 'rb'))
-        param_line = pickle.load(open(tmp_path + 'param_line.dat','rb'))
+        solution = pickle.load(open(tmp_path + '/solution.dat', 'rb'))
+        param_line = pickle.load(open(tmp_path + '/param_line.dat','rb'))
         param_line.theta_bar = TT
 
     # Solve the problem, by a sequence of parametric steps
 
     solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'toplevel',
-                                           0, 0, dict(), settings, tolerance)
+                                           0, 0, dict(), settings, tolerance, find_alt_line)
 
     # extract solution for output
 
@@ -118,6 +118,6 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, tmp_path=''
         solution.prepare_to_save()
         import pickle
 
-        pickle.dump(solution, open(tmp_path + 'solution.dat', 'wb'))
-        pickle.dump(param_line, open(tmp_path + 'param_line.dat', 'wb'))
-    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, STEPCOUNT
+        pickle.dump(solution, open(tmp_path + '/solution.dat', 'wb'))
+        pickle.dump(param_line, open(tmp_path + '/param_line.dat', 'wb'))
+    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, STEPCOUNT, param_line.T, pivot_problem['result']

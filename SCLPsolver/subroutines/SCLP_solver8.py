@@ -4,7 +4,7 @@ from .collision_info8 import collision_info
 from .time_collision_resolver8 import reclassify
 
 #'#@profile
-def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
+def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, settings, tolerance, find_alt_line=True):
 
     ITERATION[DEPTH] = 0
 
@@ -47,7 +47,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     else:
                         break
                 if not resolved:
-                    if not param_line.is_orthogonal() and param_line.theta > 0:
+                    if find_alt_line and not param_line.is_orthogonal() and param_line.theta > 0:
                         print('Unable to rewind... Trying to outflank!')
                         param_line.forward_to(col_info.delta)
                         main_theta_bar = param_line.theta_bar
