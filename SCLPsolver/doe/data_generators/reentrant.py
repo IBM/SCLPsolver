@@ -22,7 +22,7 @@ import numpy as np
 
 def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hdist_params = (), first_alpha = 100, alpha_rate = 40,
                             alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params = (),
-                            gamma = None, c = None):
+                            cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
 
     np.random.RandomState(seed)
     b = np.ones(I)
@@ -48,7 +48,7 @@ def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hd
     if gamma is None:
         gamma = np.zeros(K)
     if c is None:
-        cost = 2 * np.random.rand(K)
+        cost = cost_scale * cost_dist(*cost_dist_params, K)
         # this produce negative and positive costs!
         c = cost * G
 
