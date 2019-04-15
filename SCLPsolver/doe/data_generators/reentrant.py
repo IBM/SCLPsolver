@@ -24,15 +24,15 @@ def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hd
                             alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params = (),
                             cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
 
-    np.random.RandomState(seed)
+    np.random.seed(seed)
     b = np.ones(I)
     G = np.eye(K) - np.diag(np.ones(K - 1), -1)
 
     # construct random machine constituency matrix
     cols = np.arange(K)
     np.random.shuffle(cols)
-    H = np.zeros(I, K)
-    rows = np.concatenate(np.arange(I), np.random.choice(I, K-I, True))
+    H = np.zeros((I, K))
+    rows = np.concatenate((np.arange(I), np.random.choice(I, K-I, True)))
     H[rows, cols] = h_rate * hdist(*hdist_params, K)
 
     # initial fluid
@@ -50,6 +50,6 @@ def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hd
     if c is None:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         # this produce negative and positive costs!
-        c = cost * G
+        c = np.matmul(cost, G)
 
     return G, H, F, gamma, c, d, alpha, a, b, None

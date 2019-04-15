@@ -22,14 +22,18 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
                        hdist_params = (), alpha_rate = 40, alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist
                        = np.random.rand, a_dist_params = (), cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
 
-    np.random.RandomState(seed)
+    np.random.seed(seed)
     b = np.ones(I)
 
     # transition probabilities
     # ~nz of them are > 0,
     # they sum up to ~sum_rate so ~1-sum_rate flows out.
 
-    P = gdist(*gdist_params, (K,K)) - (1- nz) * np.ones((K,K)) - np.eye(K)
+    if gdist is np.random.rand:
+        P = gdist(K,K)
+    else:
+        P = gdist(*gdist_params, (K,K))
+    P-= (1- nz) * np.ones((K,K)) - np.eye(K)
     P[P < 0] = 0
     P[0, K-1] += 0.1
     coeff = (1/sum_rate - 1) * 2
@@ -40,8 +44,8 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     # construct random machine constituency matrix
     cols = np.arange(K)
     np.random.shuffle(cols)
-    H = np.zeros(I, K)
-    rows = np.concatenate(np.arange(I),np.random.choice(I,K-I,True))
+    H = np.zeros((I, K))
+    rows = np.concatenate((np.arange(I),np.random.choice(I,K-I,True)))
     H[rows,cols] = h_rate * hdist(*hdist_params, K)
 
     # initial fluid
@@ -58,6 +62,6 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     if c is None:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         #this produce negative and positive costs!
-        c = cost * G
+        c = np.matmul(cost,  G)
 
     return G,H,F,gamma,c,d,alpha,a,b,None

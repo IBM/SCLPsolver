@@ -15,36 +15,44 @@ def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c):
     fout.write('ConstrDimensionG = {:d};\r\n'.format(G.shape[0]))
     fout.write('G = {\r\n')
     with open(f1,'r') as fp:
-        line = fp.readline()
+        prev_line = fp.readline()
+        line = prev_line
         while line:
-            fout.write('<'+ line +'>\r\n')
+            if prev_line[0] != '%':
+                fout.write('<'+ line[:-1] +'>\r\n')
+            prev_line = line
+            line = fp.readline()
         fp.close()
     fout.write( '};\r\n\r\n')
     fout.write('H = {\r\n')
     with open(f2, 'r') as fp:
-        line = fp.readline()
+        prev_line = fp.readline()
+        line = prev_line
         while line:
-            fout.write('<' + line + '>\r\n')
+            if prev_line[0] != '%':
+                fout.write('<' + line[:-1] + '>\r\n')
+            prev_line = line
+            line = fp.readline()
         fp.close()
     fout.write('};\r\n\r\n')
     fout.write('alpha = {\r\n')
-    for i in np.nonzero(alpha):
+    for i in np.nonzero(alpha)[0]:
         fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i,1,alpha[i]))
     fout.write('};\r\n\r\n')
     fout.write('a = {\r\n')
-    for i in np.nonzero(a):
+    for i in np.nonzero(a)[0]:
         fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, a[i]))
     fout.write('};\r\n\r\n')
     fout.write('b = {\r\n')
-    for i in np.nonzero(b):
+    for i in np.nonzero(b)[0]:
         fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, b[i]))
     fout.write('};\r\n\r\n')
     fout.write('c = {\r\n')
-    for i in np.nonzero(c):
+    for i in np.nonzero(c)[0]:
         fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, c[i]))
     fout.write('};\r\n\r\n')
     fout.write('gamma = {\r\n')
-    for i in np.nonzero(gamma):
+    for i in np.nonzero(gamma)[0]:
         fout.write('<{:d} {:d} {:.16f}>\r\n'.format(i, 1, gamma[i]))
     fout.write('};\r\n\r\n')
     fout.close()

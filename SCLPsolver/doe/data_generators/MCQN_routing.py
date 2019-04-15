@@ -36,14 +36,17 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
                                (), cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
 
 
-    np.random.RandomState(seed)
+    np.random.seed(seed)
     b = np.ones(I)
 
     # transition probabilities
     # ~nz of them are > 0,
     # they sum up to ~sum_rate so ~1-sum_rate flows out.
-
-    P = gdist(*gdist_params, (K, J)) - (1 - nz) * np.ones((K, J))
+    if gdist is np.random.rand:
+        P = gdist(K, J)
+    else:
+        P = gdist(*gdist_params, (K,J))
+    P -= (1 - nz) * np.ones((K, J))
     P[P < 0] = 0
 
     #TODO: check if correct, understand whats this!
@@ -64,8 +67,8 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     # construct random machine constituency matrix
     cols = np.arange(J)
     np.random.shuffle(cols)
-    H = np.zeros(I, J)
-    rows = np.concatenate(np.arange(I), np.random.choice(I, J-I, True))
+    H = np.zeros((I, J))
+    rows = np.concatenate((np.arange(I), np.random.choice(I, J-I, True)))
     H[rows, cols] = h_0 + h_rate * hdist(*hdist_params, J)
 
     # initial fluid
@@ -82,7 +85,7 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     if c is None:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         # this produce negative and positive costs!
-        c = cost * G + 0.02 * np.random.rand(J)
+        c = np.matmul(cost, G) + 0.02 * np.random.rand(J)
 
     # Calculating a value for T
     #  ~0.2 is probability of leaving system at each service
