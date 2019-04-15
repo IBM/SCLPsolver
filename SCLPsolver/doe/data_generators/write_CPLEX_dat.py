@@ -1,6 +1,7 @@
 from scipy.io import mmwrite
 from scipy.sparse import csr_matrix
 import numpy as np
+import os
 
 
 def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c):
@@ -23,6 +24,7 @@ def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c):
             prev_line = line
             line = fp.readline()
         fp.close()
+    os.remove(f1)
     fout.write( '};\r\n\r\n')
     fout.write('H = {\r\n')
     with open(f2, 'r') as fp:
@@ -34,6 +36,7 @@ def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c):
             prev_line = line
             line = fp.readline()
         fp.close()
+    os.remove(f2)
     fout.write('};\r\n\r\n')
     fout.write('alpha = {\r\n')
     for i in np.nonzero(alpha)[0]:

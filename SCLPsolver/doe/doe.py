@@ -12,9 +12,12 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
     ps = {'K':K,'I':I,'T':T}
     for k, v in kwargs.items():
         ps[k] = v
+    for k,v in settings.items():
+        ps[k] = str(v)
     pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
     results = []
     for seed in range(starting_seed, starting_seed + exp_num):
+        ps['seed'] = seed
         if exp_type == 'MCQN':
             G, H, F, gamma, c, d, alpha, a, b, TT = generate_MCQN_data(seed, K, I, **settings)
         elif exp_type == 'reentrant':
