@@ -7,11 +7,13 @@ from doopl.factory import *
 import os
 from os import listdir
 from os.path import dirname, abspath, join, isfile
+from doe.doe_utils import path_utils
 
 DATADIRm = join(dirname(abspath(__file__)), 'mod_files')
 mod = join(DATADIRm, "main.mod")
 
-DATADIRd = join(dirname(abspath(__file__)), 'data')
+pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
+DATADIRd = pu.get_CPLEX_data_path()
 
 onlyfiles = [f for f in listdir(DATADIRd) if isfile(join(DATADIRd, f))]
 print("Test: ", onlyfiles)
