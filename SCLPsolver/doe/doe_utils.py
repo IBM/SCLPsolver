@@ -28,4 +28,7 @@ class path_utils:
                 path += str(k) + str(v) + '_'
         return path + 'data.dat'
 
+    def get_CPLEX_data_path(self):
+        return self.home_path + '/CPLEX'
+
 
