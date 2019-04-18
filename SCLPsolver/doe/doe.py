@@ -16,6 +16,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         ps[k] = str(v)
     pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
     results = []
+    files = []
     for seed in range(starting_seed, starting_seed + exp_num):
         ps['seed'] = seed
         if exp_type == 'MCQN':
@@ -37,9 +38,12 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % (time_to_solve))
         if res == 0:
-            write_CPLEX_dat(pu.get_CPLEX_data_file_name(exp_type, **ps), T, G, H, alpha, a, b, gamma, c)
+            file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
+            write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c)
+            results.append({'file': file_name, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,
+                            'steps': STEPCOUNT, 'intervals': NN})
+            files.append(file_name)
         else:
             failure_trials +=1
-        results.append({'seed':seed, 'result': res, 'objective': obj, 'time': time_to_solve, 'steps': STEPCOUNT, 'intervals': NN})
-    return results, failure_trials
+        return results, failure_trials, files
 
