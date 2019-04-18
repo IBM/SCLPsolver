@@ -30,7 +30,7 @@ class SCLP_base_sequence():
         places = find(lplaces)
         if len(places) == 0:
             new_mat, new_place = self.get_nearby_basis(N1, N2, pivots)
-            self._places = [new_place]
+            self._places = [new_place if new_place == N1 else new_place - Nnew]
             self._bases = [new_mat]
         else:
             self._bases = [self._bases[i] for i in places]
