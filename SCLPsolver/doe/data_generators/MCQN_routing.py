@@ -61,7 +61,7 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     #construct random buffer/flow assignments
     cols = np.arange(J)
     np.random.shuffle(cols)
-    rows = np.concatenate(np.arange(K), np.random.choice(K, J-K, True))
+    rows = np.concatenate((np.arange(K), np.random.choice(K, J-K, True)))
     G[rows, cols] = 1
 
     # construct random machine constituency matrix
