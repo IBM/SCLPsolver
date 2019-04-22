@@ -221,3 +221,7 @@ class SCLP_solution():
         self._last_collision = None
         self._col_info_stack.clear()
 
+    def clear_base_sequence(self, bases_to_remove):
+        if bases_to_remove > 0:
+            self._base_sequence.clear_base_sequense(bases_to_remove, self.NN)
+

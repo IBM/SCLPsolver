@@ -6,13 +6,11 @@ from subroutines.calc_controls5 import calc_controls
 from subroutines.calc_objective import calc_objective
 from subroutines.SCLP_solver8 import SCLP_solver
 from subroutines.parametric_line8 import parametric_line
+from subroutines.memory_manager import memory_manager
 
-#function[t, x, q, u, p, firstbase, lastbase, pivots, Obj, Err, NN, stepcount, flopss, ecpu] = ...
 #'#@profile
-def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_line =True, tmp_path='', hot_start =False, save_solution = False):
-#
-#	[t,x,q,u,p,firstbase,lastbase,pivots,Obj,Err,NN,stepcount,flopss,ecpu] = ...
-#		SCLP(G,H,F,a,b,c,d,alpha,gamma,TT,messagelevel,graphlevel,tol1,tol2,taxis,xaxis,qaxis)
+def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_line =True, tmp_path='', hot_start =False,
+         save_solution = False):
 #
 #	solves the separated continuous linear program:
 #
@@ -74,13 +72,12 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_li
 #						qaxis	q range
 #
 
-    # STEPCOUNT = 0
-    # DEPTH = 0
-    # ITERATION = []
     K_DIM = G.shape[0]
     J_DIM = G.shape[1]
     I_DIM = H.shape[0]
     L_DIM = F.shape[1]
+
+    mm = memory_manager(K_DIM, J_DIM + L_DIM, I_DIM)
 
     if not hot_start:
         # Initiate top level problem, by obtaining the boundary and first dictionary
@@ -103,7 +100,7 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_li
     # Solve the problem, by a sequence of parametric steps
 
     solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'toplevel',
-                                           0, 0, dict(), settings, tolerance, find_alt_line)
+                                           0, 0, dict(), settings, tolerance, find_alt_line, mm)
 
     # extract solution for output
 

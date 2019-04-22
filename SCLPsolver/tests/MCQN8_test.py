@@ -14,9 +14,9 @@ def relative_to_project(file_path):
         proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
         return os.path.join(proj, file_path)
 
-seed = 1013
-K = 2000
-I = 200
+seed = 1000
+K = 4000
+I = 400
 pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
 exp_path = pu.get_experiment_path('MCQN',K=K,I=I,seed=seed)
 G, H, F, gamma, c, d, alpha, a, b, T = load_data(exp_path)
