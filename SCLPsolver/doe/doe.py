@@ -13,7 +13,10 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
     for k, v in kwargs.items():
         ps[k] = v
     for k,v in settings.items():
-        ps[k] = str(v)
+        if isinstance(v, object) and hasattr(v, '__name__'):
+            ps[k] = v.__name__
+        else:
+            ps[k] = str(v)
     pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
     results = []
     files = []

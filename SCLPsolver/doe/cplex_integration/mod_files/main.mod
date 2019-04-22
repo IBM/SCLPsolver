@@ -4,13 +4,16 @@
  * Creation Date: Apr 16, 2019 at 2:13:53 PM
  *********************************************/
 
+execute{
+  cplex.lpmethod = 4; // barrier
+}
  
 float T = ...;
 int VarDimension = ...; 
 int ConstrDimensionH = ...; 
 int ConstrDimensionG = ...; 
-//int NumIntervals = ftoi(T/10);
 int NumIntervals = 100;
+//int NumIntervals = ftoi(T/10);
 range intervals = 1..NumIntervals;
 range intervals0 = 0..NumIntervals;
 float tau = T/(NumIntervals);
