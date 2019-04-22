@@ -122,8 +122,9 @@ class SCLP_base_sequence():
                 return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots), N2
 
 
-    def clear_base_sequense(self, numBasesToRemove, NN):
+    def clear_base_sequense(self, numBasesToRemove, maxBases, NN):
         basesActive = len(self._places)
+        numBasesToRemove = max(numBasesToRemove, basesActive-maxBases, 0)
         if (numBasesToRemove > 0):
             orderedSequence = sorted(self._places)
             order = sorted(range(len(self._places)), key=lambda i: self._places[i])

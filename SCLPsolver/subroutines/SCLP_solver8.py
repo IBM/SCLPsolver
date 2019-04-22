@@ -135,7 +135,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             param_line.forward_to(col_info.delta)
             if DEPTH == 0:
                 if mm is not None:
-                    solution.clear_base_sequence(mm.num_bases_to_remove())
+                    solution.clear_base_sequence(mm)
 
     return solution, STEPCOUNT, pivot_problem
 

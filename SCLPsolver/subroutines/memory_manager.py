@@ -7,7 +7,7 @@ class memory_manager():
     def __init__(self, K, J, I=0):
         self.matrix_size = (K+I) * J * 8
         mem = psutil.virtual_memory()
-        self._bs = math.floor(mem.free / self.matrix_size - 5)
+        self.max_bs = math.floor(mem.free / self.matrix_size - 5)
 
     def num_bases_to_remove(self):
         mem = psutil.virtual_memory()
