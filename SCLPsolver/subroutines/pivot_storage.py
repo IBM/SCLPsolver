@@ -142,6 +142,9 @@ class pivot_storage(list):
             if N2 < len(self._in):
                 self._in = self._in[:N1]+list(diff1.elements())+self._in[N2:]
                 self._out = self._out[:N1] + list(diff2.elements()) + self._out[N2:]
+            elif N2 == len(self._in):
+                self._in = self._in[:N1] + list(diff1.elements())
+                self._out = self._out[:N1] + list(diff2.elements())
             else:
                 self._in = self._in[:N1]
                 self._out = self._out[:N1]
