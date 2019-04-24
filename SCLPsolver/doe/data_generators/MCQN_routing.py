@@ -33,7 +33,8 @@ import numpy as np
 def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_0 = 0,
                                h_rate = 3, hdist = np.random.rand, hdist_params = (), alpha_rate = 40, alpha_dist =
                                np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params =
-                               (), cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
+                               (), cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma_rate=0,
+                               gamma_dist=np.random.rand, gamma_dist_params=(), c = None):
 
 
     np.random.seed(seed)
@@ -80,8 +81,10 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     F = np.empty((K, 0))
     d = np.empty(0)
 
-    if gamma is None:
+    if gamma_rate == 0:
         gamma = np.zeros(J)
+    else:
+        gamma = gamma_rate * gamma_dist(*gamma_dist_params, J)
     if c is None:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         # this produce negative and positive costs!

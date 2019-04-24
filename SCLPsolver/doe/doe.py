@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from .data_generators.MCQN import generate_MCQN_data
 from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.MCQN_routing import generate_MCQN_routing_data
@@ -36,7 +37,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         import time
         start_time = time.time()
         solver_settings = SCLP_settings(find_alt_line=False)
-        t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+        t, x, q, u, p, pivots, obj, err, NN, tau, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % (time_to_solve))
@@ -45,7 +46,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             write_CPLEX_dat(full_file_name, T, G, H, alpha, a, b, gamma, c)
             path, filename = os.path.split(full_file_name)
             results.append({'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,
-                            'steps': STEPCOUNT, 'intervals': NN})
+                            'steps': STEPCOUNT, 'intervals': NN, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau),
+                            'min_tau':np.min(tau), 'std_tau':np.std(tau)})
             files.append(full_file_name)
         else:
             failure_trials +=1

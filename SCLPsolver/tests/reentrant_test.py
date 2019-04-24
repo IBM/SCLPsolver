@@ -6,14 +6,6 @@ from SCLP import SCLP, SCLP_settings
 from doe.data_generators.data_loader import load_data
 from doe.doe_utils import path_utils
 
-
-def relative_to_project(file_path):
-    if os.path.isabs(file_path):
-        return file_path
-    else:
-        proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-        return os.path.join(proj, file_path)
-
 seed = 1000
 K = 600
 I = 200
@@ -26,7 +18,7 @@ import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
 settings = SCLP_settings(tmp_path=exp_path)
-t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, settings)
+t, x, q, u, p, pivots, obj, err, NN, tau, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, settings)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))
 pr.disable()

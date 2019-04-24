@@ -25,7 +25,7 @@ import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
 start_time = time.time()
-t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500)
+t, x, q, u, p, pivots, obj, err, NN, tau, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))
 pr.disable()

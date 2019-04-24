@@ -20,7 +20,8 @@ import numpy as np
 
 def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand, gdist_params=(), h_rate = 0.6, hdist = np.random.rand,
                        hdist_params = (), alpha_rate = 40, alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist
-                       = np.random.rand, a_dist_params = (), cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
+                       = np.random.rand, a_dist_params = (), cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (),
+                       gamma_rate=0, gamma_dist=np.random.rand, gamma_dist_params=(), c = None):
 
     np.random.seed(seed)
     b = np.ones(I)
@@ -57,8 +58,10 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     F = np.empty((K,0))
     d = np.empty(0)
 
-    if gamma is None:
+    if gamma_rate==0:
         gamma = np.zeros(K)
+    else:
+        gamma = gamma_rate * gamma_dist(*gamma_dist_params, K)
     if c is None:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         #this produce negative and positive costs!
