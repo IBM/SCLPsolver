@@ -1,22 +1,20 @@
-import scipy.sparse as sp
-from .matlab_utils import *
-from .calc_dict import calc_dict
-from .get_new_dict import get_new_dict
-from scipy.sparse import coo_matrix
+from .matlab_utils import find
+from .sparse_matrix_constructor import sparse_matrix_constructor
 
+#`#@profile
+def calc_controls(solution, JJ, KK):
 
-def calc_controls(base_sequence, pivots, JJ, KK):
-    NN = len(base_sequence['dx'])
-    new_dict, xxx = calc_dict(base_sequence, 0, 0, pivots)
-    u = []
-    p = []
-    for place in range(NN):
+    new_dict = solution.get_basis_at(0)
+    u = sparse_matrix_constructor(None, None, JJ)
+    p = sparse_matrix_constructor(None, None, KK)
+
+    for place in range(solution.NN):
         klist2 = find(new_dict['dual_name'] > 0)
         jlist1 = find(new_dict['prim_name'] < 0)
         kn2 =  new_dict['dual_name'][klist2]
         jn1 = -new_dict['prim_name'][jlist1]
-        u.append(coo_matrix((new_dict['A'][jlist1+1,0], (jn1-1, np.zeros(len(jn1)))), shape=(JJ, 1)))
-        p.append(coo_matrix((new_dict['A'][0,klist2+1], (kn2-1, np.zeros(len(kn2)))), shape=(KK, 1)))
-        if place < NN - 1:
-            new_dict = get_new_dict(new_dict, place, place+1, pivots)
-    return sp.hstack(u), sp.hstack(p)
+        u.append(sparse_matrix_constructor(new_dict['A'][jlist1+1,0].copy(), jn1-1, JJ))
+        p.append(sparse_matrix_constructor(new_dict['A'][0,klist2+1].copy(), kn2-1, KK))
+        if place < solution.NN - 1:
+            new_dict = solution.get_next_basis_for_solution(new_dict, place)
+    return u.get_matrix(), p.get_matrix()

@@ -1,6 +1,6 @@
 import numpy as np
-from .matlab_utils import *
-from .pivot import *
+from .matlab_utils import find
+from .pivot import full_pivot
 
 
 #'#@profile

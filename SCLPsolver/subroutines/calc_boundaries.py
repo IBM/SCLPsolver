@@ -1,5 +1,5 @@
 import numpy as np
-from .simplex_procedures import *
+from .simplex_procedures import simplex_procedures
 
 
 #'#@profile

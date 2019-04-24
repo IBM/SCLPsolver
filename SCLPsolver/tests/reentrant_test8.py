@@ -2,7 +2,7 @@ import sys
 import os
 proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 sys.path.append(proj)
-from SCLP8 import SCLP, SCLP_settings
+from SCLP import SCLP, SCLP_settings
 from doe.data_generators.data_loader import load_data
 from doe.doe_utils import path_utils
 

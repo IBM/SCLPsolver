@@ -4,7 +4,7 @@ from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.MCQN_routing import generate_MCQN_routing_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
 from .doe_utils import path_utils
-from SCLP8 import SCLP, SCLP_settings
+from SCLP import SCLP, SCLP_settings
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, **kwargs):

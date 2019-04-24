@@ -1,0 +1,1522 @@
+Timer unit: 3.66551e-07 s
+
+Total time: 29.3818 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\LP_formulate5.py
+Function: LP_formulate at line 6
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     6                                           @profile
+     7                                           def LP_formulate(AA, prim_name, dual_name,  Kset, nJset, tolerance = 0):
+     8       613      13064.0     21.3      0.0      prim_sign = np.zeros((len(prim_name)), dtype = int)
+     9       613     241061.0    393.2      0.3      prim_sign[ismember(prim_name,Kset)] = 1
+    10       613     144567.0    235.8      0.2      prim_sign[ismember(prim_name,nJset)] = -1
+    11       613       7951.0     13.0      0.0      dual_sign = np.zeros((len(dual_name)), dtype = int)
+    12       613     161443.0    263.4      0.2      dual_sign[ismember(dual_name,nJset)] = 1
+    13       613     217413.0    354.7      0.3      dual_sign[ismember(dual_name,Kset)] = -1
+    14       613   79370497.0 129478.8     99.0      A, pn, dn, ps, ds, err = simplex_procedures(AA.copy(), prim_name.copy(), dual_name.copy(), prim_sign, dual_sign, tolerance)
+    15       613       1446.0      2.4      0.0      return pn, dn, A
+
+Total time: 32.0522 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_pivot6.py
+Function: SCLP_pivot at line 8
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     8                                           @profile
+     9                                           def SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1, v2, KK, JJ, NN, totalK, totalJ,
+    10                                                          DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
+    11                                           
+    12       613       2763.0      4.5      0.0      pivot_problem = {'result': 0}
+    13       613       3671.0      6.0      0.0      if N1 == -1:
+    14        27        321.0     11.9      0.0          pbaseB1 = np.array([])
+    15        27         90.0      3.3      0.0          AAN1 = None
+    16        27       1346.0     49.9      0.0          AAN2 = solution.get_basis_at(N2)
+    17        27        164.0      6.1      0.0          BB2 = AAN2['A']
+    18        27         90.0      3.3      0.0          pbaseB2 = AAN2['prim_name']
+    19        27        112.0      4.1      0.0          dbaseB2 = AAN2['dual_name']
+    20        27       1187.0     44.0      0.0          Jset = dbaseB2[dbaseB2 < 0]
+    21        27         94.0      3.5      0.0          Kset = Kset_0
+    22        27        176.0      6.5      0.0          if  not isinstance(v1, list):
+    23        27        855.0     31.7      0.0              Jset = Jset[Jset!=v1]
+    24        27        136.0      5.0      0.0              if v1 > 0:
+    25        13        846.0     65.1      0.0                  Kset = np.append(Kset, v1)
+    26                                                   else:
+    27                                                       print('v1',v1)
+    28        27     635733.0  23545.7      0.7          pbaseDD, dbaseDD, DD = LP_formulate(BB2, pbaseB2, dbaseB2, Kset, Jset, tolerance)
+    29        27       8589.0    318.1      0.0          pp21 = np.setdiff1d(pbaseDD, pbaseB2, assume_unique=True)
+    30        27      12070.0    447.0      0.0          pp22 = np.setdiff1d(dbaseDD, dbaseB2, assume_unique=True)
+    31                                                   #piv1 = [pp21.tolist()+pp22.tolist()]
+    32        27        957.0     35.4      0.0          piv1 = pivot_storage(pp21.tolist(),pp22.tolist())
+    33        27        398.0     14.7      0.0          if np.size(pp21) == 0 and np.size(pp22) == 0:
+    34                                                       print('Basis B2 is optimal')
+    35                                                       return solution, STEPCOUNT, ITERATION, pivot_problem
+    36       586       2778.0      4.7      0.0      elif N2 == NN:
+    37       307       6642.0     21.6      0.0          pbaseB2 = np.array([])
+    38       307    1495500.0   4871.3      1.7          AAN1 = solution.get_basis_at(N1)
+    39       307       1089.0      3.5      0.0          AAN2 = None
+    40       307       1392.0      4.5      0.0          BB1 = AAN1['A']
+    41       307       1137.0      3.7      0.0          pbaseB1 = AAN1['prim_name']
+    42       307       1202.0      3.9      0.0          dbaseB1 = AAN1['dual_name']
+    43       307       3202.0     10.4      0.0          dbaseB2 = np.array([])
+    44       307      16414.0     53.5      0.0          Kset = pbaseB1[pbaseB1 > 0]
+    45       307       7727.0     25.2      0.0          Jset = [-v for v in Jset_N]
+    46       307       2569.0      8.4      0.0          if not isinstance(v2, list):
+    47       307      10634.0     34.6      0.0              Kset = Kset[Kset!=v2]
+    48       307       1655.0      5.4      0.0              if v2 < 0:
+    49         1         48.0     48.0      0.0                  Jset = np.append(Jset, v2)
+    50                                                   else:
+    51                                                       print('v2', v2)
+    52       307   35250694.0 114823.1     40.3          pbaseDD, dbaseDD, DD = LP_formulate(BB1, pbaseB1, dbaseB1, Kset, Jset, tolerance)
+    53       307     183182.0    596.7      0.2          pp11 = np.setdiff1d(pbaseB1, pbaseDD, assume_unique=True)
+    54       307     170224.0    554.5      0.2          pp12 = np.setdiff1d(dbaseB1, dbaseDD, assume_unique=True)
+    55                                                   #piv1 = [pp11.tolist()+ pp12.tolist()]
+    56       307      14358.0     46.8      0.0          piv1 = pivot_storage(pp11.tolist(), pp12.tolist())
+    57       307       5636.0     18.4      0.0          if np.size(pp11) == 0 and np.size(pp12) == 0:
+    58                                                       print('Basis B1 is optimal')
+    59                                                       return solution, STEPCOUNT, ITERATION, pivot_problem
+    60                                               else:
+    61       279    1295902.0   4644.8      1.5          AAN1, AAN2 = solution.get_bases(N1, N2)
+    62       279       1302.0      4.7      0.0          BB2 = AAN2['A']
+    63       279       1208.0      4.3      0.0          pbaseB1 = AAN1['prim_name']
+    64       279       1121.0      4.0      0.0          dbaseB1 = AAN1['dual_name']
+    65       279       1095.0      3.9      0.0          pbaseB2 = AAN2['prim_name']
+    66       279       1074.0      3.8      0.0          dbaseB2 = AAN2['dual_name']
+    67                                           
+    68       279       2527.0      9.1      0.0          if isinstance(v1, list) or isinstance(v2, list):
+    69         1        534.0    534.0      0.0              vv =np.setdiff1d(pbaseB1, pbaseB2, assume_unique=True)
+    70         1          7.0      7.0      0.0              if isinstance(v2, list):
+    71         1          3.0      3.0      0.0                  v2 = vv
+    72                                                       else:
+    73                                                           v1 = vv
+    74       279      14188.0     50.9      0.0          Kset = pbaseB1[pbaseB1 > 0]
+    75       279       7079.0     25.4      0.0          Kset = Kset[Kset != v2]
+    76       279       8171.0     29.3      0.0          Jset = dbaseB2[dbaseB2 < 0]
+    77       279       5379.0     19.3      0.0          Jset = Jset[Jset != v1]
+    78       279   44310501.0 158819.0     50.7          pbaseDD, dbaseDD, DD = LP_formulate(BB2, pbaseB2, dbaseB2, Kset, Jset, tolerance)
+    79       279     169696.0    608.2      0.2          pp21 = np.setdiff1d(pbaseDD, pbaseB2, assume_unique=True)
+    80       279     153505.0    550.2      0.2          pp22 = np.setdiff1d(dbaseDD, dbaseB2, assume_unique=True)
+    81       279     117602.0    421.5      0.1          pp11 = np.setdiff1d(pbaseB1, pbaseDD, assume_unique=True)
+    82       279     141217.0    506.2      0.2          pp12 = np.setdiff1d(dbaseB1, dbaseDD, assume_unique=True)
+    83       279      12581.0     45.1      0.0          piv1 = pivot_storage(pp11.tolist() + pp21.tolist(), pp12.tolist()  + pp22.tolist())
+    84                                                   #piv1 = [pp11.tolist()+ pp12.tolist(),pp21.tolist()+ pp22.tolist()]
+    85       613       4606.0      7.5      0.0      objective = DD[0, 0]
+    86                                           
+    87       613       6683.0     10.9      0.0      if objective == np.inf or objective == -np.inf:
+    88                                                   pivot_problem['result'] = 1
+    89                                                   if N1 == -1:
+    90                                                       print('***  beyond this primal problem is unbounded, dual is infeasible')
+    91                                                       cases = 'unbound_'
+    92                                                   elif N2 == NN:
+    93                                                       print('***  beyond this primal problem is infeasible, dual is unbounded')
+    94                                                       cases = 'infeas__'
+    95                                                   else:
+    96                                                       print('*** infeasibility in middle of base sequence')
+    97                                                   return solution, STEPCOUNT, ITERATION, pivot_problem
+    98                                           
+    99       613       2642.0      4.3      0.0      i1 = 1
+   100       613       2551.0      4.2      0.0      i2 = 1
+   101       613       5986.0      9.8      0.0      if N1 >= 0:
+   102       586       7099.0     12.1      0.0          i1 = np.size(pp11)
+   103       613       3700.0      6.0      0.0      if N2 < NN:
+   104       306       2322.0      7.6      0.0          i2 = np.size(pp21)
+   105       613       2949.0      4.8      0.0      if i1 == 1 and i2 == 1:
+   106       600     293678.0    489.5      0.3          dx, dq = extract_rates(pbaseDD, dbaseDD, DD, KK, JJ, totalK, totalJ)
+   107       600    2731331.0   4552.2      3.1          solution.update_caseII(N1, N2, dx, dq, AAN1, AAN2, piv1, 1, {'prim_name': pbaseDD, 'dual_name': dbaseDD, 'A': DD})
+   108       600       2871.0      4.8      0.0          return solution, STEPCOUNT, ITERATION, pivot_problem
+   109                                               else:
+   110        13         62.0      4.8      0.0          if N1 == -1:
+   111                                                       Kex1 =  np.intersect1d(pbaseDD[pbaseDD > 0], Kset_0, assume_unique=True)
+   112                                                       Kexclude =  np.intersect1d(Kex1, pbaseB2[pbaseB2 > 0], assume_unique=True)
+   113                                                       Jexclude = -np.intersect1d(dbaseDD[dbaseDD < 0], dbaseB2[dbaseB2 < 0], assume_unique=True)
+   114        13         52.0      4.0      0.0          elif N2 == NN:
+   115        12       6199.0    516.6      0.0              Kexclude =  np.intersect1d(pbaseDD[pbaseDD > 0], pbaseB1[pbaseB1 > 0], assume_unique=True)
+   116        12       3291.0    274.2      0.0              Jex1 =  np.intersect1d(dbaseDD[dbaseDD < 0], [-v for v in Jset_N], assume_unique=True)
+   117        12       2636.0    219.7      0.0              Jexclude = -np.intersect1d(Jex1, dbaseB1[dbaseB1 < 0], assume_unique=True)
+   118                                                   else:
+   119         1        634.0    634.0      0.0              Kexclude =  np.intersect1d(pbaseB1[pbaseB1 > 0], pbaseB2[pbaseB2 > 0], assume_unique=True)
+   120         1        546.0    546.0      0.0              Jexclude = -np.intersect1d(dbaseB1[dbaseB1 < 0], dbaseB2[dbaseB2 < 0], assume_unique=True)
+   121         1         15.0     15.0      0.0              if not isinstance(v1, list):
+   122         1         39.0     39.0      0.0                  Kexclude = Kexclude[Kexclude != v1]
+   123         1         29.0     29.0      0.0                  Jexclude = Jexclude[Jexclude != -v1]
+   124         1          9.0      9.0      0.0              if not isinstance(v2, list):
+   125         1         37.0     37.0      0.0                  Kexclude = Kexclude[Kexclude != v2]
+   126         1         28.0     28.0      0.0                  Jexclude = Jexclude[Jexclude != -v2]
+   127                                                   dx, dq, pivots, Nnew, STEPCOUNT, ITERATION, pivot_problem =\
+   128        13         83.0      6.4      0.0           SCLP_subproblem(pbaseDD, dbaseDD, DD, N1, N2, v1, v2, Kexclude, Jexclude, pbaseB1, pbaseB2, AAN1, AAN2, KK, JJ,
+   129        13     257985.0  19845.0      0.3                              NN, totalK, totalJ, DEPTH+1, STEPCOUNT, ITERATION, settings, tolerance)
+   130        13        128.0      9.8      0.0          if pivot_problem['result'] == 0:
+   131        13      13958.0   1073.7      0.0              solution.update_caseII(N1, N2, dx, dq, AAN1, AAN2, pivots, Nnew)
+   132        13         51.0      3.9      0.0      return solution, STEPCOUNT, ITERATION, pivot_problem
+
+Total time: 0.0241267 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: update_caseI at line 35
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    35                                               @profile
+    36                                               def update_caseI(self, N1, N2):
+    37         7      62583.0   8940.4     95.1          self._base_sequence.remove_bases(N1, N2, self._pivots)
+    38         7        736.0    105.1      1.1          self._dx.remove(N1 + 1, N2)
+    39         7        548.0     78.3      0.8          self._dq.remove(N1 + 1, N2)
+    40         7       1954.0    279.1      3.0          self._pivots.remove_pivots(N1, N2)
+
+Total time: 0.996857 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: update_caseII at line 43
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    43                                               @profile
+    44                                               def update_caseII(self, N1, N2, dx, dq, AAN1, AAN2, pivots, Nnew, basis = None):
+    45       613    2545149.0   4152.0     93.6          self._base_sequence.replace_bases(N1, N2, Nnew, AAN1, AAN2)
+    46       613      34441.0     56.2      1.3          self._pivots.replace_pivots(N1, N2, pivots)
+    47       613      72014.0    117.5      2.6          self._dx.replace_matrix(N1 + 1, N2, dx)
+    48       613      50583.0     82.5      1.9          self._dq.replace_matrix(N1 + 1, N2, dq)
+    49       613       1161.0      1.9      0.0          if basis is not None:
+    50       600      16212.0     27.0      0.6              self._base_sequence.insert_basis(basis,N1+1)
+
+Total time: 0 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: update_rewind at line 52
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    52                                               @profile
+    53                                               def update_rewind(self, N1, N2, Nnew, dx, dq, pivots):
+    54                                                   N2_cor = N2 + Nnew
+    55                                                   N2b = max(N2, N2_cor)
+    56                                                   self._base_sequence.remove_bases(N1, N2b, self._pivots, Nnew)
+    57                                                   Npivots = len(pivots)
+    58                                                   self._pivots.replace_pivots(N1, N1 + Nnew + Npivots, pivots)
+    59                                                   self._dx.replace_matrix(N1 + 1, N2_cor, dx)
+    60                                                   self._dq.replace_matrix(N1 + 1, N2_cor, dq)
+
+Total time: 1.01101 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: get_basis_at at line 62
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    62                                               @profile
+    63                                               def get_basis_at(self, place):
+    64       614    2747238.0   4474.3     99.6          new_mat, new_place = self._base_sequence.get_basis_at(place, self._pivots)
+    65       614      10279.0     16.7      0.4          self._base_sequence.insert_basis(new_mat, new_place)
+    66       614        664.0      1.1      0.0          return new_mat
+
+Total time: 0.00310139 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: get_name_diff_with0 at line 68
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    68                                               @profile
+    69                                               def get_name_diff_with0(self, name):
+    70        27       2064.0     76.4     24.4          ind, place = self._base_sequence.get_nearby_place_at(0)
+    71        27        191.0      7.1      2.3          pn = self._base_sequence.bases[ind]['prim_name']
+    72        27        287.0     10.6      3.4          pn0 = self._pivots.get_prim_name_at0(place,pn)
+    73        27       5919.0    219.2     70.0          return np.setdiff1d(pn0,name, assume_unique=True)
+
+Total time: 0.000220664 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: get_name_diff_withN at line 75
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    75                                               @profile
+    76                                               def get_name_diff_withN(self, name):
+    77         2        129.0     64.5     21.4          ind, place = self._base_sequence.get_nearby_place_at(self.NN-1)
+    78         2         14.0      7.0      2.3          pn = self._base_sequence.bases[ind]['prim_name']
+    79         2         24.0     12.0      4.0          pnN = self._pivots.get_prim_name_atN(place,pn)
+    80         2        435.0    217.5     72.3          return np.setdiff1d(pnN,name, assume_unique=True)
+
+Total time: 0.47259 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: get_bases at line 82
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    82                                               @profile
+    83                                               def get_bases(self, N1, N2):
+    84       279      10247.0     36.7      0.8          new_mat, new_place = self._base_sequence.get_nearby_basis(N1, N2, self._pivots)
+    85       279       4142.0     14.8      0.3          self._base_sequence.insert_basis(new_mat, new_place)
+    86       279        460.0      1.6      0.0          if new_place == N1:
+    87       277    1090434.0   3936.6     84.6              return new_mat, self.get_basis_at(N2)
+    88         2          3.0      1.5      0.0          elif new_place == N2:
+    89         2     184004.0  92002.0     14.3              return self.get_basis_at(N1), new_mat
+    90                                                   else:
+    91                                                       raise Exception('Cannot calculate correct bases!')
+
+Total time: 0.0174515 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solution6.py
+Function: get_next_basis_for_solution at line 93
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    93                                               @profile
+    94                                               def get_next_basis_for_solution(self, basis, place):
+    95       311      47610.0    153.1    100.0          return self._base_sequence.get_next_basis(basis, place, self._pivots)
+
+Total time: 65.3866 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_solver6.py
+Function: SCLP_solver at line 8
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     8                                           @profile
+     9                                           def SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, ThetaBar, cases, B1, B2, klist, jlist, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
+    10                                           
+    11        14         74.0      5.3      0.0      ITERATION[DEPTH] = 0
+    12                                           
+    13        14         84.0      6.0      0.0      KK = len(klist)
+    14        14         80.0      5.7      0.0      JJ = len(jlist)
+    15                                           
+    16        14         61.0      4.4      0.0      theta = 0
+    17        14         54.0      3.9      0.0      tol_coeff = 1  # tolerance multiplier
+    18        14         54.0      3.9      0.0      prevProblem = 0
+    19        14         77.0      5.5      0.0      lastCollision = {'N1': -1, 'N2': 1, 'Nnew': 1}
+    20        14         70.0      5.0      0.0      pivot_problem = {'result': 0}
+    21        14       5247.0    374.8      0.0      print(STEPCOUNT, DEPTH, ITERATION[DEPTH], JJ, 'x', KK, solution.NN, 0, 0, cases)
+    22        14      47721.0   3408.6      0.0      Kset_0 = klist[np.hstack(np.logical_or(x_0 > 0, np.logical_and(x_0 == 0, del_x_0 > 0)))]
+    23        14     293305.0  20950.4      0.2      Jset_N = jlist[np.hstack(np.logical_or(q_N > 0, np.logical_and(q_N == 0, del_q_N > 0)))]
+    24                                           
+    25       634       4265.0      6.7      0.0      while cases != 'complete' and cases != 'solved__':
+    26                                           
+    27       620      29067.0     46.9      0.0          if not solution.base_sequence.check_places():
+    28                                                       raise Exception('Bases placement failure!')
+    29                                           
+    30       620   13566696.0  21881.8      7.6          dx = solution.dx.get_matrix()
+    31       620   13637792.0  21996.4      7.6          dq = solution.dq.get_matrix()
+    32       620    1636831.0   2640.1      0.9          sdx = np.ones((dx.shape[0], dx.shape[1] + 2))
+    33       620    1767010.0   2850.0      1.0          sdq = np.ones((dq.shape[0], dq.shape[1] + 2))
+    34       620    1384018.0   2232.3      0.8          np.sign(dx, out=sdx[:,1:-1])
+    35       620    1404438.0   2265.2      0.8          np.sign(dq, out=sdq[:,1:-1])
+    36       620    3023299.0   4876.3      1.7          check_sd(sdx[:,1:-1], True)
+    37       620    3284692.0   5297.9      1.8          check_sd(sdq[:,1:-1], False)
+    38                                           
+    39       620       7561.0     12.2      0.0          lastN1 =lastCollision['N1']
+    40       620      10211.0     16.5      0.0          lastN2 = lastCollision['N2'] + lastCollision['Nnew']
+    41       620    7032699.0  11343.1      3.9          tau, dtau = calc_equations(klist, jlist, solution.pivots, x_0, del_x_0, q_N, del_q_N, T, del_T, dx, dq)
+    42       620   23187470.0  37399.1     13.0          x, del_x, q, del_q = calc_states(dx, dq, x_0, del_x_0, q_N, del_q_N, tau, dtau, sdx, sdq, tolerance)
+    43       620       6628.0     10.7      0.0          cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x, del_x, q, del_q,
+    44       620   19952486.0  32181.4     11.2                                                                     solution, B1, B2, sdx, sdq, lastN1, lastN2, tolerance, 1)
+    45       620       3919.0      6.3      0.0          if problem['result'] == 1 or problem['result'] == 2 or problem['result'] == 3:
+    46                                                       tol_coeff = 10 * tol_coeff
+    47                                                       prevProblem = problem['result']
+    48                                                       if 'data' in problem.keys():
+    49                                                           print('Problem data: ',str(problem['data']))
+    50       620       3181.0      5.1      0.0          elif problem['result'] == 4:
+    51                                                       print('More than two variables leave in time shrink ....')
+    52                                                       while tol_coeff <= 10000 and problem['result'] == 4:
+    53                                                           if tol_coeff < 10 and prevProblem !=2:
+    54                                                               if N2 - N1 == 2 or tol_coeff <= 0.001:
+    55                                                                   tol_coeff = 10
+    56                                                               else:
+    57                                                                   tol_coeff = 0.1 * tol_coeff
+    58                                                           else:
+    59                                                               tol_coeff = 10 * tol_coeff
+    60                                                           print('trying to resolve * ', tol_coeff, ' ...')
+    61                                                           cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x, del_x, q,
+    62                                                                                                                      del_q, solution, B1, B2, sdx, sdq, lastN1, lastN2, tolerance,
+    63                                                                                                                      tol_coeff)
+    64                                                       if problem['result'] == 0:
+    65                                                           tol_coeff = 1
+    66                                                           print('ok!')
+    67                                                       else:
+    68                                                           print('fail!')
+    69                                                       prevProblem = 4
+    70                                                   else:
+    71       620       3272.0      5.3      0.0              tol_coeff = 1
+    72       620       3247.0      5.2      0.0              prevProblem = problem['result']
+    73                                           
+    74       620       3270.0      5.3      0.0          if problem['result'] > 0 and DEPTH == 0:
+    75                                                       if lastCollision['cases'] == 'Case ii_':
+    76                                                           # rewinding to previous iteration
+    77                                                           print('rewind... trying to resolve * ', tol_coeff, ' ...')
+    78                                                           Delta = lastCollision['Delta']
+    79                                                           x_0 = x_0 - del_x_0 * Delta
+    80                                                           q_N = q_N - del_q_N * Delta
+    81                                                           T = T - del_T * Delta
+    82                                                           theta = theta - Delta
+    83                                                           #             v1 = lastCollision.v2 #change varible order
+    84                                                           #             v2 = lastCollision.v1 #change varible order
+    85                                                           solution.update_rewind(lastCollision['N1'], lastCollision['N2'], lastCollision['Nnew'],
+    86                                                                                  lastCollision['old_dx'], lastCollision['old_dq'], lastCollision['old_pivots'])
+    87                                                           lastN1 = lastCollision['lastN1']
+    88                                                           lastN2 = lastCollision['lastN2']
+    89                                                           dx = solution.dx.get_matrix()
+    90                                                           dq = solution.dq.get_matrix()
+    91                                                           sdx = np.ones((dx.shape[0], dx.shape[1] + 2))
+    92                                                           sdq = np.ones((dq.shape[0], dq.shape[1] + 2))
+    93                                                           np.sign(dx, out=sdx[:, 1:-1])
+    94                                                           np.sign(dq, out=sdq[:, 1:-1])
+    95                                           
+    96                                                           tau, dtau = calc_equations(klist, jlist, solution.pivots, x_0, del_x_0, q_N, del_q_N, T, del_T, dx, dq)
+    97                                                           x, del_x, q, del_q = calc_states(dx, dq, x_0, del_x_0, q_N, del_q_N, tau, dtau, sdx, sdq, tolerance)
+    98                                                           cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x, del_x, q,
+    99                                                                                                                      del_q, solution, B1, B2, sdx, sdq, lastN1, lastN2,
+   100                                                                                                                      tolerance, tol_coeff)
+   101                                                           if problem['result'] == 4:
+   102                                                               while tol_coeff >= 0.001 and problem['result'] == 4:
+   103                                                                   if tol_coeff >= 10:
+   104                                                                       if tol_coeff <= 1000:
+   105                                                                           tol_coeff = 10 * tol_coeff
+   106                                                                       else:
+   107                                                                           tol_coeff = 0.1
+   108                                                                   else:
+   109                                                                       tol_coeff = 0.1 * tol_coeff
+   110                                                                   print('trying to resolve * ', tol_coeff, ' ...')
+   111                                                                   cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x,
+   112                                                                                                                              del_x, q, del_q, solution, B1,
+   113                                                                                                                              B2, sdx, sdq, lastN1, lastN2, tolerance, tol_coeff)
+   114                                                                   if problem['result'] == 0:
+   115                                                                       tol_coeff = 1
+   116                                                                       print('ok!')
+   117                                                                   else:
+   118                                                                       print('fail!')
+   119                                           
+   120       620       3466.0      5.6      0.0          if cases == 'complete' and DEPTH > 0:
+   121        13        225.0     17.3      0.0              Delta = min(0.1 * theta, (1 - theta) / 2)
+   122                                           
+   123       620       5437.0      8.8      0.0          if DEPTH == 0 and theta + Delta > ThetaBar:
+   124         1          7.0      7.0      0.0              cases = 'solved__'
+   125         1         10.0     10.0      0.0              Delta = ThetaBar - theta
+   126                                           
+   127       620       3227.0      5.2      0.0          if cases == 'complete' and DEPTH == 0:
+   128                                                       Delta = 0.1 * theta
+   129                                           
+   130       620       4465.0      7.2      0.0          NN = len(tau)
+   131       620       3688.0      5.9      0.0          STEPCOUNT = STEPCOUNT + 1
+   132                                           
+   133       620       4149.0      6.7      0.0          ITERATION[DEPTH] = ITERATION[DEPTH] + 1
+   134       620       3334.0      5.4      0.0          theta1 = theta + Delta
+   135                                           
+   136       620       3872.0      6.2      0.0          if theta1 >= 1 and DEPTH > 0 and cases != 'complete':
+   137                                                       print("Theta > 1....")
+   138                                                       pivot_problem['result'] = 1
+   139                                                       return solution, x_0, q_N, T, STEPCOUNT, pivot_problem
+   140                                           
+   141                                           
+   142       620     249925.0    403.1      0.1          print(STEPCOUNT, DEPTH, ITERATION[DEPTH], JJ, 'x', KK, NN, theta, theta1, cases, N1, N2, v1, v2, len(solution.base_sequence.places))
+   143       620       4051.0      6.5      0.0          lastCollision = {'cases': cases, 'theta': theta, 'Delta': Delta,
+   144       620      11898.0     19.2      0.0                                   'N1': N1, 'N2': N2, 'v1': v1, 'v2': v2, 'lastN1': lastN1, 'lastN2':lastN2}
+   145       620       3260.0      5.3      0.0          if cases == 'Case i__':
+   146         7      66131.0   9447.3      0.0              solution.update_caseI(N1, N2)
+   147       613       3114.0      5.1      0.0          elif cases == 'Case ii_' or cases == 'Case iii':
+   148       599       2805.0      4.7      0.0              if cases == 'Case ii_':
+   149       278      45600.0    164.0      0.0                  store_collision_info(N1, N2, lastCollision, solution)
+   150                                           
+   151       599       3410.0      5.7      0.0              solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1,
+   152       599       3132.0      5.2      0.0                                                                       v2, KK, JJ, NN, totalK, totalJ, DEPTH,
+   153       599   87560000.0 146177.0     49.1                                                                       STEPCOUNT, ITERATION, settings, tolerance)
+   154                                           
+   155                                           
+   156       599       5254.0      8.8      0.0              while pivot_problem['result'] == 1 and tol_coeff < 0.0001/tolerance: # theta > 1
+   157                                                           tol_coeff = tol_coeff * 10
+   158                                                           print('trying to resolve * ', tol_coeff, '...')
+   159                                                           cases, Delta, N1, N2, v1, v2, problem = classification(tau, dtau, klist, jlist, dx, dq, x,
+   160                                                                                                                      del_x, q, del_q, solution, B1,
+   161                                                                                                                      B2, sdx, sdq, lastN1, lastN2, tolerance, tol_coeff)
+   162                                                           print(STEPCOUNT, DEPTH, ITERATION[DEPTH], JJ, 'x', KK, NN, theta, theta1, cases, N1, N2, v1, v2,
+   163                                                                 len(solution.base_sequence.places))
+   164                                                           lastCollision = {'cases': cases, 'theta': theta, 'Delta': Delta,
+   165                                                                            'N1': N1, 'N2': N2, 'v1': v1, 'v2': v2, 'lastN1': lastN1, 'lastN2': lastN2}
+   166                                                           if cases == 'Case i__':
+   167                                                               solution.update_caseI(N1, N2)
+   168                                                               pivot_problem['result'] = 0
+   169                                                           elif cases == 'Case ii_' or cases == 'Case iii':
+   170                                                               if cases == 'Case ii_':
+   171                                                                   store_collision_info(N1, N2, lastCollision, solution)
+   172                                                               solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v1,
+   173                                                                                                                      v2, KK, JJ, NN, totalK, totalJ, DEPTH,
+   174                                                                                                                      STEPCOUNT, ITERATION, settings,
+   175                                                                                                                      tolerance)
+   176                                                           if DEPTH > 1:
+   177                                                               break
+   178                                           
+   179       599       3611.0      6.0      0.0              if pivot_problem['result'] == 1:
+   180                                                           if DEPTH > 0:
+   181                                                               return solution, x_0, q_N, T, STEPCOUNT, pivot_problem
+   182                                                           else:
+   183                                                               print('Changing variables order...')
+   184                                                               lastCollision['v1'] = v2
+   185                                                               lastCollision['v2'] = v1
+   186                                                               tol_coeff = 1
+   187                                                               solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(Kset_0, Jset_N, solution, N1, N2, v2,
+   188                                                                                                                          v1, KK, JJ, NN, totalK, totalJ, DEPTH,
+   189                                                                                                                          STEPCOUNT, ITERATION, settings,
+   190                                                                                                                          tolerance)
+   191                                           
+   192                                                       #statData = {'cases': cases, 'N1': N1, 'N2': N2, 'minBases': settings['minBases'],
+   193                                                       #            'maxBases': settings['maxBases'], 'basesRate': settings['basesRate']}
+   194                                                       #base_sequence = clearBaseSequence(base_sequence, statData)
+   195       620      15382.0     24.8      0.0          lastCollision['Nnew'] = solution.NN - NN
+   196       620      36791.0     59.3      0.0          x_0 = x_0 + del_x_0 * Delta
+   197       620      27815.0     44.9      0.0          q_N = q_N + del_q_N * Delta
+   198       620       7015.0     11.3      0.0          T = T + del_T * Delta
+   199       620       3275.0      5.3      0.0          theta = theta1
+   200                                           
+   201        14         70.0      5.0      0.0      return solution, x_0, q_N, T, STEPCOUNT, pivot_problem
+
+Total time: 1.27967 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\SCLP_subproblem6.py
+Function: SCLP_subproblem at line 10
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    10                                           @profile
+    11                                           def SCLP_subproblem(pbaseDD,dbaseDD,DD, N1,N2,v1,v2,Kexclude,Jexclude,pbaseB1,pbaseB2,
+    12                                                                AAN1,AAN2, KK, JJ, NN, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
+    13                                           
+    14                                           
+    15                                           
+    16                                               # Excluding the k's and j's which are > 0
+    17        13       3971.0    305.5      0.1      lKDDin = np.logical_not(np.in1d(pbaseDD, Kexclude, assume_unique=True))
+    18        13       1118.0     86.0      0.0      lJDDin = np.logical_not(np.in1d(dbaseDD, -Jexclude, assume_unique=True))
+    19        13        373.0     28.7      0.0      pbaseDDred = pbaseDD[lKDDin]
+    20        13        177.0     13.6      0.0      dbaseDDred = dbaseDD[lJDDin]
+    21        13     149532.0  11502.5      4.3      DDred = DD[find(np.hstack(([True],lKDDin)))[:,None], find(np.hstack(([True],lJDDin)))]
+    22                                               #DDred = DD[find(np.insert(lKDDin, 0, True))[:, None], find(np.insert(lJDDin, 0, True))]
+    23        13        274.0     21.1      0.0      if len(pbaseB1) > 0:
+    24        13       5991.0    460.8      0.2          pbaseB1red = pbaseB1[np.logical_not(np.in1d(pbaseB1,Kexclude, assume_unique=True))]
+    25                                               else:
+    26                                                   pbaseB1red = []
+    27        13         97.0      7.5      0.0      if len(pbaseB2) > 0:
+    28         1        277.0    277.0      0.0          pbaseB2red = pbaseB2[np.logical_not(np.in1d(pbaseB2,Kexclude, assume_unique=True))]
+    29                                               else:
+    30        12         52.0      4.3      0.0          pbaseB2red = []
+    31                                           
+    32        13       1904.0    146.5      0.1      klist = np.sort(np.append(pbaseDDred[pbaseDDred > 0], dbaseDDred[dbaseDDred > 0]))
+    33        13       3339.0    256.8      0.1      jlist = np.sort(-np.append(pbaseDDred[pbaseDDred < 0], dbaseDDred[dbaseDDred < 0]))
+    34                                           
+    35        13        174.0     13.4      0.0      lk = np.size(klist)
+    36        13         94.0      7.2      0.0      lj = np.size(jlist)
+    37                                           
+    38                                               # The starting sequence
+    39        13      78095.0   6007.3      2.2      new_bs = SCLP_base_sequence({'prim_name': pbaseDDred, 'dual_name': dbaseDDred,'A': DDred.copy()})
+    40        13       7177.0    552.1      0.2      dx, dq = extract_rates(pbaseDDred, dbaseDDred, DDred, lk, lj, totalK, totalJ)
+    41                                               #TODO: check if we need vstack
+    42        13        551.0     42.4      0.0      solution = SCLP_solution(None, new_bs, dx, dq)
+    43                                               # performing the left and right first pivots
+    44                                               #		the right pivot:
+    45        13        725.0     55.8      0.0      if np.size(pbaseB2red) > 0:
+    46         1          7.0      7.0      0.0          if not isinstance(v1, list):
+    47         1          9.0      9.0      0.0              if v1 > 0:
+    48                                                           K_0 = [v1]
+    49                                                           J_N = []
+    50                                                       else:
+    51         1          4.0      4.0      0.0                  K_0 = []
+    52         1          5.0      5.0      0.0                  J_N = [-v1]
+    53                                                   else:
+    54                                                       K_0 = []
+    55                                                       J_N = []
+    56         1          6.0      6.0      0.0          if not isinstance(v2, list):
+    57         1          9.0      9.0      0.0              if v2 < 0:
+    58                                                           J_N.append(-v2)
+    59         1         53.0     53.0      0.0          from .SCLP_pivot6 import SCLP_pivot
+    60         1          5.0      5.0      0.0          solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(K_0,J_N,solution,0,1,[],v1, lk, lj, 1, totalK, totalJ,
+    61         1       4462.0   4462.0      0.1                                                      DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+    62         1          5.0      5.0      0.0          if pivot_problem['result'] == 1:
+    63                                                       print('Problem during right pivot...')
+    64                                                       return [], [], [], 0, STEPCOUNT, ITERATION, pivot_problem
+    65                                               #		the left pivot:
+    66        13        125.0      9.6      0.0      if np.size(pbaseB1red) > 0:
+    67        13        122.0      9.4      0.0          if not isinstance(v2, list):
+    68        13        150.0     11.5      0.0              if v2 > 0:
+    69        13         62.0      4.8      0.0                  K_0 = [v2]
+    70        13         63.0      4.8      0.0                  J_N = []
+    71                                                       else:
+    72                                                           K_0 = []
+    73                                                           J_N = [-v2]
+    74                                                   else:
+    75                                                       K_0 = []
+    76                                                       J_N = []
+    77        13         74.0      5.7      0.0          if not isinstance(v1, list):
+    78         1          6.0      6.0      0.0              if v1 > 0:
+    79                                                           K_0.append(v1)
+    80        13        750.0     57.7      0.0          from .SCLP_pivot6 import SCLP_pivot
+    81        13         65.0      5.0      0.0          solution, STEPCOUNT, ITERATION, pivot_problem  = SCLP_pivot(K_0,J_N,solution,-1,0,v2,[], lk, lj, 1, totalK, totalJ,
+    82        13     410911.0  31608.5     11.8                                                      DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+    83        13         74.0      5.7      0.0          if pivot_problem['result'] == 1:
+    84                                                       print('Problem during left pivot...')
+    85                                                       return [], [], [], 0,  STEPCOUNT, ITERATION, pivot_problem
+    86                                               # prepare the boundaries
+    87        13         55.0      4.2      0.0      T = 1
+    88        13         57.0      4.4      0.0      del_T = 0
+    89                                           
+    90        13        169.0     13.0      0.0      x_0=np.zeros((lk,1))
+    91        13        151.0     11.6      0.0      q_N=np.zeros((lj,1))
+    92        13        101.0      7.8      0.0      del_x_0=np.zeros((lk,1))
+    93        13        130.0     10.0      0.0      del_q_N=np.zeros((lj,1))
+    94                                           
+    95                                               # Boundary values for one sided subproblem, collision at t=0
+    96        13        119.0      9.2      0.0      if N1 == -1:
+    97                                                   # The case of v1 > 0, collision case iv_a
+    98                                                   if not isinstance(v1, list) and v1 > 0:
+    99                                                       dx_DD_v1 = DD[1:,0][pbaseDD == v1][0]
+   100                                                       lk1 = klist == v1
+   101                                                       x_0[lk1] = -dx_DD_v1
+   102                                                       del_x_0[lk1] = dx_DD_v1
+   103                                                   # The case of v1 < 0, collision case iii_a
+   104                                                   if not isinstance(v1, list) and v1 < 0:
+   105                                                       #dq_B2_v1 = AA( 1, j1B2 + 1, N2 )
+   106                                                       dq_B2_v1 = AAN2['A'][0,1:][AAN2['dual_name'] == v1][0]
+   107                                                       lj1 = jlist == -v1
+   108                                                       #q_N[lj1] = 0
+   109                                                       del_q_N[lj1] = -dq_B2_v1
+   110                                               #
+   111                                               #
+   112                                               # Boundary values for one sided subproblem, collision at t=T
+   113        13         78.0      6.0      0.0      elif N2 == NN:
+   114                                                   # The case of v2 > 0, collision case iii_b
+   115        12        137.0     11.4      0.0          if not isinstance(v2, list) and v2 > 0:
+   116                                                       #dx_B1_v2 = AA( i2B1 + 1, 1, N1 )
+   117        12        448.0     37.3      0.0              dx_B1_v2 = AAN1['A'][1:,0][AAN1['prim_name'] == v2][0]
+   118        12        141.0     11.8      0.0              lk2 = klist == v2
+   119                                                       #x_0[lk2] = 0
+   120        12        255.0     21.2      0.0              del_x_0[lk2] = -dx_B1_v2
+   121                                                   # The case of v2 < 0, collision case iv_b
+   122        12         97.0      8.1      0.0          if not isinstance(v2, list) and v2 < 0:
+   123                                                       dq_DD_v2 = DD[0,1:][dbaseDD == v2][0]
+   124                                                       lj2 = jlist == -v2
+   125                                                       q_N[lj2] = -dq_DD_v2
+   126                                                       del_q_N[lj2] = dq_DD_v2
+   127                                               #
+   128                                               #
+   129                                               # Boundary values for two sided subproblem, collision at 0<t<T
+   130                                               #  setting boundaries for the second exiting variable v1
+   131                                               else:
+   132         1          8.0      8.0      0.0          if not isinstance(v1, list) and v1 > 0:
+   133                                                       dx_DD_v1 = DD[1:,0][pbaseDD == v1][0]
+   134                                                       lk1 = klist == v1
+   135                                                       x_0[lk1] = -dx_DD_v1
+   136                                                       #dx_B1_v1 = AA( i1B1 + 1, 1, N1 )
+   137                                                       dx_B1_v1 = AAN1['A'][1:,0][AAN1['prim_name'] == v1][0]
+   138                                                       del_x_0[lk1] = -0.5*dx_B1_v1 + dx_DD_v1
+   139         1          5.0      5.0      0.0          if not isinstance(v1, list) and v1 < 0:
+   140                                                       #dq_B2_v1 = AA( 1, j1B2 + 1, N2 )
+   141         1         34.0     34.0      0.0              dq_B2_v1 = AAN2['A'][0,1:][AAN2['dual_name'] == v1][0]
+   142         1         14.0     14.0      0.0              lj1 = jlist == -v1
+   143                                                       #q_N(j1) = 0
+   144         1         21.0     21.0      0.0              del_q_N[lj1] = -0.5*dq_B2_v1
+   145                                                   #  setting boundaries for the first exiting variable v2
+   146         1         11.0     11.0      0.0          if not isinstance(v2, list) and v2 > 0:
+   147                                                       #dx_B1_v2 = AA( i2B1 + 1, 1, N1 )
+   148         1         28.0     28.0      0.0              dx_B1_v2 = AAN1['A'][1:,0][AAN1['prim_name'] == v2][0]
+   149         1          9.0      9.0      0.0              lk2 = klist == v2
+   150                                                       #x_0[lk2] = 0
+   151         1         14.0     14.0      0.0              del_x_0[lk2] = -0.5*dx_B1_v2
+   152         1         11.0     11.0      0.0          if not isinstance(v2, list) and v2 < 0:
+   153                                                       dq_DD_v2 = DD[0,1:][dbaseDD == v2][0]
+   154                                                       lj2 = jlist == -v2
+   155                                                       q_N[lj2] = -dq_DD_v2
+   156                                                       #dq_B2_v2 = AA(1, j2B2 + 1, N2 )
+   157                                                       dq_B2_v2 = AAN2['A'][0,1:][AAN2['dual_name'] == v2][0]
+   158                                                       del_q_N[lj2] = -0.5*dq_B2_v2 + dq_DD_v2
+   159                                           
+   160                                               #############################################
+   161                                               # solving the subproblem
+   162        13        657.0     50.5      0.0      from .SCLP_solver6 import SCLP_solver
+   163        13         65.0      5.0      0.0      solution, x_0, q_N, T, STEPCOUNT, pivot_problem = SCLP_solver(solution, x_0, del_x_0, q_N, del_q_N, T, del_T, 1,'sub_prob', pbaseB1red,
+   164        13     747782.0  57521.7     21.4                                                  pbaseB2red, klist, jlist, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+   165        13         74.0      5.7      0.0      if pivot_problem['result'] == 1:
+   166                                                   return [], [], [],0, STEPCOUNT, ITERATION, pivot_problem
+   167                                               else:
+   168        13         71.0      5.5      0.0          pivot_problem = {'result': 0}
+   169                                               #############################################
+   170                                           
+   171        13        199.0     15.3      0.0      Npivots = len(solution.pivots)
+   172                                               #Warning this based on assumption that first basis in new_base_sequence is equal to the AAN1 and/or last basis is equal to the AAN2
+   173        13         65.0      5.0      0.0      if Npivots > 0:
+   174        13        211.0     16.2      0.0          dx = sparse_matrix_constructor(None, None, KK)
+   175        13        117.0      9.0      0.0          dq = sparse_matrix_constructor(None, None, JJ)
+   176        13         99.0      7.6      0.0          if N1 != -1:
+   177        13         74.0      5.7      0.0              pm1 = AAN1['prim_name']
+   178        13         63.0      4.8      0.0              dm1 = AAN1['dual_name']
+   179        13     431647.0  33203.6     12.4              DD1 = AAN1['A'].copy()
+   180        13        956.0     73.5      0.0              zz1 = np.zeros(len(pm1))
+   181        13        278.0     21.4      0.0              zz2 = np.zeros(len(dm1))
+   182        13        271.0     20.8      0.0              if N2 != NN:
+   183         1          7.0      7.0      0.0                  Npivots -=1
+   184         1        157.0    157.0      0.0                  ran = enumerate(solution.pivots[:-1])
+   185                                                       else:
+   186        12       1108.0     92.3      0.0                  ran = enumerate(solution.pivots)
+   187        40       1969.0     49.2      0.1              for i,piv1 in ran:
+   188        27    1611731.0  59693.7     46.2                  DD1,pm1,dm1,zz1,zz2 = full_pivot(DD1,find(pm1==piv1[0])[0],find(dm1==piv1[1])[0],pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
+   189        27      17571.0    650.8      0.5                  ndx, ndq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
+   190        27       1908.0     70.7      0.1                  dx.append(ndx)
+   191        27        885.0     32.8      0.0                  dq.append(ndq)
+   192                                                   else:
+   193                                                       pm1 = AAN2['prim_name']
+   194                                                       dm1 = AAN2['dual_name']
+   195                                                       DD1 = AAN2['A'].copy()
+   196                                                       zz1 = np.zeros(len(pm1))
+   197                                                       zz2 = np.zeros(len(dm1))
+   198                                                       for i,piv1 in enumerate(reversed(solution.pivots)):
+   199                                                           DD1,pm1,dm1,zz1,zz2 = full_pivot(DD1,find(pm1==piv1[1]),find(dm1==piv1[0]),pm1.copy(),dm1.copy(),zz1.copy(),zz2.copy())
+   200                                                           ndx, ndq = extract_rates(pm1, dm1, DD1, KK, JJ, totalK, totalJ)
+   201                                                           dx.prepend(ndx)
+   202                                                           dq.prepend(ndq)
+   203        13        155.0     11.9      0.0      return  dx, dq, solution.pivots, Npivots, STEPCOUNT, ITERATION, pivot_problem
+
+Total time: 0.0388669 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_boundaries.py
+Function: calc_boundaries at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                           @profile
+     6                                           def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
+     7         1         25.0     25.0      0.0      K, J = np.shape(G)
+     8         1         10.0     10.0      0.0      L = np.shape(F)[1]
+     9         1          8.0      8.0      0.0      I = np.shape(H)[0]
+    10         1          5.0      5.0      0.0      if I == 0 & L == 0:
+    11                                                   x_0 = alpha
+    12                                                   q_N = np.vstack(-gamma)
+    13                                                   if np.any(x_0 < 0):
+    14                                                       raise Exception('***  Problem not primal feasible')
+    15                                                   if np.any(q_N < 0):
+    16                                                       raise Exception('***  Problem not dual feasible')
+    17                                                   return x_0, q_N
+    18         1          4.0      4.0      0.0      if solve_gen_LP:
+    19                                                   DD0 = np.vstack((-np.hstack((0, gamma, np.zeros((1,L)))), np.hstack((alpha, G, F)), np.hstack((np.zeros((I,1)), H, np.zeros((I, L))))))
+    20                                                   pn = np.vstack(np.hstack((np.arange(1,K+1), -np.arange(J + 1, J + I + 1))))
+    21                                                   ps = np.zeros((K + I, 1), dtype = int)
+    22                                                   dn = np.hstack((-np.arange(1,J+1), np.arange(K + 1, K + L + 1)))
+    23                                                   ds = np.zeros((1, J + L), dtype = int)
+    24                                                   DD0, pn, dn, ps, ds, err = simplex_procedures(DD0, pn, dn, ps, ds, tolerance)
+    25                                                   if DD0[0, 0] != 0:
+    26                                                       raise Exception('*** Problem requires impulse controls')
+    27         1         17.0     17.0      0.0      if np.size(F) > 0:
+    28                                                   DD1 = np.vstack((-np.hstack((0, d)), np.hstack((np.vstack(alpha), F))))
+    29                                                   pn1 = np.vstack(np.arange(1,K+1))
+    30                                                   ps1 = np.zeros((K, 1), dtype = int)
+    31                                                   dn1 = np.arange(K + 1, K + L + 1)
+    32                                                   ds1 = np.zeros((1, L), dtype = int)
+    33                                                   DD1, pn1, dn1, ps1, ds1, err = simplex_procedures(DD1, pn1, dn1, ps1, ds1, tolerance)
+    34                                                   x_0 = np.zeros((K + L, 1))
+    35                                                   x_0[pn1] = DD1[-1, 0]
+    36                                               else:
+    37         1          3.0      3.0      0.0          x_0 = alpha
+    38                                           
+    39         1          8.0      8.0      0.0      if np.size(H) > 0:
+    40         1      47294.0  47294.0     44.6          DD2 = np.vstack((np.hstack((0, np.hstack(b))), np.hstack((np.vstack(-gamma), -H.transpose()))))
+    41         1      26746.0  26746.0     25.2          pn2 = np.vstack(np.arange(1,J+1))
+    42         1         26.0     26.0      0.0          ps2 = np.zeros((J, 1), dtype = int)
+    43         1         29.0     29.0      0.0          dn2 = np.arange(J + 1,J + I+1)
+    44         1          6.0      6.0      0.0          ds2 = np.zeros((1, I), dtype = int)
+    45         1      31344.0  31344.0     29.6          DD2, pn2, dn2, ps2, ds2, err = simplex_procedures(DD2, pn2, dn2, ps2, ds2, tolerance)
+    46         1        116.0    116.0      0.1          q_N = np.zeros((J + I, 1))
+    47         1        391.0    391.0      0.4          q_N[pn2] = DD2[-1, 0]
+    48                                               else:
+    49                                                   q_N = -gamma
+    50                                           
+    51         1          2.0      2.0      0.0      return x_0, q_N
+
+Total time: 0.0529138 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_controls5.py
+Function: calc_controls at line 4
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     4                                           @profile
+     5                                           def calc_controls(solution, JJ, KK):
+     6                                           
+     7         1        101.0    101.0      0.1      new_dict = solution.get_basis_at(0)
+     8         1         49.0     49.0      0.0      u = sparse_matrix_constructor(None, None, JJ)
+     9         1         11.0     11.0      0.0      p = sparse_matrix_constructor(None, None, KK)
+    10                                           
+    11       313        519.0      1.7      0.4      for place in range(solution.NN):
+    12       312       8665.0     27.8      6.0          klist2 = find(new_dict['dual_name'] > 0)
+    13       312       8314.0     26.6      5.8          jlist1 = find(new_dict['prim_name'] < 0)
+    14       312       1272.0      4.1      0.9          kn2 =  new_dict['dual_name'][klist2]
+    15       312       2292.0      7.3      1.6          jn1 = -new_dict['prim_name'][jlist1]
+    16       312      34707.0    111.2     24.0          u.append(sparse_matrix_constructor(new_dict['A'][jlist1+1,0].copy(), jn1-1, JJ))
+    17       312      19261.0     61.7     13.3          p.append(sparse_matrix_constructor(new_dict['A'][0,klist2+1].copy(), kn2-1, KK))
+    18       312       2983.0      9.6      2.1          if place < solution.NN - 1:
+    19       311      51032.0    164.1     35.4              new_dict = solution.get_next_basis_for_solution(new_dict, place)
+    20         1      15150.0  15150.0     10.5      return u.get_matrix(), p.get_matrix()
+
+Total time: 2.02166 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_equations.py
+Function: calc_equations at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                           @profile
+     6                                           def calc_equations(klist,jlist,pivots,x_0,del_x_0,q_N,del_q_N,T,del_T,dx,dq):
+     7       621      12041.0     19.4      0.2      NN = len(pivots)+1
+     8       621      40941.0     65.9      0.7      coeff = np.zeros((NN,NN))
+     9       621       9666.0     15.6      0.2      rhs = np.zeros(NN)
+    10       621       4206.0      6.8      0.1      drhs = np.zeros(NN)
+    11    108852     186569.0      1.7      3.4      for n in range(NN-1):
+    12    108231     676957.0      6.3     12.3          vv = pivots[n][0]
+    13    108231     187301.0      1.7      3.4          if vv > 0:
+    14    105721     170068.0      1.6      3.1              try:
+    15    105721    1605704.0     15.2     29.1                  k = find(klist == vv)[0]
+    16                                                       except:
+    17                                                           print(vv)
+    18    105721     622143.0      5.9     11.3              coeff[n,0:n+1] = dx[k, 0:n+1]
+    19    105721     500362.0      4.7      9.1              rhs[n] = -x_0[k]
+    20    105721     454768.0      4.3      8.2              drhs[n] = -del_x_0[k]
+    21                                                   else:
+    22      2510      43589.0     17.4      0.8              j = find(jlist == -vv)[0]
+    23      2510      16420.0      6.5      0.3              coeff[n,n+1:] = dq[j, n+1:]
+    24      2510      12724.0      5.1      0.2              rhs[n] = -q_N[j]
+    25      2510      11524.0      4.6      0.2              drhs[n] = -del_q_N[j]
+    26       621      27303.0     44.0      0.5      coeff[NN-1,:] = np.ones(NN)
+    27       621       1742.0      2.8      0.0      rhs[NN-1] = T
+    28       621       2103.0      3.4      0.0      drhs[NN-1] = del_T
+    29       621     922809.0   1486.0     16.7      sol = np.linalg.solve(coeff, np.hstack((np.reshape(rhs,(-1,1)),np.reshape(drhs,(-1,1)))))
+    30                                               # tau =clean(sol(:,1));%
+    31                                               # dtau=clean(sol(:,2));%
+    32       621       6412.0     10.3      0.1      return sol[:,0], sol[:,1]
+
+Total time: 10.5862 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_init_basis.py
+Function: calc_init_basis at line 3
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     3                                           @profile
+     4                                           def calc_init_basis(G,F,H,a,b,c,d,x_0,q_N, tolerance = 0):
+     5         1         18.0     18.0      0.0      K, J = np.shape(G)
+     6         1          6.0      6.0      0.0      L = np.shape(F)[1]
+     7         1          4.0      4.0      0.0      I = np.shape(H)[0]
+     8                                           
+     9         1        144.0    144.0      0.0      Kset = find(x_0)
+    10         1         60.0     60.0      0.0      Jset = find(q_N)
+    11                                           
+    12         1     101514.0 101514.0      0.4      DD = np.vstack((-np.hstack((0,c,d)), np.hstack((np.vstack(a),G,F)),np.hstack((np.vstack(b),H, np.zeros((I, L))))))
+    13         1        234.0    234.0      0.0      pn = np.hstack((np.arange(1,K+1), -np.arange(J + 1, J + I + 1)))
+    14         1        526.0    526.0      0.0      psx = ismember(np.arange(0,K), Kset).astype(int)
+    15         1         89.0     89.0      0.0      psu = -ismember(np.arange(J, J + I), Jset).astype(int)
+    16         1         40.0     40.0      0.0      ps = np.hstack((psx, psu))
+    17                                           
+    18         1         59.0     59.0      0.0      dn = np.hstack((-np.arange(1,J+1), np.arange(K + 1, K + L + 1)))
+    19         1         62.0     62.0      0.0      dsq = ismember(np.arange(0,J), Jset).astype(int)
+    20         1        151.0    151.0      0.0      dsp = -ismember(np.arange(K, K + L), Kset).astype(int)
+    21         1         39.0     39.0      0.0      ds = np.hstack((dsq, dsp))
+    22         1   28777603.0 28777603.0     99.6      return simplex_procedures(DD, pn, dn, ps, ds, tolerance)
+
+Total time: 6.72696 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_statecollide5.py
+Function: calc_statecollide at line 4
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     4                                           @profile
+     5                                           def calc_statecollide(klist, jlist, x, del_x, q, del_q, sdx, sdq, tolerance):
+     6                                           # Calculates time and variable for which state shrinks to zero, and performs testing
+     7                                           # problem   result = 0  Ok
+     8                                           #           result = 1  immediate collision         data = TODO
+     9                                           #           result = 2  multiple states hit zero    data = TODO
+    10       607       2693.0      4.4      0.0      problem = {'result': 0, 'data': []}
+    11                                           
+    12                                               #TODO: paralellize
+    13       607    1860396.0   3064.9     10.1      w_x = get_where(del_x, True, sdx)
+    14       607    4049636.0   6671.6     22.1      rz_x, bb_x, kk_x, nn_x = calc_rz_bb(x, del_x, w_x)
+    15                                               ###
+    16       607    2835202.0   4670.8     15.4      w_q = get_where(del_q, False, sdq)
+    17       607    6328759.0  10426.3     34.5      rz_q, bb_q, kk_q, nn_q = calc_rz_bb(q, del_q, w_q)
+    18                                               #end
+    19       607       4045.0      6.7      0.0      if bb_x > bb_q:
+    20       587       5796.0      9.9      0.0          if bb_x == 0:
+    21                                                       print(kk_x, nn_x)
+    22                                                       return [np.inf, 0, 0], problem
+    23                                                   else:
+    24       587       3897.0      6.6      0.0              test1 = 1. / bb_x
+    25       587       3837.0      6.5      0.0              if test1 <= -tolerance:
+    26                                                           return [], problem
+    27       587       6077.0     10.4      0.0              elif abs(test1) < tolerance:
+    28                                                           print('immediate collision\n')
+    29                                                           problem['result'] = 1
+    30                                                           return [], problem
+    31                                                       else:                    # test1 >= tolerance
+    32       587       4184.0      7.1      0.0                  nn = nn_x - 1
+    33       587       3707.0      6.3      0.0                  vv = klist[kk_x]
+    34       587       1827.0      3.1      0.0                  bb = bb_x
+    35                                               else:
+    36        20        135.0      6.8      0.0          if bb_q == 0:
+    37                                                       print(kk_q, nn_q)
+    38                                                       return [np.inf, 0, 0], problem
+    39                                                   else:
+    40        20        101.0      5.0      0.0              test1 = 1. / bb_q
+    41        20         93.0      4.7      0.0              if test1 <= -tolerance:
+    42                                                           return [], problem
+    43        20        165.0      8.2      0.0              elif abs(test1) < tolerance:
+    44                                                           print('immediate collision\n')
+    45                                                           problem['result'] = 1
+    46                                                           return [], problem
+    47                                                       else:                   # test1 >= tolerance
+    48        20        115.0      5.8      0.0                  nn = nn_q - 1
+    49        20        131.0      6.5      0.0                  vv = -jlist[kk_q]
+    50        20         50.0      2.5      0.0                  bb = bb_q
+    51                                               # TODO: paralellize
+    52       607     714252.0   1176.7      3.9      test2 = np.add(np.divide(rz_x, bb, where=w_x), -1.0, where=w_x)
+    53       607     533114.0    878.3      2.9      zstates = np.less(np.fabs(test2, where=w_x), tolerance, where = w_x, out=w_x)
+    54                                               #zstates = np.less(np.fabs(test2, where=w_x), tolerance, where = w_x, out=np.full_like(test2, False))
+    55       607     710796.0   1171.0      3.9      sz_x = np.sum(zstates)
+    56                                               ###
+    57       607     279698.0    460.8      1.5      test2 = np.add(np.divide(rz_q, bb, where=w_q), -1.0, where=w_q)
+    58       607     261316.0    430.5      1.4      zstates = np.less(np.fabs(test2, where=w_q), tolerance, where = w_q, out=w_q)
+    59                                               #zstates = np.less(np.fabs(test2, where=w_q), tolerance, where = w_q, out=np.full_like(test2, False))
+    60       607     733393.0   1208.2      4.0      sz_q = np.sum(zstates)
+    61                                               #end
+    62       607       6087.0     10.0      0.0      if sz_x + sz_q > 1:
+    63                                                   print('multiple states hit zero\n')
+    64                                                   problem['result'] = 2
+    65                                                   return [], problem
+    66                                               else:
+    67       607       2534.0      4.2      0.0          return [test1, nn, vv], problem
+
+Total time: 3.77976 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_statecollide5.py
+Function: calc_rz_bb at line 69
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    69                                           @profile
+    70                                           def calc_rz_bb(state, del_state, w):
+    71                                               # xxx = np.any(np.equal(state,np.zeros_like(state),out = np.full_like(state, False), where=w))
+    72                                               # if xxx:
+    73                                               #     print(np.where(np.equal(state,np.zeros_like(state), out = np.full_like(state, False), where=w)))
+    74      1214    8957948.0   7378.9     86.9      rz = np.divide(-del_state, state, out=np.zeros_like(del_state), where=w)
+    75      1214    1340376.0   1104.1     13.0      kk, nn = np.unravel_index(rz.argmax(), rz.shape)
+    76      1214      10564.0      8.7      0.1      bb = rz[kk, nn]
+    77      1214       2795.0      2.3      0.0      return rz, bb, kk, nn
+
+Total time: 1.6974 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_statecollide5.py
+Function: get_where at line 80
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    80                                           @profile
+    81                                           def get_where(del_state, is_primal, sd):
+    82      1214       3234.0      2.7      0.1      if is_primal:
+    83       607    1310526.0   2159.0     28.3          locmin_state = np.logical_and( (sd==1)[:,1:],(sd==-1)[:,:-1])
+    84                                               else:
+    85       607    1200123.0   1977.1     25.9          locmin_state = np.logical_and((sd == 1)[:, :-1], (sd == -1)[:, 1:])
+    86      1214    2112564.0   1740.2     45.6      np.logical_and(del_state < 0, locmin_state, out=locmin_state)
+    87      1214       4275.0      3.5      0.1      return locmin_state
+
+Total time: 7.90536 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_states4.py
+Function: calc_states at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                           @profile
+     6                                           def calc_states(dx,dq,x_0,del_x_0,q_N,del_q_N,tau,dtau,sdx, sdq, tolerance):
+     7       621       2102.0      3.4      0.0      K1, N1  = dx.shape
+     8       621       1268.0      2.0      0.0      if K1 == 0:
+     9                                                   x = np.zeros((0, N1 + 1))
+    10                                                   del_x = np.zeros((0, N1 + 1))
+    11                                               else:
+    12                                                   # x = Array('d',K1 * (N1 + 1))
+    13                                                   # del_x = Array('d',K1 * (N1 + 1))
+    14                                                   # K1 = Value('d', K1)
+    15                                                   # x_0 = Array('d', x_0)
+    16                                                   # p = Process(target=calc_prim_states, args=())
+    17       621      31659.0     51.0      0.1          x = np.zeros((K1, N1 + 1))
+    18       621      20348.0     32.8      0.1          del_x = np.zeros((K1, N1 + 1))
+    19                                           
+    20       621       1666.0      2.7      0.0      J1 = dq.shape[0]
+    21       621       1207.0      1.9      0.0      if J1 == 0:
+    22                                                   q = np.zeros((0,N1+1))
+    23                                                   del_q = np.zeros((0,N1+1))
+    24                                               else:
+    25       621      22851.0     36.8      0.1          q = np.zeros((J1, N1 + 1))
+    26       621      24571.0     39.6      0.1          del_q = np.zeros((J1, N1 + 1))
+    27                                               # TODO: parallelize
+    28       621    8943604.0  14401.9     41.5      _calc_states(x, del_x, K1, x_0, del_x_0, tau, dtau, dx, sdx, tolerance, True)
+    29       621   12500619.0  20129.8     58.0      _calc_states(q, del_q, J1, q_N, del_q_N, tau, dtau, dq, sdq, tolerance, False)
+    30       621      16999.0     27.4      0.1      return x, del_x, np.fliplr(q), np.fliplr(del_q)
+
+Total time: 7.84137 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_states4.py
+Function: _calc_states at line 33
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    33                                           @profile
+    34                                           def _calc_states(state, del_state, vdim, state0, del_state0, tau, dtau, dstate, sdstate, tolerance, is_primal):
+    35      1242       3073.0      2.5      0.0      if vdim > 0:
+    36      1242     931991.0    750.4      4.4          sstate = sdstate == 0
+    37                                                   #sdstate = np.logical_or(np.hstack((np.full((vdim, 1), False), sdstate)), np.hstack((sdstate, np.full((vdim, 1), False))))
+    38      1242     471908.0    380.0      2.2          sdstate = np.logical_or(sstate[:,:-1],sstate[:,1:])
+    39      1242       2579.0      2.1      0.0          if is_primal:
+    40                                                       #TODO: parallelize
+    41       621    4134087.0   6657.1     19.3              _calc_primal(state, dstate, tau, state0, sdstate, tolerance)
+    42       621    4142046.0   6670.0     19.4              _calc_primal(del_state, dstate, dtau, del_state0, sdstate, tolerance)
+    43                                                   else:
+    44                                                       # TODO: parallelize
+    45       621    5860626.0   9437.4     27.4              _calc_dual(state, dstate, tau, state0, sdstate, tolerance)
+    46       621    5846002.0   9413.9     27.3              _calc_dual(del_state, dstate, dtau, del_state0, sdstate, tolerance)
+
+Total time: 3.01412 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_states4.py
+Function: _calc_primal at line 48
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    48                                           @profile
+    49                                           def _calc_primal(state, dstate, tau, state0, sd, tolerance):
+    50                                               #state[:, :] = np.cumsum(np.hstack((state0, dstate * np.hstack(tau[:, None]))), 1)
+    51      1242    1738658.0   1399.9     21.1      state[:, 0:1] = state0
+    52                                               #state[:, 1:] = dstate * tau
+    53      1242    2807810.0   2260.7     34.1      np.multiply(dstate, tau, out=state[:, 1:])
+    54      1242    3297873.0   2655.3     40.1      np.cumsum(state, 1, out=state)
+    55                                               #np.cumsum(np.hstack((state0, dstate * tau)), 1, out=state)
+    56                                               #state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    57      1242     378573.0    304.8      4.6      state[sd] = 0
+
+Total time: 4.27084 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\calc_states4.py
+Function: _calc_dual at line 60
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    60                                           @profile
+    61                                           def _calc_dual(state, dstate, tau, state0, sd, tolerance):
+    62      1242    2025736.0   1631.0     17.4      state[:, 0:1] = state0
+    63      1242    4795281.0   3860.9     41.2      np.multiply(np.fliplr(dstate), tau[::-1], out=state[:, 1:])
+    64                                               #state[:, 1:] = np.fliplr(dstate * tau)
+    65      1242    3628563.0   2921.5     31.1      np.cumsum(state, 1, out=state)
+    66                                               #np.cumsum(np.fliplr(np.hstack((dstate * tau, state0))), 1, out=state)
+    67                                               #state[:,:] = np.fliplr(np.cumsum(np.fliplr(np.hstack((dstate * tau, state0))),1))
+    68                                               #state[np.logical_or(np.absolute(state) < tolerance, sd)] = 0
+    69      1242    1201851.0    967.7     10.3      state[np.fliplr(sd)] = 0
+
+Total time: 7.26867 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\classification6.py
+Function: classification at line 8
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     8                                           @profile
+     9                                           def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sdx, sdq, lastN1, lastN2, tolerance, tol_coeff):
+    10                                           #idenitfy next collision and classify it
+    11                                           #problem
+    12                                           #   result = 0 Ok
+    13                                           #   result = 1 state prblem
+    14                                           #   result = 2 time problem
+    15                                           #   result = 3 state problem + time problem
+    16                                           #   result = 4 compound problem
+    17                                           #   result = 5 state problem + compound problem
+    18                                           #   result = 6 time problem + compound problem
+    19                                           #   result = 7 state problem + time problem + compound problem
+    20                                           
+    21       620       3781.0      6.1      0.0      max_tol_coeff = 0.01/tolerance
+    22       620       1980.0      3.2      0.0      min_tol_coeff = 0.01
+    23       620       4107.0      6.6      0.0      if tol_coeff == max_tol_coeff:
+    24                                                   print("Maximum tolerance coefficient reached")
+    25                                                   raise Exception()
+    26       620       4658.0      7.5      0.0      NN = dx.shape[1]
+    27       620       5332.0      8.6      0.0      problem = {'result': 0, 'stateProblem': [], 'timeProblem': [], 'compoundProblem': {'result':0, 'data': []}}
+    28       620       1895.0      3.1      0.0      Delta = 0
+    29       620       1821.0      2.9      0.0      N1 = -1
+    30       620       1815.0      2.9      0.0      N2 = NN
+    31       620       2018.0      3.3      0.0      v1 = []
+    32       620       2083.0      3.4      0.0      v2 = []
+    33       620       1847.0      3.0      0.0      case = ''
+    34                                           
+    35       620       1865.0      3.0      0.0      test1 = 0
+    36       620       1819.0      2.9      0.0      test2 = 0
+    37       620       5656.0      9.1      0.0      if len(B1) > 0 or len(B2) > 0:
+    38        27         89.0      3.3      0.0          if len(B1) > 0:
+    39        27       9269.0    343.3      0.0              test1 = solution.get_name_diff_with0(B1).size
+    40        27        110.0      4.1      0.0          if len(B2) > 0:
+    41         2        924.0    462.0      0.0              test2 = solution.get_name_diff_withN(B2).size
+    42       620       2941.0      4.7      0.0      if (len(B1) > 0 or len(B2) > 0) and test1 == 0 and test2 == 0:
+    43        13         43.0      3.3      0.0          return 'complete', 0, -1, NN, [], [], problem
+    44                                           
+    45                                           
+    46       607   19281107.0  31764.6     97.2      CC1, prob = calc_statecollide(klist,jlist,x,del_x,q,del_q, sdx, sdq, tolerance)
+    47       607       4193.0      6.9      0.0      problem['stateProblem'] = prob
+    48       607       3338.0      5.5      0.0      if prob['result'] != 0:
+    49                                                   problem['result'] = 1
+    50                                                   return '', Delta, N1, N2, v1, v2, problem
+    51                                           
+    52       607     276286.0    455.2      1.4      CC2, prob = calc_timecollide(tau,dtau, lastN1, lastN2, tolerance, tol_coeff)
+    53       607       3114.0      5.1      0.0      problem['timeProblem'] = prob
+    54       607       2263.0      3.7      0.0      if prob['result'] != 0:
+    55                                                   problem['result'] = problem['result'] + 2
+    56                                                   return '', Delta, N1, N2, v1, v2, problem
+    57                                           
+    58       607       3136.0      5.2      0.0      if 	len(CC1) == 0 and len(CC2) == 0:
+    59                                                   case = 'complete'
+    60                                                   Delta = np.inf
+    61                                                   return case, Delta, N1, N2, v1, v2, problem
+    62                                           
+    63       607       1814.0      3.0      0.0      Didle = 0
+    64       607       3019.0      5.0      0.0      if	len(CC1) > 0 and len(CC2) > 0:
+    65       473       2706.0      5.7      0.0          Didle = CC1[0] - CC2[0]
+    66       473       2680.0      5.7      0.0          if abs(Didle) <= tolerance:
+    67                                                       Didle = 0
+    68       473       2153.0      4.6      0.0          if Didle == 0 and not (CC2[1] - 1 <= CC1[1] and CC1[1] <= CC2[2]+1):
+    69                                                       print('time shrink as well as state hits zero elsewhere\n')
+    70                                                       problem['result'] = problem['result'] + 4
+    71                                                       problem['compoundProblem']['result'] = 1
+    72                                                       return '', Delta, N1, N2, v1, v2, problem
+    73       607       3488.0      5.7      0.0      if	(len(CC1) > 0 and len(CC2) == 0) or Didle < 0:
+    74       322        962.0      3.0      0.0          case = 'Case iii'
+    75       322       1079.0      3.4      0.0          Delta = CC1[0]
+    76       322        969.0      3.0      0.0          N1 = CC1[1]
+    77       322       1993.0      6.2      0.0          N2 = CC1[1] + 1
+    78       322       1476.0      4.6      0.0          if CC1[2] < 0:
+    79        15         48.0      3.2      0.0              v1 = CC1[2]
+    80                                                   else:
+    81       307       1184.0      3.9      0.0              v2 = CC1[2]
+    82       285       1430.0      5.0      0.0      elif (len(CC1) == 0 and len(CC2) > 0) or Didle >= 0:
+    83       285        936.0      3.3      0.0          Delta = CC2[0]
+    84       285       1339.0      4.7      0.0          N1 = CC2[1] - 1
+    85       285       1486.0      5.2      0.0          N2 = CC2[2] + 1
+    86       285       1484.0      5.2      0.0          if N1 == -1 or N2 == NN:
+    87                                                       case = 'Case i__'
+    88                                                   else:
+    89       285      81170.0    284.8      0.4              vlist = solution.pivots.get_difference(N1,N2)
+    90       285       1383.0      4.9      0.0              if len(vlist) > 2:
+    91                                                           problem['result'] = problem['result'] + 4
+    92                                                           problem['compoundProblem']['result'] = 2
+    93                                                           return '', Delta, N1, N2, v1, v2, problem
+    94       285       1149.0      4.0      0.0              elif len(vlist) == 1:
+    95         7         21.0      3.0      0.0                  case = 'Case i__'
+    96         7         30.0      4.3      0.0                  return case, Delta, N1, N2, v1, v2, problem
+    97       278       1079.0      3.9      0.0              elif len(vlist) == 2:
+    98       278        869.0      3.1      0.0                  case = 'Case ii_'
+    99       278      71391.0    256.8      0.4                  order_ratio = calc_order_ratio(vlist[0],vlist[1],N1,N2,klist,jlist,dx,dq,x,del_x,q,del_q,tau,dtau,Delta/2)
+   100       278       7489.0     26.9      0.0                  if abs(abs(order_ratio)-1) < tolerance * tol_coeff:
+   101                                                               print('Tolerance in R unclear...')
+   102       278       2974.0     10.7      0.0                  if abs(order_ratio) < 1: #the strange case when R < 0 should be perferctly reviewed
+   103       278       1109.0      4.0      0.0                      v1 = vlist[0]
+   104       278       1249.0      4.5      0.0                      v2 = vlist[1]
+   105                                                           else:
+   106                                                               v1 = vlist[1]
+   107                                                               v2 = vlist[0]
+   108       278       1013.0      3.6      0.0                  return case, Delta, N1, N2, v1, v2, problem
+   109       322       1253.0      3.9      0.0      return case, Delta, N1, N2, v1, v2, problem
+
+Total time: 0.102886 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\extract_rates5.py
+Function: extract_rates at line 6
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     6                                           @profile
+     7                                           def extract_rates(prim_name, dual_name, dct, KK, JJ, totalK = None, totalJ = None):
+     8       641       1412.0      2.2      0.5      if totalK is None:
+     9         1          1.0      1.0      0.0          totalK = KK
+    10       641       1184.0      1.8      0.4      if totalJ is None:
+    11         1          1.0      1.0      0.0          totalJ = JJ
+    12       641      31545.0     49.2     11.2      klist1 = find(prim_name > 0)
+    13       641      21440.0     33.4      7.6      jlist2 = find(dual_name < 0)
+    14       641       8538.0     13.3      3.0      kn1 =  prim_name[klist1]
+    15       641      17016.0     26.5      6.1      jn2 = -dual_name[jlist2]
+    16       641       1457.0      2.3      0.5      if KK < totalK:
+    17        41       1250.0     30.5      0.4          kn2 =  dual_name[dual_name > 0]
+    18        41       6461.0    157.6      2.3          kord = np.argsort(np.argsort(np.hstack((kn1, kn2))))[:len(kn1)]
+    19        41       2171.0     53.0      0.8          dx = sparse_matrix_constructor(dct[klist1+1,0], kord, KK)
+    20                                               else:
+    21       600     143410.0    239.0     51.1          dx = sparse_matrix_constructor(dct[klist1+1,0], kn1-1, KK)
+    22       641       1755.0      2.7      0.6      if JJ < totalJ:
+    23         4         61.0     15.2      0.0          jn1 = -prim_name[prim_name < 0]
+    24         4        631.0    157.8      0.2          jord = np.argsort(np.argsort(np.hstack((jn1, jn2))))[len(jn1):]
+    25         4        103.0     25.8      0.0          dq = sparse_matrix_constructor(dct[0,jlist2+1], jord, JJ)
+    26                                               else:
+    27       637      40886.0     64.2     14.6          dq = sparse_matrix_constructor(dct[0,jlist2+1], jn2-1, JJ)
+    28       641       1366.0      2.1      0.5      return dx, dq
+
+Total time: 0.995212 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\get_new_dict.py
+Function: get_new_dict at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                           @profile
+     6                                           def get_new_dict(oldDict, oldPlace, newPlace, pivots):
+     7        25        221.0      8.8      0.0      L = len(pivots)
+     8        25        220.0      8.8      0.0      if isinstance(oldPlace, list):
+     9                                                   oldPlace = oldPlace[0]
+    10                                                   oldDict = oldDict[0]
+    11        25        121.0      4.8      0.0      assert(newPlace >=0 and newPlace < L, 'new dictionary place is out of a base sequence')
+    12        25         83.0      3.3      0.0      assert(oldPlace >=0 and oldPlace < L, 'old dictionary place is out of a base sequence')
+    13        25     839692.0  33587.7     30.9      newDict={'A':oldDict['A'].copy(), 'prim_name':oldDict['prim_name'].copy(), 'dual_name':oldDict['dual_name'].copy()}
+    14        25        388.0     15.5      0.0      if oldPlace < newPlace:
+    15        53        624.0     11.8      0.0          for i in range(oldPlace,newPlace):
+    16        29       3424.0    118.1      0.1              out_v = find(newDict['prim_name'] == pivots[i][0])
+    17        29       1076.0     37.1      0.0              in_v = find(newDict['dual_name'] == pivots[i][1])
+    18        29    1810169.0  62419.6     66.7              newDict = dict_pivot(newDict, out_v, in_v)
+    19        25        187.0      7.5      0.0      if newPlace < oldPlace:
+    20         2         34.0     17.0      0.0          for i in range(oldPlace-1, newPlace-1, -1):
+    21         1         89.0     89.0      0.0              out_v = find(newDict['prim_name'] == pivots[i][1])
+    22         1         23.0     23.0      0.0              in_v = find(newDict['dual_name'] == pivots[i][0])
+    23         1      58674.0  58674.0      2.2              newDict = dict_pivot(newDict, out_v, in_v)
+    24        25         48.0      1.9      0.0      return newDict
+
+Total time: 0 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\pivot.py
+Function: base_pivot at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                           @profile
+     6                                           def base_pivot(A, i, j):
+     7                                               i = i + 1
+     8                                               j = j + 1
+     9                                               p = A[i, j]
+    10                                               if p == 0:
+    11                                                   raise Exception('pivot on zero')
+    12                                               rp = (A[i,:] / p).copy()
+    13                                               c = A[:, j].copy()
+    14                                               A -= np.outer(c,rp)
+    15                                               A[i,:] = rp
+    16                                               A[:, j] = c / -p
+    17                                               A[i, j] = 1. / p
+    18                                               return A
+
+Total time: 32.44 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\pivot.py
+Function: full_pivot at line 21
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    21                                           @profile
+    22                                           def full_pivot(A, i, j, pn, dn, ps, ds):
+    23      1485       5517.0      3.7      0.0      nam = pn[i]
+    24      1485       6442.0      4.3      0.0      pn[i] = dn[j]
+    25      1485       3355.0      2.3      0.0      dn[j] = nam
+    26      1485       3433.0      2.3      0.0      sam = ps[i]
+    27      1485       6450.0      4.3      0.0      ps[i] = - ds[j]
+    28      1485       3681.0      2.5      0.0      ds[j] = - sam
+    29      1485       5589.0      3.8      0.0      i = i + 1
+    30      1485       4290.0      2.9      0.0      j = j + 1
+    31      1485       4339.0      2.9      0.0      p = A[i, j]
+    32      1485       4595.0      3.1      0.0      if p == 0:
+    33                                                   raise Exception('pivot on zero')
+    34      1485      72969.0     49.1      0.1      rp = (A[i,:] / p).copy()
+    35      1485     171420.0    115.4      0.2      c = A[:, j].copy()
+    36      1485   87539455.0  58949.1     98.9      A -= np.outer(c, rp)
+    37                                               #A = dger(-1.0, c, rp, a=A, overwrite_a= 1)
+    38                                               #A -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
+    39      1485     110806.0     74.6      0.1      A[i,:] = rp
+    40      1485     535453.0    360.6      0.6      A[:, j] = c / -p
+    41      1485      16950.0     11.4      0.0      A[i, j] = 1. / p
+    42      1485       6008.0      4.0      0.0      return A, pn, dn, ps, ds
+
+Total time: 0.683648 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\pivot.py
+Function: dict_pivot at line 45
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    45                                           @profile
+    46                                           def dict_pivot(dct, i, j):
+    47        30        250.0      8.3      0.0      nam = dct['prim_name'][i]
+    48        30        250.0      8.3      0.0      dct['prim_name'][i] = dct['dual_name'][j]
+    49        30         79.0      2.6      0.0      dct['dual_name'][j] = nam
+    50        30        669.0     22.3      0.0      i = i + 1
+    51        30        217.0      7.2      0.0      j = j + 1
+    52        30       1155.0     38.5      0.1      p = dct['A'][i, j]
+    53        30        417.0     13.9      0.0      if p == 0:
+    54                                                   raise Exception('pivot on zero')
+    55        30       2417.0     80.6      0.1      rp = (dct['A'][i, :] / p).copy()
+    56        30       6639.0    221.3      0.4      c = dct['A'][:, j].copy()
+    57        30    1837446.0  61248.2     98.5      dct['A'] -= np.outer(c, rp)
+    58                                               #dct['A'] -= np.dot(np.reshape(c,(np.size(c),1)), np.reshape(rp, (1, np.size(rp))))
+    59        30       3413.0    113.8      0.2      dct['A'][i, :] = rp
+    60        30      10656.0    355.2      0.6      dct['A'][:, j] = c / -p
+    61        30       1395.0     46.5      0.1      dct['A'][i, j] = 1. / p
+    62        30         80.0      2.7      0.0      return dct
+
+Total time: 32.3514 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\simplex_procedures.py
+Function: simplex_procedures at line 6
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     6                                           @profile
+     7                                           def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
+     8                                           
+     9       615      10713.0     17.4      0.0      err = dict()
+    10       615       3683.0      6.0      0.0      err['result'] = 0
+    11       615       5123.0      8.3      0.0      mm = A.shape[0]
+    12       615       2762.0      4.5      0.0      nn = A.shape[1]
+    13                                           
+    14       615      50129.0     81.5      0.1      pneg = find(ps == -1)
+    15       616       4674.0      7.6      0.0      while pneg.size > 0:
+    16         1          5.0      5.0      0.0          i = pneg[0]
+    17         1          3.0      3.0      0.0          if tolerance == 0:
+    18                                                       cond = A[i + 1, 1:] != 0
+    19                                                   else:
+    20         1         29.0     29.0      0.0              cond = np.absolute(A[i + 1, 1:]) > tolerance
+    21         1         15.0     15.0      0.0          jj = find(np.logical_and(ds == -1, cond))
+    22         1          3.0      3.0      0.0          if jj.size > 0:
+    23                                                       j = jj[0]
+    24                                                   else:
+    25         1         21.0     21.0      0.0              mat = A[i + 1, 1:] / A[0, 1:]
+    26         1         11.0     11.0      0.0              if A[i + 1, 0] > 0:
+    27         1         49.0     49.0      0.0                  j = np.argmax(mat * (ds != 1))
+    28         1          4.0      4.0      0.0                  m = mat[j]
+    29                                                       else:
+    30                                                           j = np.argmin(mat * (ds != 1))
+    31                                                           m = -mat[j]
+    32         1          4.0      4.0      0.0              if m <=0:
+    33                                                           jj = find(A[i + 1, 1:])
+    34                                                           if jj.size > 0:
+    35                                                               j = jj[0]
+    36                                                           else:
+    37                                                               raise Exception('*** No pivot available')
+    38         1       1468.0   1468.0      0.0          A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+    39         1         18.0     18.0      0.0          pneg = find(ps == -1)
+    40                                           
+    41       615      16494.0     26.8      0.0      dneg = find(ds == -1)
+    42       897       5670.0      6.3      0.0      while dneg.size > 0:
+    43       282       2841.0     10.1      0.0          j = dneg[0]
+    44       282       1669.0      5.9      0.0          if tolerance == 0:
+    45                                                       cond = A[1:, j + 1] != 0
+    46                                                   else:
+    47       282      65248.0    231.4      0.1              cond = np.absolute(A[1:, j + 1]) > tolerance
+    48       282       9746.0     34.6      0.0          ii = find(np.logical_and(ps == -1, cond))
+    49       282       1358.0      4.8      0.0          if ii.size > 0:
+    50                                                       i = ii[0]
+    51                                                   else:
+    52       282      65309.0    231.6      0.1              mat = -A[1:, j + 1] / A[1:, 0]
+    53       282       3988.0     14.1      0.0              if A[0, j + 1] < 0:
+    54                                                           i = np.argmax(mat * (ps != 1))
+    55                                                           m = mat[i]
+    56                                                       else:
+    57       282      27736.0     98.4      0.0                  i = np.argmin(mat * (ps != 1))
+    58       282       1981.0      7.0      0.0                  m = -mat[i]
+    59       282       1612.0      5.7      0.0              if m <=0:
+    60                                                           ii = find(A[1:, j+1])
+    61                                                           if ii.size > 0:
+    62                                                               i = ii[0]
+    63                                                           else:
+    64                                                               raise Exception('*** No pivot available')
+    65       282   16934427.0  60051.2     19.2          A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+    66       282      23323.0     82.7      0.0          dneg = find(ds == -1)
+    67                                           
+    68       615     168094.0    273.3      0.2      ptest = find(np.logical_and(ps == 0,  A[1:, 0] < 0))
+    69       615      31018.0     50.4      0.0      dtest = find(np.logical_and(ds == 0,  A[0, 1:] < 0))
+    70                                           
+    71       615       3334.0      5.4      0.0      if ptest.size > 0 and dtest.size == 0:
+    72       704       5185.0      7.4      0.0          while ptest.size > 0:
+    73       398       2560.0      6.4      0.0              i = ptest[0]
+    74       398      80321.0    201.8      0.1              mat = np.divide(-A[i + 1, 1:], A[0, 1:], out=np.zeros_like(A[i + 1, 1:]), where=np.logical_and(A[0, 1:]!=0, ds != 1))
+    75       398      17718.0     44.5      0.0              j = np.argmax(mat)
+    76                                                       #j = np.argmax(mat * (ds != 1))
+    77       398       4339.0     10.9      0.0              if mat[j] <= 0:
+    78                                                           A[0, 0] = -np.inf
+    79                                                           err['result'] = 1
+    80                                                           err['message'] = '***  problem is primal infeasible'
+    81                                                           return A, pn, dn, ps, ds, err
+    82       398   24320436.0  61106.6     27.6              A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+    83       398     109980.0    276.3      0.1              ptest = find(np.logical_and(ps == 0, A[1:, 0] < 0))
+    84       309       1666.0      5.4      0.0      elif ptest.size == 0 and dtest.size > 0:
+    85      1084       8544.0      7.9      0.0          while dtest.size > 0:
+    86       777       4827.0      6.2      0.0              j = dtest[0]
+    87       777     274833.0    353.7      0.3              mat = np.divide(A[1:, j + 1], A[1:, 0], out=np.zeros_like(A[1:, j + 1]), where=np.logical_and(A[1:, 0] != 0, ps != 1))
+    88       777      42378.0     54.5      0.0              i = np.argmax(mat)
+    89                                                       #i = np.argmax(mat * (ps != 1))
+    90       777       9318.0     12.0      0.0              if mat[i] <= 0:
+    91                                                           A[0, 0] = np.inf
+    92                                                           err['result'] = 2
+    93                                                           err['message'] = '***  problem is dual infeasible'
+    94                                                           return A, pn, dn, ps, ds, err
+    95       777   45820102.0  58970.5     51.9              A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+    96       777     111034.0    142.9      0.1              dtest = find(np.logical_and(ds == 0, A[0, 1:] < 0))
+    97         2          7.0      3.5      0.0      elif ptest.size > 0 and dtest.size > 0:
+    98                                                   B = np.zeros((mm+1,nn+1))
+    99                                                   B[:-1,-1:] = np.random.rand(mm, 1) + 1
+   100                                                   B[-1:,:-1] = np.random.rand(1, nn) + 1
+   101                                                   B[:-1, :-1] = A
+   102                                                   mat = np.divide(-A[0, 1:], B[-1, 1:-1], out=np.zeros_like(A[0, 1:]), where=np.logical_and(B[-1, 1:-1] > 0, ds != 1) )
+   103                                                   j = np.argmax(mat)
+   104                                                   mu1 = mat[j]
+   105                                                   mat = np.divide(-A[1:, 0], B[1:-1, -1], out=np.zeros_like(A[1:, 0]), where=np.logical_and(B[1:-1, -1] >0, ps != 1) )
+   106                                                   i = np.argmax(mat)
+   107                                                   mu2 = mat[i]
+   108                                                   mu = max(mu1,mu2)
+   109                                                   while mu > 0:
+   110                                                       if mu1 > mu2:
+   111                                                           div = B[1:-1, 0] + mu * B[1:-1, -1]
+   112                                                           mat = np.divide(B[1:-1, j+1], div , out=np.full_like(B[1:-1, j+1], -1), where= np.logical_and(div !=0, ps != 1))
+   113                                                           i = np.argmax(mat)
+   114                                                           if mat[i] <= 0:
+   115                                                               B[0, 0] = np.inf
+   116                                                               err['result'] = 2
+   117                                                               err['message'] = '***  problem is dual infeasible'
+   118                                                               return B[:-1,:-1], pn, dn, ps, ds, err
+   119                                                       else:
+   120                                                           div = B[0, 1:-1] + mu * B[-1, 1:-1]
+   121                                                           mat = np.divide(-B[i + 1, 1:-1], div, out=np.full_like(B[i + 1, 1:-1], -1), where= np.logical_and(div !=0, ds != 1))
+   122                                                           j = np.argmax(mat)
+   123                                                           if mat[j] <= 0:
+   124                                                               B[0, 0] = - np.inf
+   125                                                               err['result'] = 1
+   126                                                               err['message'] = '***  problem is primal infeasible'
+   127                                                               return B[:-1, :-1], pn, dn, ps, ds, err
+   128                                                       B, pn, dn, ps, ds = full_pivot(B, i, j, pn, dn, ps, ds)
+   129                                                       mat = np.divide(-B[0, 1:-1], B[-1, 1:-1], out=np.zeros_like(B[0, 1:-1]), where=np.logical_and(B[-1, 1:-1] > 0, ds != 1))
+   130                                                       j = np.argmax(mat)
+   131                                                       mu1 = mat[j]
+   132                                                       mat = np.divide(-B[1:-1, 0], B[1:-1, -1], out=np.zeros_like(B[1:-1, 0]), where=np.logical_and(B[1:-1, -1] > 0, ps != 1))
+   133                                                       i = np.argmax(mat)
+   134                                                       mu2 = mat[i]
+   135                                                       mu = max(mu1, mu2)
+   136                                                   A = B[:-1, :-1]
+   137       615       3122.0      5.1      0.0      return A, pn, dn, ps, ds, err
+
+Total time: 0 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: insert at line 32
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    32                                               @profile
+    33                                               def insert(self, after, data, indexes):
+    34                                                   if after == -1:
+    35                                                       self._data = data + self._data
+    36                                                       self._indexes = indexes + self._indexes
+    37                                                   elif after >= len(self._data) -1:
+    38                                                       self._data = self._data + data
+    39                                                       self._indexes = self._indexes + indexes
+    40                                                   else:
+    41                                                       self._data = self._data[:after + 1] + data + self._data[after + 1:]
+    42                                                       self._indexes = self._indexes[:after + 1] + indexes + self._indexes[after + 1:]
+
+Total time: 0.000336494 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: remove at line 44
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    44                                               @profile
+    45                                               def remove(self, from_, to_):
+    46        14         33.0      2.4      3.6          if from_ <= 0:
+    47                                                       self._data = self._data[to_:]
+    48                                                       self._indexes = self._indexes[to_:]
+    49        14         73.0      5.2      8.0          elif to_ >= len(self._data):
+    50                                                       self._data = self._data[:from_]
+    51                                                       self._indexes = self._indexes[:from_]
+    52                                                   else:
+    53        14        477.0     34.1     52.0              self._data = self._data[:from_] + self._data[to_:]
+    54        14        335.0     23.9     36.5              self._indexes = self._indexes[:from_] + self._indexes[to_:]
+
+Total time: 0.0176557 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: replace at line 56
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    56                                               @profile
+    57                                               def replace(self, from_, to_, data, indexes):
+    58      1226       3335.0      2.7      6.9          if from_ <= 0:
+    59        54        182.0      3.4      0.4              self._data = data + self._data[to_:]
+    60        54        146.0      2.7      0.3              self._indexes = indexes + self._indexes[to_:]
+    61      1172       4513.0      3.9      9.4          elif to_ >= len(self._data):
+    62       614       7853.0     12.8     16.3              self._data = self._data[:from_] + data
+    63       614       7346.0     12.0     15.3              self._indexes = self._indexes[:from_] + indexes
+    64                                                   else:
+    65       558      13127.0     23.5     27.3              self._data = self._data[:from_] + data + self._data[to_:]
+    66       558      11665.0     20.9     24.2              self._indexes = self._indexes[:from_] + indexes + self._indexes[to_:]
+
+Total time: 0.00428901 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: get_sub_matrix at line 68
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    68                                               @profile
+    69                                               def get_sub_matrix(self, from_, to_):
+    70       556       1395.0      2.5     11.9          if from_ <= 0:
+    71                                                       return sparse_matrix_constructor(self._data[:to_], self._indexes[:to_], self._row_num, True)
+    72       556       2373.0      4.3     20.3          elif to_ >= len(self._data):
+    73                                                       return sparse_matrix_constructor(self._data[from_:], self._indexes[from_:], self._row_num, True)
+    74                                                   else:
+    75       556       7933.0     14.3     67.8              return sparse_matrix_constructor(self._data[from_:to_], self._indexes[from_:to_], self._row_num, True)
+
+Total time: 0 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: insert_matrix at line 77
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    77                                               @profile
+    78                                               def insert_matrix(self, after, other):
+    79                                                   if isinstance(other, sparse_matrix_constructor):
+    80                                                       if other.row_num != self._row_num:
+    81                                                           raise ValueError('Row numbers must be equal!')
+    82                                                       self.insert(after, other.data, other.indexes)
+
+Total time: 0.0046442 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: append at line 84
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    84                                               @profile
+    85                                               def append(self, other):
+    86       678       2054.0      3.0     16.2          if isinstance(other, sparse_matrix_constructor):
+    87       678       2682.0      4.0     21.2              if other.row_num != self._row_num:
+    88                                                           raise ValueError('Row numbers must be equal!')
+    89       678       4220.0      6.2     33.3              self._data = self._data + other.data
+    90       678       3714.0      5.5     29.3              self._indexes = self._indexes + other.indexes
+
+Total time: 0 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: prepend at line 92
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    92                                               @profile
+    93                                               def prepend(self, other):
+    94                                                   if isinstance(other, sparse_matrix_constructor):
+    95                                                       if other.row_num != self._row_num:
+    96                                                           raise ValueError('Row numbers must be equal!')
+    97                                                       self._data = other.data + self._data
+    98                                                       self._indexes = other.indexes + self._indexes
+
+Total time: 0.0344734 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: replace_matrix at line 100
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   100                                               @profile
+   101                                               def replace_matrix(self, from_, to_, other):
+   102      1226       5770.0      4.7      6.1          if isinstance(other, sparse_matrix_constructor):
+   103      1226       7811.0      6.4      8.3              if other.row_num != self._row_num:
+   104                                                           raise ValueError('Row numbers must be equal!')
+   105      1226      80467.0     65.6     85.6          self.replace(from_, to_, other.data, other.indexes)
+
+Total time: 5.58019 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: get_coo_matrix at line 107
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   107                                               @profile
+   108                                               def get_coo_matrix(self):
+   109      1244       7413.0      6.0      0.0          col_num = len(self._indexes)
+   110      1244       3485.0      2.8      0.0          if col_num > 1:
+   111      1242    4695359.0   3780.5     30.8              cols = np.concatenate([np.full_like(p,i) for i,p in enumerate(self._indexes)])
+   112      1242    3556433.0   2863.5     23.4              data = np.concatenate(self._data, axis=0)
+   113      1242    1963467.0   1580.9     12.9              rows = np.concatenate(self._indexes, axis=0)
+   114      1242    4996395.0   4022.9     32.8              return coo_matrix((data,(rows,cols)),shape=(self._row_num,col_num))
+   115                                                   else:
+   116         2        956.0    478.0      0.0              return coo_matrix((self._data[0], (self._indexes[0], np.zeros(len(self._indexes[0])))), shape=(self._row_num, col_num))
+
+Total time: 9.68097 s
+File: C:\DataD\Work\CERBERO\CLP\SCLPsolver\subroutines\sparse_matrix_constructor.py
+Function: get_matrix at line 118
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   118                                               @profile
+   119                                               def get_matrix(self):
+   120      1244   26410986.0  21230.7    100.0          return self.get_coo_matrix().toarray()
+

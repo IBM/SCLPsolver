@@ -2,14 +2,10 @@
 
 class rewind_info():
 
-    def __init__(self, solution, N1, N2):
-        cor_N1 = N1 + 1
-        if N1 > -1:
-            self._pivots = solution.pivots[N1:N2 + 1].copy()
-        else:
-            self._pivots = solution.pivots[N1 + 1:N2 + 1].copy()
-        self._dx = solution.dx.get_sub_matrix(cor_N1, N2)
-        self._dq = solution.dq.get_sub_matrix(cor_N1, N2)
+    def __init__(self, pivots, dx, dq):
+        self._pivots = pivots
+        self._dx = dx
+        self._dq = dq
 
     @property
     def pivots(self):

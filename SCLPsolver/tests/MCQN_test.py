@@ -1,8 +1,10 @@
 import sys
-sys.path.append('C:\DataD\Work\CERBERO\CLP\SCLPsolver')
-from SCLP4 import SCLP
 import os
-import numpy as np
+proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+sys.path.append(proj)
+from SCLP import SCLP
+from doe.data_generators.data_loader import load_data
+from doe.doe_utils import path_utils
 
 
 def relative_to_project(file_path):
@@ -13,29 +15,17 @@ def relative_to_project(file_path):
         return os.path.join(proj, file_path)
 
 seed = 1000
-K = 2000
-I = 200
-G = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/G.dat'))
-F = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/F.dat'))
-H = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/H.dat'))
-a = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/a.dat')))
-b = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/b.dat')))
-c = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/c.dat')))
-d = np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/d.dat'))
-if np.size(d) ==0:
-    d = np.empty(shape=(0))
-if np.size(F) ==0:
-    F = np.empty(shape=(G.shape[0], 0))
-print(F.shape)
-#d = np.hstack(dd)
-alpha = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/alpha.dat')))
-gamma = np.hstack(np.load(relative_to_project('tests/data/MCQN/K'+str(K)+'/I' + str(I)+ '/seed' + str(seed)+ '/gamma.dat')))
+K = 4000
+I = 400
+pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
+exp_path = pu.get_experiment_path('MCQN',K=K,I=I,seed=seed)
+G, H, F, gamma, c, d, alpha, a, b, T = load_data(exp_path)
 import time
-start_time = time.time()
 import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
-t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, {}, 1E-11)
+start_time = time.time()
+t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))
 pr.disable()

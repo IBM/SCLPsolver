@@ -1,4 +1,4 @@
-from subroutines.matrix_constructor8 import matrix_constructor
+from subroutines.matrix_constructor import matrix_constructor
 import numpy as np
 
 a = np.asarray([3,5,7])
