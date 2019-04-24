@@ -1,4 +1,4 @@
-from .classification8 import classification
+from .classification8a import classification
 from .SCLP_pivot8 import SCLP_pivot
 from .collision_info8 import collision_info
 from .time_collision_resolver8 import reclassify
