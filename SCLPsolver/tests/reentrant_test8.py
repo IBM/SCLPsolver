@@ -2,7 +2,7 @@ import sys
 import os
 proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 sys.path.append(proj)
-from SCLP8 import SCLP
+from SCLP8 import SCLP, SCLP_settings
 from doe.data_generators.data_loader import load_data
 from doe.doe_utils import path_utils
 
@@ -25,7 +25,8 @@ start_time = time.time()
 import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
-t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, {}, 1E-11, exp_path)
+settings = SCLP_settings(tmp_path=exp_path)
+t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, settings)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))
 pr.disable()

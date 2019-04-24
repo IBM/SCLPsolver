@@ -4,7 +4,7 @@ from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.MCQN_routing import generate_MCQN_routing_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
 from .doe_utils import path_utils
-from SCLP8 import SCLP
+from SCLP8 import SCLP, SCLP_settings
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, **kwargs):
@@ -35,8 +35,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
                 raise Exception('Undefined time horizon!')
         import time
         start_time = time.time()
-        t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, {},
-                                                                         1E-11, False, pu.get_experiment_path(exp_type, **ps))
+        solver_settings = SCLP_settings(find_alt_line=False)
+        t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % (time_to_solve))
