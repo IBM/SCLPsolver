@@ -32,7 +32,7 @@ def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
         ds1 = np.zeros(L, dtype = int)
         DD1, pn1, dn1, ps1, ds1, err = simplex_procedures(DD1, pn1, dn1, ps1, ds1, tolerance)
         x_0 = np.zeros(K + L, 1)
-        x_0[pn1] = DD1[1:, 0]
+        x_0[pn1-1] = DD1[1:, 0]
     else:
         x_0 = alpha
 
@@ -44,7 +44,7 @@ def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
         ds2 = np.zeros(I, dtype = int)
         DD2, pn2, dn2, ps2, ds2, err = simplex_procedures(DD2, pn2, dn2, ps2, ds2, tolerance)
         q_N = np.zeros(J + I)
-        q_N[pn2] = DD2[1:, 0]
+        q_N[pn2-1] = DD2[1:, 0]
     else:
         q_N = -gamma
 
