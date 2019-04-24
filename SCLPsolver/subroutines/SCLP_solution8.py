@@ -24,6 +24,13 @@ class SCLP_solution():
         self._last_collision = None
         self._state = solution_state()
 
+    def __getstate__(self):
+        return self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack
+
+    def __setstate__(self, state):
+        self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack = state
+        self._state = solution_state()
+
     @property
     def last_collision(self):
         return self._last_collision

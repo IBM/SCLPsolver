@@ -32,7 +32,8 @@ class pivot_iterator(Iterator):
 
 
 
-class pivot_storage(list):
+class pivot_storage():
+    __slots__ = ['_in','_out']
 
     def __init__(self, outpivots = None, inpivots= None):
         super().__init__()
@@ -63,8 +64,12 @@ class pivot_storage(list):
         self._out.append(object[0])
 
     def extend(self, other) -> None:
-        self._in.extend(other.inpivots)
-        self._out.extend(other.outpivots)
+        if hasattr(self, '_in'):
+            self._in.extend(other.inpivots)
+            self._out.extend(other.outpivots)
+        else:
+            self._in = other.inpivots.copy()
+            self._out = other.outpivots.copy()
 
     def insert(self, index: int, object) -> None:
         self._in.insert(index, object[1])
