@@ -57,6 +57,6 @@ def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hd
     else:
         c = np.zeros(K)
     if c_scale != 0:
-        c += c_scale * c_dist(*c_dist_params, K)
+        c += c_scale * c_dist(*c_dist_params, K) * np.random.choice([-1,1],K,True)
 
     return G, H, F, gamma, c, d, alpha, a, b, None

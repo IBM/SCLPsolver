@@ -69,5 +69,5 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     else:
         c = np.zeros(K)
     if c_scale != 0:
-        c += c_scale * c_dist(*c_dist_params, K)
+        c += c_scale * c_dist(*c_dist_params, K) * np.random.choice([-1,1],K,True)
     return G,H,F,gamma,c,d,alpha,a,b,None

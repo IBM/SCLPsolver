@@ -92,7 +92,7 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     else:
         c = np.zeros(J)
     if c_scale != 0:
-        c += c_scale * c_dist(*c_dist_params, J)
+        c += c_scale * c_dist(*c_dist_params, J) * np.random.choice([-1,1],J,True)
 
     # Calculating a value for T
     #  ~0.2 is probability of leaving system at each service
