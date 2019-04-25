@@ -48,7 +48,7 @@ maximize
 	 	+
 	 	
 	 	sum (cc in c, tt in intervals) 
-			tau*cc.value*u[cc.row][tt]*(T - tau*(tt + 1/2));
+			tau*cc.value*u[cc.row][tt]*(T - tau*(tt - 1/2));
 			
 			
 subject to {
