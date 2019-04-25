@@ -12,7 +12,7 @@ float T = ...;
 int VarDimension = ...; 
 int ConstrDimensionH = ...; 
 int ConstrDimensionG = ...; 
-int NumIntervals = 3;
+int NumIntervals = 2;
 //int NumIntervals = ftoi(T/10);
 range intervals = 1..NumIntervals;
 range intervals0 = 0..NumIntervals;
@@ -48,7 +48,7 @@ maximize
 	 	+
 	 	
 	 	sum (cc in c, tt in intervals) 
-			tau*cc.value*u[cc.row][tt]*(T - tau*(tt - 1/2));
+			tau*cc.value*u[cc.row][tt]*(T - tau*(tt - 0.5));
 			
 			
 subject to {
