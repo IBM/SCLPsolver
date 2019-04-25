@@ -21,6 +21,10 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
     pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
     results = []
     files = []
+    if get_raw_tau:
+        raw_tau = []
+    else:
+        raw_tau = None
     for seed in range(starting_seed, starting_seed + exp_num):
         ps['seed'] = seed
         if exp_type == 'MCQN':
@@ -46,12 +50,12 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             write_CPLEX_dat(full_file_name, T, G, H, alpha, a, b, gamma, c)
             path, filename = os.path.split(full_file_name)
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
-                'intervals': NN, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau), 'std_tau':np.std(tau)}
-            if get_raw_tau:
-                r['raw_tau'] = tau
+                 'intervals': NN, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau), 'std_tau':np.std(tau)}
             results.append(r)
+            if get_raw_tau:
+                raw_tau.append({'file': filename,'raw_tau':tau})
             files.append(full_file_name)
         else:
             failure_trials +=1
-    return results, failure_trials, files
+    return results, failure_trials, files, raw_tau
 
