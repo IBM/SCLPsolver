@@ -15,7 +15,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         ps[k] = v
     for k,v in settings.items():
         if isinstance(v, object) and hasattr(v, '__name__'):
-            ps[k] = v.__name__
+            ps[k] = v.__name__[:4]
         else:
             ps[k] = str(v)
     pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))

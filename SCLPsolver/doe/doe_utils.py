@@ -3,7 +3,7 @@ import os
 default_translation_table = {'sum_rate': 'sr', 'gdist':'gd', 'gdist_params':'gdp', 'h_rate': 'hr', 'hdist': 'hd', 'hdist_params' :'hdp',
                              'alpha_rate': 'alpr', 'alpha_dist': 'alpd', 'alpha_dist_params': 'alpdp', 'a_rate': 'ar', 'a_dist' : 'ad',
                              'a_dist_params': 'adp', 'cost_scale': 'cs', 'cost_dist': 'cd',  'cost_dist_params': 'cdp', 'gamma_rate': 'gmr',
-                             'gamma_dist' : 'gmd', 'gamma_dist_params': 'gmdp'}
+                             'gamma_dist' : 'gmd', 'gamma_dist_params': 'gmdp', 'c_scale': 'ccs', 'c_dist' : 'ccd', 'c_dist_params': 'ccdp'}
 
 def reverse_translation_table(table):
     result = dict()
