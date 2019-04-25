@@ -8,7 +8,7 @@ from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
 
-def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, **kwargs):
+def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, get_raw_tau = True, **kwargs):
     failure_trials = 0
     ps = {'K':K,'I':I,'T':T}
     for k, v in kwargs.items():
@@ -45,9 +45,11 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             full_file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
             write_CPLEX_dat(full_file_name, T, G, H, alpha, a, b, gamma, c)
             path, filename = os.path.split(full_file_name)
-            results.append({'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,
-                            'steps': STEPCOUNT, 'intervals': NN, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau),
-                            'min_tau':np.min(tau), 'std_tau':np.std(tau)})
+            r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
+                'intervals': NN, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau), 'std_tau':np.std(tau)}
+            if get_raw_tau:
+                r['raw_tau'] = tau
+            results.append(r)
             files.append(full_file_name)
         else:
             failure_trials +=1
