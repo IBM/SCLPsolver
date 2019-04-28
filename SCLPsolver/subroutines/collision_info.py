@@ -1,19 +1,26 @@
-from .rewind_info import rewind_info
 
 
 class collision_info():
 
-    def __init__(self, case, delta=None, N1=None, N2=None, v1=None, v2=None):
+    def __init__(self, case, delta=None, N1=None, N2=None, v1=None, v2=None, rz = None, tol_coeff=1, had_resolution=False):
         self._N1 = N1
         self._N2 = N2
-        self._v1 = v1
-        self._v2 = v2
+        self._rz = rz
+        self._tol_coeff = tol_coeff
+        if v1 is None:
+            self._v1 = []
+        else:
+            self._v1 = v1
+        if v2 is None:
+            self._v2 = []
+        else:
+            self._v2 = v2
         self._case = case
         self._delta = delta
-        self._lastN1 = None
-        self._lastN2 = None
         self._Nnew = None
         self._rewind_info = None
+        self._had_resolution = had_resolution
+        self._ztau_ind = None
 
     @property
     def N1(self):
@@ -51,32 +58,41 @@ class collision_info():
         self._delta = value
 
     @property
-    def lastN1(self):
-        return self._lastN1
-
-    @property
-    def lastN2(self):
-        return self._lastN2
-
-    @property
     def Nnew(self):
         return self._Nnew
-
-    @lastN1.setter
-    def lastN1(self, value):
-        self._lastN1 = value
-
-    @lastN2.setter
-    def lastN2(self, value):
-        self._lastN2 = value
 
     @Nnew.setter
     def Nnew(self, value):
         self._Nnew = value
 
-    def store_rewind_info(self, solution):
-        self._rewind_info = rewind_info(solution,self._N1,self._N2)
-
     @property
     def rewind_info(self):
         return self._rewind_info
+
+    @rewind_info.setter
+    def rewind_info(self, value):
+        self._rewind_info = value
+
+    @property
+    def had_resolution(self):
+        return self._had_resolution
+
+    @had_resolution.setter
+    def had_resolution(self, value):
+        self._had_resolution = value
+
+    @property
+    def rz(self):
+        return self._rz
+
+    @property
+    def tol_coeff(self):
+        return self._tol_coeff
+
+    @property
+    def ztau_ind(self):
+        return self._ztau_ind
+
+    @ztau_ind.setter
+    def ztau_ind(self, value):
+        self._ztau_ind = value

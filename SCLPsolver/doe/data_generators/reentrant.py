@@ -22,7 +22,8 @@ import numpy as np
 
 def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hdist_params = (), first_alpha = 100, alpha_rate = 40,
                             alpha_dist = np.random.rand, alpha_dist_params = (), a_rate = 0.01, a_dist = np.random.rand, a_dist_params = (),
-                            cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma = None, c = None):
+                            cost_scale = 2, cost_dist = np.random.rand,  cost_dist_params = (), gamma_rate=0,
+                            gamma_dist=np.random.rand, gamma_dist_params=(), c_scale = 0, c_dist = np.random.rand,  c_dist_params = ()):
 
     np.random.seed(seed)
     b = np.ones(I)
@@ -45,11 +46,17 @@ def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hd
     F = np.empty((K, 0))
     d = np.empty(0)
 
-    if gamma is None:
+    if gamma_rate == 0:
         gamma = np.zeros(K)
-    if c is None:
+    else:
+        gamma = gamma_rate * gamma_dist(*gamma_dist_params, K)
+    if cost_scale != 0:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         # this produce negative and positive costs!
         c = np.matmul(cost, G)
+    else:
+        c = np.zeros(K)
+    if c_scale != 0:
+        c += c_scale * c_dist(*c_dist_params, K) * np.random.choice([-1,1],K,True)
 
     return G, H, F, gamma, c, d, alpha, a, b, None

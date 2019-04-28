@@ -60,7 +60,7 @@ def calc_statecollide(klist, jlist, state, tolerance):
     if sz_x + sz_q > 1:
         print('multiple states hit zero\n')
         problem['result'] = 2
-        return [], problem
+        return [test1, nn, vv], problem
     else:
         return [test1, nn, vv], problem
 

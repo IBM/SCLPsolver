@@ -1,4 +1,6 @@
-from .simplex_procedures import *
+import numpy as np
+from .matlab_utils import find, ismember
+from .simplex_procedures import simplex_procedures
 
 #'#@profile
 def calc_init_basis(G,F,H,a,b,c,d,x_0,q_N, tolerance = 0):

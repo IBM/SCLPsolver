@@ -1,5 +1,15 @@
 import os
 
+default_translation_table = {'sum_rate': 'sr', 'gdist':'gd', 'gdist_params':'gdp', 'h_rate': 'hr', 'hdist': 'hd', 'hdist_params' :'hdp',
+                             'alpha_rate': 'alpr', 'alpha_dist': 'alpd', 'alpha_dist_params': 'alpdp', 'a_rate': 'ar', 'a_dist' : 'ad',
+                             'a_dist_params': 'adp', 'cost_scale': 'cs', 'cost_dist': 'cd',  'cost_dist_params': 'cdp', 'gamma_rate': 'gmr',
+                             'gamma_dist' : 'gmd', 'gamma_dist_params': 'gmdp', 'c_scale': 'ccs', 'c_dist' : 'ccd', 'c_dist_params': 'ccdp'}
+
+def reverse_translation_table(table):
+    result = dict()
+    for k,v in table.items():
+        result[v] = k
+
 class path_utils:
 
     def __init__(self, home_path):
@@ -21,14 +31,27 @@ class path_utils:
                 path += '/' + str(k) + str(v)
         return path
 
-    def get_CPLEX_data_file_name(self, exp_type, **kwargs):
+    def get_CPLEX_data_file_name(self, exp_type, translation_table = None, **kwargs):
         path = self.home_path + '/CPLEX/' + exp_type + '_'
         if kwargs is not None:
+            kwargs = self.translate_param_names(translation_table, **kwargs)
             for k,v in kwargs.items():
                 path += str(k) + str(v) + '_'
         return path + 'data.dat'
 
     def get_CPLEX_data_path(self):
         return self.home_path + '/CPLEX'
+
+    def translate_param_names(self, translation_table=None, **kwargs):
+        if translation_table is None:
+            translation_table = default_translation_table
+        result = dict()
+        if kwargs is not None:
+            for k,v in kwargs.items():
+                if k in translation_table.keys():
+                    result[translation_table[k]] = v
+                else:
+                    result[k] = v
+        return result
 
 

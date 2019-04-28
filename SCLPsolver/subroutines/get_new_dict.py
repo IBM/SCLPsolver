@@ -1,4 +1,4 @@
-from .matlab_utils import *
+from .matlab_utils import find
 from .pivot import dict_pivot
 
 
@@ -8,8 +8,8 @@ def get_new_dict(oldDict, oldPlace, newPlace, pivots):
     if isinstance(oldPlace, list):
         oldPlace = oldPlace[0]
         oldDict = oldDict[0]
-    assert(newPlace >=0 and newPlace < L, 'new dictionary place is out of a base sequence')
-    assert(oldPlace >=0 and oldPlace < L, 'old dictionary place is out of a base sequence')
+    # assert(newPlace >=0 and newPlace < L, 'new dictionary place is out of a base sequence')
+    # assert(oldPlace >=0 and oldPlace < L, 'old dictionary place is out of a base sequence')
     newDict={'A':oldDict['A'].copy(), 'prim_name':oldDict['prim_name'].copy(), 'dual_name':oldDict['dual_name'].copy()}
     if oldPlace < newPlace:
         for i in range(oldPlace,newPlace):

@@ -15,17 +15,17 @@ def relative_to_project(file_path):
         return os.path.join(proj, file_path)
 
 seed = 1000
-K = 600
-I = 200
+K = 4000
+I = 400
 pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
-exp_path = pu.get_experiment_path_old('reentrant',K=K,I=I,seed=seed)
+exp_path = pu.get_experiment_path('MCQN',K=K,I=I,seed=seed)
 G, H, F, gamma, c, d, alpha, a, b, T = load_data(exp_path)
 import time
-start_time = time.time()
 import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
-t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, {}, 1E-11, exp_path)
+start_time = time.time()
+t, x, q, u, p, pivots, obj, err, NN, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))
 pr.disable()

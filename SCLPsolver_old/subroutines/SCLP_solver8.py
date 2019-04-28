@@ -1,10 +1,10 @@
-from .classification8 import classification
+from .classification8a import classification
 from .SCLP_pivot8 import SCLP_pivot
 from .collision_info8 import collision_info
 from .time_collision_resolver8 import reclassify
 
 #'#@profile
-def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, settings, tolerance, find_alt_line=True):
+def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, settings, tolerance, find_alt_line=True, mm=None):
 
     ITERATION[DEPTH] = 0
 
@@ -55,22 +55,22 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                         print('Going backward by:', 0.02)
                         solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'start', DEPTH,
                                                                          STEPCOUNT,
-                                                                         ITERATION, settings, tolerance)
+                                                                         ITERATION, settings, tolerance, mm=mm)
                         ort_line = param_line.get_orthogonal_line(0.04)
                         print('Going orthogonal to:', ort_line.theta_bar)
-                        solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, ort_line, 'start', DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+                        solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, ort_line, 'start', DEPTH, STEPCOUNT, ITERATION, settings, tolerance, mm=mm)
                         if pivot_problem['result'] == 1:
                             print('Problem during orthogonal step!')
                         param_line.theta_bar = up_theta
                         print('Going forward to:', up_theta)
                         solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'start', DEPTH, STEPCOUNT,
-                                                                         ITERATION, settings, tolerance)
+                                                                         ITERATION, settings, tolerance, mm=mm)
                         ort_line.theta_bar = 0
                         ort_line.T = param_line.T
                         print('Returning to main line.')
                         #update T before going forward
                         solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, ort_line, 'start', DEPTH, STEPCOUNT,
-                                                                         ITERATION, settings, tolerance)
+                                                                         ITERATION, settings, tolerance, mm=mm)
                         param_line.theta_bar = max(main_theta_bar,param_line.T)
                         if pivot_problem['result'] == 1:
                             print('Problem during orthogonal step!')
@@ -133,6 +133,9 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
 
         if not rewind_required:
             param_line.forward_to(col_info.delta)
+            if DEPTH == 0:
+                if mm is not None:
+                    solution.clear_base_sequence(mm)
 
     return solution, STEPCOUNT, pivot_problem
 

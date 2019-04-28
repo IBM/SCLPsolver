@@ -1,18 +1,31 @@
 import numpy as np
+import os
 from subroutines.calc_boundaries import calc_boundaries
 from subroutines.calc_init_basis import calc_init_basis
-from subroutines.SCLP_solution8 import SCLP_solution
-from subroutines.calc_controls5 import calc_controls
+from subroutines.SCLP_solution import SCLP_solution
+from subroutines.calc_controls import calc_controls
 from subroutines.calc_objective import calc_objective
-from subroutines.SCLP_solver8 import SCLP_solver
-from subroutines.parametric_line8 import parametric_line
+from subroutines.SCLP_solver import SCLP_solver
+from subroutines.parametric_line import parametric_line
+from subroutines.utils import relative_to_project
 
-#function[t, x, q, u, p, firstbase, lastbase, pivots, Obj, Err, NN, stepcount, flopss, ecpu] = ...
+class SCLP_settings():
+    __slots__ = ['find_alt_line', 'save_solution', 'memory_management', 'tmp_path', 'hot_start']
+
+    def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False):
+        self.find_alt_line = find_alt_line
+        self.hot_start = hot_start
+        self.save_solution = save_solution
+        self.memory_management = memory_management
+        if tmp_path is None:
+            self.tmp_path = relative_to_project('')
+        elif os.path.isdir(tmp_path):
+            self.tmp_path = tmp_path
+        else:
+            self.tmp_path = relative_to_project('')
+
 #'#@profile
-def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_line =True, tmp_path='', hot_start =False, save_solution = False):
-#
-#	[t,x,q,u,p,firstbase,lastbase,pivots,Obj,Err,NN,stepcount,flopss,ecpu] = ...
-#		SCLP(G,H,F,a,b,c,d,alpha,gamma,TT,messagelevel,graphlevel,tol1,tol2,taxis,xaxis,qaxis)
+def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tolerance=1E-11):
 #
 #	solves the separated continuous linear program:
 #
@@ -74,15 +87,18 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_li
 #						qaxis	q range
 #
 
-    # STEPCOUNT = 0
-    # DEPTH = 0
-    # ITERATION = []
     K_DIM = G.shape[0]
     J_DIM = G.shape[1]
     I_DIM = H.shape[0]
     L_DIM = F.shape[1]
 
-    if not hot_start:
+    if settings.memory_management:
+        from subroutines.memory_manager import memory_manager
+        mm = memory_manager(K_DIM, J_DIM + L_DIM, I_DIM)
+    else:
+        mm = None
+
+    if not settings.hot_start:
         # Initiate top level problem, by obtaining the boundary and first dictionary
         x_0, q_N = calc_boundaries(G, F, H, b, d, alpha, gamma, tolerance)
         A, pn, dn, ps, ds, err = calc_init_basis(G, F, H, a, b, c, d, x_0, q_N, tolerance)
@@ -96,14 +112,17 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_li
     else:
         import pickle
         print('Loading solution!')
-        solution = pickle.load(open(tmp_path + '/solution.dat', 'rb'))
-        param_line = pickle.load(open(tmp_path + '/param_line.dat','rb'))
+        try:
+            solution = pickle.load(open(settings.tmp_path + '/solution.dat', 'rb'))
+            param_line = pickle.load(open(settings.tmp_path + '/param_line.dat','rb'))
+        except IOError:
+            raise Exception('Solution files not found in: ' + settings.tmp_path)
         param_line.theta_bar = TT
 
     # Solve the problem, by a sequence of parametric steps
 
     solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'toplevel',
-                                           0, 0, dict(), settings, tolerance, find_alt_line)
+                                           0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
 
     # extract solution for output
 
@@ -113,11 +132,10 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings, tolerance, find_alt_li
     x = solution.state.x
     q = solution.state.q
     obj, err = calc_objective(alpha, a, b, gamma, c, d, u, x, p, q, solution.state.tau)
-    if pivot_problem['result'] > 0 or save_solution:
+    if pivot_problem['result'] > 0 or settings.save_solution:
         print('Saving solution!')
         solution.prepare_to_save()
         import pickle
-
-        pickle.dump(solution, open(tmp_path + '/solution.dat', 'wb'))
-        pickle.dump(param_line, open(tmp_path + '/param_line.dat', 'wb'))
-    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, STEPCOUNT, param_line.T, pivot_problem['result']
+        pickle.dump(solution, open(settings.tmp_path + '/solution.dat', 'wb'))
+        pickle.dump(param_line, open(settings.tmp_path + '/param_line.dat', 'wb'))
+    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, solution.state.tau, STEPCOUNT, param_line.T, pivot_problem['result']
