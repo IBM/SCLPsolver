@@ -250,355 +250,6 @@ from test import test1
 
 
 
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
@@ -658,178 +309,568 @@ test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
 # test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
 #       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 #
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 
 
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1112,345 +1153,346 @@ test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
 
 
 
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-
-
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
-test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
-      {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
-       'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
-
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# Not run yet -  start!!!!!!!!!!
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 80, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+#
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.01, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.1, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.4 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist':np.random.exponential, 'gdist_params':[0.5], 'hdist':np.random.exponential, 'hdist_params':[0.5], 'alpha_dist':np.random.exponential, 'alpha_dist_params':[0.5], 'cost_dist':np.random.exponential, 'cost_dist_params':[0.5],
+#        'alpha_rate':  1000, 'cost_scale':20, 'a_rate' : 0.2, 'sum_rate':0.99, 'nz': 0.6 },starting_seed =1000)
+# Not run yet - end
 
 
 
@@ -1819,3 +1861,354 @@ test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
 # res_file = relative_to_project('results_mm.csv')
 # write_results_to_csv(results, res_file, True)
 #
+
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 250,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 250,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 1000,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 1000,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 250,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 250,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 1000,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 1000,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+
+
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 600, 60, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 600, 60, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 5, 1000, 100, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 5, 1000, 100, 500,
+#       {'alpha_rate':  1000, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+#
+# test1('results_mm.csv', False, 'MCQN', 3, 600, 60, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 3, 600, 60, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 3, 800, 80, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 3, 800, 80, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 3, 1000, 100, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.2, 'sum_rate':0.8, 'nz': 0.2 },starting_seed =1000)
+# test1('results_mm.csv', False, 'MCQN', 3, 1000, 100, 500,
+#       {'alpha_rate':  100, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.6 },starting_seed =1000)
+
+
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+
+
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 400, 40, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 800, 80, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 1600, 160, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#        starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 1600, 160, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 1600, 160, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 1600, 160, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 1600, 160, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 1600, 160, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 3200, 320, 250,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#        starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 3200, 320, 500,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 3200, 320, 1000,
+#       {'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.1, 'sum_rate': 0.9, 'nz': 0.6,
+#        'gamma_rate': -1000, 'c_scale': 1},
+#       starting_seed=1013)
+#
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 3200, 320, 250,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 3200, 320, 500,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+#
+# test1('results_mm.csv', False, 'MCQN', 10, 3200, 320, 1000,
+#       {'gdist': np.random.exponential, 'gdist_params': [0.5], 'hdist': np.random.exponential, 'hdist_params': [0.5],
+#        'alpha_dist': np.random.exponential, 'alpha_dist_params': [0.5], 'cost_dist': np.random.exponential,
+#        'cost_dist_params': [0.5],
+#        'alpha_rate': 1000, 'cost_scale': 2, 'a_rate': 0.01, 'sum_rate': 0.8, 'nz': 0.2,
+#        'gamma_rate': -1000, 'gamma_dist': np.random.exponential, 'gamma_dist_params': [0.5], 'c_scale': 1, 'c_dist': np.random.exponential, 'c_dist_params': [0.5]},
+#       starting_seed=1013)
+
+
+
+test1('results_mm.csv', False, 'MCQN', 1, 200, 20, 10000,
+      {'alpha_rate':  40, 'cost_scale':0.1, 'a_rate' : 0.05, 'sum_rate':0.8, 'nz': 0.6,
+       'gamma_rate': -10, 'c_scale': 1},starting_seed =1004)
+
+test1('results_mm.csv', False, 'MCQN', 10, 200, 20, 10000,
+      {'alpha_rate':  40, 'cost_scale':0.1, 'a_rate' : 0.01, 'sum_rate':0.8, 'nz': 0.6,
+       'gamma_rate': -10, 'c_scale': 1},starting_seed =1000)

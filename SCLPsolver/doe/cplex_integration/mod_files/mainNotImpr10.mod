@@ -43,23 +43,23 @@ dvar float+ u[cols][intervals];
 //dvar float+ x[rowsG][intervals0];
 
 maximize
-	 	sum (g in gamma, tt in intervals)
-	 	       tau*g.value*u[g.row][tt]
+	 	tau*sum (g in gamma, tt in intervals)
+	 	       g.value*u[g.row][tt]
 	 	+
 
-	 	sum (cc in c, tt in intervals)
-			tau*cc.value*u[cc.row][tt]*(T - tau*(tt - 1/2));
+	 	tau*sum (cc in c, tt in intervals)
+			cc.value*u[cc.row][tt]*(T - tau*(tt - 0.5));
 
 
 subject to {
 
 
-forall (i in rowsH, bb in b : bb.row == i, tt in intervals)
-	sum (h in H_i[i]) h.value*u[h.col][tt] <= bb.value;
+forall (i in rowsH, tt in intervals)
+	sum (h in H_i[i]) h.value*u[h.col][tt] <= sum(bb in b : bb.row == i) bb.value;
 
 
-forall (i in rowsG, alp in alpha : alp.row == i, aa in a : aa.row == i,  tt in intervals)
-	sum (g in G_i[i], ttt in intervals : ttt<=tt) tau*g.value*u[g.col][ttt] <= alp.value + aa.value*tt*tau;
+forall (i in rowsG, tt in intervals)
+	tau*sum (g in G_i[i], ttt in intervals : ttt<=tt) g.value*u[g.col][ttt] <= sum(alp in alpha : alp.row == i) alp.value + tt*tau*sum(aa in a : aa.row == i) aa.value;
 
 
 }

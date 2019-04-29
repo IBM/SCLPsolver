@@ -43,30 +43,30 @@ dvar float+ u[cols][intervals];
 dvar float+ x[rowsG][intervals0];
 
 maximize
-	 	sum (g in gamma, tt in intervals) 
-	 	       tau*g.value*u[g.row][tt]
+	 	tau * sum (g in gamma, tt in intervals)
+	 	       g.value*u[g.row][tt]
 	 	+
-	 	
-	 	sum (cc in c, tt in intervals) 
-			tau*cc.value*u[cc.row][tt]*(T - tau*(tt - 0.5));
-			
-			
+
+	 	tau * sum (cc in c, tt in intervals)
+			cc.value*u[cc.row][tt]*(T - tau*(tt - 0.5));
+
+
 subject to {
-  
+
 //H \cdot u(VarDimension,t) \leq b
 
-forall (i in rowsH, bb in b : bb.row == i, tt in intervals)
-	sum (h in H_i[i]) h.value*u[h.col][tt] <= bb.value; 
+forall (i in rowsH, tt in intervals)
+	sum (h in H_i[i]) h.value*u[h.col][tt] <= sum(bb in b: bb.row==i) bb.value;
 
 
 //int_0^t G u(s) ds + F x(t) ? alpha + a t
 
 
-forall (i in rowsG, alp in alpha : alp.row == i)
-	x[i][0] == alp.value; 	
+forall (i in rowsG)
+	x[i][0] == sum(alp in alpha : alp.row == i) alp.value;
 
-forall (i in rowsG, aa in a : aa.row == i,  tt in intervals)
-	sum (g in G_i[i]) (tau*g.value*u[g.col][tt]) == x[i][tt-1] - x[i][tt] + aa.value*tau; 	
+forall (i in rowsG, tt in intervals)
+	tau * sum (g in G_i[i]) (g.value*u[g.col][tt]) == x[i][tt-1] - x[i][tt] + tau*sum(aa in a : aa.row == i) aa.value;
 
 
 }			 
