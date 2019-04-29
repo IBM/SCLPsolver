@@ -131,6 +131,7 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
     t = np.cumsum(np.hstack((0, solution.state.tau)))
     x = solution.state.x
     q = solution.state.q
+    tau = solution.state.tau
     obj, err = calc_objective(alpha, a, b, gamma, c, d, u, x, p, q, solution.state.tau)
     if pivot_problem['result'] > 0 or settings.save_solution:
         print('Saving solution!')
@@ -138,4 +139,4 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         import pickle
         pickle.dump(solution, open(settings.tmp_path + '/solution.dat', 'wb'))
         pickle.dump(param_line, open(settings.tmp_path + '/param_line.dat', 'wb'))
-    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, solution.state.tau, STEPCOUNT, param_line.T, pivot_problem['result']
+    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, tau, STEPCOUNT, param_line.T, pivot_problem['result']

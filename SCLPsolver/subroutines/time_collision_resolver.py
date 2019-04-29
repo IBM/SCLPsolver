@@ -244,7 +244,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
             print('fail!')
             problem['result'] = 1
             problem['data'] = find(inegTAU)
-            return [], problem
+            return [0], problem
         else:
             print('resolving * ', d)
             tol2 = 10 * tolerance * d
@@ -313,7 +313,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
                     print('zero length interval shrinks\n ')
                     problem['result'] = 2
                     problem['data'] = find(test1)
-                    return [], problem
+                    return [0], problem
                 else:
                     test3 = inegDTAU
                     if not np.any(test3):
@@ -329,7 +329,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
             print('zero length interval shrinks\n ')
             problem['result'] = 2
             problem['data'] = find(test1)
-            return [], problem
+            return [0], problem
 
     test2 = np.logical_and(izerTAU, izerDTAU)
     zflag = np.any(test2)
@@ -356,7 +356,8 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
             problem['data'] = find(test2)
             problem['result'] = 5
             print('zero length interval does not expand\n')
-            return [], problem
+            #TODO: here is the source of potential bug!!!
+            return [0], problem
 
     #test3 = np.logical_and(iposTAU, inegDTAU)
     #inegDTAU = DTAU < -tol2 * tol_coeff
