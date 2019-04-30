@@ -3,7 +3,7 @@ import numpy as np
 
 
 #'#@profile
-def base_pivot(A, i, j, pn, dn):
+def base_pivot(A, i, j, pn, dn, tmp):
     nam = pn[i]
     pn[i] = dn[j]
     dn[j] = nam
@@ -14,7 +14,7 @@ def base_pivot(A, i, j, pn, dn):
         raise Exception('pivot on zero')
     rp = A[i,:] / p
     c = A[:, j].copy()
-    A -= np.outer(c, rp)
+    A -= np.outer(c, rp, out=tmp)
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
@@ -22,7 +22,7 @@ def base_pivot(A, i, j, pn, dn):
 
 
 #'#@profile
-def full_pivot(A, i, j, pn, dn, ps, ds):
+def full_pivot(A, i, j, pn, dn, ps, ds, tmp):
     nam = pn[i]
     pn[i] = dn[j]
     dn[j] = nam
@@ -36,7 +36,7 @@ def full_pivot(A, i, j, pn, dn, ps, ds):
         raise Exception('pivot on zero')
     rp = A[i,:] / p
     c = A[:, j].copy()
-    A -= np.outer(c, rp)
+    A -= np.outer(c, rp, out=tmp)
     #A = dger(-1.0, c, rp, a=A, overwrite_a= 1)
     A[i,:] = rp
     A[:, j] = c / -p
@@ -45,7 +45,7 @@ def full_pivot(A, i, j, pn, dn, ps, ds):
 
 
 #'#@profile
-def dict_pivot(dct, i, j):
+def dict_pivot(dct, i, j, tmp):
     nam = dct['prim_name'][i]
     dct['prim_name'][i] = dct['dual_name'][j]
     dct['dual_name'][j] = nam
@@ -56,7 +56,7 @@ def dict_pivot(dct, i, j):
         raise Exception('pivot on zero')
     rp = dct['A'][i, :] / p
     c = dct['A'][:, j].copy()
-    dct['A'] -= np.outer(c, rp)
+    dct['A'] -= np.outer(c, rp, out=tmp)
     dct['A'][i, :] = rp
     dct['A'][:, j] = c / -p
     dct['A'][i, j] = 1. / p

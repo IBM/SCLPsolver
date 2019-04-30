@@ -24,7 +24,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
                 Kset = np.append(Kset, v1)
         else:
             print('v1',v1)
-        pbaseDD, dbaseDD, DD = LP_formulate(BB2, pbaseB2, dbaseB2, Kset, Jset, tolerance)
+        pbaseDD, dbaseDD, DD = LP_formulate(BB2, pbaseB2, dbaseB2, Kset, Jset, solution.tmp_matrix, tolerance)
         pp21 = np.setdiff1d(pbaseDD, pbaseB2, assume_unique=True)
         pp22 = np.setdiff1d(dbaseDD, dbaseB2, assume_unique=True)
         #piv1 = [pp21.tolist()+pp22.tolist()]
@@ -47,7 +47,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
                 Jset = np.append(Jset, v2)
         else:
             print('v2', v2)
-        pbaseDD, dbaseDD, DD = LP_formulate(BB1, pbaseB1, dbaseB1, Kset, Jset, tolerance)
+        pbaseDD, dbaseDD, DD = LP_formulate(BB1, pbaseB1, dbaseB1, Kset, Jset, solution.tmp_matrix, tolerance)
         pp11 = np.setdiff1d(pbaseB1, pbaseDD, assume_unique=True)
         pp12 = np.setdiff1d(dbaseB1, dbaseDD, assume_unique=True)
         #piv1 = [pp11.tolist()+ pp12.tolist()]
@@ -74,7 +74,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         Kset = Kset[Kset != v2]
         Jset = dbaseB2[dbaseB2 < 0]
         Jset = Jset[Jset != v1]
-        pbaseDD, dbaseDD, DD = LP_formulate(BB2, pbaseB2, dbaseB2, Kset, Jset, tolerance)
+        pbaseDD, dbaseDD, DD = LP_formulate(BB2, pbaseB2, dbaseB2, Kset, Jset, solution.tmp_matrix, tolerance)
         pp21 = np.setdiff1d(pbaseDD, pbaseB2, assume_unique=True)
         pp22 = np.setdiff1d(dbaseDD, dbaseB2, assume_unique=True)
         pp11 = np.setdiff1d(pbaseB1, pbaseDD, assume_unique=True)

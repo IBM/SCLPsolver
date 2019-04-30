@@ -24,7 +24,7 @@ def extract_rates_from_basis(prim_name, dual_name, dct, problem_dims):
         dq = (dct[0,jlist2+1], jn2-1)
     return dx, dq
 
-def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims):
+def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims, tmp_matrix):
     # Warning this based on assumption that first basis in new_base_sequence is equal to the AAN1 and/or last basis is equal to the AAN2
     if len(pivots) > 0:
         if AAN1 is not None:
@@ -40,7 +40,7 @@ def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims):
                 dx = matrix_constructor(None, None, problem_dims.KK, -1, len(pivots)+1)
                 dq = matrix_constructor(None, None, problem_dims.JJ, -1, len(pivots)+1)
             for i, piv1 in ran:
-                DD1, pm1, dm1 = base_pivot(DD1, find(pm1 == piv1[0])[0], find(dm1 == piv1[1])[0], pm1, dm1)
+                DD1, pm1, dm1 = base_pivot(DD1, find(pm1 == piv1[0])[0], find(dm1 == piv1[1])[0], pm1, dm1, tmp_matrix)
                 ndx, ndq = extract_rates_from_basis(pm1, dm1, DD1, problem_dims)
                 dx.append(ndx)
                 dq.append(ndq)
@@ -51,7 +51,7 @@ def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims):
             dm1 = AAN2['dual_name'].copy()
             DD1 = AAN2['A'].copy()
             for i, piv1 in enumerate(reversed(pivots)):
-                DD1, pm1, dm1 = base_pivot(DD1, find(pm1 == piv1[1]), find(dm1 == piv1[0]), pm1, dm1)
+                DD1, pm1, dm1 = base_pivot(DD1, find(pm1 == piv1[1]), find(dm1 == piv1[0]), pm1, dm1, tmp_matrix)
                 ndx, ndq = extract_rates_from_basis(pm1, dm1, DD1, problem_dims)
                 dx.prepend(ndx)
                 dq.prepend(ndq)

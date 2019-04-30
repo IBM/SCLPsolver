@@ -21,7 +21,7 @@ def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
         ps = np.zeros(K + I, dtype = int)
         dn = np.concatenate((-np.arange(1,J+1), np.arange(K + 1, K + L + 1)))
         ds = np.zeros(J + L, dtype = int)
-        DD0, pn, dn, ps, ds, err = simplex_procedures(DD0, pn, dn, ps, ds, tolerance)
+        DD0, pn, dn, ps, ds, err = simplex_procedures(DD0, pn, dn, ps, ds, np.zeros_like(DD0), tolerance)
         if DD0[0, 0] != 0:
             raise Exception('*** Problem requires impulse controls')
     if np.size(F) > 0:
@@ -30,7 +30,7 @@ def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
         ps1 = np.zeros(K, dtype = int)
         dn1 = np.arange(K + 1, K + L + 1)
         ds1 = np.zeros(L, dtype = int)
-        DD1, pn1, dn1, ps1, ds1, err = simplex_procedures(DD1, pn1, dn1, ps1, ds1, tolerance)
+        DD1, pn1, dn1, ps1, ds1, err = simplex_procedures(DD1, pn1, dn1, ps1, ds1, np.zeros_like(DD1), tolerance)
         x_0 = np.zeros(K + L, 1)
         x_0[pn1-1] = DD1[1:, 0]
     else:
@@ -42,7 +42,7 @@ def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
         ps2 = np.zeros(J, dtype = int)
         dn2 = np.arange(J + 1,J + I+1)
         ds2 = np.zeros(I, dtype = int)
-        DD2, pn2, dn2, ps2, ds2, err = simplex_procedures(DD2, pn2, dn2, ps2, ds2, tolerance)
+        DD2, pn2, dn2, ps2, ds2, err = simplex_procedures(DD2, pn2, dn2, ps2, ds2, np.zeros_like(DD2), tolerance)
         q_N = np.zeros(J + I)
         q_N[pn2-1] = DD2[1:, 0]
     else:

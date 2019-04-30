@@ -12,6 +12,7 @@ def calc_init_basis(G,F,H,a,b,c,d,x_0,q_N, tolerance = 0):
     Jset = find(q_N)
     DD = np.vstack((-np.hstack((0,c,d)), np.hstack((np.vstack(a),G,F)),np.hstack((np.vstack(b),H, np.zeros((I, L))))))
     DD = np.ascontiguousarray(DD)
+    tmp_matrix = np.zeros_like(DD)
     pn = np.hstack((np.arange(1,K+1), -np.arange(J + 1, J + I + 1)))
     psx = ismember(np.arange(0,K), Kset).astype(int)
     psu = -ismember(np.arange(J, J + I), Jset).astype(int)
@@ -21,4 +22,4 @@ def calc_init_basis(G,F,H,a,b,c,d,x_0,q_N, tolerance = 0):
     dsq = ismember(np.arange(0,J), Jset).astype(int)
     dsp = -ismember(np.arange(K, K + L), Kset).astype(int)
     ds = np.hstack((dsq, dsp))
-    return simplex_procedures(DD, pn, dn, ps, ds, tolerance)
+    return simplex_procedures(DD, pn, dn, ps, ds, tmp_matrix, tolerance)

@@ -4,7 +4,7 @@ from .pivot import full_pivot
 
 
 #'#@profile
-def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
+def simplex_procedures(A,pn,dn,ps,ds, tmp_matrix, tolerance = 0):
 
     err = dict()
     err['result'] = 0
@@ -35,7 +35,7 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                     j = jj[0]
                 else:
                     raise Exception('*** No pivot available')
-        A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+        A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds, tmp_matrix)
         pneg = find(ps == -1)
 
     dneg = find(ds == -1)
@@ -62,7 +62,7 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                     i = ii[0]
                 else:
                     raise Exception('*** No pivot available')
-        A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+        A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds, tmp_matrix)
         dneg = find(ds == -1)
 
     ptest = find(np.logical_and(ps == 0,  A[1:, 0] < 0))
@@ -79,7 +79,7 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                 err['result'] = 1
                 err['message'] = '***  problem is primal infeasible'
                 return A, pn, dn, ps, ds, err
-            A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+            A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds, tmp_matrix)
             ptest = find(np.logical_and(ps == 0, A[1:, 0] < 0))
     elif ptest.size == 0 and dtest.size > 0:
         while dtest.size > 0:
@@ -92,10 +92,11 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                 err['result'] = 2
                 err['message'] = '***  problem is dual infeasible'
                 return A, pn, dn, ps, ds, err
-            A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds)
+            A, pn, dn, ps, ds = full_pivot(A, i, j, pn, dn, ps, ds, tmp_matrix)
             dtest = find(np.logical_and(ds == 0, A[0, 1:] < 0))
     elif ptest.size > 0 and dtest.size > 0:
         B = np.zeros((mm+1,nn+1))
+        tmp_matrix = np.zeros_like(B)
         B[:-1,-1:] = np.random.rand(mm, 1) + 1
         B[-1:,:-1] = np.random.rand(1, nn) + 1
         B[:-1, :-1] = A
@@ -125,7 +126,7 @@ def simplex_procedures(A,pn,dn,ps,ds, tolerance = 0):
                     err['result'] = 1
                     err['message'] = '***  problem is primal infeasible'
                     return B[:-1, :-1], pn, dn, ps, ds, err
-            B, pn, dn, ps, ds = full_pivot(B, i, j, pn, dn, ps, ds)
+            B, pn, dn, ps, ds = full_pivot(B, i, j, pn, dn, ps, ds, tmp_matrix)
             mat = np.divide(-B[0, 1:-1], B[-1, 1:-1], out=np.zeros_like(B[0, 1:-1]), where=np.logical_and(B[-1, 1:-1] > 0, ds != 1))
             j = np.argmax(mat)
             mu1 = mat[j]

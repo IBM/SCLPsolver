@@ -3,7 +3,7 @@ from .pivot import dict_pivot
 
 
 #'#@profile
-def get_new_dict(oldDict, oldPlace, newPlace, pivots):
+def get_new_dict(oldDict, oldPlace, newPlace, pivots, tmp_matrix):
     L = len(pivots)
     if isinstance(oldPlace, list):
         oldPlace = oldPlace[0]
@@ -15,10 +15,10 @@ def get_new_dict(oldDict, oldPlace, newPlace, pivots):
         for i in range(oldPlace,newPlace):
             out_v = find(newDict['prim_name'] == pivots[i][0])
             in_v = find(newDict['dual_name'] == pivots[i][1])
-            newDict = dict_pivot(newDict, out_v, in_v)
+            newDict = dict_pivot(newDict, out_v, in_v, tmp_matrix)
     if newPlace < oldPlace:
         for i in range(oldPlace-1, newPlace-1, -1):
             out_v = find(newDict['prim_name'] == pivots[i][1])
             in_v = find(newDict['dual_name'] == pivots[i][0])
-            newDict = dict_pivot(newDict, out_v, in_v)
+            newDict = dict_pivot(newDict, out_v, in_v, tmp_matrix)
     return newDict

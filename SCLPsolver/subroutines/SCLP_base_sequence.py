@@ -6,9 +6,10 @@ from .pivot import dict_pivot
 
 class SCLP_base_sequence():
 
-    def __init__(self, basis, place=0):
+    def __init__(self, basis, tmp_matrix, place=0):
         self._bases = [basis]
         self._places = [place]
+        self.tmp_matrix = tmp_matrix
 
     @property
     def bases(self):
@@ -60,7 +61,7 @@ class SCLP_base_sequence():
         if place + 1 in self._places:
             return self._bases[self._places.index(place + 1)]
         else:
-            return dict_pivot(basis, find(basis['prim_name'] == pivots[place][0]), find(basis['dual_name'] == pivots[place][1]))
+            return dict_pivot(basis, find(basis['prim_name'] == pivots[place][0]), find(basis['dual_name'] == pivots[place][1]), self.tmp_matrix)
 
     def get_nearby_place(self, N1, N2):
         result ={'N1':None, 'N2':None, 'N1v': None, 'N2v':None }
@@ -111,15 +112,15 @@ class SCLP_base_sequence():
                     test2 = np.fabs(np.asarray(self._places) - N2)
                     ind2 = np.argmin(test2)
                     if test1[ind1] < test2[ind2]:
-                        return get_new_dict(self._bases[ind1], self._places[ind1], N1, pivots), N1
+                        return get_new_dict(self._bases[ind1], self._places[ind1], N1, pivots, self.tmp_matrix), N1
                     else:
-                        return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots), N2
+                        return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots, self.tmp_matrix), N2
                 else:
-                    return get_new_dict(self._bases[ind1], self._places[ind1], N1, pivots), N1
+                    return get_new_dict(self._bases[ind1], self._places[ind1], N1, pivots, self.tmp_matrix), N1
             else:
                 test2 = np.fabs(np.asarray(self._places) - N2)
                 ind2 = np.argmin(test2)
-                return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots), N2
+                return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots, self.tmp_matrix), N2
 
 
     def clear_base_sequense(self, numBasesToRemove, maxBases, NN):

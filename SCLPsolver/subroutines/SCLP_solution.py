@@ -16,7 +16,8 @@ class SCLP_solution():
     def __init__(self, prim_name, dual_name, dct, KK, JJ, totalK = None, totalJ = None):
         self._problem_dims = problem_dimensions(KK, JJ, totalK, totalJ)
         self._pivots = pivot_storage()
-        self._base_sequence = SCLP_base_sequence({'prim_name': prim_name, 'dual_name': dual_name, 'A': dct})
+        self.tmp_matrix = np.zeros_like(dct)
+        self._base_sequence = SCLP_base_sequence({'prim_name': prim_name, 'dual_name': dual_name, 'A': dct}, self.tmp_matrix)
         dx, dq = extract_rates_from_basis(prim_name, dual_name, dct, self._problem_dims)
         self._dx = matrix_constructor(dx[0], dx[1], KK)
         self._dq = matrix_constructor(dq[0], dq[1], JJ)
@@ -80,7 +81,7 @@ class SCLP_solution():
         #self._state = solution_state(self._dx, self._dq, self._pivots, param_line)
 
     def update_from_subproblem(self, col_info, pivots, AAN1, AAN2):
-        dx, dq = extract_rates_from_subproblem(pivots, AAN1, AAN2, self._problem_dims)
+        dx, dq = extract_rates_from_subproblem(pivots, AAN1, AAN2, self._problem_dims, self.tmp_matrix)
         Nnew = len(pivots)
         if AAN1 is not None and AAN2 is not None:
             Nnew -=1
