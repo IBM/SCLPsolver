@@ -275,7 +275,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
             locposTAU = find(iposTAU)[0]
             if locposTAU > 0 and locposTAU < NN - 1:
                 if np.sum(DTAU[np.arange(0,locposTAU)]) < 0:
-                    return [0, [1, locposTAU]], problem
+                    return [0, [0, locposTAU-1]], problem
                 elif np.sum(DTAU[np.arange(locposTAU + 1,NN)]) < 0:
                     return [0, [locposTAU + 1, NN-1]], problem
         elif ind1:
@@ -302,7 +302,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
                         locposTAU = find(iposTAU)[0]
                         if locposTAU > 0 and locposTAU < NN - 1:
                             if np.sum(DTAU[np.arange(0, locposTAU)]) < 0:
-                                return [0, [1, locposTAU]], problem
+                                return [0, [0, locposTAU-1]], problem
                             elif np.sum(DTAU[np.arange(locposTAU + 1, NN)]) < 0:
                                 return [0, [locposTAU + 1, NN-1]], problem
                 else:
