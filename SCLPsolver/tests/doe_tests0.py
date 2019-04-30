@@ -5,7 +5,7 @@ from doe.doe_utils import path_utils
 from doe.results_producer import combine_results, write_results_to_csv
 import os
 
-results, ftrials, files, raw_tau = run_experiment_series('MCQN', 10, 200, 20, 500, {'alpha_rate':  1000},starting_seed =1000 )
+results, ftrials, files, raw_tau = run_experiment_series('MCQN', 10, 1000, 100, 2000, {'alpha_rate':  4000},starting_seed =1000 )
 pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
 DATADIRd = pu.get_CPLEX_data_path()
 cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main10.mod'), files)
