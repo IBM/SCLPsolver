@@ -61,11 +61,13 @@ def _calc_dual(state, dstate, tau, state0, sd):
     np.cumsum(state, 1, out=state)
     state[np.fliplr(sd)] = 0
 
-def check_state(state, tolerance):
+def check_state(state, tolerance, is_primal = True):
     test1 = state < -tolerance
     if np.any(test1):
-        print('Negative state!')
+        print('Negative ' + ('primal' if is_primal else 'dual') + ' state!')
         print(np.where(test1))
+        return False
+    return True
 
 def check_sd(sd, is_primal):
     xsd = sd == 0

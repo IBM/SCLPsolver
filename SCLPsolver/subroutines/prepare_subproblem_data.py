@@ -1,7 +1,7 @@
 import numpy as np
 from .matlab_utils import find
 
-
+#'#@profile
 def prepare_subproblem_basis(DD, pbaseDD, dbaseDD, Kset_0, Jset_N, v1, v2, AAN1, AAN2):
 
     pbaseB1red = None

@@ -8,7 +8,7 @@ from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
 
-def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, get_raw_tau = True, **kwargs):
+def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, get_raw_tau = True, solver_settings = None, **kwargs):
     failure_trials = 0
     ps = {'K':K,'I':I,'T':T}
     for k, v in kwargs.items():
@@ -40,7 +40,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
                 raise Exception('Undefined time horizon!')
         import time
         start_time = time.time()
-        solver_settings = SCLP_settings(find_alt_line=False)
+        if solver_settings is None:
+            solver_settings = SCLP_settings(find_alt_line=False)
         t, x, q, u, p, pivots, obj, err, NN, tau, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
         print(obj, err)
         time_to_solve = time.time() - start_time

@@ -8,7 +8,7 @@ from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
 from .matrix_constructor import matrix_constructor
 from .calc_equations import calc_equations
-from .calc_states import calc_states
+from .calc_states import calc_states, check_state
 
 
 class SCLP_solution():
@@ -68,17 +68,26 @@ class SCLP_solution():
     def totalJ(self):
         return self._problem_dims.totalJ
 
+    #'#@profile
     def update_state(self, param_line):
-        self._state.dx = self._dx.get_matrix()
-        self._state.dq = self._dq.get_matrix()
-        self._state.sdx = np.ones((self._state.dx.shape[0], self._state.dx.shape[1] + 2))
-        self._state.sdq = np.ones((self._state.dq.shape[0], self._state.dq.shape[1] + 2))
-        np.sign(self._state.dx, out=self._state.sdx[:, 1:-1])
-        np.sign(self._state.dq, out=self._state.sdq[:, 1:-1])
-        self._state.tau, self._state.dtau = calc_equations(param_line, self._pivots, self._state.dx, self._state.dq)
-        self._state.x, self._state.del_x, self._state.q, self._state.del_q\
-            = calc_states(self._state.dx, self._state.dq, param_line, self._state.tau, self._state.dtau, self._state.sdx, self._state.sdq)
-        #self._state = solution_state(self._dx, self._dq, self._pivots, param_line)
+        state = solution_state()
+        state.dx = self._dx.get_matrix()
+        state.dq = self._dq.get_matrix()
+        state.sdx = np.ones((state.dx.shape[0], state.dx.shape[1] + 2))
+        state.sdq = np.ones((state.dq.shape[0], state.dq.shape[1] + 2))
+        np.sign(state.dx, out=state.sdx[:, 1:-1])
+        np.sign(state.dq, out=state.sdq[:, 1:-1])
+        state.tau, state.dtau = calc_equations(param_line, self._pivots, state.dx, state.dq)
+        state.x, state.del_x, state.q, state.del_q\
+            = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau, state.sdx, state.sdq)
+        self._state = state
+
+    def check_state(self, tolerance):
+        if self._state is not None:
+            res = check_state(self._state.x, tolerance)
+            res = res and check_state(self._state.q, tolerance, False)
+            return res
+        return False
 
     def update_from_subproblem(self, col_info, pivots, AAN1, AAN2):
         dx, dq = extract_rates_from_subproblem(pivots, AAN1, AAN2, self._problem_dims, self.tmp_matrix)

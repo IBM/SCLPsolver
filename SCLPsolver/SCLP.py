@@ -10,13 +10,16 @@ from subroutines.parametric_line import parametric_line
 from subroutines.utils import relative_to_project
 
 class SCLP_settings():
-    __slots__ = ['find_alt_line', 'save_solution', 'memory_management', 'tmp_path', 'hot_start', 'check_solution']
+    __slots__ = ['find_alt_line', 'save_solution', 'memory_management', 'tmp_path', 'hot_start', 'check_final_solution',
+                 'check_intermediate_solution']
 
-    def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False, check_solution=True):
+    def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False,
+                 check_final_solution=True, check_intermediate_solution=False):
         self.find_alt_line = find_alt_line
         self.hot_start = hot_start
         self.save_solution = save_solution
-        self.check_solution = check_solution
+        self.check_final_solution = check_final_solution
+        self.check_intermediate_solution = check_intermediate_solution
         self.memory_management = memory_management
         if tmp_path is None:
             self.tmp_path = relative_to_project('')
@@ -135,14 +138,14 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
     tau = solution.state.tau
     obj, err = calc_objective(alpha, a, b, gamma, c, d, u, x, p, q, solution.state.tau)
     is_ok = True
-    if settings.check_solution:
-        if np.any(tau < 0):
+    if settings.check_final_solution:
+        if np.any(tau < -tolerance):
             print('Negative tau!')
             is_ok = False
-        if np.any(x < 0):
+        if np.any(x < -tolerance):
             print('Negative primal state!')
             is_ok = False
-        if np.any(q < 0):
+        if np.any(q < -tolerance):
             print('Negative dual state!')
             is_ok = False
     if pivot_problem['result'] > 0 or settings.save_solution or not is_ok:

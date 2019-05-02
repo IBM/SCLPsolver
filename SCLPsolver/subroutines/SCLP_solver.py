@@ -20,7 +20,15 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         if not solution.base_sequence.check_places():
             raise Exception('Bases placement failure!')
         if not rewind_required:
-            solution.update_state(param_line)
+            try:
+                solution.update_state(param_line)
+            except Exception as ex:
+                print('Exception during state calculation:')
+                print(ex)
+                return solution, STEPCOUNT, {'result': 1}
+            if settings.check_intermediate_solution:
+                if not solution.check_state(tolerance):
+                    return solution, STEPCOUNT, {'result': 1}
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
                 return solution, STEPCOUNT, pivot_problem
@@ -39,7 +47,12 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     # rewinding to previous iteration
                     print('rewind... ')
                     param_line.backward_to(lastCollision.delta)
-                    solution.update_state(param_line)
+                    try:
+                        solution.update_state(param_line)
+                    except Exception as ex:
+                        print('Exception during state calculation:')
+                        print(ex)
+                        return solution, STEPCOUNT, {'result': 1}
                     solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, lastCollision)
                     col_info, resolved = reclassify(lastCollision, solution, param_line.klist, param_line.jlist, tolerance)
                     if not resolved:
@@ -105,8 +118,13 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             solution.update_caseI(col_info)
             rewind_required = False
         elif col_info.case == 'Case ii_' or col_info.case == 'Case iii':
-            solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
+            try:
+                solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
                                                                        col_info, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+            except Exception as ex:
+                print('Exception during SCLP pivot:')
+                print(ex)
+                return solution, STEPCOUNT, {'result': 1}
             if col_info.case == 'Case ii_':
                 while pivot_problem['result'] == 1: # theta > 1
                     print('Pivot problem: trying to resolve * ', col_info.tol_coeff, '...')
@@ -119,8 +137,13 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                             solution.update_caseI(col_info)
                             pivot_problem['result'] = 0
                         elif col_info.case == 'Case ii_' or col_info.case == 'Case iii':
-                            solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
+                            try:
+                                solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
                                                                                col_info, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+                            except Exception as ex:
+                                print('Exception during SCLP pivot:')
+                                print(ex)
+                                return solution, STEPCOUNT, {'result': 1}
                     else:
                         break
             if pivot_problem['result'] == 1:
