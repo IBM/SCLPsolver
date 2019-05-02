@@ -20,15 +20,9 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         if not solution.base_sequence.check_places():
             raise Exception('Bases placement failure!')
         if not rewind_required:
-            try:
-                solution.update_state(param_line)
-            except Exception as ex:
-                print('Exception during state calculation:')
-                print(ex)
+            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance)
+            if not res:
                 return solution, STEPCOUNT, {'result': 1}
-            if settings.check_intermediate_solution:
-                if not solution.check_state(tolerance):
-                    return solution, STEPCOUNT, {'result': 1}
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
                 return solution, STEPCOUNT, pivot_problem
@@ -47,11 +41,8 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     # rewinding to previous iteration
                     print('rewind... ')
                     param_line.backward_to(lastCollision.delta)
-                    try:
-                        solution.update_state(param_line)
-                    except Exception as ex:
-                        print('Exception during state calculation:')
-                        print(ex)
+                    res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance)
+                    if not res:
                         return solution, STEPCOUNT, {'result': 1}
                     solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, lastCollision)
                     col_info, resolved = reclassify(lastCollision, solution, param_line.klist, param_line.jlist, tolerance)

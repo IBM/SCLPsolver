@@ -8,7 +8,7 @@ from SCLP import SCLP_settings
 
 def test1(output_file, overwrite_output, exp_type, exp_num, K, I, T, settings, starting_seed = 1000, **kwargs):
     solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution=True)
-    results, ftrials, files, raw_tau = run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed, solver_settings, **kwargs)
+    results, ftrials, files, raw_tau = run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed, solver_settings, True, **kwargs)
     pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
     DATADIRd = pu.get_CPLEX_data_path()
     cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main10.mod'), files)

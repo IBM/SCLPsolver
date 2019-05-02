@@ -69,7 +69,7 @@ class SCLP_solution():
         return self._problem_dims.totalJ
 
     #'#@profile
-    def update_state(self, param_line):
+    def update_state(self, param_line, check_state = False, tolerance=0):
         state = solution_state()
         state.dx = self._dx.get_matrix()
         state.dq = self._dq.get_matrix()
@@ -77,15 +77,28 @@ class SCLP_solution():
         state.sdq = np.ones((state.dq.shape[0], state.dq.shape[1] + 2))
         np.sign(state.dx, out=state.sdx[:, 1:-1])
         np.sign(state.dq, out=state.sdq[:, 1:-1])
-        state.tau, state.dtau = calc_equations(param_line, self._pivots, state.dx, state.dq)
-        state.x, state.del_x, state.q, state.del_q\
-            = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau, state.sdx, state.sdq)
-        self._state = state
+        try:
+            state.tau, state.dtau = calc_equations(param_line, self._pivots, state.dx, state.dq)
+            state.x, state.del_x, state.q, state.del_q\
+                = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau, state.sdx, state.sdq)
+        except Exception as ex:
+            print('Exception during state calculation:')
+            print(ex)
+            return False
+        if check_state:
+            if self._check_state(state, tolerance):
+                self._state = state
+                return True
+            else:
+                return False
+        else:
+            self._state = state
+            return True
 
-    def check_state(self, tolerance):
+    def _check_state(self, state, tolerance):
         if self._state is not None:
-            res = check_state(self._state.x, tolerance)
-            res = res and check_state(self._state.q, tolerance, False)
+            res = check_state(state.x, tolerance)
+            res = res and check_state(state.q, tolerance, False)
             return res
         return False
 

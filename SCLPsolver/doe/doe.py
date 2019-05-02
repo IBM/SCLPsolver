@@ -8,7 +8,8 @@ from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
 
-def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, get_raw_tau = True, solver_settings = None, **kwargs):
+def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, solver_settings = None,
+                          use_adaptive_T = False, get_raw_tau = True, **kwargs):
     failure_trials = 0
     ps = {'K':K,'I':I,'T':T}
     for k, v in kwargs.items():
@@ -46,7 +47,10 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % (time_to_solve))
-        if res == 0:
+        if res == 0 or use_adaptive_T:
+            if res != 0:
+                ps['T'] = 'adpt'
+                T = Tres
             full_file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
             write_CPLEX_dat(full_file_name, T, G, H, alpha, a, b, gamma, c)
             path, filename = os.path.split(full_file_name)
