@@ -54,9 +54,11 @@ def generate_reentrant_data(seed, K, I, h_rate = 0.3, hdist = np.random.rand, hd
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         # this produce negative and positive costs!
         c = np.matmul(cost, G)
+        buffer_cost = (np.inner(cost, alpha), np.inner(cost, a))
     else:
         c = np.zeros(K)
+        buffer_cost = (0, 0)
     if c_scale != 0:
         c += c_scale * c_dist(*c_dist_params, K) * np.random.choice([-1,1],K,True)
 
-    return G, H, F, gamma, c, d, alpha, a, b, None
+    return G, H, F, gamma, c, d, alpha, a, b, None, buffer_cost

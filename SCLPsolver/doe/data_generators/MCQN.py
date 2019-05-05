@@ -66,8 +66,10 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         #this produce negative and positive costs!
         c = np.matmul(cost,  G)
+        buffer_cost = (np.inner(cost,  alpha),np.inner(cost,  a))
     else:
         c = np.zeros(K)
+        buffer_cost = (0,0)
     if c_scale != 0:
         c += c_scale * c_dist(*c_dist_params, K) * np.random.choice([-1,1],K,True)
-    return G,H,F,gamma,c,d,alpha,a,b,None
+    return G,H,F,gamma,c,d,alpha,a,b,None,buffer_cost
