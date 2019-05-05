@@ -56,8 +56,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             path, filename = os.path.split(full_file_name)
             buf_cost = buffer_cost[0]*T+buffer_cost[1]*T*T/2.0
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
-                 'intervals': NN, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau), 'std_tau':np.std(tau),
-                 'buffer_cost': buf_cost, 'real_objective':obj - buf_cost}
+                 'intervals': NN, 'T': T, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
+                 'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':obj - buf_cost}
             results.append(r)
             if get_raw_tau:
                 raw_tau.append({'file': filename,'raw_tau':tau})
