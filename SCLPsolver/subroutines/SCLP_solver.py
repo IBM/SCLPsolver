@@ -17,10 +17,10 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
 
     while True:
 
-        if not solution.base_sequence.check_places():
-            raise Exception('Bases placement failure!')
+        # if not solution.base_sequence.check_places():
+        #     raise Exception('Bases placement failure!')
         if not rewind_required:
-            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance)
+            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*10)
             if not res:
                 return solution, STEPCOUNT, {'result': 1}
             if solution.check_if_complete(param_line):
@@ -41,7 +41,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     # rewinding to previous iteration
                     print('rewind... ')
                     param_line.backward_to(lastCollision.delta)
-                    res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance)
+                    res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*10)
                     if not res:
                         return solution, STEPCOUNT, {'result': 1}
                     solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, lastCollision)
