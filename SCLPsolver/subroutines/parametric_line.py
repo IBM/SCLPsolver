@@ -4,14 +4,14 @@ from subroutines.calc_boundaries import calc_boundaries
 
 
 class line_type(Enum):
-    SCLP_main = 0
-    SCLP_sub = 1
-    SCLP_orthogonal = 2
+    main = 0
+    sub = 1
+    orthogonal = 2
 
 
 class parametric_line():
 
-    def __init__(self, x_0, q_N, theta_bar, T=0, del_T =1, del_x_0=None, del_q_N=None, Kset_0=None, Jset_N=None, B1=None, B2=None, ltype = line_type.SCLP_main):
+    def __init__(self, x_0, q_N, theta_bar, T=0, del_T =1, del_x_0=None, del_q_N=None, Kset_0=None, Jset_N=None, B1=None, B2=None, ltype = line_type.main):
         self._x_0 = x_0
         self._q_N = q_N
         self._theta_bar = theta_bar
@@ -107,13 +107,13 @@ class parametric_line():
         return self._theta
 
     def is_main(self):
-        return self._ltype == line_type.SCLP_main
+        return self._ltype == line_type.main
 
     def is_sub(self):
-        return self._ltype == line_type.SCLP_sub
+        return self._ltype == line_type.sub
 
     def is_orthogonal(self):
-        return self._ltype == line_type.SCLP_orthogonal
+        return self._ltype == line_type.orthogonal
 
     def is_end(self, delta):
         if self._back_direction:
@@ -164,7 +164,7 @@ class parametric_line():
             del_q[self._Jset_N-1] = np.random.rand(len(self._Jset_N),1) - 0.5
             theta_bar = min(theta_bar, 1/np.max(np.divide(-del_q, self._q_N, where=np.logical_and(del_q < 0, self._Jset_N))))
         return parametric_line(self._x_0, self._q_N, theta_bar, self._theta, 0, del_x, del_q,
-                               self._Kset_0, self._Jset_N, None, None, line_type.SCLP_orthogonal)
+                               self._Kset_0, self._Jset_N, None, None, line_type.orthogonal)
 
     @staticmethod
     def get_subproblem_parametric_line(DD, pbaseDD, dbaseDD, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red):
@@ -228,7 +228,7 @@ class parametric_line():
                     q_N[lj2] = -dq_DD_v2
                     dq_B2_v2 = AAN2['A'][0, 1:][AAN2['dual_name'] == v2][0]
                     del_q_N[lj2] = -0.5 * dq_B2_v2 + dq_DD_v2
-        par_line = parametric_line(x_0, q_N, 1, 1, 0, del_x_0, del_q_N, None, None, pbaseB1red, pbaseB2red, line_type.SCLP_sub)
+        par_line = parametric_line(x_0, q_N, 1, 1, 0, del_x_0, del_q_N, None, None, pbaseB1red, pbaseB2red, line_type.sub)
         par_line.build_boundary_sets(solution.klist, solution.jlist)
         return par_line
 

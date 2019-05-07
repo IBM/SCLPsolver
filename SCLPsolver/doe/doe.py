@@ -29,11 +29,11 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
     for seed in range(starting_seed, starting_seed + exp_num):
         ps['seed'] = seed
         if exp_type == 'MCQN':
-            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, K, I, **settings)
+            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost, xgamma = generate_MCQN_data(seed, K, I, **settings)
         elif exp_type == 'reentrant':
-            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_reentrant_data(seed, K, I, **settings)
+            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost, xgamma = generate_reentrant_data(seed, K, I, **settings)
         elif exp_type == 'MCQN_routing':
-            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_routing_data(seed, K, I, **settings)
+            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost, xgamma = generate_MCQN_routing_data(seed, K, I, **settings)
         else:
             raise Exception('Undefined experiment type!')
         if T is None:
@@ -41,6 +41,12 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
                 raise Exception('Undefined time horizon!')
             else:
                 T = TT
+        gamma += xgamma * T
+        print(gamma)
+        pos_gamma = gamma > 0
+        gamma_correction = np.mean(gamma[pos_gamma])
+        gamma[pos_gamma] = 0
+        print(gamma)
         import time
         start_time = time.time()
         if solver_settings is None:
@@ -49,7 +55,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % time_to_solve)
-        print("--- seed: %s ---" % seed)
+        print("--- seed %s ---" % seed)
         if res == 0 or use_adaptive_T:
             if res != 0:
                 ps['T'] = 'adpt'
@@ -60,7 +66,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             buf_cost = buffer_cost[0]*T+buffer_cost[1]*T*T/2.0
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
                  'intervals': NN, 'T': T, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
-                 'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':obj - buf_cost}
+                 'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':obj - buf_cost, 'gamma_correction':gamma_correction}
             results.append(r)
             if get_raw_tau:
                 raw_tau.append({'file': filename,'raw_tau':tau})
