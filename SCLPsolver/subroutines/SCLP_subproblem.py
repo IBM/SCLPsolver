@@ -11,15 +11,8 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, v1,v2,Kset_0, Jset_N,
 
     # Excluding the k's and j's which are > 0
     DDred, pbaseDDred, dbaseDDred, pbaseB1red, pbaseB2red = prepare_subproblem_basis(DD, pbaseDD, dbaseDD, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
-
-    klist = np.sort(np.append(pbaseDDred[pbaseDDred > 0], dbaseDDred[dbaseDDred > 0]))
-    jlist = np.sort(-np.append(pbaseDDred[pbaseDDred < 0], dbaseDDred[dbaseDDred < 0]))
-
-    lk = np.size(klist)
-    lj = np.size(jlist)
-
     # The starting solution
-    solution = SCLP_solution(pbaseDDred, dbaseDDred, DDred.copy(), lk, lj, totalK, totalJ)
+    solution = SCLP_solution(pbaseDDred, dbaseDDred, DDred.copy(), totalK=totalK, totalJ=totalJ)
     # performing the left and right first pivots
     #		the right pivot:
     K_0 = []
@@ -61,7 +54,7 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, v1,v2,Kset_0, Jset_N,
             return solution,  STEPCOUNT, ITERATION, pivot_problem
 
     # prepare the boundaries
-    param_line = parametric_line.get_subproblem_parametric_line(DD, pbaseDD, dbaseDD, jlist, klist, lj, lk, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red)
+    param_line = parametric_line.get_subproblem_parametric_line(DD, pbaseDD, dbaseDD, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red)
 
     #############################################
     # solving the subproblem

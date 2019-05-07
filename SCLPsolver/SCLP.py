@@ -104,15 +104,15 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
 
     if not settings.hot_start:
         # Initiate top level problem, by obtaining the boundary and first dictionary
-        x_0, q_N = calc_boundaries(G, F, H, b, d, alpha, gamma, tolerance)
-        A, pn, dn, ps, ds, err = calc_init_basis(G, F, H, a, b, c, d, x_0, q_N, tolerance)
+        # default constructor creates main parametric line
+        param_line = parametric_line.get_SCLP_parametric_line(G, F, H, b, d, alpha, gamma, TT, tolerance)
+        # calculate initial basis
+        A, pn, dn, ps, ds, err = calc_init_basis(G, F, H, a, b, c, d, param_line.x_0, param_line.q_N, tolerance)
         if err['result'] != 0:
             raise Exception(err['message'])
         solution = SCLP_solution(pn, dn, A, K_DIM + L_DIM, J_DIM + I_DIM)
-        klist = np.sort(np.append(pn[pn > 0], dn[dn > 0]))
-        jlist = np.sort(-np.append(pn[pn < 0], dn[dn < 0]))
-        # default constructor creates main parametric line
-        param_line = parametric_line(np.vstack(x_0), np.vstack(q_N), klist, jlist, TT)
+        # building Kset0 and JsetN
+        param_line.build_boundary_sets(solution.klist, solution.jlist)
     else:
         import pickle
         print('Loading solution!')
@@ -124,7 +124,6 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         param_line.theta_bar = TT
 
     # Solve the problem, by a sequence of parametric steps
-
     solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'toplevel',
                                            0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
 

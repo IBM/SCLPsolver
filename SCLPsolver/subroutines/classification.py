@@ -7,7 +7,7 @@ from .matlab_utils import find
 #function [ cases, Delta, N1, N2, v1,v2, problem ] =
 
 #'#@profile
-def classification(klist,jlist,solution, tolerance):
+def classification(solution, tolerance):
 #idenitfy next collision and classify it
 #problem
 #   result = 0 Ok
@@ -28,7 +28,7 @@ def classification(klist,jlist,solution, tolerance):
     v2 = []
     case = ''
 
-    CC1, prob = calc_statecollide(klist,jlist, solution.state, tolerance)
+    CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, tolerance)
     problem['stateProblem'] = prob
 
     if solution.last_collision is None:
@@ -80,7 +80,7 @@ def classification(klist,jlist,solution, tolerance):
             N2 = CC2[1][1] + 1
             return collision_info('Case i__', 0, N1, N2, [], [], None, 1), problem
         else:
-            result, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, klist, jlist, 1, tolerance)
+            result, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
             tol2 = 10 * tolerance
             inegDTAU = solution.state.dtau < -tol2
             izerTAU = np.fabs(solution.state.tau) <= tol2

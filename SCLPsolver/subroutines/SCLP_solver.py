@@ -26,7 +26,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
                 return solution, STEPCOUNT, pivot_problem
-            col_info, problem = classification(param_line.klist, param_line.jlist, solution, tolerance)
+            col_info, problem = classification(solution, tolerance)
             if problem['result'] > 0:
                 rewind_required = True
             else:
@@ -45,7 +45,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     if not res:
                         return solution, STEPCOUNT, {'result': 1}
                     solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, lastCollision)
-                    col_info, resolved = reclassify(lastCollision, solution, param_line.klist, param_line.jlist, tolerance)
+                    col_info, resolved = reclassify(lastCollision, solution, tolerance)
                     if not resolved:
                         lastCollision = solution.update_rewind()
                     else:
@@ -119,7 +119,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             if col_info.case == 'Case ii_':
                 while pivot_problem['result'] == 1: # theta > 1
                     print('Pivot problem: trying to resolve * ', col_info.tol_coeff, '...')
-                    new_col_info, resolved = reclassify(col_info, solution, param_line.klist, param_line.jlist, tolerance)
+                    new_col_info, resolved = reclassify(col_info, solution, tolerance)
                     if resolved:
                         print('resolved!')
                         col_info = new_col_info

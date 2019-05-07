@@ -13,7 +13,13 @@ from .calc_states import calc_states, check_state
 
 class SCLP_solution():
 
-    def __init__(self, prim_name, dual_name, dct, KK, JJ, totalK = None, totalJ = None):
+    def __init__(self, prim_name, dual_name, dct, KK=None, JJ=None, totalK = None, totalJ = None):
+        self._klist = np.sort(np.append(prim_name[prim_name > 0], dual_name[dual_name > 0]))
+        self._jlist = np.sort(-np.append(prim_name[prim_name < 0], dual_name[dual_name < 0]))
+        if KK is None:
+            KK = np.size(self._klist)
+        if JJ is None:
+            JJ = np.size(self._jlist)
         self._problem_dims = problem_dimensions(KK, JJ, totalK, totalJ)
         self._pivots = pivot_storage()
         self.tmp_matrix = np.zeros_like(dct)
@@ -31,6 +37,14 @@ class SCLP_solution():
     def __setstate__(self, state):
         self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack = state
         self._state = solution_state()
+
+    @property
+    def klist(self):
+        return self._klist
+
+    @property
+    def jlist(self):
+        return self._jlist
 
     @property
     def last_collision(self):
@@ -78,7 +92,7 @@ class SCLP_solution():
         np.sign(state.dx, out=state.sdx[:, 1:-1])
         np.sign(state.dq, out=state.sdq[:, 1:-1])
         try:
-            state.tau, state.dtau = calc_equations(param_line, self._pivots, state.dx, state.dq)
+            state.tau, state.dtau = calc_equations(param_line, self._klist, self._jlist, self._pivots, state.dx, state.dq)
             state.x, state.del_x, state.q, state.del_q\
                 = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau, state.sdx, state.sdq)
         except Exception as ex:
