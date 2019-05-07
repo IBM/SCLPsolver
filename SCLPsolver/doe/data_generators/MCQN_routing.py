@@ -85,19 +85,16 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
         gamma = np.zeros(J)
     else:
         gamma = gamma_rate * gamma_dist(*gamma_dist_params, J)
-    if c_scale != 0:
-        c = c_scale * c_dist(*c_dist_params, J) * np.random.choice([-1,1],J,True)
-    else:
-        c = np.zeros(J)
     if cost_scale != 0:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
-        #this produce negative and positive costs!
-        xgamma = np.matmul(cost,  G)
-        c -= xgamma
-        buffer_cost = (np.inner(cost,  alpha),np.inner(cost,  a))
+        # this produce negative and positive costs!
+        c = np.matmul(cost, G)
+        buffer_cost = (np.inner(cost, alpha), np.inner(cost, a))
     else:
-        xgamma = np.zeros(K)
-        buffer_cost = (0,0)
+        c = np.zeros(J)
+        buffer_cost = (0, 0)
+    if c_scale != 0:
+        c += c_scale * c_dist(*c_dist_params, J) * np.random.choice([-1,1],J,True)
 
     # Calculating a value for T
     #  ~0.2 is probability of leaving system at each service
@@ -115,4 +112,4 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
 
     T = 1.2*(150*K/I)
 
-    return G, H, F, gamma, c, d, alpha, a, b, T, buffer_cost, xgamma
+    return G, H, F, gamma, c, d, alpha, a, b, T, buffer_cost
