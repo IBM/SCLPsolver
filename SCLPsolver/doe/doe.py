@@ -42,11 +42,10 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             else:
                 T = TT
         gamma += xgamma * T
-        print(gamma)
         pos_gamma = gamma > 0
         gamma_correction = np.mean(gamma[pos_gamma])
+        print("Corrected: ", sum(pos_gamma), " elements.  Mean_gamma_correction: ", gamma_correction)
         gamma[pos_gamma] = 0
-        print(gamma)
         import time
         start_time = time.time()
         if solver_settings is None:
