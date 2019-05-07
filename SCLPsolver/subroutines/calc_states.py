@@ -47,7 +47,7 @@ def _calc_states(state, del_state, vdim, state0, del_state0, tau, dtau, dstate, 
 #'#@profile
 def _calc_primal(state, dstate, tau, state0, sd):
     if state0 is not None:
-        state[:, 0:1] = state0
+        state[:, 0] = state0
     np.multiply(dstate, tau, out=state[:, 1:])
     np.cumsum(state, 1, out=state)
     state[sd] = 0
@@ -56,7 +56,7 @@ def _calc_primal(state, dstate, tau, state0, sd):
 #'#@profile
 def _calc_dual(state, dstate, tau, state0, sd):
     if state0 is not None:
-        state[:, 0:1] = state0
+        state[:, 0] = state0
     np.multiply(np.fliplr(dstate), tau[::-1], out=state[:, 1:])
     np.cumsum(state, 1, out=state)
     state[np.fliplr(sd)] = 0

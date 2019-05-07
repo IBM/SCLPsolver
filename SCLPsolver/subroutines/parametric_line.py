@@ -29,13 +29,13 @@ class parametric_line():
 
     def build_boundary_sets(self, klist, jlist):
         if self._del_x_0 is None:
-            self._Kset_0 = klist[np.hstack(self._x_0 > 0)]
+            self._Kset_0 = klist[self._x_0 > 0]
         else:
-            self._Kset_0 = klist[np.hstack(np.logical_or(self._x_0 > 0, self._del_x_0 > 0))]
+            self._Kset_0 = klist[np.logical_or(self._x_0 > 0, self._del_x_0 > 0)]
         if self._del_q_N is None:
-            self._Jset_N = jlist[np.hstack(self._q_N > 0)]
+            self._Jset_N = jlist[self._q_N > 0]
         else:
-            self._Jset_N = jlist[np.hstack(np.logical_or(self._q_N > 0, self._del_q_N > 0))]
+            self._Jset_N = jlist[np.logical_or(self._q_N > 0, self._del_q_N > 0)]
 
     @property
     def x_0(self):
@@ -168,10 +168,10 @@ class parametric_line():
 
     @staticmethod
     def get_subproblem_parametric_line(DD, pbaseDD, dbaseDD, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red):
-        x_0 = np.zeros((solution.KK, 1))
-        q_N = np.zeros((solution.JJ, 1))
-        del_x_0 = np.zeros((solution.KK, 1))
-        del_q_N = np.zeros((solution.JJ, 1))
+        x_0 = np.zeros(solution.KK)
+        q_N = np.zeros(solution.JJ)
+        del_x_0 = np.zeros(solution.KK)
+        del_q_N = np.zeros(solution.JJ)
         # Boundary values for one sided subproblem, collision at t=0
         if AAN1 is None:
             if not isinstance(v1, list):
@@ -235,4 +235,4 @@ class parametric_line():
     @staticmethod
     def get_SCLP_parametric_line(G, F, H, b, d, alpha, gamma, TT, tolerance):
         x_0, q_N = calc_boundaries(G, F, H, b, d, alpha, gamma, tolerance)
-        return parametric_line(np.vstack(x_0), np.vstack(q_N), TT)
+        return parametric_line(x_0, q_N, TT)
