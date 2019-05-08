@@ -92,11 +92,9 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     if cost_scale != 0:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         #this produce negative and positive costs!
-        xgamma = np.matmul(cost,  G)
-        c -= xgamma
+        c += np.matmul(cost,  G)
         buffer_cost = (np.inner(cost,  alpha),np.inner(cost,  a))
     else:
-        xgamma = np.zeros(K)
         buffer_cost = (0,0)
 
     # Calculating a value for T
@@ -115,4 +113,4 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
 
     T = 1.2*(150*K/I)
 
-    return G, H, F, gamma, c, d, alpha, a, b, T, buffer_cost, xgamma
+    return G, H, F, gamma, c, d, alpha, a, b, T, buffer_cost

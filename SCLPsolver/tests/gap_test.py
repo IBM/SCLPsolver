@@ -21,6 +21,6 @@ from test import test1
 #       {'alpha_rate':  10, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
 #        'gamma_rate':-0.1, 'c_scale': 0},starting_seed =1000)
 
-test1('results_mm.csv', False, 'MCQN', 2, 400, 40, 10000,
-      {'alpha_rate':  10, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
-       'gamma_rate':-0.1, 'c_scale': 0},starting_seed =1002)
+test1('results_mm.csv', False, 'reentrant', 2, 100, 10, 100,
+       {'alpha_rate':  1, 'cost_scale':1, 'a_rate' : 0.001,
+        'gamma_rate':0, 'c_scale': 0},starting_seed =1000)
