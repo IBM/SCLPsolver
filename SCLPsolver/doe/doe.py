@@ -53,13 +53,12 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         if res == 0 or use_adaptive_T:
             if res != 0:
                 ps['T'] = 'adpt'
-                T = Tres
             full_file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
-            write_CPLEX_dat(full_file_name, T, G, H, alpha, a, b, gamma, c)
+            write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, c)
             path, filename = os.path.split(full_file_name)
-            buf_cost = buffer_cost[0]*T+buffer_cost[1]*T*T/2.0
+            buf_cost = buffer_cost[0]*Tres+buffer_cost[1]*Tres*Tres/2.0
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
-                 'intervals': NN, 'T': T, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
+                 'intervals': NN, 'T': Tres, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
                  'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':obj - buf_cost}
             results.append(r)
             if get_raw_tau:
