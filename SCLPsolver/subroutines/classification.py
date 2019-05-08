@@ -91,11 +91,12 @@ def classification(solution, tolerance):
                 return collision_info('', Delta, N1, N2, v1, v2), problem
             else:
                 result.had_resolution = result.had_resolution or prob['had_resolution']
-                if Didle == 0 and not (result.N1 <= CC1[1] and CC1[1] <= result.N2):
-                    print('time shrink as well as state hits zero elsewhere\n')
-                    problem['result'] = problem['result'] + 4
-                    problem['compoundProblem']['result'] = 1
-                    return collision_info('', Delta, N1, N2, v1, v2), problem
+                if Didle == 0 and len(CC1) >1:
+                    if not (result.N1 <= CC1[1] and CC1[1] <= result.N2):
+                        print('time shrink as well as state hits zero elsewhere\n')
+                        problem['result'] = problem['result'] + 4
+                        problem['compoundProblem']['result'] = 1
+                        return collision_info('', Delta, N1, N2, v1, v2), problem
                 return result, problem
     problem['result'] = 8
     return None, problem
