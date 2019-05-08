@@ -4,6 +4,9 @@
  * Creation Date: Apr 16, 2019 at 2:13:53 PM
  *********************************************/
 
+execute{
+  cplex.lpmethod = 4;
+}
  
 float T = ...;
 int VarDimension = ...; 
