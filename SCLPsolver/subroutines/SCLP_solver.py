@@ -20,7 +20,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         # if not solution.base_sequence.check_places():
         #     raise Exception('Bases placement failure!')
         if not rewind_required:
-            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*10)
+            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*100)
             if not res:
                 return solution, STEPCOUNT, {'result': 1}
             if solution.check_if_complete(param_line):
