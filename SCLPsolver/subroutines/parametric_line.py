@@ -157,11 +157,11 @@ class parametric_line():
         del_q = None
         if type == 1 or type == 3:
             del_x = np.zeros_like(self._x_0)
-            del_x[self._Kset_0-1] = np.random.rand(len(self._Kset_0),1) - 0.5
+            del_x[self._Kset_0-1] = np.random.rand(len(self._Kset_0)) - 0.5
             theta_bar =min(theta_bar, 1/np.max(np.divide(-del_x, self._x_0, where = np.logical_and(del_x < 0, self._Kset_0))))
         if type == 2 or type == 3:
             del_q = np.zeros_like(self._x_0)
-            del_q[self._Jset_N-1] = np.random.rand(len(self._Jset_N),1) - 0.5
+            del_q[self._Jset_N-1] = np.random.rand(len(self._Jset_N)) - 0.5
             theta_bar = min(theta_bar, 1/np.max(np.divide(-del_q, self._q_N, where=np.logical_and(del_q < 0, self._Jset_N))))
         return parametric_line(self._x_0, self._q_N, theta_bar, self._theta, 0, del_x, del_q,
                                self._Kset_0, self._Jset_N, None, None, line_type.SCLP_orthogonal)
