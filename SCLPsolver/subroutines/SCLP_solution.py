@@ -131,7 +131,10 @@ class SCLP_solution():
     #'#@profile
     def update_caseI(self, col_info):
         NN = self.NN
-        self._col_info_stack.clear()
+        if col_info.had_resolution:
+            self.store_rewind_info(col_info)
+        else:
+            self._col_info_stack.clear()
         self._last_collision = col_info
         N1 = col_info.N1
         N2 = col_info.N2

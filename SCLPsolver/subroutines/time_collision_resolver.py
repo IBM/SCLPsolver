@@ -196,14 +196,14 @@ def ztau_resolver2(col_info, solution, tolerance):
 
 def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, tolerance):
     if N1 == -1 or N2 == solution.NN:
-        return collision_info('Case i__', delta, N1, N2, [], [], None, tol_coeff)
+        return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
     else:
         vlist = solution.pivots.get_difference(N1, N2)
         if len(vlist) > 2:
             print('More than two variables leave in time shrink ....')
             return None
         elif len(vlist) == 1:
-            return collision_info('Case i__', delta, N1, N2, [], [], None, tol_coeff)
+            return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
         elif len(vlist) == 2:
             case = 'Case ii_'
             order_ratio, correct = calc_order_ratio(vlist[0], vlist[1], N1, N2, solution.klist, solution.jlist, solution.state, delta / 2)
