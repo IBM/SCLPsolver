@@ -109,7 +109,7 @@ def resolve_and_classify(delta, rz, solution, tol_coeff0, tolerance, shrinking_i
     problem['result'] = 5
     return None, problem
 
-def reclassify(col_info, solution, tolerance):
+def reclassify(col_info, solution, tolerance, stateN=None):
     tol_coeff = col_info.tol_coeff * 10
     resolved = False
     while tol_coeff <= 0.01/tolerance:
@@ -119,8 +119,12 @@ def reclassify(col_info, solution, tolerance):
             break
         if new_col_info != col_info:
             col_info = new_col_info
-            resolved = True
-            break
+            if stateN is None:
+                resolved = True
+                break
+            elif col_info.N1 <= stateN and stateN <= col_info.N2:
+                resolved = True
+                break
     # if not resolved:
     #     result = ztau_resolver2(col_info, solution, klist, jlist, tolerance)
     #     if result is not None and result !=col_info:

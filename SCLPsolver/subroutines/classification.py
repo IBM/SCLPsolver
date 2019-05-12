@@ -94,8 +94,8 @@ def classification(solution, tolerance):
                 if Didle == 0 and len(CC1) >1:
                     if not (result.N1 <= CC1[1] and CC1[1] <= result.N2):
                         print('time shrink as well as state hits zero elsewhere...')
-                        result, resolved = reclassify(result, solution, tolerance)
-                        if not (result.N1 <= CC1[1] and CC1[1] <= result.N2):
+                        result, resolved = reclassify(result, solution, tolerance, CC1[1])
+                        if not resolved:
                             print('time shrink as well as state hits zero elsewhere...\n')
                             problem['result'] = problem['result'] + 4
                             problem['compoundProblem']['result'] = 1
