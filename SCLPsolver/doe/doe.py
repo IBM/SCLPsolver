@@ -53,6 +53,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         if res == 0 or use_adaptive_T:
             if res != 0:
                 ps['T'] = 'adpt'
+            else:
+                ps['T'] = T
             full_file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
             write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, c)
             path, filename = os.path.split(full_file_name)

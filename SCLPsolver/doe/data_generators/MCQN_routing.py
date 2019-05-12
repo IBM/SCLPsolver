@@ -1,4 +1,5 @@
 import numpy as np
+from subroutines.matlab_utils import find
 
 # General Multi-Class Queueing Network, with rouitng:
 # buffers numbered k=1,...,K.
@@ -64,7 +65,9 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     np.random.shuffle(cols)
     rows = np.concatenate((np.arange(K), np.random.choice(K, J-K, True)))
     G[rows, cols] = 1
-
+    cols = find(sum(G) - 1 >=  - 1E-11)
+    for i in cols:
+        G[np.random.choice(find(sum(G) - 1 <= - 1E-11),1),i] = - sum_rate
     # construct random machine constituency matrix
     cols = np.arange(J)
     np.random.shuffle(cols)
@@ -76,7 +79,7 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     alpha = alpha_rate * alpha_dist(*alpha_dist_params, K)
 
     # exogenous input rate
-    a = a_rate * a_dist(*a_dist_params, K)
+    a = a_rate * a_dist(*a_dist_params, K) + a_rate
 
     F = np.empty((K, 0))
     d = np.empty(0)
