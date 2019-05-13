@@ -189,5 +189,26 @@ class pivot_storage():
             self._in =  pivots.inpivots + self._in[N2:]
             self._out = pivots.outpivots + self._out[N2:]
 
+    def get_previous_in(self, n):
+        v = self._out[n]
+        w = self._in[:n+1][::-1]
+        if v in w:
+            return n - w.index[v]
+        else:
+            return None
 
+    def get_previous_in(self, n):
+        v = self._out[n]
+        w = self._in[:n+1][::-1]
+        if v in w:
+            return n - w.index(v)
+        else:
+            return None
 
+    def get_next_in(self, n):
+        v = self._out[n]
+        w = self._in[n:]
+        if v in w:
+            return self._in.index(v,n)
+        else:
+            return None
