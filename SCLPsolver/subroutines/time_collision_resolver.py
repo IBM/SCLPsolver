@@ -112,6 +112,20 @@ def resolve_and_classify(delta, rz, solution, tol_coeff0, tolerance, shrinking_i
 def reclassify(col_info, solution, tolerance, stateN=None):
     tol_coeff = col_info.tol_coeff * 10
     resolved = False
+    if col_info.case == 'Case iii':
+        if col_info.alternative is not None:
+            stateN = col_info.N1
+            col_info = col_info.alternative
+            new_col_info, problem = resolve_and_classify(col_info.delta, col_info.rz, solution, tol_coeff, tolerance)
+            if problem['result'] > 0:
+                return col_info, False
+            elif new_col_info.N1 <= stateN and stateN <= new_col_info.N2:
+                resolved = True
+                return new_col_info, resolved
+            else:
+                col_info = new_col_info
+        else:
+            return col_info, resolved
     while tol_coeff <= 0.01/tolerance:
         new_col_info, problem = resolve_and_classify(col_info.delta, col_info.rz, solution, tol_coeff, tolerance)
         tol_coeff = tol_coeff * 10

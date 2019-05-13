@@ -65,7 +65,13 @@ def classification(solution, tolerance):
             v1 = CC1[2]
         else:
             v2 = CC1[2]
-        return collision_info(case, Delta, N1, N2, v1, v2), problem
+        col_info = collision_info(case, Delta, N1, N2, v1, v2)
+        if abs(Didle) <= 1000 * tolerance:
+            if problem['timeProblem']['result'] == 0 and len(CC2) >1:
+                result, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
+                if prob1['result'] == 0:
+                    col_info.alternative = result
+        return col_info, problem
     elif (len(CC1) == 0 and len(CC2) > 0) or Didle >= 0:
         if problem['timeProblem']['result'] != 0:
             problem['result'] = problem['result'] + 2
