@@ -145,8 +145,8 @@ class SCLP_solution():
     def _update_caseII(self, col_info, dx, dq, AAN1, AAN2, pivots, Nnew, basis = None, matrix = True):
         NN = self.NN
         self._last_collision = col_info
-        if col_info.case == 'Case ii_' or col_info.alternative is not None:
-            self.store_rewind_info(col_info)
+        #if col_info.case == 'Case ii_' or col_info.alternative is not None:
+        self.store_rewind_info(col_info)
         # else:
         #     self._col_info_stack.clear()
         N1 = col_info.N1

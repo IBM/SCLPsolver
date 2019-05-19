@@ -22,31 +22,31 @@ def calc_statecollide(klist, jlist, state, tolerance):
             return [np.inf, 0, 0], problem
         else:
             test1 = 1. / bb_x
+            nn = nn_x - 1
+            vv = klist[kk_x]
             if test1 <= -tolerance:
                 return [], problem
             elif abs(test1) < tolerance:
-                print('immediate collision\n')
+                print('immediate collision',nn,vv)
                 problem['result'] = 1
-                return [], problem
+                return [test1, nn, vv], problem
             else:                    # test1 >= tolerance
-                nn = nn_x - 1
-                vv = klist[kk_x]
                 bb = bb_x
     else:
         if bb_q == 0:
             print(kk_q, nn_q)
             return [np.inf, 0, 0], problem
         else:
+            nn = nn_q - 1
+            vv = -jlist[kk_q]
             test1 = 1. / bb_q
             if test1 <= -tolerance:
                 return [], problem
             elif abs(test1) < tolerance:
-                print('immediate collision\n')
+                print('immediate collision',nn,vv)
                 problem['result'] = 1
-                return [], problem
+                return [test1, nn, vv], problem
             else:                   # test1 >= tolerance
-                nn = nn_q - 1
-                vv = -jlist[kk_q]
                 bb = bb_q
     # TODO: paralellize
     test2 = np.add(np.divide(rz_x, bb, where=w_x), -1.0, where=w_x)

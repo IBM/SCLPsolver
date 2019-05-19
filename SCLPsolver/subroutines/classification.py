@@ -54,7 +54,7 @@ def classification(solution, tolerance):
         if abs(Didle) <= tolerance:
             Didle = 0
     if	(len(CC1) > 0 and len(CC2) == 0) or Didle < 0:
-        if problem['stateProblem']['result'] !=0:
+        if problem['stateProblem']['result'] >1:
             problem['result'] = 1
             return collision_info('', Delta, N1, N2, v1, v2), problem
         case = 'Case iii'
@@ -66,6 +66,8 @@ def classification(solution, tolerance):
         else:
             v2 = CC1[2]
         col_info = collision_info(case, Delta, N1, N2, v1, v2)
+        if problem['stateProblem']['result'] > 0:
+            col_info.had_resolution = True
         if abs(Didle) <= 1000 * tolerance:
             if problem['timeProblem']['result'] == 0 and len(CC2) >1:
                 result, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
