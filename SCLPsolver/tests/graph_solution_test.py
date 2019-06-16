@@ -12,7 +12,7 @@ solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solv
 t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution(alpha, a, b, gamma, c, d)
 print(obj, err)
 time_to_solve = time.time() - start_time
-pp = solution.plot_history(plt, Tres)
+pp = solution.plot_history(plt)
 pp.show()
 print("--- %s seconds ---" % time_to_solve)
 print("--- seed %s ---" % seed)

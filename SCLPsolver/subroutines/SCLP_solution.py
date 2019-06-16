@@ -32,6 +32,7 @@ class SCLP_solution():
         self._col_info_stack = col_info_stack()
         self._last_collision = None
         self._state = solution_state()
+        self._final_T = 0
         if collect_plot_data:
             self.plot_data = []
         else:
@@ -278,9 +279,9 @@ class SCLP_solution():
             self._base_sequence.clear_base_sequense(mm.num_bases_to_remove(), mm.max_bs, self.NN)
 
     def extract_final_solution(self, alpha, a, b, gamma, c, d):
-        print(self._problem_dims.JJ, self._problem_dims.KK)
         u, p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
         t = np.cumsum(np.hstack((0, self._state.tau)))
+        self._final_T = t[-1]
         obj, err = calc_objective(alpha, a, b, gamma, c, d, u, self._state.x, p, self._state.q, self._state.tau)
         return t, self._state.x, self._state.q, u, p, self.pivots, obj, err, self.NN, self._state.tau
 
@@ -297,8 +298,12 @@ class SCLP_solution():
             is_ok = False
         return is_ok
 
-    def plot_history(self, plt, last_T):
+    def plot_history(self, plt):
         if self.plot_data is not None:
+            if self._final_T == 0:
+                last_T = sum(self._state.tau)
+            else:
+                last_T = self._final_T
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
             ax1.plot([0,last_T], [last_T,0])
