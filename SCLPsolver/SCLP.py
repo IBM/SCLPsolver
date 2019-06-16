@@ -1,6 +1,5 @@
 import numpy as np
 import os
-from subroutines.calc_boundaries import calc_boundaries
 from subroutines.calc_init_basis import calc_init_basis
 from subroutines.SCLP_solution import SCLP_solution
 from subroutines.calc_controls import calc_controls
@@ -11,16 +10,17 @@ from subroutines.utils import relative_to_project
 
 class SCLP_settings():
     __slots__ = ['find_alt_line', 'save_solution', 'memory_management', 'tmp_path', 'hot_start', 'check_final_solution',
-                 'check_intermediate_solution']
+                 'check_intermediate_solution', 'collect_plot_data']
 
     def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False,
-                 check_final_solution=True, check_intermediate_solution=False):
+                 check_final_solution=True, check_intermediate_solution=False, collect_plot_data=False):
         self.find_alt_line = find_alt_line
         self.hot_start = hot_start
         self.save_solution = save_solution
         self.check_final_solution = check_final_solution
         self.check_intermediate_solution = check_intermediate_solution
         self.memory_management = memory_management
+        self.collect_plot_data = collect_plot_data
         if tmp_path is None:
             self.tmp_path = relative_to_project('')
         elif os.path.isdir(tmp_path):
@@ -110,7 +110,7 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         A, pn, dn, ps, ds, err = calc_init_basis(G, F, H, a, b, c, d, param_line.x_0, param_line.q_N, tolerance)
         if err['result'] != 0:
             raise Exception(err['message'])
-        solution = SCLP_solution(pn, dn, A, K_DIM + L_DIM, J_DIM + I_DIM)
+        solution = SCLP_solution(pn, dn, A, K_DIM + L_DIM, J_DIM + I_DIM, collect_plot_data = settings.collect_plot_data)
         # building Kset0 and JsetN
         param_line.build_boundary_sets(solution.klist, solution.jlist)
     else:
@@ -128,29 +128,14 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
                                            0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
 
     # extract solution for output
-
     solution.update_state(param_line)
-    u, p = calc_controls(solution, J_DIM + I_DIM, K_DIM + L_DIM)
-    t = np.cumsum(np.hstack((0, solution.state.tau)))
-    x = solution.state.x
-    q = solution.state.q
-    tau = solution.state.tau
-    obj, err = calc_objective(alpha, a, b, gamma, c, d, u, x, p, q, solution.state.tau)
     is_ok = True
     if settings.check_final_solution:
-        if np.any(tau < -tolerance):
-            print('Negative tau!')
-            is_ok = False
-        if np.any(x < -tolerance):
-            print('Negative primal state!')
-            is_ok = False
-        if np.any(q < -tolerance):
-            print('Negative dual state!')
-            is_ok = False
+        is_ok = solution.check_final_solution(tolerance)
     if pivot_problem['result'] > 0 or settings.save_solution or not is_ok:
         print('Saving solution!')
         solution.prepare_to_save()
         import pickle
         pickle.dump(solution, open(settings.tmp_path + '/solution.dat', 'wb'))
         pickle.dump(param_line, open(settings.tmp_path + '/param_line.dat', 'wb'))
-    return t, x, q, u, p, solution.pivots, obj, err, solution.NN, tau, STEPCOUNT, param_line.T, pivot_problem['result']
+    return solution, STEPCOUNT, param_line.T, pivot_problem['result']
