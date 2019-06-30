@@ -16,6 +16,7 @@ class eta_matrix():
     def p(self):
         return self._p
 
+    # standard ftran operation on vector
     def ftran(self, vec):
         if vec[self._p] == 0:
             return vec
@@ -25,6 +26,7 @@ class eta_matrix():
             vv[self._p] = ap
             return vv
 
+    # inverse ftran operation on vector
     def inv_ftran(self, vec):
         if vec[self._p] == 0:
             return vec
@@ -34,6 +36,7 @@ class eta_matrix():
             vp[self._p] = ap
             return vp
 
+    # standard ftran changing vector itself
     def fftran(self, vec):
         if vec[self._p] == 0:
             return vec
@@ -43,6 +46,7 @@ class eta_matrix():
             vec[self._p] = ap
             return vec
 
+    # inverse ftran changing vector itself
     def inv_fftran(self, vec):
         if vec[self._p] == 0:
             return vec
@@ -52,6 +56,7 @@ class eta_matrix():
             vec[self._p] = ap
             return vec
 
+    # produce eta matrix representation from vector
     @staticmethod
     def get_from_vector(vec, p):
         ap = -vec[p]
@@ -59,6 +64,7 @@ class eta_matrix():
         vp[p] = -1/ap
         return eta_matrix(vp, p)
 
+    # produce eta matrix representation using vectors before and after ftran
     @staticmethod
     def get_from_ftran(v2, v1, p):
         if v1[p] == 0:
@@ -68,6 +74,7 @@ class eta_matrix():
             vp[p] = v2[p]/v1[p]
             return eta_matrix(vp, p)
 
+    # perform in place ftran without creation of eta matrix
     @staticmethod
     def get_fftran(vec, eta, p):
         if vec[p] == 0:
