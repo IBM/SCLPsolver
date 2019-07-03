@@ -197,10 +197,16 @@ class SCLP_solution():
         N1 = col_info.N1
         N2 = col_info.N2
         cor_N1 = N1 + 1
-        if N1 > -1:
-            pivots = self.pivots[N1:N2 + 1].copy()
+        if col_info.case == 'Case iii':
+            if N1 > -1:
+                pivots = self.pivots[N1:N2].copy()
+            else:
+                pivots = pivot_storage()
         else:
-            pivots = self.pivots[N1 + 1:N2 + 1].copy()
+            if N1 > -1:
+                pivots = self.pivots[N1:N2 + 1].copy()
+            else:
+                pivots = self.pivots[N1 + 1:N2 + 1].copy()
         dx = self._dx.get_sub_matrix(cor_N1, N2)
         dq = self._dq.get_sub_matrix(cor_N1, N2)
         col_info.rewind_info = rewind_info(pivots, dx, dq)
