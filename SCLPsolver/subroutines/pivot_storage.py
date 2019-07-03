@@ -189,5 +189,23 @@ class pivot_storage():
             self._in =  pivots.inpivots + self._in[N2:]
             self._out = pivots.outpivots + self._out[N2:]
 
-
+    def find_N1_N2_around(self, Nlist, N1=None, N2=None, N1trials=10, N2trials=10):
+        if N1 is None:
+            N1 = Nlist[0] - 1
+        if N1 < 0:
+            N1 = 0
+        if N2 is None:
+            N2 = Nlist[-1] + 1
+        if N2 >= len(self._in):
+            N2 = len(self._in) - 1
+        diff = Counter(self._out[N1:N2]) - Counter(self._in[N1:N2])
+        if len(list(diff.elements())) <=2:
+            return (N1,N2)
+        else:
+            for i in range(N1, max(N1-N1trials, -1), -1):
+                for j in range(N2, min(N2 + N2trials, len(self._in))):
+                    diff = Counter(self._out[i:j]) - Counter(self._in[i:j])
+                    if len(list(diff.elements())) <= 2:
+                        return (i, j)
+        return None
 

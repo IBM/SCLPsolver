@@ -1,7 +1,7 @@
 from .classification import classification
 from .SCLP_pivot import SCLP_pivot
 from .collision_info import collision_info
-from .time_collision_resolver import reclassify
+from .time_collision_resolver import reclassify, reclassify_ztau
 
 #'#@profile
 def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, settings, tolerance, find_alt_line=True, mm=None):
@@ -28,12 +28,24 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                 return solution, STEPCOUNT, pivot_problem
             col_info, problem = classification(solution, tolerance)
             if problem['result'] > 0:
-                rewind_required = True
+                if solution.last_collision.case == 'Case iii' and solution.last_collision.alternative is None:
+                    ztau_ind = solution.get_ztau_ind()
+                    if ztau_ind is not None:
+                        new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance)
+                        if new_col_info is None:
+                            rewind_required = True
+                        else:
+                            col_info = new_col_info
+                            rewind_required = False
+                    else:
+                        rewind_required = True
+                else:
+                    rewind_required = True
             else:
                 rewind_required = False
 
         if rewind_required:
-            if DEPTH == 0:
+            if DEPTH >= 0:
                 lastCollision = solution.update_rewind()
                 resolved = False
                 up_theta = param_line.theta + col_info.delta + 0.04

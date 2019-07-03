@@ -39,10 +39,12 @@ class SCLP_solution():
             self.plot_data = None
 
     def __getstate__(self):
-        return self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack
+        return self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack, self._klist, self._jlist
 
     def __setstate__(self, state):
-        self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack = state
+        self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack, self._klist, self._jlist = state
+        self.plot_data = None
+        self.tmp_matrix = np.zeros_like(self._base_sequence.bases[0]['A'])
         self._state = solution_state()
 
     @property
@@ -212,6 +214,11 @@ class SCLP_solution():
             if self._col_info_stack.last is not None:
                 self._col_info_stack.last.ztau_ind = ztau_ind
 
+    def get_ztau_ind(self):
+        if self._col_info_stack.last is not None:
+            return self._col_info_stack.last.ztau_ind
+        else:
+            return None
 
     #'#@profile
     def get_basis_at(self, place):
@@ -268,7 +275,7 @@ class SCLP_solution():
 
     def prepare_to_save(self):
         self._base_sequence.keep_only_one()
-        self._state = None
+        #self._state = None
 
     def clear_collision_stack(self):
         self._last_collision = None
