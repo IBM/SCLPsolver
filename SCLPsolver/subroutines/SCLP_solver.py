@@ -28,7 +28,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                 return solution, STEPCOUNT, pivot_problem
             col_info, problem = classification(solution, tolerance)
             if problem['result'] > 0:
-                if solution.last_collision.case == 'Case iii' and solution.last_collision.alternative is None:
+                if solution.last_collision.case == 'Case iii':
                     ztau_ind = solution.get_ztau_ind()
                     if ztau_ind is not None:
                         new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance)

@@ -111,15 +111,7 @@ def resolve_and_classify(delta, rz, solution, tol_coeff0, tolerance, shrinking_i
 
 def reclassify(col_info, solution, tolerance, stateN=None):
     if col_info.from_ztau:
-        res = solution.pivots.find_N1_N2_around(col_info.ztau_ind, col_info.N1-1, col_info.N2)
-        if res is not None:
-            col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                          solution, tolerance)
-            if col is not None:
-                col.from_ztau = True
-                col.ztau_ind = col_info.ztau_ind
-                return col, True
-        res = solution.pivots.find_N1_N2_around(col_info.ztau_ind, col_info.N1, col_info.N2+1)
+        res = solution.pivots.find_N1_N2_around(col_info.ztau_ind, col_info.N1-1)
         if res is not None:
             col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
                                           solution, tolerance)
