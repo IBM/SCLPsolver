@@ -10,16 +10,17 @@ from subroutines.utils import relative_to_project
 
 class SCLP_settings():
     __slots__ = ['find_alt_line', 'save_solution', 'memory_management', 'tmp_path', 'hot_start', 'check_final_solution',
-                 'check_intermediate_solution', 'collect_plot_data']
+                 'check_intermediate_solution', 'collect_plot_data', 'max_iteration']
 
     def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False,
-                 check_final_solution=True, check_intermediate_solution=False, collect_plot_data=False):
+                 check_final_solution=True, check_intermediate_solution=False, collect_plot_data=False, max_iteration = None):
         self.find_alt_line = find_alt_line
         self.hot_start = hot_start
         self.save_solution = save_solution
         self.check_final_solution = check_final_solution
         self.check_intermediate_solution = check_intermediate_solution
         self.memory_management = memory_management
+        self.max_iteration = max_iteration
         self.collect_plot_data = collect_plot_data
         if tmp_path is None:
             self.tmp_path = relative_to_project('')

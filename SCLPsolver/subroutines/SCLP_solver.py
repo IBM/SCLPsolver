@@ -110,6 +110,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         STEPCOUNT = STEPCOUNT + 1
         ITERATION[DEPTH] = ITERATION[DEPTH] + 1
 
+        if settings.max_iteration is not None:
         solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, col_info)
 
         if DEPTH > 0 and param_line.is_end(col_info.delta):
