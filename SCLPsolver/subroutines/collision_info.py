@@ -21,6 +21,7 @@ class collision_info():
         self._rewind_info = None
         self._had_resolution = had_resolution
         self._ztau_ind = None
+        self.from_ztau = False
         self.alternative = None
 
     @property

@@ -37,6 +37,15 @@ class parametric_line():
         else:
             self._Jset_N = jlist[np.logical_or(self._q_N > 0, self._del_q_N > 0)]
 
+    def scale(self, factor):
+        self._theta_bar *= factor
+        self._theta *= factor
+        self._del_T /= factor
+        if self._del_x_0 is not None:
+            self._del_x_0 /= factor
+        if self._del_q_N is not None:
+            self._del_q_N /= factor
+
     @property
     def x_0(self):
         return self._x_0

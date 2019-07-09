@@ -45,7 +45,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         start_time = time.time()
         if solver_settings is None:
             solver_settings = SCLP_settings(find_alt_line=False)
-        t, x, q, u, p, pivots, obj, err, NN, tau, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+        solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+        t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution(alpha, a, b, gamma, c, d)
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % time_to_solve)
