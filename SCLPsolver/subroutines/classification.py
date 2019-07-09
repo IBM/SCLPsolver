@@ -51,7 +51,7 @@ def classification(solution, tolerance):
     Didle = 0
     if	len(CC1) > 0 and len(CC2) > 0:
         Didle = CC1[0] - CC2[0]
-        if abs(Didle) <= tolerance:
+        if abs(Didle) <= tolerance and abs(Didle) < CC1[0] and abs(Didle) < CC2[0]:
             Didle = 0
     if	(len(CC1) > 0 and len(CC2) == 0) or Didle < 0:
         if problem['stateProblem']['result'] >1:
@@ -70,9 +70,9 @@ def classification(solution, tolerance):
             col_info.had_resolution = True
         if abs(Didle) <= 1000 * tolerance:
             if problem['timeProblem']['result'] == 0 and len(CC2) >1:
-                result, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
+                col_info1, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
                 if prob1['result'] == 0:
-                    col_info.alternative = result
+                    col_info.alternative = col_info1
         return col_info, problem
     elif (len(CC1) == 0 and len(CC2) > 0) or Didle >= 0:
         if problem['timeProblem']['result'] != 0:
@@ -82,32 +82,41 @@ def classification(solution, tolerance):
                 inegDTAU = solution.state.dtau < -tol2
                 izerTAU = np.fabs(solution.state.tau) <= tol2
                 solution.store_ztau_ind(find(np.logical_and(izerTAU, inegDTAU)))
-            return collision_info('', Delta, N1, N2, v1, v2), problem
-        if CC2[0] == 0:
-            N1 = CC2[1][0] - 1
-            N2 = CC2[1][1] + 1
-            return collision_info('Case i__', 0, N1, N2, [], [], None, 1), problem
+            col_info = collision_info('', Delta, N1, N2, v1, v2)
         else:
-            result, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
-            tol2 = 10 * tolerance
-            inegDTAU = solution.state.dtau < -tol2
-            izerTAU = np.fabs(solution.state.tau) <= tol2
-            solution.store_ztau_ind(find(np.logical_and(izerTAU, inegDTAU)))
-            problem['timeProblem'] = prob1
-            if prob1['result'] != 0:
-                problem['result'] = 2
-                return collision_info('', Delta, N1, N2, v1, v2), problem
+            if CC2[0] == 0:
+                N1 = CC2[1][0] - 1
+                N2 = CC2[1][1] + 1
+                col_info = collision_info('Case i__', 0, N1, N2, [], [], None, 1)
             else:
-                result.had_resolution = result.had_resolution or prob['had_resolution']
-                if Didle == 0 and len(CC1) >1:
-                    if not (result.N1 <= CC1[1] and CC1[1] <= result.N2):
-                        print('time shrink as well as state hits zero elsewhere...')
-                        result, resolved = reclassify(result, solution, tolerance, CC1[1])
-                        if not resolved:
-                            print('time shrink as well as state hits zero elsewhere...\n')
-                            problem['result'] = problem['result'] + 4
-                            problem['compoundProblem']['result'] = 1
-                            return collision_info('', Delta, N1, N2, v1, v2), problem
-                return result, problem
+                col_info, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
+                tol2 = 10 * tolerance
+                inegDTAU = solution.state.dtau < -tol2
+                izerTAU = np.fabs(solution.state.tau) <= tol2
+                solution.store_ztau_ind(find(np.logical_and(izerTAU, inegDTAU)))
+                problem['timeProblem'] = prob1
+                if prob1['result'] != 0:
+                    problem['result'] = 2
+                    col_info = collision_info('', Delta, N1, N2, v1, v2)
+                else:
+                    col_info.had_resolution = col_info.had_resolution or prob['had_resolution']
+                    if Didle == 0 and len(CC1) >1:
+                        if not (col_info.N1 <= CC1[1] and CC1[1] <= col_info.N2):
+                            print('time shrink as well as state hits zero elsewhere...')
+                            col_info, resolved = reclassify(col_info, solution, tolerance, CC1[1])
+                            if not resolved:
+                                print('time shrink as well as state hits zero elsewhere...\n')
+                                problem['result'] = problem['result'] + 4
+                                problem['compoundProblem']['result'] = 1
+                                col_info = collision_info('', Delta, N1, N2, v1, v2)
+        if abs(Didle) <= 1000 * tolerance:
+            if len(CC1) > 1:
+                if col_info.case != '':
+                    col_info.alternative = collision_info('Case iii', CC1[0], CC1[1], CC1[1] + 1,
+                                                      *((CC1[2], None) if CC1[2] < 0 else (None, CC1[2])))
+                else:
+                    return collision_info('Case iii', CC1[0], CC1[1], CC1[1] + 1,
+                                                      *((CC1[2], None) if CC1[2] < 0 else (None, CC1[2]))), {'result': 0, 'stateProblem': [], 'timeProblem': [], 'compoundProblem': {'result':0, 'data': []}}
+        return col_info, problem
     problem['result'] = 8
     return None, problem

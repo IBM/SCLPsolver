@@ -301,10 +301,12 @@ class SCLP_solution():
     def check_final_solution(self, tolerance):
         is_ok = True
         if np.any(self._state.tau < -tolerance):
-            print('Negative tau!')
+            n = np.argmin(self._state.tau)
+            print('Negative tau!', n, self._state.tau[n])
             is_ok = False
         if np.any(self._state.x < -tolerance):
-            print('Negative primal state!')
+            n,i = np.unravel_index(np.argmin(self._state.x),self._state.x.shape)
+            print('Negative primal state!',n,i, self._state.x[n,i])
             is_ok = False
         if np.any(self._state.q < -tolerance):
             print('Negative dual state!')

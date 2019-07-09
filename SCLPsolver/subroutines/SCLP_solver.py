@@ -28,24 +28,34 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                 return solution, STEPCOUNT, pivot_problem
             col_info, problem = classification(solution, tolerance)
             if problem['result'] > 0:
-                if solution.last_collision.case == 'Case iii':
-                    ztau_ind = solution.get_ztau_ind()
-                    if ztau_ind is not None:
-                        new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance)
-                        if new_col_info is None:
-                            rewind_required = True
-                        else:
-                            col_info = new_col_info
-                            rewind_required = False
-                    else:
+                ztau_ind = solution.get_ztau_ind()
+                if ztau_ind is not None:
+                    new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance, DEPTH>0)
+                    if new_col_info is None:
                         rewind_required = True
+                    else:
+                        col_info = new_col_info
+                        rewind_required = False
                 else:
                     rewind_required = True
+                # if solution.last_collision.case == 'Case iii':
+                #     ztau_ind = solution.get_ztau_ind()
+                #     if ztau_ind is not None:
+                #         new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance)
+                #         if new_col_info is None:
+                #             rewind_required = True
+                #         else:
+                #             col_info = new_col_info
+                #             rewind_required = False
+                #     else:
+                #         rewind_required = True
+                # else:
+                #     rewind_required = True
             else:
                 rewind_required = False
 
         if rewind_required:
-            if DEPTH >= 0:
+            if DEPTH == 0:
                 lastCollision = solution.update_rewind()
                 resolved = False
                 up_theta = param_line.theta + col_info.delta + 0.04
@@ -111,6 +121,9 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         ITERATION[DEPTH] = ITERATION[DEPTH] + 1
 
         if settings.max_iteration is not None:
+            if DEPTH == 0 and ITERATION[DEPTH] >= settings.max_iteration:
+                return solution, STEPCOUNT, pivot_problem
+
         solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, col_info)
 
         if DEPTH > 0 and param_line.is_end(col_info.delta):

@@ -116,9 +116,22 @@ def reclassify(col_info, solution, tolerance, stateN=None):
             col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
                                           solution, tolerance)
             if col is not None:
-                col.from_ztau = True
-                col.ztau_ind = col_info.ztau_ind
-                return col, True
+                if col != col_info:
+                    col.from_ztau = True
+                    col.ztau_ind = col_info.ztau_ind
+                    return col, True
+        res = solution.pivots.find_N1_N2_around(col_info.ztau_ind, col_info.N1, col_info.N2 + 1)
+        if res is not None:
+            col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
+                                          solution, tolerance)
+            if col is not None:
+                if col != col_info:
+                    col.from_ztau = True
+                    col.ztau_ind = col_info.ztau_ind
+                    return col, True
+        else:
+            if col_info.alternative is not None:
+                return col_info.alternative, True
         return col_info, False
     else:
         tol_coeff = col_info.tol_coeff * 10
@@ -150,13 +163,12 @@ def reclassify(col_info, solution, tolerance, stateN=None):
                 elif col_info.N1 <= stateN and stateN <= col_info.N2:
                     resolved = True
                     break
-        # if not resolved:
-        #     result = ztau_resolver2(col_info, solution, klist, jlist, tolerance)
-        #     if result is not None and result !=col_info:
-        #         return result, True
+        if not resolved:
+            if col_info.alternative is not None:
+                return col_info.alternative, True
         return col_info, resolved
 
-def reclassify_ztau(col_info, solution, ztau_ind, tolerance):
+def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
     if len(ztau_ind) >= 3:
         if ztau_ind[1] - ztau_ind[0] > 2:
             if  ztau_ind[-1] - ztau_ind[-2] > 2:
@@ -165,12 +177,14 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance):
                     col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
                                                   solution, tolerance)
                     if col is not None:
+                        col.from_ztau = True
                         return col
             res = solution.pivots.find_N1_N2_around(ztau_ind[1:])
             if res is not None:
                 col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
                                               solution, tolerance)
                 if col is not None:
+                    col.from_ztau = True
                     return col
         elif ztau_ind[-1] - ztau_ind[-2] > 2:
             res = solution.pivots.find_N1_N2_around(ztau_ind[:-1])
@@ -178,15 +192,27 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance):
                 col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
                                               solution, tolerance)
                 if col is not None:
+                    col.from_ztau = True
                     return col
-    res = solution.pivots.find_N1_N2_around(ztau_ind)
-    if res is not None:
-        col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                      solution, tolerance)
-        if col is not None:
-            col.from_ztau = True
-            col.ztau_ind = ztau_ind
-            return col
+    if (len(ztau_ind) > 3 and (max(ztau_ind) - min(ztau_ind) + 1)/len(ztau_ind) < 0.9) or hard_find:
+        for n in range(len(ztau_ind)):
+            res = solution.pivots.find_N1_N2_around(ztau_ind[n:])
+            if res is not None:
+                col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
+                                              solution, tolerance)
+                if col is not None:
+                    col.from_ztau = True
+                    col.ztau_ind = ztau_ind[n:]
+                    return col
+        for n in range(1, len(ztau_ind)-1):
+            res = solution.pivots.find_N1_N2_around(ztau_ind[:-n])
+            if res is not None:
+                col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
+                                              solution, tolerance)
+                if col is not None:
+                    col.from_ztau = True
+                    col.ztau_ind = ztau_ind[:-n]
+                    return col
     return None
 
 
