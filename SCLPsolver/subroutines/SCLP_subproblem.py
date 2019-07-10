@@ -1,5 +1,4 @@
-import numpy as np
-from .SCLP_solution import SCLP_solution
+from .generic_SCLP_solution import generic_SCLP_solution
 from .parametric_line import parametric_line
 from .prepare_subproblem_data import prepare_subproblem_basis
 from .collision_info import collision_info
@@ -12,7 +11,7 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, v1,v2,Kset_0, Jset_N,
     # Excluding the k's and j's which are > 0
     DDred, pbaseDDred, dbaseDDred, pbaseB1red, pbaseB2red = prepare_subproblem_basis(DD, pbaseDD, dbaseDD, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
     # The starting solution
-    solution = SCLP_solution(pbaseDDred, dbaseDDred, DDred.copy(), totalK=totalK, totalJ=totalJ)
+    solution = generic_SCLP_solution(pbaseDDred, dbaseDDred, DDred.copy(), totalK=totalK, totalJ=totalJ)
     # performing the left and right first pivots
     #		the right pivot:
     K_0 = []

@@ -1,5 +1,4 @@
 import os
-from subroutines.calc_init_basis import calc_init_basis
 from subroutines.SCLP_solution import SCLP_solution
 from subroutines.SCLP_formulation import SCLP_formulation
 from subroutines.SCLP_solver import SCLP_solver
@@ -96,8 +95,8 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         # default constructor creates main parametric line
         param_line = parametric_line.get_SCLP_parametric_line(formulation, tolerance)
         # calculate initial basis
-        solution = SCLP_solution.get_initial_solution(formulation, param_line.x_0, param_line.q_N, tolerance,
-                                                      collect_plot_data=settings.collect_plot_data)
+        solution = SCLP_solution(formulation, param_line.x_0, param_line.q_N, tolerance,
+                                                              collect_plot_data=settings.collect_plot_data)
         # building Kset0 and JsetN
         param_line.build_boundary_sets(solution.klist, solution.jlist)
     else:
