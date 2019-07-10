@@ -11,6 +11,7 @@ from .calc_equations import calc_equations
 from .calc_states import calc_states, check_state
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
+from .calc_init_basis import calc_init_basis
 
 
 class SCLP_solution():
@@ -37,6 +38,13 @@ class SCLP_solution():
             self.plot_data = []
         else:
             self.plot_data = None
+
+    @staticmethod
+    def get_initial_solution(formulation, x_0, q_N, tolerance, collect_plot_data=False):
+        A, pn, dn, ps, ds, err = calc_init_basis(formulation, x_0, q_N, tolerance)
+        if err['result'] != 0:
+            raise Exception(err['message'])
+        return SCLP_solution(pn, dn, A, formulation.K + formulation.L, formulation.J + formulation.I, collect_plot_data=collect_plot_data)
 
     def __getstate__(self):
         return self._problem_dims, self._pivots, self._base_sequence, self._dx, self._dq, self._last_collision, self._col_info_stack, self._klist, self._jlist

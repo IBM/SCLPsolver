@@ -242,6 +242,6 @@ class parametric_line():
         return par_line
 
     @staticmethod
-    def get_SCLP_parametric_line(G, F, H, b, d, alpha, gamma, TT, tolerance):
-        x_0, q_N = calc_boundaries(G, F, H, b, d, alpha, gamma, tolerance)
-        return parametric_line(x_0, q_N, TT)
+    def get_SCLP_parametric_line(formulation, tolerance):
+        x_0, q_N = calc_boundaries(formulation, tolerance)
+        return parametric_line(x_0, q_N, formulation.T)

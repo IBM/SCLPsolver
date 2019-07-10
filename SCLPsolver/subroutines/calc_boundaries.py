@@ -3,10 +3,9 @@ from .simplex_procedures import simplex_procedures
 
 
 #'#@profile
-def calc_boundaries(G,F,H,b,d,alpha,gamma, tolerance = 0, solve_gen_LP = False):
-    K, J = np.shape(G)
-    L = np.shape(F)[1]
-    I = np.shape(H)[0]
+def calc_boundaries(formulation, tolerance = 0, solve_gen_LP = False):
+    G, F, H, b, d, alpha, gamma = formulation.G, formulation.F, formulation.H, formulation.b, formulation.d, formulation.alpha, formulation.gamma
+    K, J, L, I = formulation.K, formulation.J, formulation.L, formulation.I
     if I == 0 & L == 0:
         x_0 = alpha
         q_N = -gamma

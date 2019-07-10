@@ -1,9 +1,7 @@
-import numpy as np
 import os
 from subroutines.calc_init_basis import calc_init_basis
 from subroutines.SCLP_solution import SCLP_solution
-from subroutines.calc_controls import calc_controls
-from subroutines.calc_objective import calc_objective
+from subroutines.SCLP_formulation import SCLP_formulation
 from subroutines.SCLP_solver import SCLP_solver
 from subroutines.parametric_line import parametric_line
 from subroutines.utils import relative_to_project
@@ -92,26 +90,14 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
 #						qaxis	q range
 #
 
-    K_DIM = G.shape[0]
-    J_DIM = G.shape[1]
-    I_DIM = H.shape[0]
-    L_DIM = F.shape[1]
-
-    if settings.memory_management:
-        from subroutines.memory_manager import memory_manager
-        mm = memory_manager(K_DIM, J_DIM + L_DIM, I_DIM)
-    else:
-        mm = None
-
+    formulation = SCLP_formulation(G, F, H, a, b, c, d, alpha, gamma, TT)
     if not settings.hot_start:
         # Initiate top level problem, by obtaining the boundary and first dictionary
         # default constructor creates main parametric line
-        param_line = parametric_line.get_SCLP_parametric_line(G, F, H, b, d, alpha, gamma, TT, tolerance)
+        param_line = parametric_line.get_SCLP_parametric_line(formulation, tolerance)
         # calculate initial basis
-        A, pn, dn, ps, ds, err = calc_init_basis(G, F, H, a, b, c, d, param_line.x_0, param_line.q_N, tolerance)
-        if err['result'] != 0:
-            raise Exception(err['message'])
-        solution = SCLP_solution(pn, dn, A, K_DIM + L_DIM, J_DIM + I_DIM, collect_plot_data = settings.collect_plot_data)
+        solution = SCLP_solution.get_initial_solution(formulation, param_line.x_0, param_line.q_N, tolerance,
+                                                      collect_plot_data=settings.collect_plot_data)
         # building Kset0 and JsetN
         param_line.build_boundary_sets(solution.klist, solution.jlist)
     else:
@@ -123,6 +109,12 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         except IOError:
             raise Exception('Solution files not found in: ' + settings.tmp_path)
         param_line.theta_bar = TT
+
+    if settings.memory_management:
+        from subroutines.memory_manager import memory_manager
+        mm = memory_manager(formulation.K, formulation.J + formulation.L, formulation.I)
+    else:
+        mm = None
 
     # Solve the problem, by a sequence of parametric steps
     solution, STEPCOUNT, pivot_problem = SCLP_solver(solution, param_line, 'toplevel',
