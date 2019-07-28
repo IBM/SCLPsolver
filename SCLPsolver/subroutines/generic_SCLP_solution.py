@@ -13,18 +13,18 @@ from .calc_states import calc_states, check_state
 
 class generic_SCLP_solution():
 
-    def __init__(self, prim_name, dual_name, dct, KK=None, JJ=None, totalK = None, totalJ = None, collect_plot_data=False):
-        self._klist = np.sort(np.append(prim_name[prim_name > 0], dual_name[dual_name > 0]))
-        self._jlist = np.sort(-np.append(prim_name[prim_name < 0], dual_name[dual_name < 0]))
+    def __init__(self, LP_form, KK=None, JJ=None, totalK = None, totalJ = None):
+        self._klist = np.sort(np.append(LP_form.prim_name[LP_form.prim_name > 0], LP_form.dual_name[LP_form.dual_name > 0]))
+        self._jlist = np.sort(-np.append(LP_form.prim_name[LP_form.prim_name < 0], LP_form.dual_name[LP_form.dual_name < 0]))
         if KK is None:
             KK = np.size(self._klist)
         if JJ is None:
             JJ = np.size(self._jlist)
         self._problem_dims = problem_dimensions(KK, JJ, totalK, totalJ)
         self._pivots = pivot_storage()
-        self.tmp_matrix = np.zeros_like(dct)
-        self._base_sequence = SCLP_base_sequence({'prim_name': prim_name, 'dual_name': dual_name, 'A': dct}, self.tmp_matrix)
-        dx, dq = extract_rates_from_basis(prim_name, dual_name, dct, self._problem_dims)
+        self.tmp_matrix = np.zeros_like(LP_form.simplex_dict)
+        self._base_sequence = SCLP_base_sequence({'prim_name': LP_form.prim_name, 'dual_name': LP_form.dual_name, 'A': LP_form.simplex_dict}, self.tmp_matrix)
+        dx, dq = extract_rates_from_basis(LP_form.prim_name, LP_form.dual_name, LP_form.simplex_dict, self._problem_dims)
         self._dx = matrix_constructor(dx[0], dx[1], KK)
         self._dq = matrix_constructor(dq[0], dq[1], JJ)
         self._col_info_stack = col_info_stack()

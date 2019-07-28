@@ -1,18 +1,19 @@
 import numpy as np
 from .generic_SCLP_solution import generic_SCLP_solution
-from .calc_init_basis import calc_init_basis
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
 from .solution_state import solution_state
+from .LP_formulation import solve_LP_in_place
 
 
 class SCLP_solution(generic_SCLP_solution):
 
     def __init__(self, formulation, x_0, q_N, tolerance, collect_plot_data):
-        A, pn, dn, ps, ds, err = calc_init_basis(formulation, x_0, q_N, tolerance)
+        LP_form = formulation.formulate_ratesLP(x_0, q_N)
+        err = solve_LP_in_place(LP_form, np.zeros_like(LP_form.simplex_dict), tolerance)
         if err['result'] != 0:
             raise Exception(err['message'])
-        super().__init__(pn, dn, A, formulation.K + formulation.L, formulation.J + formulation.I)
+        super().__init__(LP_form, formulation.K + formulation.L, formulation.J + formulation.I)
         self._formulation = formulation
         self._final_T = 0
         if collect_plot_data:
