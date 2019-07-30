@@ -96,21 +96,25 @@ def pivot_vector(primal_names_vector, primal_values_vector, eta_vector, pivot_in
     new_primal_names_vector = []
     new_primal_values_vector = []
 
-    for primal_name_vector_index, primal_name_vector_value in enumerate(primal_names_vector):
+    # handle primal names vector
+    primal_names_vector_without_existing_variable = np.delete(primal_names_vector,pivot_index)
 
-        if primal_name_vector_index != pivot_index:
-            if primal_names_vector[primal_name_vector_index] > entering_var_name:
-                # insert entering variable to new vector
-                new_primal_names_vector.append(entering_var_name)
-                new_primal_values_vector.append(primal_values_vector[pivot_index] * eta_vector[pivot_index])
+    index_of_location_to_insert_entering_variable = np.searchsorted(primal_names_vector_without_existing_variable, entering_var_name)
 
-                # insert next variable to keep the vector sorted
-                new_primal_names_vector.append(primal_names_vector[primal_name_vector_index])
-                new_primal_values_vector.append(primal_values_vector[primal_name_vector_index])
-            else:
-                # copy names/values as is
-                new_primal_names_vector.append(primal_names_vector[primal_name_vector_index])
-                new_primal_values_vector.append(primal_values_vector[primal_name_vector_index])
+    split_names_vector_left_side = np.array_split(primal_names_vector_without_existing_variable, index_of_location_to_insert_entering_variable)[0]
+    split_names_vector_right_side = np.array_split(primal_names_vector_without_existing_variable, index_of_location_to_insert_entering_variable)[1]
+
+    new_primal_names_vector = np.concatenate([split_names_vector_left_side, np.array([entering_var_name]), split_names_vector_right_side])
+
+    # handle primal values vector
+    primal_values_vector_without_existing_variable = np.delete(primal_values_vector, pivot_index)
+
+    split_values_vector_left_side = np.array_split(primal_values_vector_without_existing_variable, index_of_location_to_insert_entering_variable)[0]
+    split_values_vector_right_side = np.array_split(primal_values_vector_without_existing_variable, index_of_location_to_insert_entering_variable)[1]
+
+    pivot_value_z = primal_values_vector[pivot_index] * eta_vector[pivot_index]
+
+    new_primal_values_vector = np.concatenate([split_values_vector_left_side, np.array([pivot_value_z]), split_values_vector_right_side])
 
     print('time taken in milliseconds =', t.timeit()/1000)
 
