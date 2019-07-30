@@ -88,7 +88,6 @@ class eta_matrix():
 import timeit
 import numpy as np
 
-
 # we assume primal_names_vector is already sorted in an ascending manner
 # method should extract the variable in pivot_index location and enter a new variable name in the correct place in the vector (so the vector is still sorted)
 def pivot_vector(primal_names_vector, primal_values_vector, eta_vector, pivot_index, entering_var_name):
@@ -97,29 +96,26 @@ def pivot_vector(primal_names_vector, primal_values_vector, eta_vector, pivot_in
     new_primal_names_vector = []
     new_primal_values_vector = []
 
-    primal_vector_iterator = np.nditer(primal_names_vector, flags=['f_index'])
+    for primal_name_vector_index, primal_name_vector_value in enumerate(primal_names_vector):
 
-    while not primal_vector_iterator.finished:
-        if primal_vector_iterator.index != pivot_index:
-            if primal_names_vector[primal_vector_iterator.index] > entering_var_name:
+        if primal_name_vector_index != pivot_index:
+            if primal_names_vector[primal_name_vector_index] > entering_var_name:
                 # insert entering variable to new vector
                 new_primal_names_vector.append(entering_var_name)
                 new_primal_values_vector.append(primal_values_vector[pivot_index] * eta_vector[pivot_index])
 
                 # insert next variable to keep the vector sorted
-                new_primal_names_vector.append(primal_names_vector[primal_vector_iterator.index])
-                new_primal_values_vector.append(primal_values_vector[primal_vector_iterator.index])
+                new_primal_names_vector.append(primal_names_vector[primal_name_vector_index])
+                new_primal_values_vector.append(primal_values_vector[primal_name_vector_index])
             else:
                 # copy names/values as is
-                new_primal_names_vector.append(primal_names_vector[primal_vector_iterator.index])
-                new_primal_values_vector.append(primal_values_vector[primal_vector_iterator.index])
+                new_primal_names_vector.append(primal_names_vector[primal_name_vector_index])
+                new_primal_values_vector.append(primal_values_vector[primal_name_vector_index])
 
-        primal_vector_iterator.iternext()
+    print('time taken in milliseconds =', t.timeit()/1000)
 
-    print(t.timeit())
-
-    print('new_primal_names_vector=', new_primal_names_vector)
-    print('new_primal_values_vector=', new_primal_values_vector)
+    print('new_primal_names_vector =', new_primal_names_vector)
+    print('new_primal_values_vector =', new_primal_values_vector)
 
     return [new_primal_names_vector, new_primal_values_vector]
 
