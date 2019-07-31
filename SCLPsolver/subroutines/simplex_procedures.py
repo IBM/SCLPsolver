@@ -1,7 +1,7 @@
 import numpy as np
 from .matlab_utils import find
 from .pivot import full_pivot
-
+from .pivot_new import base_pivot
 
 #'#@profile
 def simplex_procedures(A,pn,dn,ps,ds, tmp_matrix, tolerance = 0):
@@ -136,3 +136,90 @@ def simplex_procedures(A,pn,dn,ps,ds, tmp_matrix, tolerance = 0):
             mu = max(mu1, mu2)
         A = B[:-1, :-1]
     return A, pn, dn, ps, ds, err
+
+def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
+
+    err = dict()
+    err['result'] = 0
+    ptest = find(LP_form.simplex_dict[1:, 0] < 0)
+    dtest = find(LP_form.simplex_dict[0, 1:] < 0)
+
+    if ptest.size > 0 and dtest.size == 0:
+        if tmp_matrix is None:
+            tmp_matrix = np.zeros_like(LP_form.simplex_dict)
+        while ptest.size > 0:
+            i = ptest[0]
+            mat = np.divide(-LP_form.simplex_dict[i + 1, 1:], LP_form.simplex_dict[0, 1:],
+                            out=np.zeros_like(LP_form.simplex_dict[i + 1, 1:]), where=LP_form.simplex_dict[0, 1:]!=0)
+            j = np.argmax(mat)
+            if mat[j] <= 0:
+                LP_form.simplex_dict[0, 0] = -np.inf
+                err['result'] = 1
+                err['message'] = '***  problem is primal infeasible'
+                return LP_form, err
+            LP_form = base_pivot(LP_form, i, j, tmp_matrix)
+            ptest = find(LP_form.simplex_dict[1:, 0] < 0)
+    elif ptest.size == 0 and dtest.size > 0:
+        if tmp_matrix is None:
+            tmp_matrix = np.zeros_like(LP_form.simplex_dict)
+        while dtest.size > 0:
+            j = dtest[0]
+            mat = np.divide(LP_form.simplex_dict[1:, j + 1], LP_form.simplex_dict[1:, 0],
+                            out=np.zeros_like(LP_form.simplex_dict[1:, j + 1]), where=LP_form.simplex_dict[1:, 0] != 0)
+            i = np.argmax(mat)
+            if mat[i] <= 0:
+                LP_form.simplex_dict[0, 0] = np.inf
+                err['result'] = 2
+                err['message'] = '***  problem is dual infeasible'
+                return LP_form, err
+            LP_form = base_pivot(LP_form, i, j, tmp_matrix)
+            dtest = find(LP_form.simplex_dict[0, 1:] < 0)
+    elif ptest.size > 0 and dtest.size > 0:
+        mm = LP_form.simplex_dict.shape[0]
+        nn = LP_form.simplex_dict.shape[1]
+        B = np.zeros((mm+1,nn+1))
+        tmp_matrix = np.zeros_like(B)
+        B[:-1,-1:] = np.random.rand(mm, 1) + 1
+        B[-1:,:-1] = np.random.rand(1, nn) + 1
+        B[:-1, :-1] = LP_form.simplex_dict
+        from .LP_formulation import LP_formulation
+        LP_form2 = LP_formulation(B,LP_form.prim_name,LP_form.dual_name)
+        mat = np.divide(-LP_form.simplex_dict[0, 1:], B[-1, 1:-1], out=np.zeros_like(LP_form.simplex_dict[0, 1:]), where=B[-1, 1:-1] > 0)
+        j = np.argmax(mat)
+        mu1 = mat[j]
+        mat = np.divide(-LP_form.simplex_dict[1:, 0], B[1:-1, -1], out=np.zeros_like(LP_form.simplex_dict[1:, 0]), where=B[1:-1, -1] >0)
+        i = np.argmax(mat)
+        mu2 = mat[i]
+        mu = max(mu1,mu2)
+        while mu > 0:
+            if mu1 > mu2:
+                div = LP_form2.simplex_dict[1:-1, 0] + mu * LP_form2.simplex_dict[1:-1, -1]
+                mat = np.divide(LP_form2.simplex_dict[1:-1, j+1], div, out=np.full_like(LP_form2.simplex_dict[1:-1, j+1], -1), where= div !=0)
+                i = np.argmax(mat)
+                if mat[i] <= 0:
+                    B[0, 0] = np.inf
+                    err['result'] = 2
+                    err['message'] = '***  problem is dual infeasible'
+                    LP_form.simplex_dict = LP_form2.simplex_dict[:-1,:-1]
+                    return LP_form, err
+            else:
+                div = LP_form2.simplex_dict[0, 1:-1] + mu * LP_form2.simplex_dict[-1, 1:-1]
+                mat = np.divide(-LP_form2.simplex_dict[i + 1, 1:-1], div, out=np.full_like(LP_form2.simplex_dict[i + 1, 1:-1], -1), where= div !=0)
+                j = np.argmax(mat)
+                if mat[j] <= 0:
+                    B[0, 0] = - np.inf
+                    err['result'] = 1
+                    err['message'] = '***  problem is primal infeasible'
+                    LP_form.simplex_dict = LP_form2.simplex_dict[:-1, :-1]
+                    return LP_form, err
+            LP_form2 = base_pivot(LP_form2, i, j, tmp_matrix)
+            mat = np.divide(-LP_form2.simplex_dict[0, 1:-1], LP_form2.simplex_dict[-1, 1:-1],
+                            out=np.zeros_like(LP_form2.simplex_dict[0, 1:-1]), where=LP_form2.simplex_dict[-1, 1:-1] > 0)
+            j = np.argmax(mat)
+            mu1 = mat[j]
+            mat = np.divide(-LP_form2.simplex_dict[1:-1, 0], LP_form2.simplex_dict[1:-1, -1], out=np.zeros_like(B[1:-1, 0]), where=LP_form2.simplex_dict[1:-1, -1] > 0)
+            i = np.argmax(mat)
+            mu2 = mat[i]
+            mu = max(mu1, mu2)
+        LP_form.simplex_dict = LP_form2.simplex_dict[:-1, :-1]
+    return LP_form, err

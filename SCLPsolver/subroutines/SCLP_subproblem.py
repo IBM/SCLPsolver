@@ -9,9 +9,9 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, v1,v2,Kset_0, Jset_N,
                      AAN1,AAN2, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
 
     # Excluding the k's and j's which are > 0
-    DDred, pbaseDDred, dbaseDDred, pbaseB1red, pbaseB2red = prepare_subproblem_basis(DD, pbaseDD, dbaseDD, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
+    rates_LP_form, pbaseB1red, pbaseB2red = prepare_subproblem_basis(DD, pbaseDD, dbaseDD, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
     # The starting solution
-    solution = generic_SCLP_solution(pbaseDDred, dbaseDDred, DDred.copy(), totalK=totalK, totalJ=totalJ)
+    solution = generic_SCLP_solution(rates_LP_form, totalK=totalK, totalJ=totalJ)
     # performing the left and right first pivots
     #		the right pivot:
     K_0 = []

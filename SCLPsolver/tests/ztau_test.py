@@ -10,5 +10,5 @@ G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_routing_data(
 print(a)
 print(c)
 solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 100, settings)
-t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution(alpha, a, b, gamma, c, d)
+t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
 print(obj, err)

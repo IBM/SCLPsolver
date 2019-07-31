@@ -9,7 +9,7 @@ import time
 start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False, collect_plot_data=True)
 solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
-t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution(alpha, a, b, gamma, c, d)
+t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
 print(obj, err)
 time_to_solve = time.time() - start_time
 pp = solution.plot_history(plt)
