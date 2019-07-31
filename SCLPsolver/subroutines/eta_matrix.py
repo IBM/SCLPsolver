@@ -131,11 +131,43 @@ def pivot_vector(primal_names_vector, primal_values_vector, eta_vector, pivot_in
 
     return [new_primal_names_vector, new_primal_values_vector]
 
+def pivot_vector2(names_vector, values_vector, eta_vector, pivot_index, entering_var_name):
+    t = timeit.Timer('char in text', setup='text = "sample string"; char = "g"')
+
+    # handle primal names vector
+    index_of_location_to_insert_entering_variable = np.searchsorted(names_vector, entering_var_name)
+    pivot_element_value = values_vector[pivot_index] * eta_vector[pivot_index]
+    values_vector += values_vector[pivot_index] * eta_vector
+
+    if index_of_location_to_insert_entering_variable > pivot_index:
+        # handle names vector
+        names_vector[pivot_index: index_of_location_to_insert_entering_variable - 1] = names_vector[pivot_index + 1: index_of_location_to_insert_entering_variable]
+        names_vector[index_of_location_to_insert_entering_variable - 1] = entering_var_name
+
+        # handle values vector
+        values_vector[pivot_index: index_of_location_to_insert_entering_variable - 1] = values_vector[pivot_index + 1: index_of_location_to_insert_entering_variable]
+        values_vector[index_of_location_to_insert_entering_variable - 1] = pivot_element_value
+    else:
+        # handle names vector
+        names_vector[index_of_location_to_insert_entering_variable] = entering_var_name
+        names_vector[index_of_location_to_insert_entering_variable + 1: pivot_index] = names_vector[index_of_location_to_insert_entering_variable: pivot_index]
+
+        # handle values vector
+        values_vector[index_of_location_to_insert_entering_variable] = pivot_element_value
+        values_vector[index_of_location_to_insert_entering_variable + 1: pivot_index] = values_vector[index_of_location_to_insert_entering_variable: pivot_index]
+
+    print('time taken in milliseconds =', t.timeit()/1000)
+
+    print('new_primal_names_vector =', names_vector)
+    print('new_primal_values_vector =', values_vector)
+
+    return [names_vector, values_vector]
+
 
 primal_names_vector = [-15, -3, 1, 4]
 primal_values_vector = [1, 8, 5, -4]
 eta = [3, 2, 1, 6]
-print(pivot_vector(primal_names_vector, primal_values_vector , eta, 1, 2))
+print(pivot_vector2(primal_names_vector, primal_values_vector , eta, 1, 2))
 
 
 
