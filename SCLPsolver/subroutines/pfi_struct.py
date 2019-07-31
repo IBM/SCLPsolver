@@ -3,14 +3,23 @@
 
 class pfi_struct():
 
-    __slots__ = ['_col_list', '_prim_vars', '_row_list', '_dual_vars', '_prim_inv_basis', '_dual_inv_basis', '_dict', '_pivots']
+    # simplex_dict - matrix
+    # prim_names - vector
+    # dual_names - vector
+    # place - scalar - place of the matrix in the base sequence
+    # pivots - object of the pivot_storage class (store nnames of entering and leaving variables)
+    # eta_rows - eta vectors to perform pivoting on dual variables and matrix rows
+    # eta_cols - eta vectors to perform pivoting on primal variables and matrix columns
+    __slots__ = ['_simplex_dict','_prim_names', '_dual_names', '_place', '_pivots', '_eta_rows', '_eta_cols']
 
     # should return row of the simplex dictionary performing sequence of ftran operations
-    def get_dict_row_at(self, n):
+    # n-place number of operations to perform
+    # var_name  of primal variable which index+1 indicates row of the matrix
+    def get_dict_row_at(self, n, var_name):
         pass
 
     # should return column of the simplex dictionary performing sequence of ftran operations
-    def get_dict_col_at(self, n):
+    def get_dict_col_at(self, n, var_name):
         pass
 
     # should return primal variables performing sequence of ftran operations
