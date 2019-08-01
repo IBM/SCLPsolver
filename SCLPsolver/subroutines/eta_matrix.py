@@ -165,8 +165,8 @@ def pivot_vector2(names_vector, values_vector, eta_vector, pivot_index, entering
 
 
 primal_names_vector = [-15, -3, 1, 4]
-primal_values_vector = [1, 8, 5, -4]
-eta = [3, 2, 1, 6]
+primal_values_vector = np.asarray([1, 8, 5, -4])
+eta = np.asarray([3, 2, 1, 6])
 print(pivot_vector2(primal_names_vector, primal_values_vector , eta, 1, 2))
 
 
