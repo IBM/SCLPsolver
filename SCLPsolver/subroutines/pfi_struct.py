@@ -12,13 +12,14 @@ class pfi_struct:
 
     # __slots__ = ['simplex_dict', 'prim_names', 'dual_names', 'place', 'pivots', 'eta_rows', 'eta_cols']
 
-    def __init__(self,simple_dict, prim_names, dual_names, place, eta_rows, eta_cols):
-        self.simple_dict = simple_dict
+    def __init__(self,simplex_dict, prim_names, dual_names, place, eta_rows, eta_cols, pivots):
+        self.simplex_dict = simplex_dict
         self.prim_names = prim_names
         self.dual_names = dual_names
         self.place = place
         self.eta_rows = eta_rows
         self.eta_cols = eta_cols
+        self.pivots = pivots
 
     def get_dict(self, n, var_name, names_vector, eta_vector, use_row):
         # 1 choose from a row/column from the matrix (taking the values vector) based on the index of the prim_names that
@@ -30,22 +31,28 @@ class pfi_struct:
         for eta in eta_vector:
             # 3 push these inputs into the ftran() function
 
-            index += index + 1
+
 
             if result == None:
                 index_to_pivot = np.where(names_vector == var_name)[0][0]
                 if use_row:
-                    values_vector = self.simple_dict[index_to_pivot]
+                    values_vector = self.simplex_dict[index_to_pivot, :]
                 else:
-                    values_vector = self.simple_dict[:, index_to_pivot]
-                result = ftran(names_vector, values_vector, eta, index_to_pivot, var_name)
+                    values_vector = self.simplex_dict[:, index_to_pivot]
+                pivot = self.pivots[self.place]
+                # check if this pivot[0] or pivot[1]
+                index_of_pivot = np.where(self.prim_names == pivot[0])[0][0]
+                result = ftran(self.prim_names, values_vector, eta, index_of_pivot, pivot[1])
             else:
                 names_vector = result[0]
                 values_vector = result[1]
-                index_to_pivot = np.where(names_vector == var_name)[0][0]
-                result = ftran(names_vector, values_vector, eta, index_to_pivot, var_name)
+                pivot = self.pivots[self.place + index]
+                # check if this pivot[0] or pivot[1]
+                index_of_pivot = np.where(self.prim_names == pivot[0])[0][0]
+                result = ftran(names_vector, values_vector, eta, index_of_pivot, pivot[1])
 
             # 4 output of the ftran should be fed again to the ftran as input until iteration == n-place
+            index += 1
             if (index <= n - self.place):
                 break
 
