@@ -20,36 +20,42 @@ class pfi_struct:
         self.eta_rows = eta_rows
         self.eta_cols = eta_cols
 
-    # should return row of the simplex dictionary performing sequence of ftran operations
-    # n-place number of operations to perform
-    # varname is an element of primal variable we should take index+1 that indicates row of the matrix
-    def get_dict_row_at(self, n, var_name):
-        # 1 choose from  a row from the matrix (taking the values vector) based on the index of the prim_names that
+    def get_dict(self, n, var_name, names_vector, eta_vector, use_row):
+        # 1 choose from a row/column from the matrix (taking the values vector) based on the index of the prim_names that
         # correspond to the var_name
 
         # 2 take the corresponding eta row based on the order in the vector
         result = None
         index = 0
-        for eta_row in self.eta_rows:
+        for eta in eta_vector:
             # 3 push these inputs into the ftran() function
 
-            index+=index+1
+            index += index + 1
 
             if result == None:
-                index_of_row_to_pivot = np.where(self.prim_names == var_name)[0][0]
-                values_vector = self.simple_dict[index_of_row_to_pivot]
-                result = ftran(self.prim_names, values_vector, eta_row, index_of_row_to_pivot, var_name)
+                index_to_pivot = np.where(names_vector == var_name)[0][0]
+                if use_row:
+                    values_vector = self.simple_dict[index_to_pivot]
+                else:
+                    values_vector = self.simple_dict[:, index_to_pivot]
+                result = ftran(names_vector, values_vector, eta, index_to_pivot, var_name)
             else:
-                primal_names_vector = result[0]
-                primal_values_vector = result[1]
-                index_of_row_to_pivot = np.where(primal_names_vector == var_name)[0][0]
-                result = ftran(primal_names_vector, primal_values_vector, eta_row, index_of_row_to_pivot, var_name)
+                names_vector = result[0]
+                values_vector = result[1]
+                index_to_pivot = np.where(names_vector == var_name)[0][0]
+                result = ftran(names_vector, values_vector, eta, index_to_pivot, var_name)
 
             # 4 output of the ftran should be fed again to the ftran as input until iteration == n-place
             if (index <= n - self.place):
                 break
 
         return result
+
+    # should return row of the simplex dictionary performing sequence of ftran operations
+    # n-place number of operations to perform
+    # varname is an element of primal variable we should take index+1 that indicates row of the matrix
+    def get_dict_row_at(self, n, var_name):
+        return self.get_dict(n, var_name, self.prim_names, self.eta_rows, True)
 
     # same for columns
     def get_dict_col_at(self, n, var_name):
