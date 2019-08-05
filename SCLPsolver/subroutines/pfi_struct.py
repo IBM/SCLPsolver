@@ -80,12 +80,12 @@ class pfi_struct:
     # same for first column of matrix
     def get_prim_vars_at(self, n):
         # similar to 1st method but using the 1st column of the matrix
-        return self.get_dict(n, None, self.prim_names, self.eta_rows, True)
+        return self.get_dict(n, None, self.prim_names, self.eta_rows, False)
 
     # same for first row of matrix
     def get_dual_vars_at(self, n):
         # similar to 1st method but using the 1st row of the matrix
-        pass
+        return self.get_dict(n, None, self.prim_names, self.eta_rows, True)
 
     # should remove data between n1 and n2 positions
     def remove_data(self, n1, n2):
@@ -129,7 +129,10 @@ def ftran(names_vector, values_vector, eta_vector, pivot_index, entering_var_nam
 
     return [names_vector, values_vector]
 
+
+
 t = timeit.Timer('char in text', setup='text = "sample string"; char = "g"')
+
 prim_names = np.asarray([1, 2, 3, 4])
 exiting_names = np.asarray([-1, -2,-3,-4])
 pivots = pivot_storage(prim_names,exiting_names)
@@ -137,4 +140,6 @@ pfi_instance = pfi_struct(np.asarray([[1, 2, 3, 4], [5, 6, 7, 8], [1, 2, 3, 4], 
 print(pfi_instance.get_dict_row_at(1, 2))
 print(pfi_instance.get_dict_col_at(1, 6))
 print(pfi_instance.get_prim_vars_at(1))
+print(pfi_instance.get_dual_vars_at(1))
+
 print('time taken in milliseconds =', t.timeit()/1000)
