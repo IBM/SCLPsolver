@@ -1,5 +1,6 @@
 import numpy as np
 import timeit
+from pivot_storage import pivot_storage
 
 class pfi_struct:
     # simplex_dict - matrix
@@ -30,8 +31,6 @@ class pfi_struct:
         index = 0
         for eta in eta_vector:
             # 3 push these inputs into the ftran() function
-
-
 
             if result == None:
                 index_to_pivot = np.where(names_vector == var_name)[0][0]
@@ -67,7 +66,7 @@ class pfi_struct:
     # same for columns
     def get_dict_col_at(self, n, var_name):
         # same as above but using the eta_cols and the column of the matrix, and using dual_names instead of prim_names
-        pass
+        return self.get_dict(n, var_name, self.dual_names, self.eta_cols, False)
 
     # same for first column of matrix
     def get_prim_vars_at(self, n):
@@ -124,5 +123,6 @@ def ftran(names_vector, values_vector, eta_vector, pivot_index, entering_var_nam
 
     return [names_vector, values_vector]
 
-pfi_instance = pfi_struct(np.asarray([[1, 2],[ 3, 4]]),np.asarray([1, 2]), np.asarray([3, 4]), 2, np.asarray([[1, 2],[3, 4]]), np.asarray([[1, 2],[3, 4]]))
+pivots = pivot_storage()
+pfi_instance = pfi_struct(np.asarray([[1, 2],[ 3, 4]]),np.asarray([1, 2]), np.asarray([3, 4]), 2, np.asarray([[1, 2],[3, 4]]), np.asarray([[1, 2],[3, 4]]),pivots)
 print(pfi_instance.get_dict_row_at(1, 2))
