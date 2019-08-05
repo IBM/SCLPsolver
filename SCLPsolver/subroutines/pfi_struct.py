@@ -109,12 +109,13 @@ def ftran(names_vector, values_vector, eta_vector, pivot_index, entering_var_nam
         values_vector[index_of_location_to_insert_entering_variable - 1] = pivot_element_value
     else:
         # handle names vector
+        names_vector[index_of_location_to_insert_entering_variable + 1 : pivot_index + 1] = names_vector[index_of_location_to_insert_entering_variable: pivot_index ]
         names_vector[index_of_location_to_insert_entering_variable] = entering_var_name
-        names_vector[index_of_location_to_insert_entering_variable + 1: pivot_index] = names_vector[index_of_location_to_insert_entering_variable: pivot_index]
 
         # handle values vector
+        values_vector[index_of_location_to_insert_entering_variable + 1: pivot_index + 1] = values_vector[index_of_location_to_insert_entering_variable: pivot_index ]
         values_vector[index_of_location_to_insert_entering_variable] = pivot_element_value
-        values_vector[index_of_location_to_insert_entering_variable + 1: pivot_index] = values_vector[index_of_location_to_insert_entering_variable: pivot_index]
+
 
     print('time taken in milliseconds =', t.timeit()/1000)
 
@@ -123,6 +124,8 @@ def ftran(names_vector, values_vector, eta_vector, pivot_index, entering_var_nam
 
     return [names_vector, values_vector]
 
-pivots = pivot_storage()
-pfi_instance = pfi_struct(np.asarray([[1, 2],[ 3, 4]]),np.asarray([1, 2]), np.asarray([3, 4]), 2, np.asarray([[1, 2],[3, 4]]), np.asarray([[1, 2],[3, 4]]),pivots)
+prim_names = np.asarray([1, 2, 3, 4])
+exiting_names = np.asarray([-1, -2,-3,-4])
+pivots = pivot_storage(prim_names,exiting_names)
+pfi_instance = pfi_struct(np.asarray([[1, 2, 3, 4], [5, 6, 7, 8]]), prim_names, np.asarray([5,6,7,8]), 2, np.asarray([[1, 2, 3, 4],[5, 6, 7, 8]]), np.asarray([[1, 2, 3, 4],[5, 6, 7, 8]]),pivots)
 print(pfi_instance.get_dict_row_at(1, 2))
