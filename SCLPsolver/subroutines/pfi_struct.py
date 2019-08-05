@@ -80,7 +80,7 @@ class pfi_struct:
     # same for first column of matrix
     def get_prim_vars_at(self, n):
         # similar to 1st method but using the 1st column of the matrix
-        return self.get_dict(n, None, self.prim_names, self.eta_rows, False)
+        return self.get_dict(n, None, self.dual_names, self.eta_cols, False)
 
     # same for first row of matrix
     def get_dual_vars_at(self, n):
