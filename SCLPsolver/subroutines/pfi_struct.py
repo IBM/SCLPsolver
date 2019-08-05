@@ -33,11 +33,20 @@ class pfi_struct:
             # 3 push these inputs into the ftran() function
 
             if result == None:
-                index_to_pivot = np.where(names_vector == var_name)[0][0]
-                if use_row:
-                    values_vector = self.simplex_dict[index_to_pivot, :]
+
+                if var_name != None:
+                    index_to_pivot = np.where(names_vector == var_name)[0][0]
+
+                    if use_row:
+                        values_vector = self.simplex_dict[index_to_pivot, :]
+                    else:
+                        values_vector = self.simplex_dict[:, index_to_pivot]
                 else:
-                    values_vector = self.simplex_dict[:, index_to_pivot]
+                    if use_row:
+                        values_vector = self.simplex_dict[0, :]
+                    else:
+                        values_vector = self.simplex_dict[:, 0]
+
                 pivot = self.pivots[self.place]
                 # check if this pivot[0] or pivot[1]
                 index_of_pivot = np.where(self.prim_names == pivot[0])[0][0]
@@ -71,7 +80,7 @@ class pfi_struct:
     # same for first column of matrix
     def get_prim_vars_at(self, n):
         # similar to 1st method but using the 1st column of the matrix
-        pass
+        return self.get_dict(n, None, self.prim_names, self.eta_rows, True)
 
     # same for first row of matrix
     def get_dual_vars_at(self, n):
@@ -127,4 +136,5 @@ pivots = pivot_storage(prim_names,exiting_names)
 pfi_instance = pfi_struct(np.asarray([[1, 2, 3, 4], [5, 6, 7, 8], [1, 2, 3, 4], [1, 2, 3, 4]]), prim_names, np.asarray([5,6,7,8]), 2, np.asarray([[1, 2, 3, 4],[5, 6, 7, 8]]), np.asarray([[1, 2, 3, 4],[5, 6, 7, 8]]),pivots)
 print(pfi_instance.get_dict_row_at(1, 2))
 print(pfi_instance.get_dict_col_at(1, 6))
+print(pfi_instance.get_prim_vars_at(1))
 print('time taken in milliseconds =', t.timeit()/1000)
