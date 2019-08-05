@@ -124,9 +124,6 @@ def ftran(names_vector, values_vector, eta_vector, pivot_index, entering_var_nam
         values_vector[index_of_location_to_insert_entering_variable + 1: pivot_index + 1] = values_vector[index_of_location_to_insert_entering_variable: pivot_index ]
         values_vector[index_of_location_to_insert_entering_variable] = pivot_element_value
 
-
-
-
     return [names_vector, values_vector]
 
 
