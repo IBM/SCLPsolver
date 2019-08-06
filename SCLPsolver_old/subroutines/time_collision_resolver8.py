@@ -198,7 +198,7 @@ def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, klist, jlist
     if N1 == -1 or N2 == solution.NN:
         return collision_info('Case i__', delta, N1, N2, [], [], None, tol_coeff)
     else:
-        vlist = solution.pivots.get_difference(N1, N2)
+        vlist = solution.pivots.get_out_difference(N1, N2)
         if len(vlist) > 2:
             print('More than two variables leave in time shrink ....')
             return None

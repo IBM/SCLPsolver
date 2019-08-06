@@ -134,8 +134,12 @@ class pivot_storage():
     def __reversed__(self):
         return pivot_iterator(self, True)
 
-    def get_difference(self, N1, N2):
+    def get_out_difference(self, N1, N2):
         diff = Counter(self._out[N1:N2]) - Counter(self._in[N1:N2])
+        return list(diff.elements())
+
+    def get_in_difference(self, N1, N2):
+        diff = Counter(self._in[N1:N2]) - Counter(self._out[N1:N2])
         return list(diff.elements())
 
     def remove_pivots(self, N1, N2):

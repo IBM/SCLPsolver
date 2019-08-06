@@ -86,7 +86,7 @@ def classification(tau,dtau,klist,jlist,dx,dq,x,del_x,q,del_q,solution,B1,B2, sd
         if N1 == -1 or N2 == NN:
             case = 'Case i__'
         else:
-            vlist = solution.pivots.get_difference(N1,N2)
+            vlist = solution.pivots.get_out_difference(N1, N2)
             if len(vlist) > 2:
                 problem['result'] = problem['result'] + 4
                 problem['compoundProblem']['result'] = 2

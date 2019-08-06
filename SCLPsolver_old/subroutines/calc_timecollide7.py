@@ -107,7 +107,7 @@ def calc_timecollide(TAU, DTAU, pivots, lastN1, lastN2, last_case, tolerance, to
                         if len(ishrink0) < nn2 - nn1:
                             print('multiple negative intervals shrinks...')
                         else:
-                            vlist = pivots.get_difference(nn1, nn2)
+                            vlist = pivots.get_out_difference(nn1, nn2)
                             if len(vlist) <= 2:
                                 return [tolerance, nn1, nn2], problem
                             else:
@@ -129,7 +129,7 @@ def calc_timecollide(TAU, DTAU, pivots, lastN1, lastN2, last_case, tolerance, to
                             if len(ishrink) < nn2 - nn1:
                                 print('Multiple locations shrinks...')
                             else:
-                                vlist = pivots.get_difference(nn1, nn2)
+                                vlist = pivots.get_out_difference(nn1, nn2)
                                 if len(vlist) <= 2:
                                     return [tolerance, nn1, nn2], problem
                                 else:
