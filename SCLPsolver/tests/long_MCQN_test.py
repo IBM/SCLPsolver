@@ -38,7 +38,7 @@ for I in [10,20,40,80,100,200,400,800]:
                                 write_results_to_csv(results, res_file)
                             else:
                                 for n in [0,2,4,8]:
-                                    results, ftrials, files, raw_tau = run_experiment_series('MCQN', n+2, I * 10, I, T,
+                                    results, ftrials, files, raw_tau = run_experiment_series('MCQN', 2, I * 10, I, T,
                                                                                              settings, 1000+n,
                                                                                              solver_settings, True, False)
 
