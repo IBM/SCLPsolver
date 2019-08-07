@@ -1,6 +1,8 @@
 from doe.data_generators.MCQN import generate_MCQN_data
 from SCLP import SCLP, SCLP_settings
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 
 seed = 1000
 G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, 12, 4)
