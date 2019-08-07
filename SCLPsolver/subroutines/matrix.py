@@ -64,3 +64,14 @@ class matrix():
         self._bottom -= 1
         self._right -= 1
 
+
+    def overwrite(self, index, row_vector, column_vector):
+        matrix_size = self._bottom - self._top
+
+        if index > self._allocation_size or index < 0:
+            print('Index out of bounds, index value is ', index, ' while matrix size is ', matrix_size)
+
+        # insert row vector
+        self._matrix[self._top + index, self._left:self._right] = row_vector
+        # insert the column vector
+        self._matrix[self._top:self._bottom, self._left + index] = column_vector
