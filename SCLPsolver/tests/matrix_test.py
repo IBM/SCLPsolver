@@ -18,6 +18,12 @@ column_vector = np.asarray([4,5,6])
 c.insert(index,row_vector,column_vector)
 print(c.get_matrix())
 
-index = 1
-c.delete(1)
+index = 2
+row_vector = np.asarray([1,2,3,5])
+column_vector = np.asarray([4,5,6,7])
+c.insert(index,row_vector,column_vector)
+print(c.get_matrix())
+
+index = 3
+c.delete(index)
 print(c.get_matrix())
