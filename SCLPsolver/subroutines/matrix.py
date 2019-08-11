@@ -87,8 +87,8 @@ class matrix():
 
         self._right = self._bottom = len(w) + 1
 
-        self._matrix[:self._bottom - 1,:self._right -1] = w
-        self._matrix[:len(x), self._right -1 ] = x
+        self._matrix[:self._bottom - 1,:self._right - 1] = w
+        self._matrix[:len(x), self._right - 1 ] = x
         self._matrix[self._bottom - 1, :len(y)] = y
         self._matrix[self._bottom - 1, self._right - 1] = z
 
