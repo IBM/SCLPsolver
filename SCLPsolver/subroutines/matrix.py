@@ -26,6 +26,11 @@ class matrix():
     def get_matrix(self):
         return self._matrix[self._left:self._right,self._top:self._bottom]
 
+    def set_matrix(self, matrix):
+        self._right = self._left + matrix.shape[0]
+        self._bottom = self._top + matrix.shape[1]
+        self._matrix[self._left:self._right, self._top:self._bottom] = matrix
+
     def insert(self, index, row_vector, column_vector):
         matrix_size = self._bottom - self._top
 
@@ -91,4 +96,20 @@ class matrix():
         # w
         self._matrix[:self._bottom - 1, :self._right - 1] = inverse_of_matrix_a - np.outer(self._matrix[:len(inverse_of_matrix_a), self._right - 1 ], self._matrix[self._bottom + 2, :len(inverse_of_matrix_a)])
 
+        return self.get_matrix()
+
+    def inverseUpdate3(self, vector_b, vector_c, scalar_d, tmp_matrix):
+        v = np.dot(vector_c, self._matrix[:self._bottom, :self._right])
+        z = 1 / (scalar_d - np.inner(v, vector_b))
+        y = -z * v
+        x = np.dot(self._matrix[:self._bottom, :self._right], vector_b * -z)
+        self._matrix[:self._bottom, :self._right] -= np.outer(x, v, out=tmp_matrix)
+
+        self._right += 1
+        self._bottom += 1
+
+        #self._matrix[:self._bottom - 1, :self._right - 1] = w
+        self._matrix[:len(x), self._right - 1] = x
+        self._matrix[self._bottom - 1, :len(y)] = y
+        self._matrix[self._bottom - 1, self._right - 1] = z
         return self.get_matrix()

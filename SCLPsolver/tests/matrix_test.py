@@ -1,6 +1,6 @@
 from subroutines.matrix import matrix
 import numpy as np
-import timeit
+import time
 
 a = 8
 b = 6
@@ -36,13 +36,13 @@ test_matrix.overwrite(index, row_vector, column_vector)
 print(test_matrix.get_matrix())
 
 
-matrix_a_size = 200
-times_to_run = 10000000
+matrix_a_size = 400
+times_to_run = 100
 # comparing numpy inverse speed to new algorithm speed
 # 1st testing the numpy implementation
-matrix_a = np.random.randint(10, size=(matrix_a_size, matrix_a_size))
-vector_b = np.random.randint(10, size=(matrix_a_size))
-vector_c = np.random.randint(10, size=(matrix_a_size))
+matrix_a = 10*np.random.rand(matrix_a_size, matrix_a_size)
+vector_b = 10*np.random.rand(matrix_a_size)
+vector_c = 10*np.random.rand(matrix_a_size)
 scalar_d = 4
 
 matrix_to_inverse = np.zeros((matrix_a_size + 1, matrix_a_size + 1))
@@ -51,16 +51,46 @@ matrix_to_inverse[0:matrix_a_size, matrix_a_size] = vector_b
 matrix_to_inverse[matrix_a_size, 0:matrix_a_size] = vector_c
 matrix_to_inverse[matrix_a_size, matrix_a_size] = scalar_d
 
-numpy_inverse_update_matrix = np.linalg.inv(matrix_to_inverse)
+tmp_matrix = np.zeros_like(matrix_a)
 
-numpy_inverse_time=timeit.timeit(lambda: 'np.linalg.inv(matrix_a)', number=times_to_run)
+new_algorithm_time = 0
+numpy_inverse_time =0
+for i in range(times_to_run):
+    matrix_a = 10 * np.random.rand(matrix_a_size, matrix_a_size)
+    vector_b = 10 * np.random.rand(matrix_a_size)
+    vector_c = 10 * np.random.rand(matrix_a_size)
+    scalar_d = 4
+
+    matrix_to_inverse = np.zeros((matrix_a_size + 1, matrix_a_size + 1))
+    matrix_to_inverse[0:matrix_a_size, 0:matrix_a_size] = matrix_a
+    matrix_to_inverse[0:matrix_a_size, matrix_a_size] = vector_b
+    matrix_to_inverse[matrix_a_size, 0:matrix_a_size] = vector_c
+    matrix_to_inverse[matrix_a_size, matrix_a_size] = scalar_d
+    start_time = time.time()
+    numpy_inverse_update_matrix = np.linalg.inv(matrix_to_inverse)
+    numpy_inverse_time += time.time() - start_time
+    inversed_matrix_a = np.linalg.inv(matrix_a)
+    c = matrix(None, len(inversed_matrix_a) * 2)
+    c.set_matrix(inversed_matrix_a)
+    start_time = time.time()
+    #new_algorithm_time = timeit.timeit(lambda: 'c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)', number=times_to_run)
+    improved_algorithm_inverse_update_matrix = c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)
+    new_algorithm_time += time.time() - start_time
+
+#numpy_inverse_time=timeit.timeit(lambda: 'np.linalg.inv(matrix_a)', number=times_to_run)
 print("Numpy iverse took ",numpy_inverse_time," seconds")
-inversed_matrix_a = np.linalg.inv(matrix_a)
-
-c = matrix(None, len(inversed_matrix_a)*2)
-
-new_algorithm_time = timeit.timeit(lambda: 'c.inverseUpdate2(inversed_matrix_a, vector_b, vector_c, scalar_d)', number=times_to_run)
-improved_algorithm_inverse_update_matrix = c.inverseUpdate2(inversed_matrix_a, vector_b, vector_c, scalar_d)
+# inversed_matrix_a = np.linalg.inv(matrix_a)
+#
+# c = matrix(None, len(inversed_matrix_a)*2)
+# c.set_matrix(inversed_matrix_a)
+# tmp_matrix = np.zeros_like(inversed_matrix_a)
+#
+# new_algorithm_time = 0
+# for i in range(times_to_run):
+#     start_time = time.time()
+#     #new_algorithm_time = timeit.timeit(lambda: 'c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)', number=times_to_run)
+#     improved_algorithm_inverse_update_matrix = c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)
+#     new_algorithm_time += time.time() - start_time
 
 print("New algorithm took ",new_algorithm_time," seconds")
 size_comparison = numpy_inverse_time/new_algorithm_time
