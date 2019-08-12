@@ -82,7 +82,7 @@ class matrix():
         v = np.dot(vector_c,inverse_of_matrix_a)
         z = 1/(scalar_d - np.inner(v, vector_b))
         y = -z * v
-        x = np.dot(-inverse_of_matrix_a , vector_b * z)
+        x = np.dot(inverse_of_matrix_a, vector_b * -z)
         w = inverse_of_matrix_a - np.outer(x,v)
 
         self._right = self._bottom = len(w) + 1
