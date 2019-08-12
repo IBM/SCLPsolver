@@ -36,11 +36,12 @@ test_matrix.overwrite(index, row_vector, column_vector)
 print(test_matrix.get_matrix())
 
 
+matrix_size = 200
 # comparing numpy inverse speed to new algorithm speed
 # 1st testing the numpy implementation
 matrix_a = np.random.randint(10, size=(2, 2))
 vector_b = np.asarray([2,2])
-vector_c = np.asarray([3,3])
+vector_c = np.asarray([2,2])
 scalar_d = 4
 
 matrix_to_inverse = np.zeros((3,3))
