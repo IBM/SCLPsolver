@@ -54,7 +54,7 @@ matrix_to_inverse[matrix_a_size, matrix_a_size] = scalar_d
 numpy_inverse_update_matrix = np.linalg.inv(matrix_to_inverse)
 
 numpy_inverse_time=timeit.timeit(lambda: 'np.linalg.inv(matrix_a)', number=times_to_run)
-print("numpy took ",numpy_inverse_time," seconds")
+print("Numpy iverse took ",numpy_inverse_time," seconds")
 inversed_matrix_a = np.linalg.inv(matrix_a)
 
 c = matrix(None, len(inversed_matrix_a)*2)
@@ -62,10 +62,11 @@ c = matrix(None, len(inversed_matrix_a)*2)
 new_algorithm_time = timeit.timeit(lambda: 'c.inverseUpdate2(inversed_matrix_a, vector_b, vector_c, scalar_d)', number=times_to_run)
 improved_algorithm_inverse_update_matrix = c.inverseUpdate2(inversed_matrix_a, vector_b, vector_c, scalar_d)
 
-print("new algorithm took ",new_algorithm_time," seconds")
-print("new algorithm is ",numpy_inverse_time-new_algorithm_time," faster")
+print("New algorithm took ",new_algorithm_time," seconds")
+diff_between_algorithms = numpy_inverse_time-new_algorithm_time
+print("** New algorithm is",'faster' if (diff_between_algorithms >= 0) else 'slower', "by : ", abs(diff_between_algorithms)," seconds")
 #print("Numpy result:\n",numpy_inverse_update_matrix)
 #print("New Algorithm result:\n",improved_algorithm_inverse_update_matrix)
-print(np.array_equal(numpy_inverse_update_matrix,improved_algorithm_inverse_update_matrix))
+print("Are Numpy and new Algotithm results the same? :",  np.allclose(numpy_inverse_update_matrix,improved_algorithm_inverse_update_matrix))
 
 

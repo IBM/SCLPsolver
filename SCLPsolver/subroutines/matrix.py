@@ -78,18 +78,17 @@ class matrix():
 
 
     def inverseUpdate2(self, inverse_of_matrix_a, vector_b, vector_c, scalar_d):
+        self._right = self._bottom = len(inverse_of_matrix_a) + 1
 
-        v = np.dot(vector_c,inverse_of_matrix_a)
-        z = 1/(scalar_d - np.inner(v, vector_b))
-        y = -z * v
-        x = np.dot(inverse_of_matrix_a, vector_b * -z)
-        w = inverse_of_matrix_a - np.outer(x,v)
-
-        self._right = self._bottom = len(w) + 1
-
-        self._matrix[:self._bottom - 1,:self._right - 1] = w
-        self._matrix[:len(x), self._right - 1 ] = x
-        self._matrix[self._bottom - 1, :len(y)] = y
-        self._matrix[self._bottom - 1, self._right - 1] = z
+        # v
+        self._matrix[self._bottom + 2, :len(inverse_of_matrix_a)] = np.dot(vector_c,inverse_of_matrix_a)
+        # z
+        self._matrix[self._bottom - 1, self._right - 1] = 1/(scalar_d - np.inner(self._matrix[self._bottom + 2, :len(inverse_of_matrix_a)], vector_b))
+        # y
+        self._matrix[self._bottom - 1, :len(inverse_of_matrix_a)] = -(self._matrix[self._bottom - 1, self._right - 1]) * self._matrix[self._bottom + 2, :len(inverse_of_matrix_a)]
+        # x
+        self._matrix[:len(inverse_of_matrix_a), self._right - 1 ] = np.dot(inverse_of_matrix_a, vector_b * -(self._matrix[self._bottom - 1, self._right - 1]))
+        # w
+        self._matrix[:self._bottom - 1, :self._right - 1] = inverse_of_matrix_a - np.outer(self._matrix[:len(inverse_of_matrix_a), self._right - 1 ], self._matrix[self._bottom + 2, :len(inverse_of_matrix_a)])
 
         return self.get_matrix()
