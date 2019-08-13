@@ -24,12 +24,12 @@ class matrix():
 
     #'#@profile
     def get_matrix(self):
-        return self._matrix[self._left:self._right,self._top:self._bottom]
+        return self._matrix[self._top:self._bottom,self._left:self._right]
 
     def set_matrix(self, matrix):
-        self._right = self._left + matrix.shape[0]
-        self._bottom = self._top + matrix.shape[1]
-        self._matrix[self._left:self._right, self._top:self._bottom] = matrix
+        self._bottom = self._top + matrix.shape[0]
+        self._right = self._left + matrix.shape[1]
+        self._matrix[self._top:self._bottom, self._left:self._right] = matrix
 
     def insert(self, index, row_vector, column_vector):
         matrix_size = self._bottom - self._top
