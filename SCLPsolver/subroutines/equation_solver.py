@@ -41,6 +41,9 @@ class equation_solver():
     def resolve(self, old_solution):
         return ftran(btran(old_solution, self._eta_rows[-1],self._row_places[-1]),self._eta_cols[-1], self._col_places[-1])
 
+    def set_inverse_matrix(self, inverse_matrix):
+        self._inv_matrix.set_matrix(inverse_matrix)
+
 def to_eta(values, index_to_pivot):
     pivot_val = values[index_to_pivot]
     values /= -values[index_to_pivot]
