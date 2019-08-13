@@ -74,32 +74,15 @@ for i in range(times_to_run):
     c = matrix(None, len(inversed_matrix_a) * 2)
     c.set_matrix(inversed_matrix_a)
 
-    #new_algorithm_time = timeit.timeit(lambda: 'c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)', number=times_to_run)
-
     start_time = time.time()
     improved_algorithm_inverse_update_matrix = c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)
     new_algorithm3_time += time.time() - start_time
 
     start_time = time.time()
-    improved_algorithm_inverse_update_matrix = c.inverseUpdate2(inversed_matrix_a,vector_b, vector_c, scalar_d)
+    improved_algorithm_inverse_update_matrix = c.inverseUpdate2(inversed_matrix_a, vector_b, vector_c, scalar_d)
     new_algorithm2_time += time.time() - start_time
 
-
-
-#numpy_inverse_time=timeit.timeit(lambda: 'np.linalg.inv(matrix_a)', number=times_to_run)
 print("Numpy iverse took ",numpy_inverse_time," seconds")
-# inversed_matrix_a = np.linalg.inv(matrix_a)
-#
-# c = matrix(None, len(inversed_matrix_a)*2)
-# c.set_matrix(inversed_matrix_a)
-# tmp_matrix = np.zeros_like(inversed_matrix_a)
-#
-# new_algorithm_time = 0
-# for i in range(times_to_run):
-#     start_time = time.time()
-#     #new_algorithm_time = timeit.timeit(lambda: 'c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)', number=times_to_run)
-#     improved_algorithm_inverse_update_matrix = c.inverseUpdate3(vector_b, vector_c, scalar_d, tmp_matrix)
-#     new_algorithm_time += time.time() - start_time
 
 print("New algorithm 2 took ",new_algorithm2_time," seconds")
 size_comparison = numpy_inverse_time/new_algorithm2_time
@@ -108,8 +91,7 @@ print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster
 print("New algorithm 3 took ",new_algorithm3_time," seconds")
 size_comparison = numpy_inverse_time/new_algorithm3_time
 print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster' if (size_comparison >= 1) else 'slower')
-#print("Numpy result:\n",numpy_inverse_update_matrix)
-#print("New Algorithm result:\n",improved_algorithm_inverse_update_matrix)
+
 print("Are Numpy and new Algorithm results the same? :",  np.allclose(numpy_inverse_update_matrix,improved_algorithm_inverse_update_matrix))
 
 
