@@ -18,21 +18,9 @@ class equation_solver():
 
     def remove_equation(self, n_row, n_col):
         self._steps += 1
-        vcol = 1
-        vrow = 1
-        #looks like this not correct
-        for i, r in enumerate(self._eta_rows):
-            vcol *= self._eta_rows[self._row_places[i]]
-            vrow *= self._eta_cols[self._col_places[i]]
-        col = self._inv_matrix.get_matrix()[:, n_col] * vcol
-        row = self._inv_matrix.get_matrix()[n_row, :] * vrow
-        for i, c in enumerate(self._eta_cols):
-            col = ftran(col, c, self._col_places[i])
-            row = ftran(row, self._eta_rows[i], self._row_places[i])
-        self._row_places.append(n_row)
-        self._col_places.append(n_col)
-        self._eta_rows.append(to_eta(row, n_col))
-        self._eta_cols.append(to_eta(col, n_row))
+        pass
+        # replace row and column to [00100]
+        #utilize sparsity in btran
         #do something to remove column and row
 
     def replace_equation(self, n_row, n_col, row, col):
@@ -49,6 +37,9 @@ class equation_solver():
         self._col_places.append(n_col)
         self._eta_rows.append(to_eta(row, n_col))
         self._eta_cols.append(to_eta(col, n_row))
+
+    def resolve(self, old_solution):
+        return ftran(btran(old_solution, self._eta_rows[-1],self._row_places[-1]),self._eta_cols[-1], self._col_places[-1])
 
 def to_eta(values, index_to_pivot):
     pivot_val = values[index_to_pivot]
