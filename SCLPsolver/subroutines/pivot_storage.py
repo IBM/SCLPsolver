@@ -193,6 +193,15 @@ class pivot_storage():
             self._in =  pivots.inpivots + self._in[N2:]
             self._out = pivots.outpivots + self._out[N2:]
 
+
+    def get_previous_in(self, n):
+        v = self._out[n]
+        w = self._in[:n+1][::-1]
+        if v in w:
+            return n - w.index(v)
+        else:
+            return None
+
     def find_N1_N2_around(self, Nlist, N1=None, N2=None, N1trials=10, N2trials=10):
         if N1 is None:
             N1 = Nlist[0] - 1
@@ -213,3 +222,11 @@ class pivot_storage():
                         return (i, j)
         return None
 
+
+    def get_next_in(self, n):
+        v = self._out[n]
+        w = self._in[n:]
+        if v in w:
+            return self._in.index(v,n)
+        else:
+            return None
