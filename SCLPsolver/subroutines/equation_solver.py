@@ -48,19 +48,35 @@ class equation_solver():
         self._steps += 1
         for i, r in enumerate(self._eta_rows):
             col = btran(col, r, self._row_places[i])
-            row = btran(row, self._eta_cols[i], self._col_places[i])
         col = np.dot(self._inv_matrix.get_matrix(), col)
-        row = np.dot(self._inv_matrix.get_matrix().T, row)
         for i, c in enumerate(self._eta_cols):
             col = ftran(col, c, self._col_places[i])
-            row = ftran(row, self._eta_rows[i], self._row_places[i])
-        self._row_places.append(i_row)
         self._col_places.append(i_col)
-        self._eta_rows.append(to_eta(row, i_col))
         self._eta_cols.append(to_eta(col, i_row))
+        for i, c in zip(reversed(range(len(self._eta_cols))), reversed(self._eta_cols)):
+            row = btran(row, c, self._col_places[i])
+        row = np.dot(self._inv_matrix.get_matrix().T, row)
+        for i, r in enumerate(self._eta_rows):
+            row = ftran(row, r, self._row_places[i])
+        self._row_places.append(i_row)
+        self._eta_rows.append(to_eta(row, i_col))
+
+
+    def _get_row_etm(self, index):
+        etm = np.eye(len(self._eta_rows[index]))
+        etm[self._row_places[index], :] = self._eta_rows[index]
+        return etm
+
+    def _get_col_etm(self, index):
+        etm = np.eye(len(self._eta_cols[index]))
+        etm[:, self._col_places[index]] = self._eta_cols[index]
+        return etm
+
+    def get_inverse(self):
+        return np.dot(self._get_col_etm(-1),np.dot(self._inv_matrix.get_matrix(), self._get_row_etm(-1)))
 
     def _resolve(self, old_solution):
-        return ftran(btran(old_solution, self._eta_rows[-1], self._row_places[-1]), self._eta_cols[-1], self._col_places[-1])
+        return ftran(np.dot(self._inv_matrix.get_matrix(), btran(old_solution, self._eta_rows[-1], self._row_places[-1])), self._eta_cols[-1], self._col_places[-1])
 
     def resolve(self, old_solution):
         # should update old_solution inserting 0 to indexes of -1 in col order and ordering elements
@@ -74,7 +90,7 @@ class equation_solver():
 def to_eta(values, index_to_pivot):
     pivot_val = values[index_to_pivot]
     values /= -values[index_to_pivot]
-    values[index_to_pivot] = pivot_val
+    values[index_to_pivot] = 1/pivot_val
     return values
 
 def ftran(values, eta, index_to_pivot):

@@ -4,29 +4,42 @@ import numpy as np
 import random
 import time
 
-matrix_size = 400
+matrix_size = 300
 times_to_run = 100
 # comparing numpy inverse speed to new algorithm speed
 # 1st testing the numpy implementation
-matrix_1 = 10*np.random.rand(matrix_size, matrix_size)
-vector_2 = 10*np.random.normal(size=matrix_size)
-matrix_3 = np.linalg.inv(matrix_1)
-result_4 = np.dot(matrix_3,vector_2)
+# matrix_1 = 10*np.random.rand(matrix_size, matrix_size)
+# vector_2 = 10*np.random.normal(size=matrix_size)
+# matrix_3 = np.linalg.inv(matrix_1)
+# result_4 = np.dot(matrix_3,vector_2)
+#
+# index_to_replace = random.randint(0,matrix_size-1)
+#
+# random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size)
+# random_column_vector_5_2 =10 * np.random.normal(size=matrix_size)#matrix_1[:, index_to_replace]#
+# #random_row_vector_5_1[index_to_replace] =  matrix_1[index_to_replace,index_to_replace]
 
-random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size)
-random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size)
 
-index_to_replace = random.randint(0,matrix_size-1)
 
 numpy_algorithm_time = 0
 new_algorithm_time = 0
 
 for i in range(times_to_run):
-    start_time = time.time()
+    matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
+    vector_2 = 10 * np.random.normal(size=matrix_size)
+    matrix_3 = np.linalg.inv(matrix_1)
+    result_4 = np.dot(matrix_3, vector_2)
+
+    index_to_replace = random.randint(0, matrix_size - 1)
+
+    random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size)
+    random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size)
     # step 6
-    matrix_1[index_to_replace,:] = random_row_vector_5_1
     matrix_1[:, index_to_replace] = random_column_vector_5_2
+    matrix_1[index_to_replace,:] = random_row_vector_5_1
+
     # step 7
+    start_time = time.time()
     matrix_7 = np.linalg.inv(matrix_1)
     # step 8
     result_8 = np.dot(matrix_7,vector_2)
@@ -39,7 +52,9 @@ for i in range(times_to_run):
     start_time = time.time()
     #step 10
     equation_solver_9._replace_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
-    result_11 = equation_solver_9.resolve(result_4)
+    #result10 = equation_solver_9.get_inverse()
+    #print(np.allclose(result10, matrix_7))
+    result_11 = equation_solver_9.resolve(vector_2)
     new_algorithm_time += time.time() - start_time
 
 
