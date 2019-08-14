@@ -9,12 +9,12 @@ times_to_run = 100
 # comparing numpy inverse speed to new algorithm speed
 # 1st testing the numpy implementation
 matrix_1 = 10*np.random.rand(matrix_size, matrix_size)
-vector_2 = 10*np.random.rand(matrix_size, 1)
+vector_2 = 10*np.random.normal(size=matrix_size)
 matrix_3 = np.linalg.inv(matrix_1)
 result_4 = np.dot(matrix_3,vector_2)
 
-random_row_vector_5_1 = 10 * np.random.rand(1, matrix_size)
-random_column_vector_5_2 = 10 * np.random.rand(matrix_size,1)
+random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size)
+random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size)
 
 index_to_replace = random.randint(0,matrix_size-1)
 
@@ -24,8 +24,8 @@ new_algorithm_time = 0
 for i in range(times_to_run):
     start_time = time.time()
     # step 6
-    matrix_1[index_to_replace:index_to_replace+1,:] = random_row_vector_5_1
-    matrix_1[:, index_to_replace:index_to_replace+1] = random_column_vector_5_2
+    matrix_1[index_to_replace,:] = random_row_vector_5_1
+    matrix_1[:, index_to_replace] = random_column_vector_5_2
     # step 7
     matrix_7 = np.linalg.inv(matrix_1)
     # step 8
