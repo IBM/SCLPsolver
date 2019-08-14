@@ -38,8 +38,8 @@ for i in range(times_to_run):
 
     start_time = time.time()
     #step 10
-    equation_solver_9.replace_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
-    result_10 = equation_solver.resolve(result_4)
+    equation_solver_9._replace_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
+    result_11 = equation_solver_9.resolve(result_4)
     new_algorithm_time += time.time() - start_time
 
 
@@ -47,7 +47,11 @@ print("Numpy algorithm took ", numpy_algorithm_time, " seconds")
 print("New algorithm took ", new_algorithm_time, " seconds")
 size_comparison = numpy_algorithm_time/new_algorithm_time
 print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster' if (size_comparison >= 1) else 'slower')
-print("Are Numpy and new Algorithm results the same? :",  np.allclose(result_8,result_10))
+
+#print(result_8)
+#print(result_11)
+
+print("Are Numpy and new Algorithm results the same? :",  np.allclose(result_8,result_11))
 
 
 
