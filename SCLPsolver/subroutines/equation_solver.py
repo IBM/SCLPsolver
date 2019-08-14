@@ -14,6 +14,26 @@ class equation_solver():
         self._row_order = [0] # use this to save order of equations set -1 if we remove equation
         self._col_order = [0] # use this to save order of variables set -1 if we remove variable
 
+    def replace_equations(self, dx, dq, pivots, n1, n2, nnew):
+        # should replace all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
+        # and same for corresponding rows
+        pass
+
+    def remove_equations(self, pivots, n1, n2):
+        # should remove all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
+        # and same for corresponding rows
+        pass
+
+    def reinvert(self, dx, dq, pivots):
+        # should build matrix invert it and put to the self._inv_matrix
+        self._steps = 0
+        self._eta_rows = []
+        self._eta_cols = []
+        self._row_places = []
+        self._col_places = []
+        self._row_order = list(range(self._inv_matrix.get_matrix().shape[0]))
+        self._col_order = list(range(self._inv_matrix.get_matrix().shape[1]))
+
     def add_equation(self, n_row, n_col, row, col):
         self._steps += 1
         if -1 not in self._row_order:
