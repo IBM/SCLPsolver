@@ -17,10 +17,10 @@ class equation_solver():
     def add_equation(self, n_row, n_col, row, col):
         self._steps += 1
         if -1 not in self._row_order:
-            self._inv_matrix.enlarge() #new method to implement should increase row and column count of matrix and set 1 at the corner
+            self._inv_matrix.enlarge()
             self._row_order.append(n_row)
             self._col_order.append(n_col)
-            self._replace_equation(len(self._row_places),len(self._col_places), row, col)
+            self._replace_equation(len(self._row_places)+1,len(self._col_places)+1, row, col)
         else:
             i_row = self._row_places.index(-1)
             i_col = self._col_places.index(-1)
@@ -76,6 +76,7 @@ class equation_solver():
         return np.dot(self._get_col_etm(-1),np.dot(self._inv_matrix.get_matrix(), self._get_row_etm(-1)))
 
     def _resolve(self, rhs):
+        # should utilize sparsity in btran!!!
         for i, r in zip(reversed(range(len(self._eta_rows))), reversed(self._eta_rows)):
             rhs = btran(rhs, r, self._row_places[i])
         rhs = np.dot(self._inv_matrix.get_matrix(), rhs)

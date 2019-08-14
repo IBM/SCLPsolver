@@ -9,7 +9,7 @@ class matrix():
     def __init__(self, data, allocation_size):
         self._allocation_size = allocation_size
 
-        self._matrix = np.zeros(shape=(allocation_size, allocation_size))
+        self._matrix = np.eye(allocation_size)
 
         self._top = 0
         self._left = 0
@@ -30,6 +30,10 @@ class matrix():
         self._bottom = self._top + matrix.shape[0]
         self._right = self._left + matrix.shape[1]
         self._matrix[self._top:self._bottom, self._left:self._right] = matrix
+
+    def enlarge(self):
+        self._bottom += 1
+        self._right += 1
 
     def insert(self, index, row_vector, column_vector):
         matrix_size = self._bottom - self._top
