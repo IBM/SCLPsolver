@@ -33,5 +33,7 @@ def test1(output_file, overwrite_output, exp_type, exp_num, K, I, T, settings, s
     # results = combine_results(results, cplex_results, 10, True)
     cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main100.mod'), files)
     results = combine_results(results, cplex_results, 100)
+    cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main1000.mod'), files)
+    results = combine_results(results, cplex_results, 1000)
     res_file = relative_to_project(output_file)
     write_results_to_csv(results, res_file, overwrite_output, raw_tau)
