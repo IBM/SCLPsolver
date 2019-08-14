@@ -72,15 +72,15 @@ class equation_solver():
         etm[:, self._col_places[index]] = self._eta_cols[index]
         return etm
 
-    def get_inverse(self):
+    def _get_inverse(self):
         return np.dot(self._get_col_etm(-1),np.dot(self._inv_matrix.get_matrix(), self._get_row_etm(-1)))
 
-    def _resolve(self, old_solution):
-        return ftran(np.dot(self._inv_matrix.get_matrix(), btran(old_solution, self._eta_rows[-1], self._row_places[-1])), self._eta_cols[-1], self._col_places[-1])
+    def _resolve(self, rhs):
+        return ftran(np.dot(self._inv_matrix.get_matrix(), btran(rhs, self._eta_rows[-1], self._row_places[-1])), self._eta_cols[-1], self._col_places[-1])
 
-    def resolve(self, old_solution):
+    def resolve(self, rhs):
         # should update old_solution inserting 0 to indexes of -1 in col order and ordering elements
-        res = self._resolve(old_solution)
+        res = self._resolve(rhs)
         # should update res by removing 0 from indexes of -1 in col order and ordering elements
         return res
 
