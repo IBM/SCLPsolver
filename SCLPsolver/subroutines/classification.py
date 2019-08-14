@@ -41,7 +41,7 @@ def classification(solution, tolerance):
     problem['timeProblem'] = prob
 
     if 	len(CC1) == 0 and len(CC2) == 0:
-        if problem['stateProblem']['result']==0 and problem['timeProblem']['result'] == 0:
+        if problem['stateProblem']['result'] == 0 and problem['timeProblem']['result'] == 0:
             case = 'complete'
             Delta = np.inf
             return collision_info(case, Delta, N1, N2, v1, v2), problem

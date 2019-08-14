@@ -178,6 +178,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
                                                   solution, tolerance)
                     if col is not None:
                         col.from_ztau = True
+                        col.ztau_ind = ztau_ind
                         return col
             res = solution.pivots.find_N1_N2_around(ztau_ind[1:])
             if res is not None:
@@ -185,6 +186,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
                                               solution, tolerance)
                 if col is not None:
                     col.from_ztau = True
+                    col.ztau_ind = ztau_ind
                     return col
         elif ztau_ind[-1] - ztau_ind[-2] > 2:
             res = solution.pivots.find_N1_N2_around(ztau_ind[:-1])
@@ -193,6 +195,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
                                               solution, tolerance)
                 if col is not None:
                     col.from_ztau = True
+                    col.ztau_ind = ztau_ind
                     return col
     if (len(ztau_ind) > 3 and (max(ztau_ind) - min(ztau_ind) + 1)/len(ztau_ind) < 0.9) or hard_find:
         for n in range(len(ztau_ind)):
@@ -286,7 +289,7 @@ def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, tolerance):
     if N1 == -1 or N2 == solution.NN:
         return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
     else:
-        vlist = solution.pivots.get_difference(N1, N2)
+        vlist = solution.pivots.get_out_difference(N1, N2)
         if len(vlist) > 2:
             print('More than two variables leave in time shrink ....')
             return None

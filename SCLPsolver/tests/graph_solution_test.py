@@ -1,10 +1,12 @@
 from doe.data_generators.MCQN import generate_MCQN_data
 from SCLP import SCLP, SCLP_settings
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 
 seed = 1000
 G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, 12, 4)
-T = 60
+T = 150
 import time
 start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False, collect_plot_data=True)

@@ -32,9 +32,26 @@ for I in [200,400,800]:
             res_file = relative_to_project('results_long2.csv')
             write_results_to_csv(results, res_file)
         else:
-            for n in [0,2,4,8]:
-                results, ftrials, files, raw_tau = run_experiment_series('MCQN', n+2, I * 10, I, T,
-                                                                         settings, 1000+n,
+            if I == 200:
+                results, ftrials, files, raw_tau = run_experiment_series('MCQN', 2, I * 10, I, T,
+                                                                         settings, 1006,
+                                                                         solver_settings, True, False)
+
+                cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
+                    'doe/cplex_integration/mod_files/main1.mod'), files)
+                results = combine_results(results, cplex_results, 1)
+                cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
+                    'doe/cplex_integration/mod_files/main10.mod'), files)
+                results = combine_results(results, cplex_results, 10)
+                if I < 800:
+                    cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
+                        'doe/cplex_integration/mod_files/main100.mod'), files)
+                    results = combine_results(results, cplex_results, 100)
+                res_file = relative_to_project('results_long.csv')
+                write_results_to_csv(results, res_file)
+            if I > 200:
+                results, ftrials, files, raw_tau = run_experiment_series('MCQN', 1, I * 10, I, T,
+                                                                         settings, 1000,
                                                                          solver_settings, True, False)
 
                 cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(

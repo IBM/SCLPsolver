@@ -7,7 +7,7 @@ from .rewind_info import rewind_info
 from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
 from .matrix_constructor import matrix_constructor
-from .calc_equations import calc_equations
+from .calc_equations import time_equations
 from .calc_states import calc_states, check_state
 
 
@@ -85,7 +85,9 @@ class generic_SCLP_solution():
         np.sign(state.dx, out=state.sdx[:, 1:-1])
         np.sign(state.dq, out=state.sdq[:, 1:-1])
         try:
-            state.tau, state.dtau = calc_equations(param_line, self._klist, self._jlist, self._pivots, state.dx, state.dq)
+            state.equations = time_equations.build_equations(param_line, self._klist, self._jlist, self._pivots,
+                                                             state.dx, state.dq)
+            state.tau, state.dtau = state.equations.solve()
             state.x, state.del_x, state.q, state.del_q\
                 = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau, state.sdx, state.sdq)
         except Exception as ex:

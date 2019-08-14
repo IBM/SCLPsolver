@@ -2,7 +2,7 @@ import os
 import numpy as np
 from .data_generators.MCQN import generate_MCQN_data
 from .data_generators.reentrant import generate_reentrant_data
-from .data_generators.MCQN_routing import generate_MCQN_routing_data
+from .data_generators.MCQN_routing1 import generate_MCQN_routing_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
