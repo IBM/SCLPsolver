@@ -76,10 +76,14 @@ class equation_solver():
         return np.dot(self._get_col_etm(-1),np.dot(self._inv_matrix.get_matrix(), self._get_row_etm(-1)))
 
     def _resolve(self, rhs):
-        return ftran(np.dot(self._inv_matrix.get_matrix(), btran(rhs, self._eta_rows[-1], self._row_places[-1])), self._eta_cols[-1], self._col_places[-1])
+        for i, r in zip(reversed(range(len(self._eta_rows))), reversed(self._eta_rows)):
+            rhs = btran(rhs, r, self._row_places[i])
+        rhs = np.dot(self._inv_matrix.get_matrix(), rhs)
+        for i, c in enumerate(self._eta_cols):
+            rhs = ftran(rhs, c, self._col_places[i])
+        return rhs
 
     def resolve(self, rhs):
-        # should update old_solution inserting 0 to indexes of -1 in col order and ordering elements
         res = self._resolve(rhs)
         # should update res by removing 0 from indexes of -1 in col order and ordering elements
         return res
