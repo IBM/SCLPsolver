@@ -66,7 +66,7 @@ class equation_solver():
 
     def _replace_equation(self, i_row, i_col, row, col):
         self._steps += 1
-        for i, r in enumerate(self._eta_rows):
+        for i, r in zip(reversed(range(len(self._eta_rows))), reversed(self._eta_rows)):
             col = btran(col, r, self._row_places[i])
         col = np.dot(self._inv_matrix.get_matrix(), col)
         for i, c in enumerate(self._eta_cols):

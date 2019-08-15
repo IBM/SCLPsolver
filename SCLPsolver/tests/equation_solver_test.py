@@ -23,10 +23,11 @@ times_to_run = 5
 
 numpy_algorithm_time = 0
 new_algorithm_time = 0
+vector_2 = 10 * np.random.normal(size=matrix_size)
 
 for i in range(times_to_run):
 
-    vector_2 = 10 * np.random.normal(size=matrix_size)
+
 
     if i == 0:
         matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
