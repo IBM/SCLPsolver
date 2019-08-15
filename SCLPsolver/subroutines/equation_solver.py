@@ -3,7 +3,8 @@ import subroutines.matrix as mm
 
 class equation_solver():
 
-    def __init__(self, alloc_size):
+    def __init__(self, alloc_size, steps_to_reinvert=30):
+        self._steps_to_reinvert = steps_to_reinvert
         self._steps = 0
         self._eta_rows = []
         self._eta_cols = []
@@ -15,14 +16,20 @@ class equation_solver():
         self._col_order = [0] # use this to save order of variables set -1 if we remove variable
 
     def replace_equations(self, dx, dq, pivots, n1, n2, nnew):
-        # should replace all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
-        # and same for corresponding rows
-        pass
+        if self._steps + n2-n1 + max(nnew,0) > self._steps_to_reinvert:
+            self.reinvert(dx, dq, pivots)
+        else:
+            # should replace all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
+            # and same for corresponding rows
+            pass
 
-    def remove_equations(self, pivots, n1, n2):
-        # should remove all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
-        # and same for corresponding rows
-        pass
+    def remove_equations(self, dx, dq, pivots, n1, n2):
+        if self._steps + n2-n1  > self._steps_to_reinvert:
+            self.reinvert(dx, dq, pivots)
+        else:
+            # should remove all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
+            # and same for corresponding rows
+            pass
 
     def reinvert(self, dx, dq, pivots):
         # should build matrix invert it and put to the self._inv_matrix
@@ -35,7 +42,6 @@ class equation_solver():
         self._col_order = list(range(self._inv_matrix.get_matrix().shape[1]))
 
     def add_equation(self, n_row, n_col, row, col):
-        self._steps += 1
         if -1 not in self._row_order:
             self._inv_matrix.enlarge()
             self._row_order.append(n_row)
@@ -49,7 +55,6 @@ class equation_solver():
             self._col_order[i_col] = n_col
 
     def remove_equation(self, n_row, n_col):
-        self._steps += 1
         i_row = self._row_places.index(n_row)
         i_col = self._col_places.index(n_col)
         row = np.zeros(len(self._col_places))
