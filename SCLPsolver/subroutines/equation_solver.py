@@ -125,6 +125,11 @@ class equation_solver():
     def set_inverse_matrix(self, inverse_matrix):
         self._inv_matrix.set_matrix(inverse_matrix)
 
+        # ************* this is temporary and should be removed later ***************
+        self._row_order = np.asarray(list(range(self._inv_matrix.get_matrix().shape[0])))
+        self._col_order = np.asarray(list(range(self._inv_matrix.get_matrix().shape[1])))
+        # ***************************************************************************
+
 def to_eta(values, index_to_pivot):
     pivot_val = values[index_to_pivot]
     values /= -values[index_to_pivot]
