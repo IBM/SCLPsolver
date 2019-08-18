@@ -27,11 +27,17 @@ class matrix():
         return self._matrix[self._top:self._bottom,self._left:self._right]
 
     def set_matrix(self, matrix):
+        if len(matrix) > len(self._matrix):
+            np.matrix.resize(self._matrix,(len(matrix)*2,len(matrix)*2))
         self._bottom = self._top + matrix.shape[0]
         self._right = self._left + matrix.shape[1]
         self._matrix[self._top:self._bottom, self._left:self._right] = matrix
 
     def enlarge(self):
+        if self._bottom+3>self._allocation_size:
+            self._allocation_size *= 2
+            np.matrix.resize(self._matrix, (self._allocation_size,self._allocation_size))
+
         self._bottom += 1
         self._right += 1
 
@@ -48,8 +54,7 @@ class matrix():
         # move bottom left corner
         self._matrix[self._top + index+1:self._bottom+1,self._left:self._left+index] = self._matrix[self._top + index:self._bottom,self._left:self._left+index]
 
-        self._bottom += 1
-        self._right += 1
+        self.enlarge()
 
         # insert row vector
         self._matrix[self._top+index,self._left:self._right] = row_vector

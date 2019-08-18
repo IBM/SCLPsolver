@@ -27,8 +27,6 @@ vector_2 = 10 * np.random.normal(size=matrix_size)
 
 for i in range(times_to_run):
 
-
-
     if i == 0:
         matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
 
@@ -73,6 +71,17 @@ print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster
 #print(result_8)
 #print(result_11)
 
+#
+# vector_col_order = np.asarray([4,2,-1,9])
+# original_result_vector = np.asarray([1, 2, 3, 4])
+# argsort_indices = vector_col_order.argsort()
+# sorted_col_order = vector_col_order[argsort_indices]
+# sorted_result_vector = original_result_vector[argsort_indices]
+#
+# index = np.searchsorted(sorted_col_order, -1, side='right')
+# clean_up_result = sorted_result_vector[index:]
+# print("sorting_result ", clean_up_result)
+#
 
 
 
