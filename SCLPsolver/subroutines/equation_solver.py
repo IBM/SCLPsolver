@@ -73,14 +73,16 @@ class equation_solver():
         self._steps += 1
         for i, r in zip(reversed(range(len(self._eta_rows))), reversed(self._eta_rows)):
             col = btran(col, r, self._row_places[i])
-        col = np.dot(self._inv_matrix.get_matrix(), col)
+        inv_matrix = self._inv_matrix.get_matrix()
+        inv_matrix_dim = inv_matrix.shape[0]
+        col[:inv_matrix_dim] = np.dot(inv_matrix, col[:inv_matrix_dim])
         for i, c in enumerate(self._eta_cols):
             col = ftran(col, c, self._col_places[i])
         self._col_places.append(i_col)
         self._eta_cols.append(to_eta(col, i_row))
         for i, c in zip(reversed(range(len(self._eta_cols))), reversed(self._eta_cols)):
             row = btran(row, c, self._col_places[i])
-        row = np.dot(self._inv_matrix.get_matrix().T, row)
+        row[:inv_matrix_dim] = np.dot(inv_matrix.T, row[:inv_matrix_dim])
         for i, r in enumerate(self._eta_rows):
             row = ftran(row, r, self._row_places[i])
         self._row_places.append(i_row)
@@ -104,7 +106,9 @@ class equation_solver():
         # should utilize sparsity in btran!!!
         for i, r in zip(reversed(range(len(self._eta_rows))), reversed(self._eta_rows)):
             rhs = btran(rhs, r, self._row_places[i])
-        rhs = np.dot(self._inv_matrix.get_matrix(), rhs)
+        inv_matrix = self._inv_matrix.get_matrix()
+        inv_matrix_dim = inv_matrix.shape[0]
+        rhs[:inv_matrix_dim] = np.dot(inv_matrix, rhs[:inv_matrix_dim])
         for i, c in enumerate(self._eta_cols):
             rhs = ftran(rhs, c, self._col_places[i])
         return rhs
