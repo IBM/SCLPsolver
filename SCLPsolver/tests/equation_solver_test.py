@@ -99,10 +99,6 @@ equation_solver_9.set_inverse_matrix(matrix_3)
 start_time = time.time()
 
 equation_solver_9.add_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
-
-#step 10
-#result10 = equation_solver_9.get_inverse()
-#print(np.allclose(result10, matrix_7))
 result_11 = equation_solver_9.resolve(vector_2)
 new_algorithm_time += time.time() - start_time
 
