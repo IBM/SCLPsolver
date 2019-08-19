@@ -46,7 +46,8 @@ class equation_solver():
             self._inv_matrix.enlarge()
             self._row_order.append(n_row)
             self._col_order.append(n_col)
-            self._replace_equation(len(self._row_places)+1,len(self._col_places)+1, row, col)
+            i_row = self._inv_matrix.get_matrix().shape[0] -1
+            self._replace_equation(i_row,i_row, row, col)
         else:
             i_row = self._row_places.index(-1)
             i_col = self._col_places.index(-1)
@@ -99,7 +100,7 @@ class equation_solver():
         etm[:, self._col_places[index]] = self._eta_cols[index]
         return etm
 
-    def _get_inverse(self):
+    def get_inverse(self):
         return np.dot(self._get_col_etm(-1),np.dot(self._inv_matrix.get_matrix(), self._get_row_etm(-1)))
 
     def _resolve(self, rhs):
