@@ -105,13 +105,13 @@ equation_solver_9 = equation_solver(matrix_size*2)
 equation_solver_9.set_inverse_matrix(matrix_3)
 equation_solver_10 = equation_solver(matrix_size*2)
 equation_solver_10.set_inverse_matrix(res22)
-equation_solver_10._replace_equation(3, 3, random_row_vector_5_1, random_column_vector_5_2)
+equation_solver_10._replace_equation(3, 3, random_row_vector_5_1.copy(), random_column_vector_5_2.copy())
 result_12 = equation_solver_10.resolve(vector_2.copy())
 
 start_time = time.time()
 
 #equation_solver_9.add_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
-equation_solver_9.add_equation(matrix_size,matrix_size,random_row_vector_5_1,random_column_vector_5_2)
+equation_solver_9.add_equation(matrix_size,matrix_size,random_row_vector_5_1.copy(),random_column_vector_5_2.copy())
 
 result_11 = equation_solver_9.resolve(vector_2.copy())
 
