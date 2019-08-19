@@ -117,8 +117,8 @@ class equation_solver():
         original_result_vector = self._resolve(rhs)
         # should update res by removing 0 from indexes of -1 in col order and ordering elements
 
-        argsort_indices = self._col_order.argsort()
-        sorted_col_order = self._col_order[argsort_indices]
+        argsort_indices = np.array(self._col_order).argsort()
+        sorted_col_order = np.array(self._col_order)[argsort_indices]
         sorted_result_vector = original_result_vector[argsort_indices]
 
         index = np.searchsorted(sorted_col_order, -1, side='right')
@@ -130,8 +130,8 @@ class equation_solver():
         self._inv_matrix.set_matrix(inverse_matrix)
 
         # ************* this is temporary and should be removed later ***************
-        self._row_order = np.asarray(list(range(self._inv_matrix.get_matrix().shape[0])))
-        self._col_order = np.asarray(list(range(self._inv_matrix.get_matrix().shape[1])))
+        self._row_order = list(range(self._inv_matrix.get_matrix().shape[0]))
+        self._col_order = list(range(self._inv_matrix.get_matrix().shape[1]))
         # ***************************************************************************
 
 def to_eta(values, index_to_pivot):
