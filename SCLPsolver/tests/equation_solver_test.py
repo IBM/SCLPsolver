@@ -67,7 +67,6 @@ vector_2 = 10 * np.random.normal(size=matrix_size+1)
 matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
 
 matrix_3 = np.linalg.inv(matrix_1)
-# result_4 = np.dot(matrix_3, vector_2)
 
 index_to_replace = 2#random.randint(0, matrix_size - 1)
 
