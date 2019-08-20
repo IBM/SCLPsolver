@@ -142,6 +142,21 @@ class equation_solver():
         # print("sorting_result ", clean_up_result)
         return clean_up_result
 
+    def reverse_vector_order(self, vector, order):
+        vector_index = 0
+        order_index = 0
+
+        while order_index < len(order):
+            if order[order_index] != -1:
+                order[order_index] = vector[order[order_index]]
+                vector_index += 1
+            else:
+                order[order_index] = 0
+
+            order_index += 1
+
+        return order
+
     def set_inverse_matrix(self, inverse_matrix):
         self._inv_matrix.set_matrix(inverse_matrix)
 

@@ -144,10 +144,15 @@ print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster
 
 # test that do replace, add and remove several times
 
+print('\n test reverse_vector_order')
 
+vector = [1,2,3]
+order = [0, -1, 2, -1 ,1]
 
+equation_solver_test = equation_solver(matrix_size*2)
+print('result : ', equation_solver_test.reverse_vector_order(vector, order))
 
-
+#
 
 
 
