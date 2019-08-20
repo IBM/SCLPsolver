@@ -70,7 +70,7 @@ class equation_solver():
                 i_col = i
         for i, n in enumerate(self._row_order):
             if n > n_row:
-                self._row_order[i] += 1
+                self._row_order[i] -= 1
             elif n == n_row:
                 i_row = i
         row = np.zeros(len(self._col_places))
