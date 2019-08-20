@@ -73,8 +73,8 @@ class equation_solver():
                 self._row_order[i] -= 1
             elif n == n_row:
                 i_row = i
-        row = np.zeros(len(self._col_places))
-        col = np.zeros(len(self._row_places))
+        row = np.zeros(len(self._col_order))
+        col = np.zeros(len(self._row_order))
         row[i_col] = 1
         col[i_row] = 1
         # should utilize sparsity in btran!!!
