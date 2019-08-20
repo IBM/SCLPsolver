@@ -42,6 +42,13 @@ class equation_solver():
         self._col_order = list(range(self._inv_matrix.get_matrix().shape[1]))
 
     def add_equation(self, n_row, n_col, row, col):
+        if n_col in self._col_order:
+            for i,n in enumerate(self._col_order):
+                if n >= n_col:
+                    self._col_order[i] +=1
+            for i, n in enumerate(self._row_order):
+                if n >= n_row:
+                    self._row_order[i] += 1
         if -1 not in self._row_order:
             self._inv_matrix.enlarge()
             self._row_order.append(n_row)
@@ -56,8 +63,16 @@ class equation_solver():
             self._col_order[i_col] = n_col
 
     def remove_equation(self, n_row, n_col):
-        i_row = self._row_places.index(n_row)
-        i_col = self._col_places.index(n_col)
+        for i, n in enumerate(self._col_order):
+            if n > n_col:
+                self._col_order[i] -= 1
+            elif n == n_col:
+                i_col = i
+        for i, n in enumerate(self._row_order):
+            if n > n_row:
+                self._row_order[i] += 1
+            elif n == n_row:
+                i_row = i
         row = np.zeros(len(self._col_places))
         col = np.zeros(len(self._row_places))
         row[i_col] = 1
