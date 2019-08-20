@@ -4,7 +4,7 @@ import numpy as np
 import random
 import time
 
-matrix_size = 4
+matrix_size = 3
 times_to_run = 5
 print('\n test replace_equation')
 
@@ -69,7 +69,7 @@ matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
 matrix_3 = np.linalg.inv(matrix_1)
 # result_4 = np.dot(matrix_3, vector_2)
 
-index_to_replace = random.randint(0, matrix_size - 1)
+index_to_replace = 2#random.randint(0, matrix_size - 1)
 
 random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size+1)
 random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size+1)
@@ -109,8 +109,22 @@ equation_solver_9.set_inverse_matrix(matrix_3)
 
 start_time = time.time()
 
-equation_solver_9.add_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
-result_11 = equation_solver_9.resolve(vector_2.copy())
+random_5_1_mod = random_row_vector_5_1.copy()
+v = random_5_1_mod[-1]
+random_5_1_mod[-1] = random_5_1_mod[index_to_replace]
+random_5_1_mod[index_to_replace] = v
+random_5_2_mod = random_column_vector_5_2.copy()
+v = random_5_2_mod[-1]
+random_5_2_mod[-1] = random_5_2_mod[index_to_replace]
+random_5_2_mod[index_to_replace] = v
+
+
+equation_solver_9.add_equation(index_to_replace,index_to_replace,random_5_1_mod,random_5_2_mod)
+vector_2_mod = vector_2.copy()
+v = vector_2_mod[-1]
+vector_2_mod[-1] = vector_2_mod[index_to_replace]
+vector_2_mod[index_to_replace] = v
+result_11 = equation_solver_9.resolve(vector_2_mod.copy())
 
 new_algorithm_time += time.time() - start_time
 
