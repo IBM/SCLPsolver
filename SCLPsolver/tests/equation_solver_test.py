@@ -4,8 +4,20 @@ import numpy as np
 import random
 import time
 
+
 matrix_size = 3
 times_to_run = 5
+
+
+print('\n test reverse_vector_order')
+
+vector = [1,2,3]
+order = [0, -1, 2, -1 ,1]
+
+equation_solver_test = equation_solver(matrix_size*2)
+print('result : ', equation_solver_test.reverse_vector_order(vector, order))
+
+
 print('\n test replace_equation')
 
 numpy_algorithm_time = 0
@@ -36,7 +48,7 @@ for i in range(times_to_run):
     start_time = time.time()
     matrix_7 = np.linalg.inv(matrix_1)
     # step 8
-    result_8 = np.dot(matrix_7, vector_2)
+    matrix_2 = np.dot(matrix_7, vector_2)
     numpy_algorithm_time += time.time() - start_time
 
     start_time = time.time()
@@ -45,7 +57,7 @@ for i in range(times_to_run):
     result_11 = equation_solver_9.resolve(vector_2)
     new_algorithm_time += time.time() - start_time
 
-    print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, result_11))
+    print("Are Numpy and new Algorithm results the same? :", np.allclose(matrix_2, result_11))
 
 
 print("Numpy algorithm took ", numpy_algorithm_time, " seconds")
@@ -81,7 +93,7 @@ matrix_2[index_to_replace,:] = random_row_vector_5_1
 start_time = time.time()
 matrix_7 = np.linalg.inv(matrix_2)
 # step 8
-result_8 = np.dot(matrix_7, vector_2)
+matrix_2 = np.dot(matrix_7, vector_2)
 numpy_algorithm_time += time.time() - start_time
 
 # step 9
@@ -109,7 +121,7 @@ result_11 = equation_solver_9.resolve(vector_2_mod.copy())
 
 new_algorithm_time += time.time() - start_time
 
-print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, result_11))
+print("Are Numpy and new Algorithm results the same? :", np.allclose(matrix_2, result_11))
 
 
 print("Numpy algorithm took ", numpy_algorithm_time, " seconds")
@@ -122,19 +134,36 @@ print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster
 
 # test remove equation
 
+print('\n test remove_equation')
+
+matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
+vector_2 = 10 * np.random.normal(size=matrix_size-1)
+
+matrix_3 = np.linalg.inv(matrix_1)
+
+index_to_replace = random.randint(0, matrix_size - 1)
+
+# removing row and column
+matrix_2 = np.zeros([matrix_size-1,matrix_size-1])
+matrix_2[:index_to_replace, :index_to_replace] = matrix_1[:index_to_replace, :index_to_replace]
+matrix_2[:index_to_replace, index_to_replace:] = matrix_1[:index_to_replace, index_to_replace+1:]
+matrix_2[index_to_replace:, :index_to_replace] = matrix_1[index_to_replace+1:,:index_to_replace]
+matrix_2[index_to_replace:,index_to_replace:] = matrix_1[index_to_replace+1:,index_to_replace+1:]
+
+# inverse matrix
+matrix_7 = np.linalg.inv(matrix_2)
+
+# dot on rhs
+result_8 = np.dot(matrix_7, vector_2)
+
+equation_solver_test = equation_solver(matrix_size)
+equation_solver_test.set_inverse_matrix(matrix_3)
+equation_solver_test.remove_equation(index_to_replace,index_to_replace)
+equation_solver_result = equation_solver_test.resolve(vector_2_mod.copy())
+#print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, equation_solver_result))
+
+print(result_8, '\n')
+print(equation_solver_result)
+
 
 # test that do replace, add and remove several times
-
-print('\n test reverse_vector_order')
-
-vector = [1,2,3]
-order = [0, -1, 2, -1 ,1]
-
-equation_solver_test = equation_solver(matrix_size*2)
-print('result : ', equation_solver_test.reverse_vector_order(vector, order))
-
-#
-
-
-
-
