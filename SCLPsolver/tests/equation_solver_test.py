@@ -160,10 +160,10 @@ equation_solver_test = equation_solver(matrix_size)
 equation_solver_test.set_inverse_matrix(matrix_3)
 equation_solver_test.remove_equation(index_to_replace,index_to_replace)
 equation_solver_result = equation_solver_test.resolve(vector_2_mod.copy())
-#print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, equation_solver_result))
+print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, equation_solver_result))
 
-print(result_8, '\n')
-print(equation_solver_result)
+print('result_8              :',result_8)
+print('equation_solver_result:',equation_solver_result)
 
 
 # test that do replace, add and remove several times
