@@ -5,7 +5,7 @@ import random
 import time
 
 
-matrix_size = 3
+matrix_size = 4
 times_to_run = 5
 
 
@@ -126,8 +126,8 @@ print("Are Numpy and new Algorithm results the same? :", np.allclose(matrix_2, r
 
 print("Numpy algorithm took ", numpy_algorithm_time, " seconds")
 print("New algorithm took ", new_algorithm_time, " seconds")
-size_comparison = numpy_algorithm_time/new_algorithm_time
-print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster' if (size_comparison >= 1) else 'slower')
+#size_comparison = numpy_algorithm_time/new_algorithm_time
+#print("** New algorithm is ",abs(round((size_comparison-1)*100,1)), "%" ,'faster' if (size_comparison >= 1) else 'slower')
 #
 # print("results using numpy:\n",result_8)
 # print("results using add equation:\n",result_11)
@@ -159,6 +159,9 @@ result_8 = np.dot(matrix_7, vector_2)
 equation_solver_test = equation_solver(matrix_size)
 equation_solver_test.set_inverse_matrix(matrix_3)
 equation_solver_test.remove_equation(index_to_replace,index_to_replace)
+vector_2_mod = np.zeros(matrix_size)
+vector_2_mod[:index_to_replace] = vector_2[:index_to_replace]
+vector_2_mod[index_to_replace+1:] = vector_2[index_to_replace:]
 equation_solver_result = equation_solver_test.resolve(vector_2_mod.copy())
 print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, equation_solver_result))
 
