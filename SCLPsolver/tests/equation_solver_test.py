@@ -73,7 +73,8 @@ matrix_1 = 10 * np.random.rand(matrix_size, matrix_size)
 
 matrix_3 = np.linalg.inv(matrix_1)
 
-index_to_replace = 2#random.randint(0, matrix_size - 1)
+index_to_replace = 0#random.randint(0, matrix_size - 1)
+
 
 random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size+1)
 random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size+1)
@@ -103,20 +104,19 @@ equation_solver_9.set_inverse_matrix(matrix_3)
 start_time = time.time()
 
 random_5_1_mod = random_row_vector_5_1.copy()
-v = random_5_1_mod[-1]
-random_5_1_mod[-1] = random_5_1_mod[index_to_replace]
-random_5_1_mod[index_to_replace] = v
+v = random_5_1_mod[index_to_replace]
+random_5_1_mod[index_to_replace:-1] = random_5_1_mod[index_to_replace+1:]
+random_5_1_mod[-1] = v
 random_5_2_mod = random_column_vector_5_2.copy()
-v = random_5_2_mod[-1]
-random_5_2_mod[-1] = random_5_2_mod[index_to_replace]
-random_5_2_mod[index_to_replace] = v
+v = random_5_2_mod[index_to_replace]
+random_5_2_mod[index_to_replace:-1] = random_5_2_mod[index_to_replace+1:]
+random_5_2_mod[-1] = v
 
-
-equation_solver_9.add_equation(index_to_replace,index_to_replace,random_5_1_mod,random_5_2_mod)
+equation_solver_9.add_equation(index_to_replace,index_to_replace,random_5_1_mod.copy(),random_5_2_mod.copy())
 vector_2_mod = vector_2.copy()
-v = vector_2_mod[-1]
-vector_2_mod[-1] = vector_2_mod[index_to_replace]
-vector_2_mod[index_to_replace] = v
+v = vector_2_mod[index_to_replace]
+vector_2_mod[index_to_replace:-1] = vector_2_mod[index_to_replace+1:]
+vector_2_mod[-1] = v
 result_11 = equation_solver_9.resolve(vector_2_mod.copy())
 
 new_algorithm_time += time.time() - start_time
