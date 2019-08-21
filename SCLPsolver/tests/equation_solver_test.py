@@ -103,21 +103,21 @@ equation_solver_9.set_inverse_matrix(matrix_3)
 
 start_time = time.time()
 
-random_5_1_mod = random_row_vector_5_1.copy()
-v = random_5_1_mod[index_to_replace]
-random_5_1_mod[index_to_replace:-1] = random_5_1_mod[index_to_replace+1:]
-random_5_1_mod[-1] = v
-random_5_2_mod = random_column_vector_5_2.copy()
-v = random_5_2_mod[index_to_replace]
-random_5_2_mod[index_to_replace:-1] = random_5_2_mod[index_to_replace+1:]
-random_5_2_mod[-1] = v
+# random_5_1_mod = random_row_vector_5_1.copy()
+# v = random_5_1_mod[index_to_replace]
+# random_5_1_mod[index_to_replace:-1] = random_5_1_mod[index_to_replace+1:]
+# random_5_1_mod[-1] = v
+# random_5_2_mod = random_column_vector_5_2.copy()
+# v = random_5_2_mod[index_to_replace]
+# random_5_2_mod[index_to_replace:-1] = random_5_2_mod[index_to_replace+1:]
+# random_5_2_mod[-1] = v
 
-equation_solver_9.add_equation(index_to_replace,index_to_replace,random_5_1_mod.copy(),random_5_2_mod.copy())
-vector_2_mod = vector_2.copy()
-v = vector_2_mod[index_to_replace]
-vector_2_mod[index_to_replace:-1] = vector_2_mod[index_to_replace+1:]
-vector_2_mod[-1] = v
-result_11 = equation_solver_9.resolve(vector_2_mod.copy())
+equation_solver_9.add_equation(index_to_replace,index_to_replace,random_row_vector_5_1,random_column_vector_5_2)
+# vector_2_mod = vector_2.copy()
+# v = vector_2_mod[index_to_replace]
+# vector_2_mod[index_to_replace:-1] = vector_2_mod[index_to_replace+1:]
+# vector_2_mod[-1] = v
+result_11 = equation_solver_9.resolve(vector_2)
 
 new_algorithm_time += time.time() - start_time
 
@@ -159,10 +159,10 @@ result_8 = np.dot(matrix_7, vector_2)
 equation_solver_test = equation_solver(matrix_size)
 equation_solver_test.set_inverse_matrix(matrix_3)
 equation_solver_test.remove_equation(index_to_replace,index_to_replace)
-vector_2_mod = np.zeros(matrix_size)
-vector_2_mod[:index_to_replace] = vector_2[:index_to_replace]
-vector_2_mod[index_to_replace+1:] = vector_2[index_to_replace:]
-equation_solver_result = equation_solver_test.resolve(vector_2_mod.copy())
+# vector_2_mod = np.zeros(matrix_size)
+# vector_2_mod[:index_to_replace] = vector_2[:index_to_replace]
+# vector_2_mod[index_to_replace+1:] = vector_2[index_to_replace:]
+equation_solver_result = equation_solver_test.resolve(vector_2)
 print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, equation_solver_result))
 
 print('result_8              :',result_8)

@@ -54,13 +54,15 @@ class equation_solver():
             self._row_order.append(n_row)
             self._col_order.append(n_col)
             i_row = self._inv_matrix.get_matrix().shape[0] -1
-            self._replace_equation(i_row,i_row, row, col)
+            i_col = i_row
         else:
             i_row = self._row_places.index(-1)
             i_col = self._col_places.index(-1)
-            self._replace_equation(i_row, i_col, row, col)
             self._row_order[i_row] = n_row
             self._col_order[i_col] = n_col
+        col = self.reverse_vector_order(col, self._col_order)
+        row = self.reverse_vector_order(row, self._row_order)
+        self._replace_equation(i_row, i_col, row, col)
 
     def remove_equation(self, n_row, n_col):
         for i, n in enumerate(self._col_order):
@@ -83,6 +85,8 @@ class equation_solver():
         self._col_order[i_col] = -1
 
     def replace_equation(self, n_row, n_col, row, col):
+        col = self.reverse_vector_order(col, self._col_order)
+        row = self.reverse_vector_order(row, self._row_order)
         self._replace_equation(self._row_places.index(n_row), self._col_places.index(n_col), row, col)
 
     def _replace_equation(self, i_row, i_col, row, col):
@@ -130,6 +134,7 @@ class equation_solver():
         return rhs
 
     def resolve(self, rhs):
+        rhs = self.reverse_vector_order(rhs, self._col_order)
         original_result_vector = self._resolve(rhs)
         # should update res by removing 0 from indexes of -1 in col order and ordering elements
 
@@ -143,19 +148,24 @@ class equation_solver():
         return clean_up_result
 
     def reverse_vector_order(self, vector, order):
-        vector_index = 0
-        order_index = 0
+        res = np.zeros(len(order))
+        for i,o in enumerate(order):
+            if o != -1:
+                res[i] = vector[o]
+        return res
 
-        while order_index < len(order):
-            if order[order_index] != -1:
-                order[order_index] = vector[order[order_index]]
-                vector_index += 1
-            else:
-                order[order_index] = 0
-
-            order_index += 1
-
-        return order
+        # vector_index = 0
+        # order_index = 0
+        # while order_index < len(order):
+        #     if order[order_index] != -1:
+        #         order[order_index] = vector[order[order_index]]
+        #         vector_index += 1
+        #     else:
+        #         order[order_index] = 0
+        #
+        #     order_index += 1
+        #
+        # return order
 
     def set_inverse_matrix(self, inverse_matrix):
         self._inv_matrix.set_matrix(inverse_matrix)
