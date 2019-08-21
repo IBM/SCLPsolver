@@ -133,19 +133,40 @@ class equation_solver():
             rhs = ftran(rhs, c, self._col_places[i])
         return rhs
 
+    def replace_column_and_resolve(self, n_col, col, old_solution):
+        i_col = self._col_places.index(n_col)
+        self._steps += 1
+        for i, r in zip(reversed(range(len(self._eta_rows))), reversed(self._eta_rows)):
+            col = btran(col, r, self._row_places[i])
+        inv_matrix = self._inv_matrix.get_matrix()
+        inv_matrix_dim = inv_matrix.shape[0]
+        col[:inv_matrix_dim] = np.dot(inv_matrix, col[:inv_matrix_dim])
+        for i, c in enumerate(self._eta_cols):
+            col = ftran(col, c, self._col_places[i])
+        self._col_places.append(i_col)
+        self._eta_cols.append(to_eta(col, i_col))
+        return ftran(old_solution, self._eta_cols[-1], i_col)
+
+    def raw_resolve(self, rhs):
+        rhs = self.reverse_vector_order(rhs, self._col_order)
+        return self._resolve(rhs)
+
     def resolve(self, rhs):
         rhs = self.reverse_vector_order(rhs, self._col_order)
-        original_result_vector = self._resolve(rhs)
+        result_vector = self._resolve(rhs)
+        return self.vector_order(result_vector)
+
+    def vector_order(self, vector):
         # should update res by removing 0 from indexes of -1 in col order and ordering elements
 
-        argsort_indices = np.array(self._col_order).argsort()
-        sorted_col_order = np.array(self._col_order)[argsort_indices]
-        sorted_result_vector = original_result_vector[argsort_indices]
-
-        index = np.searchsorted(sorted_col_order, -1, side='right')
-        clean_up_result = sorted_result_vector[index:]
-        # print("sorting_result ", clean_up_result)
-        return clean_up_result
+        # argsort_indices = np.array(self._col_order).argsort()
+        # sorted_col_order = np.array(self._col_order)[argsort_indices]
+        # sorted_result_vector = original_result_vector[argsort_indices]
+        # index = np.searchsorted(sorted_col_order, -1, side='right')
+        argsort_indices = sorted(range(len(self._col_order)), key=self._col_order.__getitem__)
+        sorted_result_vector = vector[argsort_indices]
+        index = self._col_order.count(-1)
+        return sorted_result_vector[index:]
 
     def reverse_vector_order(self, vector, order):
         res = np.zeros(len(order))
@@ -188,6 +209,7 @@ def ftran(values, eta, index_to_pivot):
     return values
 
 def btran(values, eta, index_to_pivot):
-    pivot_val = np.inner(values[:len(eta)], eta)
-    values[index_to_pivot] = pivot_val
+    if eta is not None:
+        pivot_val = np.inner(values[:len(eta)], eta)
+        values[index_to_pivot] = pivot_val
     return values
