@@ -5,8 +5,8 @@ import random
 import time
 
 
-matrix_size = 4
-times_to_run = 10
+matrix_size = 2000
+times_to_run = 4
 
 print('\n test reverse_vector_order')
 
@@ -45,8 +45,10 @@ def test_replace(input_matrix, equation_solver_parameter):
     result_11 = equation_solver_parameter.resolve(vector_2)
 
     print("Iteration:", i, " Are Numpy and new Algorithm results the same? :", np.allclose(result_8, result_11))
+    print("Abs error:", max(abs(result_8 - result_11)))
+    print("Rel error:", max(abs(result_8 - result_11) / abs(result_8)))
 
-    return input_matrix;
+    return input_matrix
 
 def test_add(input_matrix, equation_solver_parameter):
     print(' testing add equation')
@@ -79,10 +81,12 @@ def test_add(input_matrix, equation_solver_parameter):
     result_11 = equation_solver_parameter.resolve(vector_2)
 
     print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, result_11))
+    print("Abs error:", max(abs(result_8 - result_11)))
+    print("Rel error:", max(abs(result_8 - result_11)/abs(result_8)))
 
     # print("results using numpy:\n",result_8)
     # print("results using add equation:\n",result_11)
-    return matrix_2;
+    return matrix_2
 
 def test_remove(input_matrix, equation_solver_parameter):
     print(' testing remove equation')
@@ -109,10 +113,12 @@ def test_remove(input_matrix, equation_solver_parameter):
     equation_solver_parameter.remove_equation(index_to_replace, index_to_replace)
     equation_solver_result = equation_solver_parameter.resolve(vector_2)
     print("Are Numpy and new Algorithm results the same? :", np.allclose(result_8, equation_solver_result))
+    print("Abs error:", max(abs(result_8 - equation_solver_result)))
+    print("Rel error:", max(abs(result_8 - equation_solver_result)/abs(result_8)))
     #
     # print('result_8              :',result_8)
     # print('equation_solver_result:',equation_solver_result)
-    return matrix_2;
+    return matrix_2
 
 
 #0 create test matrix
