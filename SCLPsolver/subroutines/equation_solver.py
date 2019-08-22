@@ -56,8 +56,8 @@ class equation_solver():
             i_row = self._inv_matrix.get_matrix().shape[0] -1
             i_col = i_row
         else:
-            i_row = self._row_places.index(-1)
-            i_col = self._col_places.index(-1)
+            i_row = self._row_order.index(-1)
+            i_col = self._col_order.index(-1)
             self._row_order[i_row] = n_row
             self._col_order[i_col] = n_col
         col = self.reverse_vector_order(col, self._col_order)
@@ -87,7 +87,7 @@ class equation_solver():
     def replace_equation(self, n_row, n_col, row, col):
         col = self.reverse_vector_order(col, self._col_order)
         row = self.reverse_vector_order(row, self._row_order)
-        self._replace_equation(self._row_places.index(n_row), self._col_places.index(n_col), row, col)
+        self._replace_equation(self._row_order.index(n_row), self._col_order.index(n_col), row, col)
 
     def _replace_equation(self, i_row, i_col, row, col):
         self._steps += 1
