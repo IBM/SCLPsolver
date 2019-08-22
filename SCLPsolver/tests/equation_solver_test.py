@@ -6,7 +6,7 @@ import time
 
 
 matrix_size = 400
-times_to_run = 100
+times_to_run = 10
 
 print('\n test reverse_vector_order')
 
@@ -21,20 +21,21 @@ print('result : ', equation_solver_test.reverse_vector_order(vector, order))
 
 def test_replace(inputMatrix):
     print(' testing replace equation')
+    inputMatrixSize = len(inputMatrix)
     numpy_algorithm_time = 0
     new_algorithm_time = 0
-    vector_2 = 10 * np.random.normal(size=matrix_size)
+    vector_2 = 10 * np.random.normal(size=inputMatrixSize)
 
     matrix_3 = np.linalg.inv(inputMatrix)
 
     # step 9
-    equation_solver_9 = equation_solver(matrix_size)
+    equation_solver_9 = equation_solver(inputMatrixSize)
     equation_solver_9.set_inverse_matrix(matrix_3)
 
-    index_to_replace = random.randint(0, matrix_size - 1)
+    index_to_replace = random.randint(0, inputMatrixSize - 1)
 
-    random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size)
-    random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size)
+    random_row_vector_5_1 = 10 * np.random.normal(size=inputMatrixSize)
+    random_column_vector_5_2 = 10 * np.random.normal(size=inputMatrixSize)
     # step 6
     inputMatrix[:, index_to_replace] = random_column_vector_5_2
     inputMatrix[index_to_replace, :] = random_row_vector_5_1
@@ -65,16 +66,17 @@ def test_replace(inputMatrix):
 
 def test_add(inputMatrix):
     print(' testing add equation')
+    inputMatrixSize = len(inputMatrix)
     numpy_algorithm_time = 0
     new_algorithm_time = 0
-    vector_2 = 10 * np.random.normal(size=matrix_size + 1)
+    vector_2 = 10 * np.random.normal(size=inputMatrixSize + 1)
 
     matrix_3 = np.linalg.inv(inputMatrix)
 
     index_to_replace = 0  # random.randint(0, matrix_size - 1)
 
-    random_row_vector_5_1 = 10 * np.random.normal(size=matrix_size + 1)
-    random_column_vector_5_2 = 10 * np.random.normal(size=matrix_size + 1)
+    random_row_vector_5_1 = 10 * np.random.normal(size=inputMatrixSize + 1)
+    random_column_vector_5_2 = 10 * np.random.normal(size=inputMatrixSize + 1)
 
     # expand matrix by 1 row and 1 column
     matrix_2 = np.eye(inputMatrix.shape[0] + 1)
@@ -95,7 +97,7 @@ def test_add(inputMatrix):
     numpy_algorithm_time += time.time() - start_time
 
     # step 9
-    equation_solver_9 = equation_solver(matrix_size * 2)
+    equation_solver_9 = equation_solver(inputMatrixSize * 2)
     equation_solver_9.set_inverse_matrix(matrix_3)
 
     start_time = time.time()
@@ -120,11 +122,14 @@ def test_add(inputMatrix):
 
 def test_remove(inputMatrix):
     print(' testing remove equation')
-    vector_2 = 10 * np.random.normal(size=len(inputMatrix) - 1)
+
+    inputMatrixSize = len(inputMatrix)
+
+    vector_2 = 10 * np.random.normal(size=inputMatrixSize - 1)
 
     matrix_3 = np.linalg.inv(inputMatrix)
 
-    index_to_replace = random.randint(0, len(inputMatrix) - 1)
+    index_to_replace = random.randint(0, inputMatrixSize - 1)
 
     # removing row and column
     matrix_2 = np.zeros([len(inputMatrix) - 1, len(inputMatrix) - 1])
@@ -153,6 +158,6 @@ test_matrix = 10 * np.random.rand(matrix_size, matrix_size)
 
 for i in range(times_to_run):
 
-    matrix_result = test_replace(test_matrix)
-    matrix_result = test_add(matrix_result)
-    matrix_result = test_remove(matrix_result)
+    test_matrix = test_replace(test_matrix)
+    test_matrix = test_add(test_matrix)
+    test_matrix = test_remove(test_matrix)
