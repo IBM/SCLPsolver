@@ -65,7 +65,7 @@ def test_add(input_matrix, equation_solver_parameter):
     matrix_2[:index_to_replace, index_to_replace + 1:] = input_matrix[:index_to_replace, index_to_replace:]
     matrix_2[index_to_replace + 1:, :index_to_replace] = input_matrix[index_to_replace:, :index_to_replace]
     matrix_2[index_to_replace + 1:, index_to_replace + 1:] = input_matrix[index_to_replace:, index_to_replace:]
-    res22 = np.linalg.inv(matrix_2)
+
     matrix_2[:, index_to_replace] = random_column_vector_5_2
     matrix_2[index_to_replace, :] = random_row_vector_5_1
 
