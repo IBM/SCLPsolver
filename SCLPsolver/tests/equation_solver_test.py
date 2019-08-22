@@ -70,12 +70,9 @@ def test_add(input_matrix, equation_solver_parameter):
     matrix_2[index_to_replace, :] = random_row_vector_5_1
 
     # step 7
-    start_time = time.time()
     matrix_7 = np.linalg.inv(matrix_2)
     # step 8
     result_8 = np.dot(matrix_7, vector_2)
-
-    start_time = time.time()
 
     equation_solver_parameter.add_equation(index_to_replace, index_to_replace, random_row_vector_5_1, random_column_vector_5_2)
 
