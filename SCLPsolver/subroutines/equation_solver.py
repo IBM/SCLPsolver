@@ -1,9 +1,10 @@
 import numpy as np
 import subroutines.matrix as mm
+from subroutines.equation_order import equation_order
 
 class equation_solver():
 
-    def __init__(self, alloc_size, steps_to_reinvert=30):
+    def __init__(self, alloc_size, steps_to_reinvert=10):
         self._steps_to_reinvert = steps_to_reinvert
         self._steps = 0
         self._eta_rows = []
@@ -12,26 +13,39 @@ class equation_solver():
         self._col_places = []
         self._matrix = mm.matrix(1, alloc_size)
         self._inv_matrix = mm.matrix(1, alloc_size)
+        self._eq_order = equation_order()
         self._row_order = [0] # use this to save order of equations set -1 if we remove equation
         self._col_order = [0] # use this to save order of variables set -1 if we remove variable
 
-    def replace_equations(self, dx, dq, pivots, n1, n2, nnew):
-        if self._steps + n2-n1 + max(nnew,0) > self._steps_to_reinvert:
-            self.reinvert(dx, dq, pivots)
+
+    #Note row_idx parameter is alist where index correspond to out_bases and value to var_names in eq_order
+    def insert_equations(self, matrix, row_ids, n1, var_names, nnew):
+        if self._steps + nnew > self._steps_to_reinvert:
+            self.reinvert(matrix)
         else:
-            # should replace all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
-            # and same for corresponding rows
+            rows_to_insert, cols_to_insert = self._eq_order.insert(n1, var_names)
+            # should prepare columns and rows to insert, i.e. we need take columns between n1 and n2 and replace row order but now based
+            # on out_bases and var_names from eq_order and on row_ids, similar for rows
             pass
 
-    def remove_equations(self, dx, dq, pivots, n1, n2):
-        if self._steps + n2-n1  > self._steps_to_reinvert:
-            self.reinvert(dx, dq, pivots)
+    def replace_equations(self, matrix, row_ids, n1, n2, v1, v2, var_names):
+        # TODO: check this condition
+        if self._steps + n2-n1 + max(len(var_names)-2,0) > self._steps_to_reinvert:
+            self.reinvert(matrix)
         else:
-            # should remove all inv_matrix columns between n1 and n2 to columns between n1 and n2+nnew
-            # and same for corresponding rows
+            cols_to_replace, cols_to_ar, rows_to_ar, need_to_add = self._eq_order.replace(n1, n2, v1, v2, var_names)
+            # should prepare columns and rows to insert/replace, i.e. we need take columns between n1 and n2 and
+            # replace row order but now based on out_bases and var_names from eq_order and on row_ids, similar for rows
             pass
 
-    def reinvert(self, dx, dq, pivots):
+    def remove_equations(self, matrix, row_ids, n1, n2, var_name):
+        if self._steps + n2-n1 > self._steps_to_reinvert:
+            self.reinvert(matrix)
+        else:
+            rows_to_remove, cols_to_remove = self._eq_order.remove(n1, n2, var_name)
+            pass
+
+    def reinvert(self, matrix):
         # should build matrix invert it and put to the self._inv_matrix
         self._steps = 0
         self._eta_rows = []
@@ -40,6 +54,7 @@ class equation_solver():
         self._col_places = []
         self._row_order = list(range(self._inv_matrix.get_matrix().shape[0]))
         self._col_order = list(range(self._inv_matrix.get_matrix().shape[1]))
+        self._inv_matrix.set_matrix(np.linalg.inv(matrix)) # TODO: check if this correct when new matrix have size large then allocated
 
     def add_equation(self, n_row, n_col, row, col):
         if n_col in self._col_order:

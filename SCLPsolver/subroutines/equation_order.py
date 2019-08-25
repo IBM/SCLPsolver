@@ -14,6 +14,18 @@ class equation_order():
         self._var_names = []
         self._col_order = []
 
+    @property
+    def out_bases(self):
+        return self._out_bases
+
+    @property
+    def var_names(self):
+        return self._var_names
+
+    @property
+    def col_order(self):
+        return self._col_order
+
     # This handles collision type I: we need to remove all bases between n1 and n2
     # That is all columns between n1 and n2 should be removed
     # Also we need to remove corresponding equations (rows)
