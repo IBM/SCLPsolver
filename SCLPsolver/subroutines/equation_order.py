@@ -39,7 +39,7 @@ class equation_order():
         for i, v in enumerate(self._col_order):
             if v > n2:
                 self._col_order[i] = v - n2 + n1 + 1
-            elif v > n1:
+            elif v > n1: #TODO the comparison on the left is not the same as the one in 58 - is this a bug?
                 self._col_order[i] = -1
                 cols_to_remove.append(i)
         if var_name is not None:
@@ -55,7 +55,7 @@ class equation_order():
             else:
                 if v > n2:
                     self._out_bases[i] = v - n2 + n1 + 1
-                elif v >= n1:
+                elif v >= n1: #TODO the comparison on the left is not the same as the one in 42 - is this a bug?
                     self._out_bases[i] = -1
                     rows_to_remove.append(i)
                     self._var_names[i] = 0
