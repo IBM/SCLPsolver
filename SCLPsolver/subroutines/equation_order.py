@@ -43,7 +43,7 @@ class equation_order():
                 self._col_order[i] = -1
                 cols_to_remove.append(i)
         if var_name is not None:
-            ind_v = self._var_names.index(var_name, n1, n2 + 1)
+            ind_v = self._var_names.index(var_name, n1, n2 + 1) #TODO if n2>=len(_var_names) , this line will fail
         else:
             if n1 == -1:
                 ind_v = self._out_bases.index(n2)
