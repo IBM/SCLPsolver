@@ -28,17 +28,7 @@ class equation_solver():
             # should prepare columns and rows to insert, i.e. we need take columns between n1 and n2 and replace row order but now based
             # on out_bases and var_names from eq_order and on row_ids, similar for rows
 
-            for i in rows_to_insert:
-                # run on rows
-                m_row_index = self._eq_order.out_bases[i]
-                result = self.reverse_vector_order(matrix[m_row_index], self._eq_order.col_order)
-                #TODO: add result to matrix row - will be done by evgeny
-
-            for j in cols_to_insert:
-                # run on columns
-                m_col_index = self.eq_order[j]
-                result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
-
+            result = self.reverse_vector_order_using_cols_and_rows(matrix, rows_to_insert, cols_to_insert)
 
             pass
 
@@ -57,16 +47,7 @@ class equation_solver():
                 result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
 
             if need_to_add:
-                for i in rows_to_ar:
-                    # run on rows
-                    m_row_index = self._eq_order.out_bases[i]
-                    result = self.reverse_vector_order(matrix[m_row_index], self._eq_order.col_order)
-                    # TODO: add result to matrix row - will be done by evgeny
-
-                for j in cols_to_ar:
-                    # run on columns
-                    m_col_index = self._eq_order[j]
-                    result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
+                result = self.reverse_vector_order_using_cols_and_rows(matrix, rows_to_ar,cols_to_ar)
 
         pass
 
@@ -242,6 +223,21 @@ class equation_solver():
         self._row_order = list(range(self._inv_matrix.get_matrix().shape[0]))
         self._col_order = list(range(self._inv_matrix.get_matrix().shape[1]))
         # ***************************************************************************
+
+    def reverse_vector_order_using_cols_and_rows(self, matrix, rows, cols):
+        for i in rows:
+            # run on rows
+            m_row_index = self._eq_order.out_bases[i]
+            row_result = self.reverse_vector_order(matrix[m_row_index], self._eq_order.col_order)
+            # TODO: add result to matrix row - will be done by evgeny
+
+        for j in cols:
+            # run on columns
+            m_col_index = self._eq_order[j]
+            col_result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
+
+        return [row_result,col_result]
+
 
 def to_eta(values, index_to_pivot):
     pivot_val = values[index_to_pivot]
