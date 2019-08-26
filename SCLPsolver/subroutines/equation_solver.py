@@ -20,16 +20,29 @@ class equation_solver():
 
 
     #Note row_idx parameter is alist where index correspond to out_bases and value to var_names in eq_order
-    def insert_equations(self, matrix, row_ids, n1, var_names, nnew):
+    def insert_equations(self, matrix, row_idx, n1, var_names, nnew):
         if self._steps + nnew > self._steps_to_reinvert:
             self.reinvert(matrix)
         else:
             rows_to_insert, cols_to_insert = self._eq_order.insert(n1, var_names)
             # should prepare columns and rows to insert, i.e. we need take columns between n1 and n2 and replace row order but now based
             # on out_bases and var_names from eq_order and on row_ids, similar for rows
+
+            for i in rows_to_insert:
+                # run on rows
+                m_row_index = self._eq_order.out_bases[i]
+                result = self.reverse_vector_order(matrix[m_row_index], self._eq_order.col_order)
+                #TODO: add result to matrix row - will be done by evgeny
+
+            for j in cols_to_insert:
+                # run on columns
+                m_col_index = self.eq_order[j]
+                result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
+
+
             pass
 
-    def replace_equations(self, matrix, row_ids, n1, n2, v1, v2, var_names):
+    def replace_equations(self, matrix, row_idx, n1, n2, v1, v2, var_names):
         # TODO: check this condition
         if self._steps + n2-n1 + max(len(var_names)-2,0) > self._steps_to_reinvert:
             self.reinvert(matrix)
@@ -37,9 +50,27 @@ class equation_solver():
             cols_to_replace, cols_to_ar, rows_to_ar, need_to_add = self._eq_order.replace(n1, n2, v1, v2, var_names)
             # should prepare columns and rows to insert/replace, i.e. we need take columns between n1 and n2 and
             # replace row order but now based on out_bases and var_names from eq_order and on row_ids, similar for rows
-            pass
 
-    def remove_equations(self, matrix, row_ids, n1, n2, var_name):
+            for j in cols_to_replace:
+                # run on columns
+                m_col_index = self.eq_order[j]
+                result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
+
+            if need_to_add:
+                for i in rows_to_ar:
+                    # run on rows
+                    m_row_index = self._eq_order.out_bases[i]
+                    result = self.reverse_vector_order(matrix[m_row_index], self._eq_order.col_order)
+                    # TODO: add result to matrix row - will be done by evgeny
+
+                for j in cols_to_ar:
+                    # run on columns
+                    m_col_index = self._eq_order[j]
+                    result = self.reverse_vector_order(matrix[m_col_index], self._eq_order.out_bases)
+
+        pass
+
+    def remove_equations(self, matrix, row_idx, n1, n2, var_name):
         if self._steps + n2-n1 > self._steps_to_reinvert:
             self.reinvert(matrix)
         else:
