@@ -33,13 +33,15 @@ class matrix():
         self._right = self._left + matrix.shape[1]
         self._matrix[self._top:self._bottom, self._left:self._right] = matrix
 
-    def enlarge(self):
-        if self._bottom+3>self._allocation_size:
-            self._allocation_size *= 2
-            np.matrix.resize(self._matrix, (self._allocation_size,self._allocation_size))
-
-        self._bottom += 1
-        self._right += 1
+    def enlarge(self, size = 1):
+        if size > 0:
+            if self._bottom+size>self._allocation_size:
+                self._allocation_size = 2 * (self._allocation_size + size)
+                mat = np.eye(self._allocation_size)
+                mat[self._top:self._bottom,self._left:self._right] = self._matrix[self._top:self._bottom,self._left:self._right]
+                self._matrix = mat
+            self._bottom += size
+            self._right += size
 
     def insert(self, index, row_vector, column_vector):
         matrix_size = self._bottom - self._top

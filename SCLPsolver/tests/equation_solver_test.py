@@ -1,5 +1,5 @@
 from subroutines.matrix import matrix
-from subroutines.equation_solver import equation_solver
+from subroutines.generic_equation_solver import generic_equation_solver
 import numpy as np
 import random
 import time
@@ -13,7 +13,7 @@ print('\n test reverse_vector_order')
 vector = [1,2,3]
 order = [0, -1, 2, -1 ,1]
 
-equation_solver_test = equation_solver(matrix_size*2)
+equation_solver_test = generic_equation_solver(matrix_size * 2)
 print('result : ', equation_solver_test.reverse_vector_order(vector, order))
 
 
@@ -128,7 +128,7 @@ test_matrix = 10 * np.random.rand(matrix_size, matrix_size)
 
 inverse_of_test_matrix = np.linalg.inv(test_matrix)
 #2 input the inverse matrix to solver
-equation_solver_test = equation_solver(len(inverse_of_test_matrix) * 2)
+equation_solver_test = generic_equation_solver(len(inverse_of_test_matrix) * 2)
 equation_solver_test.set_inverse_matrix(inverse_of_test_matrix)
 
 for i in range(times_to_run):

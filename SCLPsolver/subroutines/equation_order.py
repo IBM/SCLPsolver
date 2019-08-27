@@ -9,10 +9,15 @@ class equation_order():
     # To identify columns we still using col_order
     __slots__ = ['_out_bases', '_var_names', '_col_order']
 
-    def __init__(self):
-        self._out_bases = []
-        self._var_names = []
-        self._col_order = []
+    def __init__(self, row_data = None):
+        if row_data is not None:
+            self._out_bases = list(range(len(row_data)))
+            self._var_names = row_data.copy()
+            self._col_order = list(range(len(row_data)+1))
+        else:
+            self._out_bases = []
+            self._var_names = []
+            self._col_order = [0]
 
     @property
     def out_bases(self):
@@ -43,7 +48,7 @@ class equation_order():
                 self._col_order[i] = -1
                 cols_to_remove.append(i)
         if var_name is not None:
-            ind_v = self._var_names.index(var_name, n1, n2 + 1) #TODO if n2>=len(_var_names) , this line will fail
+            ind_v = self._var_names.index(var_name, n1, n2 + 1)
         else:
             if n1 == -1:
                 ind_v = self._out_bases.index(n2)
@@ -70,6 +75,7 @@ class equation_order():
     # var_names handles variables leaving on pivots n1->n1+1, n1+1->n1+2,..., n1+m->n2 after insertion
     # Returns indexes of rows and columns that should be inserted
     def insert(self, n1, var_names):
+        enlarge_count = 0
         cols_to_insert = []
         rows_to_insert = []
         if n1 != -1 and n1 in self._out_bases:
@@ -90,6 +96,7 @@ class equation_order():
         for j in range(m, len(var_names) - 1 + corr):
             cols_to_insert.append(len(self._col_order))
             self._col_order.append(n1 + j + 1)
+            enlarge_count +=1
         m = 0
         for i, v in enumerate(self._out_bases):
             if v == -1:
@@ -109,7 +116,7 @@ class equation_order():
                 rows_to_insert.append(len(self._out_bases))
                 self._out_bases.append(n1 + j + corr)
                 self._var_names.append(var_names[j])
-        return rows_to_insert, cols_to_insert
+        return rows_to_insert, cols_to_insert, enlarge_count
 
     # This handles collision type II: we need to replace bases between n1 and n2
     # The number of new bases could be less or greater then number of old bases (n2 - n1 - 1)
@@ -122,6 +129,7 @@ class equation_order():
     #   rows_to_ar - indexes of rows that should be replaced or removed
     #   need_to_add; True/False if we need to add rows and columns
     def replace(self, n1, n2, v1, v2, var_names):
+        enlarge_count = 0
         cols_to_replace = []
         cols_to_ar = []
         rows_to_ar = []
@@ -147,6 +155,7 @@ class equation_order():
         for j in range(m, len(var_names)):
             cols_to_ar.append(len(self._col_order))
             self._col_order.append(n1 + j)
+            enlarge_count += 1
         m = 0
         for i, v in enumerate(self._out_bases):
             if v == -1:
@@ -179,4 +188,4 @@ class equation_order():
             rows_to_ar.append(len(self._out_bases))
             self._out_bases.append(n1 + j)
             self._var_names.append(var_names[j])
-        return cols_to_replace, cols_to_ar, rows_to_ar, need_to_add
+        return cols_to_replace, cols_to_ar, rows_to_ar, need_to_add, enlarge_count
