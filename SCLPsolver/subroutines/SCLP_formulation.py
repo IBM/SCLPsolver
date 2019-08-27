@@ -3,6 +3,9 @@ from .matlab_utils import find, ismember
 from .LP_formulation import LP_formulation
 from .simplex_procedures import unsigned_simplex
 
+
+# We are going to extend this class
+# Assume that a,b,c,d are matrix
 class SCLP_formulation():
 
     __slots__ = ["G", "F", "H", "a", "b", "c", "d", "alpha", "gamma", "T", "I", "J", "K", "L"]

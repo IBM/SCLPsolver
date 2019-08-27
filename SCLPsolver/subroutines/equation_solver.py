@@ -25,6 +25,7 @@ class equation_solver():
             self.reinvert(matrix)
         else:
             rows_to_insert, cols_to_insert = self._eq_order.insert(n1, var_names)
+            # need to check if we need to enlarge matrix
             # should prepare columns and rows to insert, i.e. we need take columns between n1 and n2 and replace row order but now based
             # on out_bases and var_names from eq_order and on row_ids, similar for rows
 
