@@ -1,4 +1,6 @@
-
+# input
+# data - a matrix
+# partition - list of scalars
 
 class piecewise_data():
 
@@ -13,7 +15,7 @@ class piecewise_data():
         self._nextT = 0
 
     # should add picewise data combining partitions and data
-    def add_rows(self, pdata):
+    def add_rows(self, picewise_data):
         pass
 
     # should append columns to data and partition to partition
@@ -34,12 +36,16 @@ class piecewise_data():
 class piecewise_LP_data():
 
     def __init__(self, rhs, objective):
-        pass
+        self.rhs = rhs
+        self.objective = objective
 
-    # should return minimum between objective and rhs
+    # should return minimum of self._nextT of objective and rhs
     def get_nextT(self):
-        pass
+        return min(self.rhs.nextT,self.objective.nextT)
 
     # should return next data from objective and/or rhs and indicator what data are returned
     def next_data(self):
-        pass
+        if self.rhs.nextT < self.rhs.nextT:
+            return self.rhs.next_data, 'rhs'
+        else:
+            return self.objective.next_data, 'objective'
