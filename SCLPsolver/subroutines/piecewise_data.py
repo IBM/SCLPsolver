@@ -1,6 +1,7 @@
 # input
 # data - a matrix
 # partition - list of scalars
+import numpy as np
 
 class piecewise_data():
 
@@ -20,7 +21,8 @@ class piecewise_data():
 
     # should append columns to data and partition to partition
     def add_columns(self, data, partition):
-        pass
+        self.data = np.concatante(self.data,data)
+        self.partition = np.concatenate(self.partition,partition)
 
     @property
     def nextT(self):
