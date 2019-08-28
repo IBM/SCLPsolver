@@ -49,8 +49,8 @@ class piecewise_data():
 
     # should append columns to data and partition to partition
     def add_columns(self, data, partition):
-        self.data = np.concatante(self.data,data)
-        self.partition = np.concatenate(self.partition,partition)
+        self.data = np.concatenate((self.data,data),axis=1)
+        self.partition = np.concatenate((self.partition,partition),axis=None)
 
     @property
     def nextT(self):
@@ -58,8 +58,12 @@ class piecewise_data():
 
     def next_data(self):
         self._current_index +=1
+
         #check if we at the end of list if yes set self._nextT=np.inf
-        self._nextT = self.partition[self._current_index+1]
+        if self._current_index >= len(self.partition)-1:
+            self._nextT = np.inf
+        else:
+            self._nextT = self.partition[self._current_index+1]
         return self.data[:,self._current_index]
 
 
@@ -76,6 +80,8 @@ class piecewise_LP_data():
     # should return next data from objective and/or rhs and indicator what data are returned
     def next_data(self):
         if self.rhs.nextT < self.rhs.nextT:
-            return self.rhs.next_data, 'rhs'
+            data = self.rhs.next_data()
+            return data, 'rhs'
         else:
-            return self.objective.next_data, 'objective'
+            data = self.objective.next_data()
+            return data, 'objective'
