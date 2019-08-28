@@ -3,6 +3,7 @@
 # partition - list of scalars
 import numpy as np
 
+
 class piecewise_data():
 
     __slots__ = ['data', 'partition', '_current_index', '_nextT']
@@ -17,9 +18,36 @@ class piecewise_data():
 
     # should add picewise data combining partitions and data
     def add_rows(self, picewise_data):
-        pass
+        number_of_cols_for_new_matrix = len(np.setdiff1d(picewise_data.partition,self.partition))
+        number_of_rows_for_new_matrix = len (picewise_data.data) + len(self.data)
+        new_matrix = np.zeros((number_of_rows_for_new_matrix,number_of_cols_for_new_matrix))
+        new_partition = np.zeros(len(number_of_cols_for_new_matrix))
 
-    # should append columns to data and partition to partition
+        new_col_index = 0
+        self_partition_index = 0
+        input_partition_index = 0
+
+        for new_col_index in range(number_of_cols_for_new_matrix):
+            top_vector = self.data[:, self_partition_index]
+            bottom_vector = picewise_data.data[:, input_partition_index]
+            new_matrix[:len(top_vector), new_col_index] = top_vector
+            new_matrix[len(top_vector):, new_col_index] = bottom_vector
+
+            new_partition[new_col_index] = max(self.partition[self_partition_index], picewise_data.partition[input_partition_index])
+
+            if self.partition[self_partition_index] == picewise_data.partition[input_partition_index]:
+                self_partition_index += 1
+
+            if self.partition[self_partition_index] > picewise_data.partition[input_partition_index]:
+                input_partition_index += 1
+
+            if self.partition[self_partition_index] < picewise_data.partition[input_partition_index]:
+                self_partition_index += 1
+                input_partition_index += 1
+‎
+
+
+                # should append columns to data and partition to partition
     def add_columns(self, data, partition):
         self.data = np.concatante(self.data,data)
         self.partition = np.concatenate(self.partition,partition)
