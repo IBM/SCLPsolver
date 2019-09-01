@@ -21,9 +21,7 @@ class piecewise_data():
         number_of_cols_for_new_matrix = len(picewise_data.partition) + max(len(np.setdiff1d(self.partition,picewise_data.partition)),len(np.setdiff1d(picewise_data.partition,self.partition)))
         number_of_rows_for_new_matrix = len (picewise_data.data) + len(self.data)
         new_data_matrix = np.zeros((number_of_rows_for_new_matrix,number_of_cols_for_new_matrix))
-        new_partition_vector = np.zeros(number_of_cols_for_new_matrix)
 
-        new_col_index = 0
         self_partition_index = 0
         input_partition_index = 0
 
