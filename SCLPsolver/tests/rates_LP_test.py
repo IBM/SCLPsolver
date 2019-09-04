@@ -31,7 +31,6 @@ def alternativeImplementation():
     # param_line.q_N is a vector
     # take columns where param_line.q_N == 0 + all columns from last I columns to matrix B
     # take columns where param_line.q_N > 0 to matrix N
-    # TODO consider replacing the loop below with some numpy function
     zero_indices = np.argwhere(param_line.q_N == 0)
     zero_indices = zero_indices.reshape(len(zero_indices))
     matrix_B = new_matrix[:,zero_indices]
