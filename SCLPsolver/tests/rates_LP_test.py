@@ -34,12 +34,12 @@ def alternativeImplementation():
     # TODO consider replacing the loop below with some numpy function
     for i in range(len(param_line.q_N)):
         if (param_line.q_N[i] == 0):
-            if matrix_B == []:
+            if len(matrix_B) == 0:
                 matrix_B = new_matrix[:, i]
             else:
                 matrix_B = np.column_stack((matrix_B, new_matrix[:, i]))
         elif (param_line.q_N[i] > 0):
-            if matrix_N == []:
+            if len(matrix_N) == 0:
                 matrix_N = new_matrix[:, i]
             else:
                 matrix_N = np.column_stack((matrix_N, new_matrix[:, i]))
@@ -50,7 +50,7 @@ def alternativeImplementation():
     inverse_of_matrix_B = np.linalg.inv(matrix_B)
     matrix_X =  np.dot(inverse_of_matrix_B, matrix_N)
     # calculate np.dot(inv(B), np.concatenate(a, b))
-    result = np.dot(inverse_of_matrix_B, np.concatenate(a, b))
+    result = np.dot(inverse_of_matrix_B, np.concatenate((a, b), axis=None))
     # end time
     end_time = time.time()
     print('time taken for alternative implementation:',end_time - start_time)
@@ -69,9 +69,14 @@ for seed in range(1000, 1000 + num_trials):
     formulation = SCLP_formulation(G, F, H, a, b, c, d, alpha, gamma, TT)
     param_line = parametric_line.get_SCLP_parametric_line(formulation, tolerance)
     # start time
+    start_time = time.time()
+
     LP_form = formulation.formulate_ratesLP(param_line.x_0, param_line.q_N)
     err = solve_LP_in_place(LP_form, np.zeros_like(LP_form.simplex_dict), tolerance)
     # end time
+    end_time = time.time()
+    print('time taken for new implementation:', end_time - start_time)
+
     if err['result'] != 0:
         raise Exception(err['message'])
     # alternative way implement as function
