@@ -32,17 +32,10 @@ def alternativeImplementation():
     # take columns where param_line.q_N == 0 + all columns from last I columns to matrix B
     # take columns where param_line.q_N > 0 to matrix N
     # TODO consider replacing the loop below with some numpy function
-    for i in range(len(param_line.q_N)):
-        if (param_line.q_N[i] == 0):
-            if len(matrix_B) == 0:
-                matrix_B = new_matrix[:, i]
-            else:
-                matrix_B = np.column_stack((matrix_B, new_matrix[:, i]))
-        elif (param_line.q_N[i] > 0):
-            if len(matrix_N) == 0:
-                matrix_N = new_matrix[:, i]
-            else:
-                matrix_N = np.column_stack((matrix_N, new_matrix[:, i]))
+    zero_indices = np.argwhere(param_line.q_N == 0)
+    zero_indices = zero_indices.reshape(len(zero_indices))
+    matrix_B = new_matrix[:,zero_indices]
+    matrix_N = new_matrix[:,np.nonzero(param_line.q_N)[0]]
 
     matrix_B = np.column_stack((matrix_B, new_matrix[:,number_of_columns_in_G+len(H):]))
 
