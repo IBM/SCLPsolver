@@ -5,7 +5,7 @@ from subroutines.parametric_line import parametric_line
 from subroutines.LP_formulation import solve_LP_in_place
 from doe.data_generators.MCQN import generate_MCQN_data
 
-def alternativeImplementation():
+def alternativeImplementation(K, I):
     # start time
     start_time = time.time()
     # build matrix [[G 0 I]
@@ -19,13 +19,12 @@ def alternativeImplementation():
 
     new_matrix[:number_of_rows_in_G, :number_of_columns_in_G]=G
     new_matrix[number_of_rows_in_G:number_of_rows_in_G+len(H), :number_of_columns_in_G]=H
-    new_matrix[:, number_of_columns_in_G:] = 0
-    I = np.eye(len(H))
-    new_matrix[number_of_rows_in_G:, number_of_columns_in_G:number_of_columns_in_G+len(H)] = I
-    I = np.eye(len(G))
-    new_matrix[:number_of_rows_in_G, number_of_columns_in_G+len(H):] = I
+    #new_matrix[:, number_of_columns_in_G:] = 0
+    new_matrix[number_of_rows_in_G:, number_of_columns_in_G:number_of_columns_in_G+len(H)] = np.eye(len(H))
+    #new_matrix[:number_of_rows_in_G, number_of_columns_in_G+len(H):] = np.eye(len(G))
 
-    matrix_B = []
+    matrix_B = np.zeros((K+I,K+I))
+    matrix_B[:K,:K] = np.eye(len(G))
     matrix_N = []
 
     # param_line.q_N is a vector
@@ -33,10 +32,10 @@ def alternativeImplementation():
     # take columns where param_line.q_N > 0 to matrix N
     zero_indices = np.argwhere(param_line.q_N == 0)
     zero_indices = zero_indices.reshape(len(zero_indices))
-    matrix_B = new_matrix[:,zero_indices]
+    matrix_B[:,K:] = new_matrix[:,zero_indices]
     matrix_N = new_matrix[:,np.nonzero(param_line.q_N)[0]]
 
-    matrix_B = np.column_stack((matrix_B, new_matrix[:,number_of_columns_in_G+len(H):]))
+    #matrix_B = np.column_stack((matrix_B, new_matrix[:,number_of_columns_in_G+len(H):]))
 
     # find inverse of B and calculate X = np.dot(inv(B), N)
     inverse_of_matrix_B = np.linalg.inv(matrix_B)
@@ -57,7 +56,7 @@ num_trials = 100
 K = 1000
 i = 100
 for seed in range(1000, 1000 + num_trials):
-    G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, K, i)
+    G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, K, i, gamma_rate = -0.1)
     formulation = SCLP_formulation(G, F, H, a, b, c, d, alpha, gamma, TT)
     param_line = parametric_line.get_SCLP_parametric_line(formulation, tolerance)
     # start time
@@ -72,5 +71,5 @@ for seed in range(1000, 1000 + num_trials):
     if err['result'] != 0:
         raise Exception(err['message'])
     # alternative way implement as function
-    alternativeImplementation()
+    alternativeImplementation(K, i)
 

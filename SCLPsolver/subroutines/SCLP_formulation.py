@@ -108,18 +108,25 @@ class SCLP_formulation():
         dn1 = np.arange(self.J + 1, self.J + self.I + 1)
         return LP_formulation(DD1, pn1, dn1)
 
+    def get_generalBoundaryLP(self):
+        DD0 = np.vstack((np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
+                         np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L))))))
+        pn = np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)))
+        dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)))
+        return LP_formulation(DD0, pn, dn)
+
     def get_dualBoundaryLP_solution(self, tolerance = 0):
         if self._formulation_type == SCLP_formulation_type.not_bounded or self._formulation_type == SCLP_formulation_type.dual_classic:
             return -self.gamma
         elif self._formulation_type == SCLP_formulation_type.primal_classic or self._formulation_type == SCLP_formulation_type.weiss:
             LP_form = self.get_dualBoundaryLP()
             LP_form, err = unsigned_simplex(LP_form, None, tolerance)
-            q_N = np.zeros(self.J + self.I)
-            q_N[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
-            return q_N
-        else:
-            # MCLP not supported yet
-            return None
+            if err['result'] == 0:
+                q_N = np.zeros(self.J + self.I)
+                q_N[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
+                return q_N
+        # MCLP not supported yet
+        return None
 
     def get_primalBoundaryLP_solution(self, tolerance = 0):
         if self._formulation_type == SCLP_formulation_type.not_bounded or self._formulation_type == SCLP_formulation_type.primal_classic:
@@ -127,9 +134,9 @@ class SCLP_formulation():
         elif self._formulation_type == SCLP_formulation_type.dual_classic or self._formulation_type == SCLP_formulation_type.weiss:
             LP_form = self.get_primalBoundaryLP()
             LP_form, err = unsigned_simplex(LP_form, None, tolerance)
-            x_0 = np.zeros(self.K + self.L)
-            x_0[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
-            return x_0
-        else:
-            # MCLP not supported yet
-            return None
+            if err['result'] == 0:
+                x_0 = np.zeros(self.K + self.L)
+                x_0[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
+                return x_0
+        # MCLP not supported yet
+        return None
