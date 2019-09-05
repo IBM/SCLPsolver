@@ -1,5 +1,10 @@
 from doe.data_generators.MCQN import generate_MCQN_data
 from SCLP import SCLP, SCLP_settings
+from bokeh.plotting import figure, output_file, show
+# select a palette
+from bokeh.palettes import Dark2_5 as palette
+# itertools handles the cycling
+import itertools
 
 seed = 1000
 number_of_buffers = 12
@@ -12,7 +17,7 @@ import time
 start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False)
 solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
-t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
+t, X, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
 print(obj, err)
 time_to_solve = time.time() - start_time
 print("--- %s seconds ---" % time_to_solve)
@@ -29,3 +34,23 @@ print("--- seed %s ---" % seed)
 #                               u[n,j] * H[k,j] indicate how many capacity of server k took task j at time period t[n]...t[n+1]
 #                               we need for each server k create barchart where width of bar is length of time period
 #                               and total height is sum(u[n,j] * H[k,j]) for all j this height splitted by different colors according to j (up to 12)
+
+output_file("line.html")
+
+p = figure(plot_width=800, plot_height=400)
+
+# create a color iterator
+colors = itertools.cycle(palette)
+
+# add a line renderer
+for i,color in zip(range(number_of_buffers),colors):
+    p.line(t, X[i], line_width=2, line_color=color)
+
+show(p)
+
+# output_file("barchart.html")
+#
+#
+# for i,color in zip(range(number_of_buffers),colors):
+#     p.vbar(x=H[i], width=0.5, bottom=0,
+#        top=[1.2, 2.5, 3.7], color=color)
