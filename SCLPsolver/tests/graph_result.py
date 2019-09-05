@@ -2,11 +2,12 @@ from doe.data_generators.MCQN import generate_MCQN_data
 from SCLP import SCLP, SCLP_settings
 
 seed = 1000
-# 12 - number of buffers
-# 4 - number of servers
-# 150 - time horizon
-G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, 12, 4)
-T = 150
+number_of_buffers = 12
+number_of_servers = 4
+time_horizon = 150
+
+G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, number_of_buffers, number_of_servers)
+T = time_horizon
 import time
 start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False)
