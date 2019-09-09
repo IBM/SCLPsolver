@@ -57,7 +57,7 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-show(plot_line)
+#show(plot_line)
 
 
 
@@ -81,19 +81,19 @@ for j in range(12):
 
 print('data = ',data)
 
-width_array = t.tolist()[:13]
-width_array = np.diff(width_array)
+height_array = t.tolist()[:13]
+height_array = np.diff(height_array)
 
-total_width = int(np.sum(width_array))
+total_width = int(np.sum(height_array))
 
-width_array = np.multiply(1/total_width, width_array).tolist()
-print('width_array = ',width_array)
+height_array = np.multiply(1 / total_width, height_array).tolist()
+print('height_array = ', height_array)
 
 
-p = figure(x_range=servers, plot_height=plot_height, plot_width=plot_width, title="Server utilization by task",
+p = figure(y_range=servers, plot_height=plot_height, plot_width=plot_width, title="Server utilization by task",
            toolbar_location=None, tools="")
 
-p.vbar_stack(tasks, x='servers', width=width_array, color=colors, source=data,
+p.hbar_stack(tasks, y='servers', height=height_array, color=colors, source=ColumnDataSource(data),
              legend=[value(x) for x in tasks])
 
 p.legend.location = (0, 20)
