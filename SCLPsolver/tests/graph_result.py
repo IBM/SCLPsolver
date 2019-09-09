@@ -40,10 +40,13 @@ print("--- seed %s ---" % seed)
 #                               we need for each server k create barchart where width of bar is length of time period
 #                               and total height is sum(U[n,j] * H[k,j]) for all j this height splitted by different colors according to j (up to 12)
 
-output_file("line.html")
 
 plot_width = 800
 plot_height = 400
+
+
+
+output_file("line.html")
 
 plot_line = figure(plot_width=plot_width, plot_height=plot_height)
 
@@ -57,14 +60,14 @@ for i,color in zip(range(number_of_buffers),colors):
 show(plot_line)
 
 
+
+output_file("stacked.html")
 # create a color iterator
 colors = stacked_bar_chart_palette[12]
+print('colors = ',colors)
 
 servers = ['server '+str(i) for i in range(1,len(H)+1)]
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
-print('colors = ',colors)
-
-
 print('tasks=',tasks)
 
 data = {'servers' : servers}
@@ -76,10 +79,7 @@ for j in range(12):
         new_matrix[j,k] = U[j,k]*H[k,j]
     data['task '+str(j+1)] = new_matrix[j].tolist()
 
-
 print('data = ',data)
-
-output_file("stacked.html")
 
 width_array = t.tolist()[:13]
 width_array = np.diff(width_array)
