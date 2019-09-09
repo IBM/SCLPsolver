@@ -4,7 +4,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.core.properties import value
 from bokeh.models import ColumnDataSource
 # select a palette
-from bokeh.palettes import Dark2_5 as palette
+from bokeh.palettes import Category20 as palette
 # itertools handles the cycling
 import itertools
 import numpy as np
@@ -53,24 +53,20 @@ colors = itertools.cycle(palette)
 
 output_file("stacked.html")
 
-# fruits = ['Apples', 'Pears', 'Nectarines', 'Plums', 'Grapes', 'Strawberries']
-# years = ["2015", "2016", "2017"]
-# colors = ["#c9d9d3", "#718dbf", "#e84d60"]
-#
-# data = {'fruits' : fruits,
-#         '2015'   : [2, 1, 4, 3, 2, 4],
-#         '2016'   : [5, 3, 4, 2, 4, 6],
-#         '2017'   : [3, 2, 4, 4, 5, 3]}
+# create a color iterator
+colors = palette[12]
+
 
 servers = ['server '+str(i) for i in range(1,len(H)+1)]
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
+print('colors = ',colors)
+
 
 print('tasks=',tasks)
 
 data = {'servers' : servers}
 
 new_matrix = np.zeros((12,4))
-
 
 for j in range(12):
     for k in range(4):
@@ -80,8 +76,7 @@ for j in range(12):
 
 print(data)
 
-
-p = figure(x_range=servers, plot_height=250, title="Server by task",
+p = figure(x_range=servers, plot_height=250, title="Server by tasks",
            toolbar_location=None, tools="")
 
 p.vbar_stack(tasks, x='servers', width=0.9, color=colors, source=data,
