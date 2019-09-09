@@ -80,15 +80,18 @@ output_file("stacked.html")
 
 width_array = t.tolist()[:13]
 width_array = np.diff(width_array)
-width_array = np.multiply(width_array, 10)
-width_array = np.round(width_array).astype(int).tolist()
+
+total_width = int(np.sum(width_array))
+
+width_array = np.multiply(1/total_width, width_array).tolist()
+#width_array = np.round(width_array).astype(int).tolist()
 print('width_array = ',width_array)
 
 plot_width = int(np.sum(width_array))
 print('plot_width = ',plot_width)
 
 
-p = figure(x_range=servers, plot_height=800, plot_width=plot_width, title="Server by tasks",
+p = figure(x_range=servers, plot_height=800, plot_width=800, title="Server utilization by task",
            toolbar_location=None, tools="")
 
 p.vbar_stack(tasks, x='servers', width=width_array, color=colors, source=data,
