@@ -4,7 +4,8 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.core.properties import value
 from bokeh.models import ColumnDataSource
 # select a palette
-from bokeh.palettes import Category20 as palette
+from bokeh.palettes import Dark2_5 as line_palette
+from bokeh.palettes import Category20 as stacked_bar_chart_palette
 # itertools handles the cycling
 import itertools
 import numpy as np
@@ -38,23 +39,22 @@ print("--- seed %s ---" % seed)
 #                               we need for each server k create barchart where width of bar is length of time period
 #                               and total height is sum(U[n,j] * H[k,j]) for all j this height splitted by different colors according to j (up to 12)
 
-# output_file("line.html")
-#
-# p = figure(plot_width=800, plot_height=400)
-#
-# create a color iterator
-colors = itertools.cycle(palette)
-#
-# # add a line renderer
-# for i,color in zip(range(number_of_buffers),colors):
-#     p.line(t, X[i], line_width=2, line_color=color)
-#
-# show(p)
+output_file("line.html")
 
-output_file("stacked.html")
+plot_line = figure(plot_width=800, plot_height=400)
 
 # create a color iterator
-colors = palette[12]
+colors = itertools.cycle(line_palette)
+
+# add a line renderer
+for i,color in zip(range(number_of_buffers),colors):
+    plot_line.line(t, X[i], line_width=2, line_color=color)
+
+show(plot_line)
+
+
+# create a color iterator
+colors = stacked_bar_chart_palette[12]
 
 
 servers = ['server '+str(i) for i in range(1,len(H)+1)]
@@ -75,6 +75,8 @@ for j in range(12):
 
 
 print(data)
+
+output_file("stacked.html")
 
 p = figure(x_range=servers, plot_height=250, title="Server by tasks",
            toolbar_location=None, tools="")
