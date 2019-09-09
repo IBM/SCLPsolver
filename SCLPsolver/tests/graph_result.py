@@ -6,6 +6,7 @@ from bokeh.models import ColumnDataSource
 # select a palette
 from bokeh.palettes import Dark2_5 as line_palette
 from bokeh.palettes import Category20 as stacked_bar_chart_palette
+from bokeh.models import Legend
 # itertools handles the cycling
 import itertools
 import numpy as np
@@ -41,7 +42,10 @@ print("--- seed %s ---" % seed)
 
 output_file("line.html")
 
-plot_line = figure(plot_width=800, plot_height=400)
+plot_width = 800
+plot_height = 400
+
+plot_line = figure(plot_width=plot_width, plot_height=plot_height)
 
 # create a color iterator
 colors = itertools.cycle(line_palette)
@@ -55,7 +59,6 @@ for i,color in zip(range(number_of_buffers),colors):
 
 # create a color iterator
 colors = stacked_bar_chart_palette[12]
-
 
 servers = ['server '+str(i) for i in range(1,len(H)+1)]
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
@@ -87,14 +90,16 @@ width_array = np.multiply(1/total_width, width_array).tolist()
 #width_array = np.round(width_array).astype(int).tolist()
 print('width_array = ',width_array)
 
-plot_width = int(np.sum(width_array))
-print('plot_width = ',plot_width)
+#plot_width = int(np.sum(width_array))
+#print('plot_width = ',plot_width)
 
 
-p = figure(x_range=servers, plot_height=800, plot_width=800, title="Server utilization by task",
+p = figure(x_range=servers, plot_height=plot_height, plot_width=plot_width, title="Server utilization by task",
            toolbar_location=None, tools="")
 
 p.vbar_stack(tasks, x='servers', width=width_array, color=colors, source=data,
              legend=[value(x) for x in tasks])
+
+p.legend.location = (0, 20)
 
 show(p)
