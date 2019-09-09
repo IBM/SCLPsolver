@@ -54,7 +54,7 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-#show(plot_line)
+show(plot_line)
 
 
 # create a color iterator
@@ -77,7 +77,7 @@ for j in range(12):
     data['task '+str(j+1)] = new_matrix[j].tolist()
 
 
-print(data)
+print('data = ',data)
 
 output_file("stacked.html")
 
@@ -87,11 +87,7 @@ width_array = np.diff(width_array)
 total_width = int(np.sum(width_array))
 
 width_array = np.multiply(1/total_width, width_array).tolist()
-#width_array = np.round(width_array).astype(int).tolist()
 print('width_array = ',width_array)
-
-#plot_width = int(np.sum(width_array))
-#print('plot_width = ',plot_width)
 
 
 p = figure(x_range=servers, plot_height=plot_height, plot_width=plot_width, title="Server utilization by task",
