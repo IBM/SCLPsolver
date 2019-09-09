@@ -50,7 +50,7 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-show(plot_line)
+#show(plot_line)
 
 
 # create a color iterator
@@ -78,10 +78,20 @@ print(data)
 
 output_file("stacked.html")
 
-p = figure(x_range=servers, plot_height=250, title="Server by tasks",
+width_array = t.tolist()[:13]
+width_array = np.diff(width_array)
+width_array = np.multiply(width_array, 10)
+width_array = np.round(width_array).astype(int).tolist()
+print('width_array = ',width_array)
+
+plot_width = int(np.sum(width_array))
+print('plot_width = ',plot_width)
+
+
+p = figure(x_range=servers, plot_height=800, plot_width=plot_width, title="Server by tasks",
            toolbar_location=None, tools="")
 
-p.vbar_stack(tasks, x='servers', width=0.9, color=colors, source=data,
+p.vbar_stack(tasks, x='servers', width=width_array, color=colors, source=data,
              legend=[value(x) for x in tasks])
 
 show(p)
