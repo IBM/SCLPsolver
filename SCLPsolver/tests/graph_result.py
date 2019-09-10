@@ -81,11 +81,11 @@ p = {}
 for k in range(number_of_servers): # servers
     for j in range(number_of_buffers): # tasks
         for ti in range(0,number_of_time_slots-1): # time slices
-            new_matrix[j,ti] = U[ti,j]*H[k,j]
+            new_matrix[j,ti] = U[j,ti]*H[k,j]
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
     df = pd.DataFrame(data)
-    max_y_value = df.get_values().max()*1.3
+    max_y_value = df.get_values().max()
 
     print('data = ',data)
 
