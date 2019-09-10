@@ -72,7 +72,7 @@ time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
 print('tasks=',tasks)
 
-data = {'time_slots': time_slots}
+data = {}
 
 new_matrix = np.zeros((number_of_buffers,number_of_time_slots))
 
@@ -84,6 +84,7 @@ for k in range(number_of_servers): # servers
             new_matrix[j,ti] = U[ti,j]*H[k,j]
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
+    max_y_value = np.amax(new_matrix)
     df = pd.DataFrame(data)
 
     # delete following two lines **********************************
@@ -92,9 +93,9 @@ for k in range(number_of_servers): # servers
 
     print('data = ',data)
 
-    p[k] = figure(x_range=(0, len(df)-1), y_range=(0, 10))
+    p[k] = figure(x_range=(0, len(df)-1), y_range=(0, max_y_value))
 
-    p[k].varea_stack(stackers=tasks, x='time_slots', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
+    p[k].varea_stack(stackers=tasks, x='index', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
     # reverse the legend entries to match the stacked order
     p[k].legend[0].items.reverse()
