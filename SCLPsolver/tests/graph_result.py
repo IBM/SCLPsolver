@@ -69,14 +69,16 @@ colors = stacked_bar_chart_palette[number_of_buffers]
 print('colors = ',colors)
 
 time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
+
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
 print('tasks=',tasks)
 
-data = {}
+data = {'t':t[1:]}
 
 new_matrix = np.zeros((number_of_buffers,number_of_time_slots))
 
 p = {}
+max_y_value = 1
 
 for k in range(number_of_servers): # servers
     for j in range(number_of_buffers): # tasks
@@ -85,13 +87,12 @@ for k in range(number_of_servers): # servers
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
     df = pd.DataFrame(data)
-    max_y_value = df.get_values().max()
 
     print('data = ',data)
 
     p[k] = figure(x_range=(0, len(df)-1), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height)
 
-    p[k].varea_stack(stackers=tasks, x='index', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
+    p[k].varea_stack(stackers=tasks, x='t', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
     # reverse the legend entries to match the stacked order
     p[k].legend[0].items.reverse()
