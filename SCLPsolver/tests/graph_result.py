@@ -1,13 +1,14 @@
 from doe.data_generators.MCQN import generate_MCQN_data
 from SCLP import SCLP, SCLP_settings
-from bokeh.plotting import figure, output_file, show
-from bokeh.core.properties import value
-from bokeh.models import ColumnDataSource
 from bokeh.layouts import column
 # select a palette
 from bokeh.palettes import Dark2_5 as line_palette
 from bokeh.palettes import Category20 as stacked_bar_chart_palette
-from bokeh.models import Legend
+import pandas as pd
+from bokeh.core.properties import value
+from bokeh.plotting import figure, show, output_file
+from bokeh.palettes import Category20
+
 # itertools handles the cycling
 import itertools
 import numpy as np
@@ -58,51 +59,48 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-show(plot_line)
+#show(plot_line)
 
+number_of_time_slots = len(t)-1
 
-
-output_file("stacked.html")
+output_file('stacked_area.html')
 # create a color iterator
 colors = stacked_bar_chart_palette[number_of_buffers]
 print('colors = ',colors)
 
-time_slots = ['t ' + str(i) for i in range(len(t)-1)]
+time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
 print('tasks=',tasks)
 
-data = {'time_slots' : time_slots}
+data = {'time_slots': time_slots}
 
-new_matrix = np.zeros((number_of_buffers,len(t)-1))
+new_matrix = np.zeros((number_of_buffers,number_of_time_slots))
 
 p = {}
 
-# this array will have len(t) values
-width_array = t
-# this array will have len(t)-1 values because it only shows the diffs between the t values
-width_array = np.diff(width_array)
-
-total_width = int(np.sum(width_array))
-
-width_array = np.multiply(1 / total_width, width_array)
-width_array = np.multiply(1 / total_width * 100, width_array).tolist()
-print('width_array = ', width_array)
-
 for k in range(number_of_servers): # servers
     for j in range(number_of_buffers): # tasks
-        for ti in range(1,len(t)-1): # time slices
+        for ti in range(0,number_of_time_slots-1): # time slices
             new_matrix[j,ti] = U[ti,j]*H[k,j]
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
+    df = pd.DataFrame(data)
+
+    # delete following two lines **********************************
+    N = 12
+    PLEASE_DELETE_THIS_LINE = pd.DataFrame(np.random.randint(10, 100, size=(15, N))).add_prefix('y')
+
     print('data = ',data)
 
-    p[k] = figure(x_range=time_slots, plot_height=plot_height, title="Server "+str(k)+" Task utilization over time",
-               toolbar_location=None, tools="")
+    p[k] = figure(x_range=(0, len(df)-1), y_range=(0, 10))
 
-    p[k].vbar_stack(tasks, x='time_slots', width=1, color=colors, source=data,
-                    legend=[value(x) for x in tasks])
+    p[k].varea_stack(stackers=tasks, x='time_slots', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
-    p[k].legend.location = (0, 20)
+    # reverse the legend entries to match the stacked order
+    p[k].legend[0].items.reverse()
+
+
+    #p[k].legend.location = (0, 20)
 
 
 
