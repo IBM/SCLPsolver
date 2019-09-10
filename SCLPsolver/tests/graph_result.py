@@ -90,7 +90,7 @@ for k in range(number_of_servers): # servers
 
     print('data = ',data)
 
-    p[k] = figure(x_range=(0, len(df)-1), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height)
+    p[k] = figure(x_range=(0, time_horizon), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height)
 
     p[k].varea_stack(stackers=tasks, x='t', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
