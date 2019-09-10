@@ -59,7 +59,7 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-#show(plot_line)
+show(plot_line)
 
 number_of_time_slots = len(t)-1
 
@@ -84,12 +84,8 @@ for k in range(number_of_servers): # servers
             new_matrix[j,ti] = U[ti,j]*H[k,j]
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
-    max_y_value = np.amax(new_matrix)
     df = pd.DataFrame(data)
-
-    # delete following two lines **********************************
-    N = 12
-    PLEASE_DELETE_THIS_LINE = pd.DataFrame(np.random.randint(10, 100, size=(15, N))).add_prefix('y')
+    max_y_value = df.get_values().max()*1.3
 
     print('data = ',data)
 
