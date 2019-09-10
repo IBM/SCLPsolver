@@ -73,24 +73,30 @@ time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
 print('tasks=',tasks)
 
-data = {'t':t[1:]}
+new_t = np.zeros(2 * number_of_time_slots)
+new_t[0] = t[1]/2
+new_t[1:-1] = np.repeat(t[1:-1],2)
+new_t[-1] = t[-1]
 
-new_matrix = np.zeros((number_of_buffers,number_of_time_slots))
+data = {'t':new_t}
+
+new_matrix = np.zeros((number_of_buffers,2 * number_of_time_slots))
 
 p = {}
 max_y_value = 1
 
 for k in range(number_of_servers): # servers
     for j in range(number_of_buffers): # tasks
-        for ti in range(0,number_of_time_slots-1): # time slices
-            new_matrix[j,ti] = U[j,ti]*H[k,j]
+        for ti in range(0,number_of_time_slots): # time slices
+            new_matrix[j, 2 * ti] = U[j, ti] * H[k, j]
+            new_matrix[j, 2 * ti+1] = U[j, ti] * H[k, j]
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
     df = pd.DataFrame(data)
 
     print('data = ',data)
 
-    p[k] = figure(x_range=(0, time_horizon), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height)
+    p[k] = figure(x_range=(0, time_horizon*1.2), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height)
 
     p[k].varea_stack(stackers=tasks, x='t', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
