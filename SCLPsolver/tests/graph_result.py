@@ -6,7 +6,7 @@ from bokeh.palettes import Dark2_5 as line_palette
 from bokeh.palettes import Category20 as stacked_bar_chart_palette
 import pandas as pd
 from bokeh.core.properties import value
-from bokeh.plotting import figure, show, output_file
+from bokeh.plotting import figure, show, output_file, gridplot
 from bokeh.palettes import Category20
 
 # itertools handles the cycling
@@ -99,7 +99,7 @@ for k in range(number_of_servers): # servers
 
     print('data = ',data)
 
-    p[k] = figure(x_range=(0, time_horizon*1.2), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height)
+    p[k] = figure(x_range=(0, time_horizon*1.2), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height, title='Server '+str(k)+' Utilization')
 
     p[k].varea_stack(stackers=tasks, x='t', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
@@ -110,5 +110,5 @@ for k in range(number_of_servers): # servers
 
     p[k].legend[0].items.reverse()
 
-
-show(column(p[0],p[1],p[2],p[3]))
+grid = gridplot([[p[0], p[1]], [p[2], p[3]]])
+show(grid)
