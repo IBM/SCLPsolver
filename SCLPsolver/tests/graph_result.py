@@ -8,6 +8,12 @@ import pandas as pd
 from bokeh.core.properties import value
 from bokeh.plotting import figure, show, output_file, gridplot
 from bokeh.palettes import Category20
+import math
+
+from bokeh.io import show, output_file
+from bokeh.plotting import figure
+from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval
+from bokeh.palettes import Spectral8
 
 # itertools handles the cycling
 import itertools
@@ -19,6 +25,15 @@ number_of_servers = 4
 time_horizon = 150
 
 G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, number_of_buffers, number_of_servers)
+#vector alpha >0 , vector a can be any value
+# a is input/output coming from outside
+# alpha is initial value in buffer
+# matrix G connected buffers and tasks
+# in matrix G , flow between a task and multiple buffers
+# task to buffer based on H[k,j] diagram 1
+# a, buffer, task diagram 2
+
+
 T = time_horizon
 import time
 start_time = time.time()
@@ -59,7 +74,7 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-show(plot_line)
+#show(plot_line)
 
 number_of_time_slots = len(t)-1
 
@@ -84,6 +99,8 @@ data = {'t':new_t}
 new_matrix = np.zeros((number_of_buffers,2 * number_of_time_slots))
 
 p = {}
+network_graph_tasks_indices = []
+network_graph_server_indices = []
 max_y_value = 1
 
 for k in range(number_of_servers): # servers
@@ -93,11 +110,14 @@ for k in range(number_of_servers): # servers
             new_matrix[j, 2 * ti+1] = U[j, ti] * H[k, j]
         if H[k,j]>0:
             new_legend_tasks[j] = 'task '+str(j)
+            network_graph_tasks_indices.append(j)
+            network_graph_server_indices.append(len(tasks)+k)
+            print('k,j=',k+1,',',j+1)
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
     df = pd.DataFrame(data)
 
-    print('data = ',data)
+    #print('data = ',data)
 
     p[k] = figure(x_range=(0, time_horizon*1.2), y_range=(0, max_y_value),plot_width=plot_width, plot_height=plot_height, title='Server '+str(k)+' Utilization')
 
@@ -111,4 +131,53 @@ for k in range(number_of_servers): # servers
     p[k].legend[0].items.reverse()
 
 grid = gridplot([[p[0], p[1]], [p[2], p[3]]])
-show(grid)
+#show(grid)
+
+from bokeh.io import show, output_file
+from bokeh.plotting import figure
+from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, Quad
+from bokeh.palettes import Category20c
+
+index_array_of_tasks = list(range(1,len(tasks)))
+index_array_of_servers = list(range(len(tasks),len(tasks)+number_of_servers))
+
+print('index_array_of_tasks=',index_array_of_tasks)
+print('index_array_of_servers=',index_array_of_servers)
+
+node_indices = np.concatenate((index_array_of_tasks,index_array_of_servers),axis=None).tolist()
+node_x_location = np.concatenate((index_array_of_tasks,range(1,len(index_array_of_servers))),axis=None).tolist()
+node_y_location = np.concatenate((np.full(len(index_array_of_tasks), 5),np.full(len(index_array_of_servers), 3)),axis=None).tolist()
+
+
+plot = figure(title='Task to Server relationship', x_range=(0,len(node_indices)+1), y_range=(0,10),
+              tools='', toolbar_location=None)
+
+graph = GraphRenderer()
+
+graph.node_renderer.data_source.add(node_indices, 'index')
+graph.node_renderer.data_source.add(Category20c[len(node_indices)], 'color')
+graph.node_renderer.glyph = Oval(height=1, width=1, fill_color='color')
+
+
+print('start=',node_indices)
+print('end=',node_y_location)
+
+graph.edge_renderer.data_source.data = dict(
+    start=list(network_graph_tasks_indices),
+    end=list(network_graph_server_indices)
+)
+
+### start of layout code
+#circ = [i*2*math.pi/8 for i in node_indices]
+x = node_x_location
+y = node_y_location
+
+graph_layout = dict(zip(node_indices, zip(x, y)))
+graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
+
+plot.renderers.append(graph)
+
+output_file('graph.html')
+show(plot)
+
+
