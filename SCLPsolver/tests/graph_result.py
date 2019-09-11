@@ -71,6 +71,7 @@ print('colors = ',colors)
 time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
 
 tasks = ['task '+str(i) for i in range(1,len(H[0])+1)]
+new_legend_tasks = {}
 print('tasks=',tasks)
 
 new_t = np.zeros(2 * number_of_time_slots)
@@ -90,6 +91,8 @@ for k in range(number_of_servers): # servers
         for ti in range(0,number_of_time_slots): # time slices
             new_matrix[j, 2 * ti] = U[j, ti] * H[k, j]
             new_matrix[j, 2 * ti+1] = U[j, ti] * H[k, j]
+        if H[k,j]>0:
+            new_legend_tasks[j] = 'task '+str(j)
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
     df = pd.DataFrame(data)
@@ -101,11 +104,11 @@ for k in range(number_of_servers): # servers
     p[k].varea_stack(stackers=tasks, x='t', color=Category20[number_of_buffers], legend=[value(x) for x in tasks], source=df)
 
     # reverse the legend entries to match the stacked order
+    for j in reversed(range(number_of_buffers)):
+        if H[k,j]==0:
+            del p[k].legend[0].items[j]
+
     p[k].legend[0].items.reverse()
-
-
-    #p[k].legend.location = (0, 20)
-
 
 
 show(column(p[0],p[1],p[2],p[3]))
