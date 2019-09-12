@@ -7,7 +7,7 @@ from bokeh.palettes import Category20 as stacked_bar_chart_palette
 import pandas as pd
 from bokeh.core.properties import value
 from bokeh.plotting import figure, show, output_file, gridplot
-from bokeh.palettes import Category20
+from bokeh.palettes import Category20, Paired
 import math
 
 from bokeh.io import show, output_file
@@ -156,7 +156,7 @@ graph = GraphRenderer()
 
 graph.node_renderer.data_source.add(node_indices, 'index')
 graph.node_renderer.data_source.add(Category20c[len(node_indices)], 'color')
-graph.node_renderer.glyph = Oval(height=1, width=1, fill_color='color')
+graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
 
 
 print('start=',node_indices)
@@ -176,6 +176,10 @@ graph_layout = dict(zip(node_indices, zip(x, y)))
 graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
 
 plot.renderers.append(graph)
+
+plot.square(range(1,len(index_array_of_servers)), np.full(len(index_array_of_servers), 3), size=30, color=colors, alpha=0.5)
+plot.circle(index_array_of_tasks, np.full(len(index_array_of_tasks), 5), size=30, color=colors, alpha=0.5)
+
 
 output_file('graph.html')
 show(plot)
