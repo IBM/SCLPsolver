@@ -7,7 +7,7 @@ from bokeh.palettes import Category20 as stacked_bar_chart_palette
 import pandas as pd
 from bokeh.core.properties import value
 from bokeh.plotting import figure, show, output_file, gridplot
-from bokeh.palettes import Category20, Paired
+from bokeh.palettes import Category20, Paired, Plasma256
 import math
 
 from bokeh.io import show, output_file
@@ -146,12 +146,14 @@ index_array_of_servers = list(range(len(tasks)+1,len(tasks)+number_of_servers+1)
 print('index_array_of_tasks=',index_array_of_tasks)
 print('index_array_of_servers=',index_array_of_servers)
 
+number_of_tasks = len(tasks)
+
 node_indices = np.concatenate((index_array_of_tasks,index_array_of_servers),axis=None).tolist()
 node_x_location = np.concatenate((index_array_of_tasks,list(range(1,len(index_array_of_servers)+1))),axis=None).tolist()
 node_y_location = np.concatenate((np.full(len(index_array_of_tasks), 5),np.full(len(index_array_of_servers), 3)),axis=None).tolist()
 
 
-plot = figure(title='Task capacity per server', x_range=(0,max(number_of_servers,number_of_buffers)+1), y_range=(0,8),
+plot = figure(title='Task capacity per server', x_range=(0,max(number_of_servers,number_of_tasks)+1), y_range=(0,8),
               tools='', toolbar_location=None)
 
 graph = GraphRenderer()
@@ -169,8 +171,6 @@ graph.edge_renderer.data_source.data = dict(
     end=list(network_graph_server_indices)
 )
 
-### start of layout code
-#circ = [i*2*math.pi/8 for i in node_indices]
 x = node_x_location
 y = node_y_location
 
@@ -209,3 +209,71 @@ output_file('graph.html')
 show(plot)
 
 
+number_of_io_nodes = len(a)
+index_array_of_io = list(range(1,number_of_io_nodes))
+index_array_of_buffers = list(range(number_of_io_nodes,number_of_io_nodes+number_of_buffers))
+index_array_of_tasks = list(range(number_of_io_nodes+number_of_buffers,number_of_io_nodes+number_of_buffers+number_of_tasks))
+
+print('index_array_of_io=',index_array_of_io)
+print('index_array_of_buffers=',index_array_of_buffers)
+print('index_array_of_tasks=',index_array_of_tasks)
+
+node_indices = np.concatenate((index_array_of_io,index_array_of_buffers,index_array_of_tasks),axis=None).tolist()
+node_x_location = np.concatenate((index_array_of_io,list(range(1,len(index_array_of_buffers)+1)),list(range(1,len(index_array_of_tasks)+1))),axis=None).tolist()
+node_y_location = np.concatenate((np.full(number_of_io_nodes, 7),np.full(number_of_buffers, 5),np.full(number_of_tasks, 3)),axis=None).tolist()
+
+
+plot = figure(title='Flow from outside to buffers to tasks', x_range=(0,max(number_of_io_nodes,number_of_buffers,number_of_tasks)+1), y_range=(0,9),
+              tools='', toolbar_location=None)
+
+graph = GraphRenderer()
+
+graph.node_renderer.data_source.add(node_indices, 'index')
+graph.node_renderer.data_source.add(Plasma256[:len(node_indices)], 'color')
+graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
+
+#
+# print('start=',network_graph_tasks_indices)
+# print('end=',network_graph_server_indices)
+#
+# graph.edge_renderer.data_source.data = dict(
+#     start=list(network_graph_tasks_indices),
+#     end=list(network_graph_server_indices)
+# )
+#
+# x = node_x_location
+# y = node_y_location
+#
+# graph_layout = dict(zip(node_indices, zip(x, y)))
+# graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
+#
+# plot.renderers.append(graph)
+#
+# x_servers = list(range(1,len(index_array_of_servers)+1))
+# y_servers = np.full(len(index_array_of_servers), 3)
+# plot.square(x_servers,y_servers , size=30, color=Category20[number_of_servers], alpha=0.5)
+#
+# x_tasks = index_array_of_tasks
+# y_tasks = np.full(len(index_array_of_tasks), 5)
+# plot.circle(x_tasks , y_tasks, size=30, color=Category20[len(index_array_of_tasks)], alpha=0.5)
+# text_label_values = np.round(np.multiply(np.round(list(network_graph_tasks_server_hash.values()), 2), 100)).tolist()
+# text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
+#
+# source = ColumnDataSource(data=dict(x=list(network_graph_tasks_server_hash.keys()),
+#                                     y=np.full(len(network_graph_tasks_indices), 4.8),
+#                                     values=text_label_values ))
+# capacityLabels = LabelSet(x='x', y='y', text='values', level='glyph',
+#                           x_offset=-8, y_offset=10, source=source, render_mode='canvas', text_font_size="10pt")
+#
+# plot.add_layout(capacityLabels)
+#
+# source = ColumnDataSource(data=dict(x=[6,6],
+#                                     y=[2.5,5.5],
+#                                     values=['servers','tasks'] ))
+#
+# typeLabel = LabelSet(x='x', y='y', text='values', level='glyph',
+#                           x_offset=0, y_offset=0, source=source, render_mode='canvas', text_font_size="10pt")
+# plot.add_layout(typeLabel)
+
+output_file('graph.html')
+show(plot)
