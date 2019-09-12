@@ -177,8 +177,9 @@ graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
 
 plot.renderers.append(graph)
 
-plot.square(range(1,len(index_array_of_servers)), np.full(len(index_array_of_servers), 3), size=30, color=colors, alpha=0.5)
-plot.circle(index_array_of_tasks, np.full(len(index_array_of_tasks), 5), size=30, color=colors, alpha=0.5)
+plot.square(list(range(1,len(index_array_of_servers)+1)), np.full(len(index_array_of_servers), 3), size=30, color=Category20[number_of_servers], alpha=0.5)
+plot.circle(index_array_of_tasks, np.full(len(index_array_of_tasks), 5), size=30, color=Category20[len(index_array_of_tasks)], alpha=0.5)
+
 
 
 output_file('graph.html')
