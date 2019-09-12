@@ -151,7 +151,7 @@ node_x_location = np.concatenate((index_array_of_tasks,list(range(1,len(index_ar
 node_y_location = np.concatenate((np.full(len(index_array_of_tasks), 5),np.full(len(index_array_of_servers), 3)),axis=None).tolist()
 
 
-plot = figure(title='Task capacity per server', x_range=(0,len(node_indices)+1), y_range=(0,10),
+plot = figure(title='Task capacity per server', x_range=(0,max(number_of_servers,number_of_buffers)+1), y_range=(0,8),
               tools='', toolbar_location=None)
 
 graph = GraphRenderer()
@@ -192,10 +192,19 @@ text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
 source = ColumnDataSource(data=dict(x=list(network_graph_tasks_server_hash.keys()),
                                     y=np.full(len(network_graph_tasks_indices), 4.8),
                                     values=text_label_values ))
-labels = LabelSet(x='x', y='y', text='values', level='glyph',
-              x_offset=-8, y_offset=10, source=source, render_mode='canvas', text_font_size="10pt")
+capacityLabels = LabelSet(x='x', y='y', text='values', level='glyph',
+                          x_offset=-8, y_offset=10, source=source, render_mode='canvas', text_font_size="10pt")
 
-plot.add_layout(labels)
+plot.add_layout(capacityLabels)
+
+source = ColumnDataSource(data=dict(x=[6,6],
+                                    y=[2.5,5.5],
+                                    values=['servers','tasks'] ))
+
+typeLabel = LabelSet(x='x', y='y', text='values', level='glyph',
+                          x_offset=0, y_offset=0, source=source, render_mode='canvas', text_font_size="10pt")
+plot.add_layout(typeLabel)
+
 output_file('graph.html')
 show(plot)
 
