@@ -210,9 +210,9 @@ show(plot)
 
 
 number_of_io_nodes = len(a)
-index_array_of_io = list(range(1,number_of_io_nodes))
-index_array_of_buffers = list(range(number_of_io_nodes,number_of_io_nodes+number_of_buffers))
-index_array_of_tasks = list(range(number_of_io_nodes+number_of_buffers,number_of_io_nodes+number_of_buffers+number_of_tasks))
+index_array_of_io = list(range(1,number_of_io_nodes+1))
+index_array_of_buffers = list(range(number_of_io_nodes+1,number_of_io_nodes+number_of_buffers+1))
+index_array_of_tasks = list(range(number_of_io_nodes+number_of_buffers+1,number_of_io_nodes+number_of_buffers+number_of_tasks+1))
 
 print('index_array_of_io=',index_array_of_io)
 print('index_array_of_buffers=',index_array_of_buffers)
@@ -232,30 +232,38 @@ graph.node_renderer.data_source.add(node_indices, 'index')
 graph.node_renderer.data_source.add(Plasma256[:len(node_indices)], 'color')
 graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
 
-#
-# print('start=',network_graph_tasks_indices)
-# print('end=',network_graph_server_indices)
-#
-# graph.edge_renderer.data_source.data = dict(
-#     start=list(network_graph_tasks_indices),
-#     end=list(network_graph_server_indices)
-# )
-#
-# x = node_x_location
-# y = node_y_location
-#
-# graph_layout = dict(zip(node_indices, zip(x, y)))
-# graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
-#
-# plot.renderers.append(graph)
-#
-# x_servers = list(range(1,len(index_array_of_servers)+1))
-# y_servers = np.full(len(index_array_of_servers), 3)
-# plot.square(x_servers,y_servers , size=30, color=Category20[number_of_servers], alpha=0.5)
-#
-# x_tasks = index_array_of_tasks
-# y_tasks = np.full(len(index_array_of_tasks), 5)
-# plot.circle(x_tasks , y_tasks, size=30, color=Category20[len(index_array_of_tasks)], alpha=0.5)
+# TODO add the edges between buffers and tasks
+start = index_array_of_io
+end = index_array_of_buffers
+
+print('start=',start)
+print('end=',end)
+
+graph.edge_renderer.data_source.data = dict(
+    start=start,
+    end=end
+)
+
+x = node_x_location
+y = node_y_location
+
+graph_layout = dict(zip(node_indices, zip(x, y)))
+graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
+
+plot.renderers.append(graph)
+
+x_io = list(range(1,number_of_io_nodes+1))
+y_io = np.full(number_of_io_nodes, 7)
+plot.triangle(x_io,y_io , size=30, color=Category20[number_of_io_nodes], alpha=0.5, line_width=2)
+
+x_buffers = list(range(1,number_of_buffers+1))
+y_buffers = np.full(number_of_buffers, 5)
+plot.rect(x_buffers,y_buffers , color=Category20[number_of_io_nodes], alpha=0.5, width=0.5, height=0.5)
+
+x_tasks = list(range(1,number_of_tasks+1))
+y_tasks = np.full(number_of_tasks, 3)
+plot.circle(x_tasks,y_tasks , size=30, color=Category20[number_of_io_nodes], alpha=0.5)
+
 # text_label_values = np.round(np.multiply(np.round(list(network_graph_tasks_server_hash.values()), 2), 100)).tolist()
 # text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
 #
