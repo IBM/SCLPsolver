@@ -12,7 +12,7 @@ import math
 
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
-from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, LabelSet, ColumnDataSource
+from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, LabelSet, ColumnDataSource, Text
 from bokeh.palettes import Spectral8
 
 # itertools handles the cycling
@@ -151,7 +151,7 @@ node_x_location = np.concatenate((index_array_of_tasks,list(range(1,len(index_ar
 node_y_location = np.concatenate((np.full(len(index_array_of_tasks), 5),np.full(len(index_array_of_servers), 3)),axis=None).tolist()
 
 
-plot = figure(title='Task to Server relationship', x_range=(0,len(node_indices)+1), y_range=(0,10),
+plot = figure(title='Task capacity per server', x_range=(0,len(node_indices)+1), y_range=(0,10),
               tools='', toolbar_location=None)
 
 graph = GraphRenderer()
