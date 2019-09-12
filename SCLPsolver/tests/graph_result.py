@@ -12,7 +12,7 @@ import math
 
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
-from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval
+from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, LabelSet, ColumnDataSource
 from bokeh.palettes import Spectral8
 
 # itertools handles the cycling
@@ -101,6 +101,7 @@ new_matrix = np.zeros((number_of_buffers,2 * number_of_time_slots))
 p = {}
 network_graph_tasks_indices = []
 network_graph_server_indices = []
+network_graph_tasks_server_hash = {}
 max_y_value = 1
 
 for k in range(number_of_servers): # servers
@@ -109,10 +110,11 @@ for k in range(number_of_servers): # servers
             new_matrix[j, 2 * ti] = U[j, ti] * H[k, j]
             new_matrix[j, 2 * ti+1] = U[j, ti] * H[k, j]
         if H[k,j]>0:
-            new_legend_tasks[j] = 'task '+str(j)
-            network_graph_tasks_indices.append(j)
-            network_graph_server_indices.append(len(tasks)+k)
-            print('k,j=',k+1,',',j+1)
+            new_legend_tasks[j] = 'task '+str(j+1)
+            network_graph_tasks_indices.append(j+1)
+            network_graph_server_indices.append(len(tasks)+k+1)
+            network_graph_tasks_server_hash[j+1] = H[k, j]
+            print('k,j=',k+1,',',j+1,'=',H[k, j])
         data['task '+str(j+1)] = new_matrix[j].tolist()
 
     df = pd.DataFrame(data)
@@ -138,14 +140,14 @@ from bokeh.plotting import figure
 from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, Quad
 from bokeh.palettes import Category20c
 
-index_array_of_tasks = list(range(1,len(tasks)))
-index_array_of_servers = list(range(len(tasks),len(tasks)+number_of_servers))
+index_array_of_tasks = list(range(1,len(tasks)+1))
+index_array_of_servers = list(range(len(tasks)+1,len(tasks)+number_of_servers+1))
 
 print('index_array_of_tasks=',index_array_of_tasks)
 print('index_array_of_servers=',index_array_of_servers)
 
 node_indices = np.concatenate((index_array_of_tasks,index_array_of_servers),axis=None).tolist()
-node_x_location = np.concatenate((index_array_of_tasks,range(1,len(index_array_of_servers))),axis=None).tolist()
+node_x_location = np.concatenate((index_array_of_tasks,list(range(1,len(index_array_of_servers)+1))),axis=None).tolist()
 node_y_location = np.concatenate((np.full(len(index_array_of_tasks), 5),np.full(len(index_array_of_servers), 3)),axis=None).tolist()
 
 
@@ -159,8 +161,8 @@ graph.node_renderer.data_source.add(Category20c[len(node_indices)], 'color')
 graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
 
 
-print('start=',node_indices)
-print('end=',node_y_location)
+print('start=',network_graph_tasks_indices)
+print('end=',network_graph_server_indices)
 
 graph.edge_renderer.data_source.data = dict(
     start=list(network_graph_tasks_indices),
@@ -177,11 +179,23 @@ graph.layout_provider = StaticLayoutProvider(graph_layout=graph_layout)
 
 plot.renderers.append(graph)
 
-plot.square(list(range(1,len(index_array_of_servers)+1)), np.full(len(index_array_of_servers), 3), size=30, color=Category20[number_of_servers], alpha=0.5)
-plot.circle(index_array_of_tasks, np.full(len(index_array_of_tasks), 5), size=30, color=Category20[len(index_array_of_tasks)], alpha=0.5)
+x_servers = list(range(1,len(index_array_of_servers)+1))
+y_servers = np.full(len(index_array_of_servers), 3)
+plot.square(x_servers,y_servers , size=30, color=Category20[number_of_servers], alpha=0.5)
 
+x_tasks = index_array_of_tasks
+y_tasks = np.full(len(index_array_of_tasks), 5)
+plot.circle(x_tasks , y_tasks, size=30, color=Category20[len(index_array_of_tasks)], alpha=0.5)
+text_label_values = np.round(np.multiply(np.round(list(network_graph_tasks_server_hash.values()), 2), 100)).tolist()
+text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
 
+source = ColumnDataSource(data=dict(x=list(network_graph_tasks_server_hash.keys()),
+                                    y=np.full(len(network_graph_tasks_indices), 4.8),
+                                    values=text_label_values ))
+labels = LabelSet(x='x', y='y', text='values', level='glyph',
+              x_offset=-8, y_offset=10, source=source, render_mode='canvas', text_font_size="10pt")
 
+plot.add_layout(labels)
 output_file('graph.html')
 show(plot)
 
