@@ -236,7 +236,6 @@ graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
 start = index_array_of_io
 end = index_array_of_buffers
 
-# TODO add the edges between buffers and tasks
 for buffer_index in range(number_of_buffers):
     for task_index in range(number_of_tasks):
         value = G[buffer_index,task_index]
