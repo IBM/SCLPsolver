@@ -12,7 +12,7 @@ import math
 
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
-from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, LabelSet, ColumnDataSource, Text
+from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval, LabelSet, ColumnDataSource, Text, Arrow, OpenHead
 from bokeh.palettes import Spectral8
 
 # itertools handles the cycling
@@ -25,14 +25,6 @@ number_of_servers = 4
 time_horizon = 150
 
 G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, number_of_buffers, number_of_servers)
-#vector alpha >0 , vector a can be any value
-# a is input/output coming from outside
-# alpha is initial value in buffer
-# matrix G connected buffers and tasks
-# in matrix G , flow between a task and multiple buffers
-# task to buffer based on H[k,j] diagram 1
-# a, buffer, task diagram 2
-
 
 T = time_horizon
 import time
@@ -208,6 +200,13 @@ plot.add_layout(typeLabel)
 output_file('graph.html')
 show(plot)
 
+#vector alpha >0 , vector a can be any value
+# a is input/output coming from outside
+# alpha is initial value in buffer
+# matrix G connected buffers and tasks
+# in matrix G , flow between a task and multiple buffers
+# task to buffer based on H[k,j] diagram 1
+# a, buffer, task diagram 2
 
 number_of_io_nodes = len(a)
 index_array_of_io = list(range(1,number_of_io_nodes+1))
@@ -222,8 +221,9 @@ node_indices = np.concatenate((index_array_of_io,index_array_of_buffers,index_ar
 node_x_location = np.concatenate((index_array_of_io,list(range(1,len(index_array_of_buffers)+1)),list(range(1,len(index_array_of_tasks)+1))),axis=None).tolist()
 node_y_location = np.concatenate((np.full(number_of_io_nodes, 7),np.full(number_of_buffers, 5),np.full(number_of_tasks, 3)),axis=None).tolist()
 
+max_x_range = max(number_of_io_nodes,number_of_buffers,number_of_tasks)+1
 
-plot = figure(title='Flow from outside to buffers to tasks', x_range=(0,max(number_of_io_nodes,number_of_buffers,number_of_tasks)+1), y_range=(0,9),
+plot = figure(title='Flow from outside to buffers to tasks', x_range=(0,max_x_range), y_range=(0,9),
               tools='', toolbar_location=None)
 
 graph = GraphRenderer()
@@ -232,9 +232,21 @@ graph.node_renderer.data_source.add(node_indices, 'index')
 graph.node_renderer.data_source.add(Plasma256[:len(node_indices)], 'color')
 graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
 
-# TODO add the edges between buffers and tasks
+
 start = index_array_of_io
 end = index_array_of_buffers
+
+# TODO add the edges between buffers and tasks
+for buffer_index in range(number_of_buffers):
+    for task_index in range(number_of_tasks):
+        value = G[buffer_index,task_index]
+        if value > 0:
+            start.append(index_array_of_buffers[buffer_index])
+            end.append(index_array_of_tasks[task_index])
+        elif value < 0:
+            start.append(index_array_of_tasks[task_index])
+            end.append(index_array_of_buffers[buffer_index])
+
 
 print('start=',start)
 print('end=',end)
@@ -275,13 +287,13 @@ plot.circle(x_tasks,y_tasks , size=30, color=Category20[number_of_io_nodes], alp
 #
 # plot.add_layout(capacityLabels)
 #
-# source = ColumnDataSource(data=dict(x=[6,6],
-#                                     y=[2.5,5.5],
-#                                     values=['servers','tasks'] ))
-#
-# typeLabel = LabelSet(x='x', y='y', text='values', level='glyph',
-#                           x_offset=0, y_offset=0, source=source, render_mode='canvas', text_font_size="10pt")
-# plot.add_layout(typeLabel)
+source = ColumnDataSource(data=dict(x=[max_x_range/2-0.5,max_x_range/2-0.5,max_x_range/2-0.5],
+                                    y=[2.5,5.5,7.5],
+                                    values=['tasks','buffers','outside sources'] ))
+
+typeLabel = LabelSet(x='x', y='y', text='values', level='glyph',
+                          x_offset=0, y_offset=0, source=source, render_mode='canvas', text_font_size="10pt")
+plot.add_layout(typeLabel)
 
 output_file('graph.html')
 show(plot)
