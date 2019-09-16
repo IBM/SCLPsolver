@@ -257,10 +257,10 @@ for buffer_index in range(number_of_buffers):
 print('start=',start)
 print('end=',end)
 
-graph.edge_renderer.data_source.data = dict(
-    start=start,
-    end=end
-)
+# graph.edge_renderer.data_source.data = dict(
+#     start=start,
+#     end=end
+# )
 
 x = node_x_location
 y = node_y_location
@@ -281,6 +281,21 @@ plot.rect(x_buffers,y_buffers , color=Category20[number_of_io_nodes], alpha=0.5,
 x_tasks = list(range(1,number_of_tasks+1))
 y_tasks = np.full(number_of_tasks, 3)
 plot.circle(x_tasks,y_tasks , size=30, color=Category20[number_of_io_nodes], alpha=0.5)
+
+for i in range(number_of_buffers):
+    for j in range(number_of_tasks):
+        if G[i,j]>0:
+            x_start_node = x_buffers[i]
+            y_start_node = y_buffers[i]
+            x_end_node = x_tasks[j]
+            y_end_node = y_tasks[j]
+        elif G[i,j]<0:
+            x_start_node = x_tasks[j]
+            y_start_node = y_tasks[j]
+            x_end_node = x_buffers[i]
+            y_end_node = y_buffers[i]
+        plot.add_layout(Arrow(end=OpenHead(),
+                           x_start=x_start_node, y_start=y_start_node, x_end=x_end_node, y_end=y_end_node))
 
 text_label_values = np.round(np.multiply(np.round(list(network_graph_buffer_task_hash.values()), 2), 100)).tolist()
 text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
