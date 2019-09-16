@@ -66,7 +66,7 @@ colors = itertools.cycle(line_palette)
 for i,color in zip(range(number_of_buffers),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
-#show(plot_line)
+show(plot_line)
 
 number_of_time_slots = len(t)-1
 
@@ -125,7 +125,7 @@ for k in range(number_of_servers): # servers
     p[k].legend[0].items.reverse()
 
 grid = gridplot([[p[0], p[1]], [p[2], p[3]]])
-#show(grid)
+show(grid)
 
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
