@@ -236,9 +236,16 @@ graph.node_renderer.glyph = Oval(height=0, width=0, fill_color='color')
 start = index_array_of_io
 end = index_array_of_buffers
 
+network_graph_buffer_task_hash = {}
+
 for buffer_index in range(number_of_buffers):
+
+    network_graph_buffer_task_hash[buffer_index + 1] = np.sum(G[buffer_index,:])
+    
     for task_index in range(number_of_tasks):
         value = G[buffer_index,task_index]
+
+
         if value > 0:
             start.append(index_array_of_buffers[buffer_index])
             end.append(index_array_of_tasks[task_index])
@@ -275,17 +282,20 @@ x_tasks = list(range(1,number_of_tasks+1))
 y_tasks = np.full(number_of_tasks, 3)
 plot.circle(x_tasks,y_tasks , size=30, color=Category20[number_of_io_nodes], alpha=0.5)
 
-# text_label_values = np.round(np.multiply(np.round(list(network_graph_tasks_server_hash.values()), 2), 100)).tolist()
-# text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
-#
-# source = ColumnDataSource(data=dict(x=list(network_graph_tasks_server_hash.keys()),
-#                                     y=np.full(len(network_graph_tasks_indices), 4.8),
-#                                     values=text_label_values ))
-# capacityLabels = LabelSet(x='x', y='y', text='values', level='glyph',
-#                           x_offset=-8, y_offset=10, source=source, render_mode='canvas', text_font_size="10pt")
-#
-# plot.add_layout(capacityLabels)
-#
+text_label_values = np.round(np.multiply(np.round(list(network_graph_buffer_task_hash.values()), 2), 100)).tolist()
+text_label_values = [str(int(capacity)) + '%' for capacity in text_label_values]
+
+
+source = ColumnDataSource(data=dict(x=list(network_graph_buffer_task_hash.keys()),
+                                    y=np.full(number_of_buffers, 4.8),
+                                    values=text_label_values ))
+capacityLabels = LabelSet(x='x', y='y', text='values', level='glyph',
+                          x_offset=-8, y_offset=10, source=source, render_mode='canvas', text_font_size="10pt")
+
+plot.add_layout(capacityLabels)
+
+
+
 source = ColumnDataSource(data=dict(x=[max_x_range/2-0.5,max_x_range/2-0.5,max_x_range/2-0.5],
                                     y=[2.5,5.5,7.5],
                                     values=['tasks','buffers','outside sources'] ))
