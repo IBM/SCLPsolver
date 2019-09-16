@@ -242,25 +242,25 @@ for buffer_index in range(number_of_buffers):
 
     network_graph_buffer_task_hash[buffer_index + 1] = np.sum(G[buffer_index,:])
     
-    for task_index in range(number_of_tasks):
-        value = G[buffer_index,task_index]
-
-
-        if value > 0:
-            start.append(index_array_of_buffers[buffer_index])
-            end.append(index_array_of_tasks[task_index])
-        elif value < 0:
-            start.append(index_array_of_tasks[task_index])
-            end.append(index_array_of_buffers[buffer_index])
+    # for task_index in range(number_of_tasks):
+    #     value = G[buffer_index,task_index]
+    #
+    #
+    #     if value > 0:
+    #         start.append(index_array_of_buffers[buffer_index])
+    #         end.append(index_array_of_tasks[task_index])
+    #     elif value < 0:
+    #         start.append(index_array_of_tasks[task_index])
+    #         end.append(index_array_of_buffers[buffer_index])
 
 
 print('start=',start)
 print('end=',end)
 
-# graph.edge_renderer.data_source.data = dict(
-#     start=start,
-#     end=end
-# )
+graph.edge_renderer.data_source.data = dict(
+     start=start,
+     end=end
+ )
 
 x = node_x_location
 y = node_y_location
