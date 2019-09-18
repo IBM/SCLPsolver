@@ -52,9 +52,9 @@ def alternativeImplementation(K, I):
 
 
 tolerance = 0
-num_trials = 100
-K = 1000
-i = 100
+num_trials = 1
+K = 10
+i = 10
 for seed in range(1000, 1000 + num_trials):
     G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, K, i, gamma_rate = -0.1)
     formulation = SCLP_formulation(G, F, H, a, b, c, d, alpha, gamma, TT)
@@ -72,4 +72,6 @@ for seed in range(1000, 1000 + num_trials):
         raise Exception(err['message'])
     # alternative way implement as function
     alternativeImplementation(K, i)
+    formulation.show_flow_from_outside_to_buffers_to_tasks()
+    formulation.show_task_capacity_per_server()
 

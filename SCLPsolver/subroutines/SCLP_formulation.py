@@ -5,6 +5,7 @@ from bokeh.io import output_file, show
 from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet, Arrow, OpenHead
 from bokeh.plotting import figure
 from bokeh.palettes import Category20c, Category20, Paired, Plasma256
+from bokeh.palettes import Dark2_5 as palette
 
 from .matlab_utils import find, ismember
 from .LP_formulation import LP_formulation
@@ -238,7 +239,7 @@ class SCLP_formulation():
         # a to buffer to task
 
         number_of_io_nodes = len(self.a)
-        number_of_buffers = len(self.X)
+        number_of_buffers = self.K
         number_of_tasks = len(self.H[0])
         index_array_of_io = list(range(1, number_of_io_nodes + 1))
         index_array_of_buffers = list(range(number_of_io_nodes + 1, number_of_io_nodes + number_of_buffers + 1))
@@ -287,15 +288,15 @@ class SCLP_formulation():
 
         x_io = list(range(1, number_of_io_nodes + 1))
         y_io = np.full(number_of_io_nodes, 7)
-        plot.triangle(x_io, y_io, size=30, color=Category20[number_of_io_nodes], alpha=0.5, line_width=2)
+        plot.triangle(x_io, y_io, size=30, color=getLargePalette(number_of_io_nodes,Plasma256), alpha=0.5, line_width=2)
 
         x_buffers = list(range(1, number_of_buffers + 1))
         y_buffers = np.full(number_of_buffers, 5)
-        plot.rect(x_buffers, y_buffers, color=Category20[number_of_io_nodes], alpha=0.5, width=0.5, height=0.5)
+        plot.rect(x_buffers, y_buffers, color=getLargePalette(number_of_buffers,Plasma256), alpha=0.5, width=0.5, height=0.5)
 
         x_tasks = list(range(1, number_of_tasks + 1))
         y_tasks = np.full(number_of_tasks, 3)
-        plot.circle(x_tasks, y_tasks, size=30, color=Category20[number_of_io_nodes], alpha=0.5)
+        plot.circle(x_tasks, y_tasks, size=30, color=getLargePalette(number_of_tasks,Plasma256), alpha=0.5)
 
         for i in range(number_of_buffers):
             for j in range(number_of_tasks):
@@ -336,4 +337,13 @@ class SCLP_formulation():
         show(plot)
 
         return None
-    
+
+def getLargePalette(size, palette):
+    if size < 256:
+        return palette[size]
+    p = palette[:256]
+    out = []
+    for i in range(size):
+        idx = int(i * 256.0 / size)
+        out.append(p[idx])
+    return out
