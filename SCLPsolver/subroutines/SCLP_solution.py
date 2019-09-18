@@ -54,11 +54,11 @@ class SCLP_solution(generic_SCLP_solution):
         return res
 
     def extract_final_solution(self):
-        u, p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
-        t = np.cumsum(np.hstack((0, self._state.tau)))
-        self._final_T = t[-1]
-        obj, err = calc_objective(self._formulation, u, self._state.x, p, self._state.q, self._state.tau)
-        return t, self._state.x, self._state.q, u, p, self.pivots, obj, err, self.NN, self._state.tau
+        self.u, p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
+        self.t = np.cumsum(np.hstack((0, self._state.tau)))
+        self._final_T = self.t[-1]
+        obj, err = calc_objective(self._formulation, self.u, self._state.x, p, self._state.q, self._state.tau)
+        return self.t, self._state.x, self._state.q, self.u, p, self.pivots, obj, err, self.NN, self._state.tau
 
     def check_final_solution(self, tolerance):
         is_ok = True
@@ -120,7 +120,8 @@ class SCLP_solution(generic_SCLP_solution):
         # Plots of buffers status: piecewise linear graphs where:
         # t = [0,t1,...,Tres] vector containing time partition
         # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
-        t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
+        if not hasattr(self, 't'):
+            self.extract_final_solution()
 
         number_of_buffers = self.formulation.K
 
@@ -133,7 +134,7 @@ class SCLP_solution(generic_SCLP_solution):
 
         # add a line renderer
         for i, color in zip(range(number_of_buffers), colors):
-            plot_line.line(t, X[i], line_width=2, line_color=color)
+            plot_line.line(self.t, self._state.x[i], line_width=2, line_color=color)
 
         show(plot_line)
         return None
@@ -148,28 +149,24 @@ class SCLP_solution(generic_SCLP_solution):
         #                               we need for each server k create barchart where width of bar is length of time period
         #                               and total height is sum(U[n,j] * H[k,j]) for all j this height splitted by different colors according to j (up to 12)
 
-        t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
+        #self.extract_final_solution()
 
-        number_of_buffers = len(X)
-        number_of_servers = self.formulation.L
-        seed = 1000
+        number_of_buffers = self.formulation.K
+        number_of_servers = self.formulation.I
 
         time_horizon = 150
 
-        G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, number_of_buffers,
-                                                                                number_of_servers)
-
-        number_of_time_slots = len(t) - 1
+        number_of_time_slots = len(self.t) - 1
 
         output_file('server_utilization.html')
 
-        tasks = ['task ' + str(i) for i in range(1, len(H[0]) + 1)]
+        tasks = ['task ' + str(i) for i in range(1, len(self.formulation.H[0]) + 1)]
         new_legend_tasks = {}
 
         new_t = np.zeros(2 * number_of_time_slots)
-        new_t[0] = t[1] / 2
-        new_t[1:-1] = np.repeat(t[1:-1], 2)
-        new_t[-1] = t[-1]
+        new_t[0] = self.t[1] / 2
+        new_t[1:-1] = np.repeat(self.t[1:-1], 2)
+        new_t[-1] = self.t[-1]
 
         data = {'t': new_t}
 
@@ -184,13 +181,13 @@ class SCLP_solution(generic_SCLP_solution):
         for k in range(number_of_servers):  # servers
             for j in range(number_of_buffers):  # tasks
                 for ti in range(0, number_of_time_slots):  # time slices
-                    new_matrix[j, 2 * ti] = U[j, ti] * H[k, j]
-                    new_matrix[j, 2 * ti + 1] = U[j, ti] * H[k, j]
-                if H[k, j] > 0:
+                    new_matrix[j, 2 * ti] = self.u[j, ti] * self.formulation.H[k, j]
+                    new_matrix[j, 2 * ti + 1] = self.u[j, ti] * self.formulation.H[k, j]
+                if self.formulation.H[k, j] > 0:
                     new_legend_tasks[j] = 'task ' + str(j + 1)
                     network_graph_tasks_indices.append(j + 1)
                     network_graph_server_indices.append(len(tasks) + k + 1)
-                    network_graph_tasks_server_hash[j + 1] = H[k, j]
+                    network_graph_tasks_server_hash[j + 1] = self.formulation.H[k, j]
                 data['task ' + str(j + 1)] = new_matrix[j].tolist()
 
             df = pd.DataFrame(data)
@@ -203,7 +200,7 @@ class SCLP_solution(generic_SCLP_solution):
 
             # reverse the legend entries to match the stacked order
             for j in reversed(range(number_of_buffers)):
-                if H[k, j] == 0:
+                if self.formulation.H[k, j] == 0:
                     del p[k].legend[0].items[j]
 
             p[k].legend[0].items.reverse()

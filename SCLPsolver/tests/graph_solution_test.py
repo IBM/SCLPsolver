@@ -11,10 +11,16 @@ import time
 start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False, collect_plot_data=True)
 solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+
 t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
+
+solution.show_buffer_status()
+solution.show_server_utilization()
+
 print(obj, err)
 time_to_solve = time.time() - start_time
 pp = solution.plot_history(plt)
 pp.show()
 print("--- %s seconds ---" % time_to_solve)
 print("--- seed %s ---" % seed)
+
