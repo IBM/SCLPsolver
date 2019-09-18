@@ -63,7 +63,7 @@ plot_line = figure(plot_width=plot_width, plot_height=plot_height)
 colors = itertools.cycle(line_palette)
 
 # add a line renderer
-for i,color in zip(range(number_of_buffers),colors):
+for i,color in zip(range(len(X)),colors):
     plot_line.line(t, X[i], line_width=2, line_color=color)
 
 show(plot_line)
