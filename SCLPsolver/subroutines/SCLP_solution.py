@@ -122,7 +122,7 @@ class SCLP_solution(generic_SCLP_solution):
         # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
         t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
 
-        number_of_buffers = len(X)
+        number_of_buffers = self.formulation.K
 
         output_file("buffer_status.html")
 
