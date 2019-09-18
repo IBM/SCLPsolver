@@ -1,7 +1,13 @@
 import numpy as np
+from bokeh.core.property.dataspec import value
 from bokeh.io import output_file, show
+from bokeh.layouts import gridplot
 from bokeh.plotting import figure
-
+from bokeh.palettes import Dark2_5 as line_palette
+from bokeh.palettes import Category20 as stacked_bar_chart_palette
+from bokeh.palettes import Category20, Paired, Plasma256
+import pandas as pd
+from doe.data_generators.MCQN import generate_MCQN_data
 from .generic_SCLP_solution import generic_SCLP_solution
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
@@ -9,9 +15,11 @@ from .solution_state import solution_state
 from .LP_formulation import solve_LP_in_place
 import itertools
 
-from bokeh.palettes import Dark2_5 as line_palette
 
 class SCLP_solution(generic_SCLP_solution):
+
+    plot_width = 800
+    plot_height = 400
 
     def __init__(self, formulation, x_0, q_N, tolerance, collect_plot_data):
         LP_form = formulation.formulate_ratesLP(x_0, q_N)
@@ -108,19 +116,17 @@ class SCLP_solution(generic_SCLP_solution):
             return plt
         return None
 
-    def showBufferStatus(self):
+    def show_buffer_status(self):
+        # Plots of buffers status: piecewise linear graphs where:
         # t = [0,t1,...,Tres] vector containing time partition
         # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
         t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
 
-        plot_width = 800
-        plot_height = 400
-
         number_of_buffers = len(X)
 
-        output_file("bufferStatus.html")
+        output_file("buffer_status.html")
 
-        plot_line = figure(plot_width=plot_width, plot_height=plot_height)
+        plot_line = figure(plot_width=self.plot_width, plot_height=self.plot_height)
 
         # create a color iterator
         colors = itertools.cycle(line_palette)
@@ -132,3 +138,81 @@ class SCLP_solution(generic_SCLP_solution):
         show(plot_line)
         return None
 
+    def show_server_utilization(self):
+        # Plot of time_slots utilization:  4 barcharts where each bar can contain up to 12 colors. Colors are according to kind of tasks running on server
+        #                                we have 12 kinds of tasks (number of columns in H) and 4 time_slots (number of rows in H)
+        #                               if specific task (j) can run on the specific server (k) then we have H[k,j] > 0
+        #                               otherwise H[k,j] == 0 and we cannot run specific task on specific server
+        #                               U is a (16,len(t)-1) matrix where we interesting only on first (12,len(t)-1) part
+        #                               U[j,n] * H[k,j] indicate how many capacity of server k took task j at time period t[n]...t[n+1]
+        #                               we need for each server k create barchart where width of bar is length of time period
+        #                               and total height is sum(U[n,j] * H[k,j]) for all j this height splitted by different colors according to j (up to 12)
+
+        t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
+
+        number_of_buffers = len(X)
+        number_of_servers = 4
+        seed = 1000
+
+        time_horizon = 150
+
+        G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, number_of_buffers,
+                                                                                number_of_servers)
+
+        number_of_time_slots = len(t) - 1
+
+        output_file('server_utilization.html')
+        # create a color iterator
+        colors = stacked_bar_chart_palette[len(H[0])]
+
+        time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
+
+        tasks = ['task ' + str(i) for i in range(1, len(H[0]) + 1)]
+        new_legend_tasks = {}
+
+        new_t = np.zeros(2 * number_of_time_slots)
+        new_t[0] = t[1] / 2
+        new_t[1:-1] = np.repeat(t[1:-1], 2)
+        new_t[-1] = t[-1]
+
+        data = {'t': new_t}
+
+        new_matrix = np.zeros((number_of_buffers, 2 * number_of_time_slots))
+
+        p = {}
+        network_graph_tasks_indices = []
+        network_graph_server_indices = []
+        network_graph_tasks_server_hash = {}
+        max_y_value = 1
+
+        for k in range(number_of_servers):  # servers
+            for j in range(number_of_buffers):  # tasks
+                for ti in range(0, number_of_time_slots):  # time slices
+                    new_matrix[j, 2 * ti] = U[j, ti] * H[k, j]
+                    new_matrix[j, 2 * ti + 1] = U[j, ti] * H[k, j]
+                if H[k, j] > 0:
+                    new_legend_tasks[j] = 'task ' + str(j + 1)
+                    network_graph_tasks_indices.append(j + 1)
+                    network_graph_server_indices.append(len(tasks) + k + 1)
+                    network_graph_tasks_server_hash[j + 1] = H[k, j]
+                data['task ' + str(j + 1)] = new_matrix[j].tolist()
+
+            df = pd.DataFrame(data)
+
+            p[k] = figure(x_range=(0, time_horizon * 1.2), y_range=(0, max_y_value), plot_width=self.plot_width,
+                          plot_height=self.plot_height, title='Server ' + str(k) + ' Utilization')
+
+            p[k].varea_stack(stackers=tasks, x='t', color=Category20[number_of_buffers],
+                             legend=[value(x) for x in tasks], source=df)
+
+            # reverse the legend entries to match the stacked order
+            for j in reversed(range(number_of_buffers)):
+                if H[k, j] == 0:
+                    del p[k].legend[0].items[j]
+
+            p[k].legend[0].items.reverse()
+
+        grid = gridplot([[p[0], p[1]], [p[2], p[3]]])
+        show(grid)
+
+        return None
