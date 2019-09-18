@@ -1,10 +1,15 @@
 import numpy as np
+from bokeh.io import output_file, show
+from bokeh.plotting import figure
+
 from .generic_SCLP_solution import generic_SCLP_solution
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
 from .solution_state import solution_state
 from .LP_formulation import solve_LP_in_place
+import itertools
 
+from bokeh.palettes import Dark2_5 as line_palette
 
 class SCLP_solution(generic_SCLP_solution):
 
@@ -101,5 +106,29 @@ class SCLP_solution(generic_SCLP_solution):
             ax1.set_yticklabels(list(range(len(self.plot_data))))
             plt.setp(ax1.get_xticklabels(), rotation=30)
             return plt
+        return None
+
+    def showBufferStatus(self):
+        # t = [0,t1,...,Tres] vector containing time partition
+        # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
+        t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
+
+        plot_width = 800
+        plot_height = 400
+
+        number_of_buffers = len(X)
+
+        output_file("bufferStatus.html")
+
+        plot_line = figure(plot_width=plot_width, plot_height=plot_height)
+
+        # create a color iterator
+        colors = itertools.cycle(line_palette)
+
+        # add a line renderer
+        for i, color in zip(range(number_of_buffers), colors):
+            plot_line.line(t, X[i], line_width=2, line_color=color)
+
+        show(plot_line)
         return None
 
