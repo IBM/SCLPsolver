@@ -336,3 +336,4 @@ class SCLP_formulation():
         show(plot)
 
         return None
+    
