@@ -151,7 +151,7 @@ class SCLP_solution(generic_SCLP_solution):
         t, X, q, U, p, pivots, obj, err, NN, tau = self.extract_final_solution()
 
         number_of_buffers = len(X)
-        number_of_servers = 4
+        number_of_servers = self.formulation.L
         seed = 1000
 
         time_horizon = 150
@@ -162,10 +162,6 @@ class SCLP_solution(generic_SCLP_solution):
         number_of_time_slots = len(t) - 1
 
         output_file('server_utilization.html')
-        # create a color iterator
-        colors = stacked_bar_chart_palette[len(H[0])]
-
-        time_slots = ['t ' + str(i) for i in range(number_of_time_slots)]
 
         tasks = ['task ' + str(i) for i in range(1, len(H[0]) + 1)]
         new_legend_tasks = {}
