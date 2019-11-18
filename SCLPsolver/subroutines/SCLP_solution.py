@@ -54,11 +54,11 @@ class SCLP_solution(generic_SCLP_solution):
         return res
 
     def extract_final_solution(self):
-        self.u, p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
+        self.u, self.p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
         self.t = np.cumsum(np.hstack((0, self._state.tau)))
         self._final_T = self.t[-1]
-        obj, err = calc_objective(self._formulation, self.u, self._state.x, p, self._state.q, self._state.tau)
-        return self.t, self._state.x, self._state.q, self.u, p, self.pivots, obj, err, self.NN, self._state.tau
+        obj, err = calc_objective(self._formulation, self.u, self._state.x, self.p, self._state.q, self._state.tau)
+        return self.t, self._state.x, self._state.q, self.u, self.p, self.pivots, obj, err, self.NN, self._state.tau
 
     def check_final_solution(self, tolerance):
         is_ok = True
@@ -74,6 +74,32 @@ class SCLP_solution(generic_SCLP_solution):
             print('Negative dual state!')
             is_ok = False
         return is_ok
+
+    def is_other_feasible(self, other_sol):
+        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.extract_final_solution()
+        slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :])
+        int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1)
+        slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau) - np.dot(self._formulation.G, int_u)
+        if self._formulation.L > 0:
+            slack_x0 = np.vstack(self._formulation.alpha) - np.dot(self._formulation.F, x[self._formulation.K:, 0])
+            real_dx = np.dot(self._formulation.F, np.cumsum(other_sol.state.dx[self._formulation.K:, :] * tau, axis=1))
+            slack_dx = slack_dx - real_dx
+        else:
+            slack_x0 = np.vstack(self._formulation.alpha)
+        slack_x = slack_dx + slack_x0
+        return np.all(slack_x > 0) and np.all(slack_u > 0) and np.all(slack_x0 > 0)
+
+    def other_objective(self, other_sol):
+        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.extract_final_solution()
+        TT = t[NN]
+        part1 = np.dot(np.dot(self._formulation.gamma, u[:self._formulation.J, :]), tau)
+        ddtau = tau * (t[:-1] + t[1:]) / 2
+        part2 = np.dot(np.dot(self._formulation.c, u[:self._formulation.J, :]), tau * TT - ddtau)
+        if self._formulation.L == 0:
+            part3 = 0
+        else:
+            part3 = np.dot(np.dot(self._formulation.d, ((x[self._formulation.K:, :-1] + x[self._formulation.K:, 1:]) / 2)), tau)
+        return part1 + part2 + part3
 
     def plot_history(self, plt):
         if self.plot_data is not None:
