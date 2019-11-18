@@ -21,14 +21,18 @@ from test import test1
 #       {'alpha_rate':  10, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
 #        'gamma_rate':-0.1, 'c_scale': 0},starting_seed =1000)
 
-test1('results_mm.csv', False, 'reentrant', 1, 120, 40, 1000,
-       {'first_alpha':  2, 'alpha_rate':  2, 'cost_scale':1, 'a_rate' : 0.05, 'h_rate' : 0.1,
-        'gamma_rate':0, 'c_scale': 0},starting_seed =1000)
+# test1('results_mm.csv', False, 'reentrant', 1, 500, 100, 1000,
+#        {'first_alpha':  1, 'alpha_rate':  1, 'cost_scale':1, 'a_rate' : 0.05, 'h_rate' : 0.1,
+#         'gamma_rate':0, 'c_scale': 0},starting_seed =1000)
 
-# test1('results_mm.csv', False, 'MCQN_routing', 1, 100, 10, 100,
-#       {'J':200, 'alpha_rate':  2, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
-#        'gamma_rate':0, 'c_scale': 0, 'h_rate' : 0.3},starting_seed =1003)
+# test1('results_mm.csv', False, 'MCQN_routing', 1, 90, 30, 1000,
+#       {'J':180, 'alpha_rate':  1, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
+#        'gamma_rate':0, 'c_scale': 0, 'h_rate' : 0.1},starting_seed =1000)
 
 # test1('results_mm.csv', False, 'MCQN_routing', 1, 200, 20, 100,
 #       {'J':400, 'alpha_rate':  20, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5, 'h_rate': 0.05,
 #        'gamma_rate':0, 'c_scale': 0},starting_seed =1001)
+
+b = np.array([[0, 1], [2, 3]])
+np.matrix.resize(b,(3,3))
+print(b)

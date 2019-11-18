@@ -19,7 +19,7 @@ from bokeh.palettes import Spectral8
 import itertools
 import numpy as np
 
-seed = 1000
+seed = 1001
 number_of_buffers = 12
 number_of_servers = 4
 time_horizon = 150
