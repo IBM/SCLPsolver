@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from .data_generators.MCQN import generate_MCQN_data
+from .data_generators.MCQN import generate_MCQN_data, perturb_MCQN_data
 from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.MCQN_routing1 import generate_MCQN_routing_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
@@ -70,4 +70,39 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         else:
             failure_trials +=1
     return results, failure_trials, files, raw_tau
+
+
+def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_error, starting_seed = 1000, solver_settings = SCLP_settings(),
+                                use_adaptive_T = False, get_raw_tau = True, **kwargs):
+
+    num_feasible = 0
+    true_objective = float("inf")
+    perturbed_obj_vals = list()
+
+    # 1. generate the "true" MCQN data
+    G0, H0, F0, gamma0, c0, d0, alpha0, a0, b0, TT0, buffer_cost0 = generate_MCQN_data(starting_seed, K, I, **settings)
+
+    # 2. Solve using SCLP
+    solution0, STEPCOUNT0, Tres0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
+    t, x, q, u, p, pivots, obj, err, NN, tau = solution0.extract_final_solution()
+    if True:
+        true_objective = obj
+
+    for seed in range(starting_seed+1, starting_seed + 1 + exp_num):
+
+        # 3. Perturb the MCQN data
+        G1, H1, F1, a1, b1, c1, d1, alpha1, gamma1 = perturb_MCQN_data(seed, rel_error, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0)
+
+        # Solve the SCLP with perturbed MCQN
+        # 5. Test
+        # a. Check if the "true" values are feasible under perturbation
+        solution1, STEPCOUNT1, Tres1, res1 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
+        is_feasible = solution1.is_other_feasible(solution0)
+        num_feasible += int(is_feasible)
+
+        # b. Assuming feasibility, get the objective value of the "true" solution under the perturbation
+        if is_feasible:
+            perturbed_obj_vals.append(solution1.other_objective(solution0))
+
+    return num_feasible, true_objective, perturbed_obj_vals
 

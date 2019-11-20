@@ -74,3 +74,7 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     else:
         buffer_cost = (0,0)
     return G,H,F,gamma,c,d,alpha,a,b,None,buffer_cost
+
+
+def perturb_MCQN_data(seed,rel_error,G,H,F,a,b,c,d,alpha,gamma):
+    return G,H,F,a,b,c,d,alpha,gamma
