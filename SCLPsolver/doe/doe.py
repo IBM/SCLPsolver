@@ -72,7 +72,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
     return results, failure_trials, files, raw_tau
 
 
-def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_error, starting_seed = 1000, solver_settings = SCLP_settings(),
+def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_perturbation, symmetric, starting_seed = 1000, solver_settings = SCLP_settings(),
                                 use_adaptive_T = False, get_raw_tau = True, **kwargs):
 
     num_feasible = 0
@@ -91,18 +91,19 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_error,
     for seed in range(starting_seed+1, starting_seed + 1 + exp_num):
 
         # 3. Perturb the MCQN data
-        G1, H1, F1, a1, b1, c1, d1, alpha1, gamma1 = perturb_MCQN_data(seed, rel_error, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0)
+        G, H, F, a, b, c, d, alpha, gamma = perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0)
 
-        # Solve the SCLP with perturbed MCQN
+        # 4. Solve the SCLP with perturbed MCQN
+        solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+
         # 5. Test
         # a. Check if the "true" values are feasible under perturbation
-        solution1, STEPCOUNT1, Tres1, res1 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
-        is_feasible = solution1.is_other_feasible(solution0)
+        is_feasible = solution.is_other_feasible(solution0)
         num_feasible += int(is_feasible)
 
         # b. Assuming feasibility, get the objective value of the "true" solution under the perturbation
         if is_feasible:
-            perturbed_obj_vals.append(solution1.other_objective(solution0))
+            perturbed_obj_vals.append(solution.other_objective(solution0))
 
     return num_feasible, true_objective, perturbed_obj_vals
 

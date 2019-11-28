@@ -76,5 +76,20 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
     return G,H,F,gamma,c,d,alpha,a,b,None,buffer_cost
 
 
-def perturb_MCQN_data(seed,rel_error,G,H,F,a,b,c,d,alpha,gamma):
+def perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0):
+    if seed:
+        np.random.seed(seed)
+    if symmetric:
+        lower, upper = -rel_perturbation, rel_perturbation
+    else:
+        lower, upper = 0, rel_perturbation
+    G = G0 * (1 + np.random.uniform(lower, upper))
+    H = H0 * (1 + np.random.uniform(lower, upper))
+    F = F0 * (1 + np.random.uniform(lower, upper))
+    a = a0 * (1 + np.random.uniform(lower, upper))
+    b = b0 * (1 + np.random.uniform(lower, upper))
+    c = c0 * (1 + np.random.uniform(lower, upper))
+    d = d0 * (1 + np.random.uniform(lower, upper))
+    alpha = alpha0 * (1 + np.random.uniform(lower, upper))
+    gamma = gamma0 * (1 + np.random.uniform(lower, upper))
     return G,H,F,a,b,c,d,alpha,gamma
