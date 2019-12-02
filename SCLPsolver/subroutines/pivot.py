@@ -43,6 +43,8 @@ def full_pivot(A, i, j, pn, dn, ps, ds, tmp):
     A[i, j] = 1. / p
     return A, pn, dn, ps, ds
 
+def ok(a, b):
+    return all((m == n) or (m == 1) or (n == 1) for m, n in zip(a.shape[::-1], b.shape[::-1]))
 
 #'#@profile
 def dict_pivot(dct, i, j, tmp):
@@ -54,6 +56,10 @@ def dict_pivot(dct, i, j, tmp):
     p = dct['A'][i, j]
     if p == 0:
         raise Exception('pivot on zero')
+    if not ok(dct['A'][i, :], p):
+        print("=========================================")
+        print("dct[A][i,:].shape={}, p.shape={}".format(dct['A'][i, :].shape, p.shape))
+        raise Exception("Bad shapes! dct[A][i,:].shape={}, p.shape={}".format(dct['A'][i, :].shape, p.shape))
     rp = dct['A'][i, :] / p
     c = dct['A'][:, j].copy()
     dct['A'] -= np.outer(c, rp, out=tmp)
