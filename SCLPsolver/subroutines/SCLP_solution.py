@@ -101,6 +101,32 @@ class SCLP_solution(generic_SCLP_solution):
             part3 = np.dot(np.dot(self._formulation.d, ((x[self._formulation.K:, :-1] + x[self._formulation.K:, 1:]) / 2)), tau)
         return part1 + part2 + part3
 
+    def truncate_at(self, t0):
+        self.t = np.cumsum(np.hstack((0, self._state.tau)))
+        self._final_T = self.t[-1]
+        if t0 < self._final_T:
+            #TODO: check last_breakpoint
+            last_breakpoint = np.where(self.t<=t0)[0][-1]
+            delta_t = t0 - last_breakpoint
+            self._base_sequence.remove_bases(-1, last_breakpoint, self._pivots)
+            self._dx.remove(0, last_breakpoint)
+            self._dq.remove(0, last_breakpoint)
+            self._pivots.remove_pivots(-1, last_breakpoint)
+            self._state.dx = self._dx.get_matrix()
+            self._state.dq = self._dq.get_matrix()
+            self._state.sdx = self._state.sdx[:, last_breakpoint:]
+            self._state.sdx[:,0] = np.ones(self._state.dx.shape[0])
+            self._state.sdq = self._state.sdq[:, last_breakpoint:]
+            self._state.sdq[:, 0] = np.ones(self._state.dq.shape[0])
+            self._state.tau=self._state.tau[last_breakpoint:]
+            self._state.dtau = self._state.dtau[last_breakpoint:]
+            self._state.x = self._state.x[:,last_breakpoint:]
+            self._state.x[:, 0] += self._state.dx[:, 0] * delta_t
+            self._state.q = self._state.q[:, last_breakpoint:]
+            self._state.q[:, 0] -= self._state.dq[:, 0] * delta_t
+            self._state.del_x = self._state.del_x[:, last_breakpoint:]
+            self._state.del_q = self._state.del_q[:, last_breakpoint:]
+
     def plot_history(self, plt):
         if self.plot_data is not None:
             if self._final_T == 0:
