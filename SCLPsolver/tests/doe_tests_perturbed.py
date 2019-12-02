@@ -25,12 +25,12 @@ num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('
 
 print(num_feasible, true_objective, perturbed_obj_vals)
 
-num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 1, 2000, 200, 500,
-                                                                               {'alpha_rate': 1000,
-                                                                                'cost_scale': 20,
-                                                                                'a_rate': 0.1},
-                                                                               rel_perturbation=0.01,
-                                                                               symmetric=True,
-                                                                               starting_seed =1000)
-
-print(num_feasible, true_objective, perturbed_obj_vals)
+# num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 1, 2000, 200, 500,
+#                                                                                {'alpha_rate': 1000,
+#                                                                                 'cost_scale': 20,
+#                                                                                 'a_rate': 0.1},
+#                                                                                rel_perturbation=0.01,
+#                                                                                symmetric=True,
+#                                                                                starting_seed =1000)
+#
+# print(num_feasible, true_objective, perturbed_obj_vals)

@@ -79,7 +79,7 @@ class SCLP_solution(generic_SCLP_solution):
         t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.extract_final_solution()
         slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :])
         int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1)
-        slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau) - np.dot(self._formulation.G, int_u)
+        slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau - np.dot(self._formulation.G, int_u))
         if self._formulation.L > 0:
             slack_x0 = np.vstack(self._formulation.alpha) - np.dot(self._formulation.F, x[self._formulation.K:, 0])
             real_dx = np.dot(self._formulation.F, np.cumsum(other_sol.state.dx[self._formulation.K:, :] * tau, axis=1))
