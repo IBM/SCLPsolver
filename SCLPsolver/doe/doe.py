@@ -90,6 +90,10 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
 
     for seed in range(starting_seed+1, starting_seed + 1 + exp_num):
 
+        print("\n\n\n==============")
+        print(seed)
+        print("==============\n\n\n")
+
         # 3. Perturb the MCQN data
         G, H, F, a, b, c, d, alpha, gamma = perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0)
 
