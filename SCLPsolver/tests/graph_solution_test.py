@@ -12,7 +12,7 @@ start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False, collect_plot_data=True)
 solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
 
-t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
+t, x, q, u, p, pivots, obj, err, NN, tau = solution.get_final_solution()
 
 solution.show_buffer_status()
 solution.show_server_utilization()

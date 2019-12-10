@@ -46,7 +46,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         if solver_settings is None:
             solver_settings = SCLP_settings(find_alt_line=False)
         solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
-        t, x, q, u, p, pivots, obj, err, NN, tau = solution.extract_final_solution()
+        t, x, q, u, p, pivots, obj, err, NN, tau = solution.get_final_solution()
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % time_to_solve)
@@ -84,7 +84,7 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
 
     # 2. Solve using SCLP
     solution0, STEPCOUNT0, Tres0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
-    t, x, q, u, p, pivots, obj, err, NN, tau = solution0.extract_final_solution()
+    t, x, q, u, p, pivots, obj, err, NN, tau = solution0.get_final_solution()
     if True:
         true_objective = obj
 

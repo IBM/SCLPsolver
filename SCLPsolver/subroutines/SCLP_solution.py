@@ -29,6 +29,8 @@ class SCLP_solution(generic_SCLP_solution):
         super().__init__(LP_form, formulation.K + formulation.L, formulation.J + formulation.I)
         self._formulation = formulation
         self._final_T = 0
+        self._is_final = False
+        self._u, self._p, self._t, self._obj, self._err= None, None, None, None, None
         if collect_plot_data:
             self.plot_data = []
         else:
@@ -53,12 +55,18 @@ class SCLP_solution(generic_SCLP_solution):
             self.plot_data.append({'T': param_line.T, 'tau': self._state.tau, 'dtau': self._state.dtau})
         return res
 
-    def extract_final_solution(self):
-        self.u, self.p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
-        self.t = np.cumsum(np.hstack((0, self._state.tau)))
-        self._final_T = self.t[-1]
-        obj, err = calc_objective(self._formulation, self.u, self._state.x, self.p, self._state.q, self._state.tau)
-        return self.t, self._state.x, self._state.q, self.u, self.p, self.pivots, obj, err, self.NN, self._state.tau
+    def get_final_solution(self):
+        if not self._is_final:
+            self._extract_final_solution()
+        return self._t, self._state.x, self._state.q, self._u, self._p, self.pivots, self._obj, self._err, self.NN, self._state.tau
+
+    def _extract_final_solution(self):
+        #TODO: Note calc_controls produce problem in base-sequence recalculation impossible after this step....
+        self._u, self._p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
+        self._t = np.cumsum(np.hstack((0, self._state.tau)))
+        self._final_T = self._t[-1]
+        self._obj, self._err = calc_objective(self._formulation, self._u, self._state.x, self._p, self._state.q, self._state.tau)
+        self._is_final = True
 
     def check_final_solution(self, tolerance):
         is_ok = True
@@ -76,7 +84,7 @@ class SCLP_solution(generic_SCLP_solution):
         return is_ok
 
     def is_other_feasible(self, other_sol):
-        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.extract_final_solution()
+        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
         slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :])
         int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1)
         slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau - np.dot(self._formulation.G, int_u))
@@ -90,7 +98,7 @@ class SCLP_solution(generic_SCLP_solution):
         return np.all(slack_x > 0) and np.all(slack_u > 0) and np.all(slack_x0 > 0)
 
     def other_objective(self, other_sol):
-        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.extract_final_solution()
+        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
         TT = t[NN]
         part1 = np.dot(np.dot(self._formulation.gamma, u[:self._formulation.J, :]), tau)
         ddtau = tau * (t[:-1] + t[1:]) / 2
@@ -173,7 +181,7 @@ class SCLP_solution(generic_SCLP_solution):
         # t = [0,t1,...,Tres] vector containing time partition
         # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
         if not hasattr(self, 't'):
-            self.extract_final_solution()
+            self.get_final_solution()
 
         number_of_buffers = self.formulation.K
 
