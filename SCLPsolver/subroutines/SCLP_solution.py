@@ -4,10 +4,8 @@ from bokeh.io import output_file, show
 from bokeh.layouts import gridplot
 from bokeh.plotting import figure
 from bokeh.palettes import Dark2_5 as line_palette
-from bokeh.palettes import Category20 as stacked_bar_chart_palette
 from bokeh.palettes import Category20, Paired, Plasma256
 import pandas as pd
-from doe.data_generators.MCQN import generate_MCQN_data
 from .generic_SCLP_solution import generic_SCLP_solution
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
@@ -85,17 +83,19 @@ class SCLP_solution(generic_SCLP_solution):
 
     def is_other_feasible(self, other_sol):
         t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
-        slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :])
-        int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1)
-        slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau - np.dot(self._formulation.G, int_u))
+        # now we calculate important values at all points of the time partition, i.e. for t=t_0,...,t_N
+        slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :]) # b - Hu(t)
+        int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1) # \int_0^t u(s) ds
+        slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau - np.dot(self._formulation.G, int_u)) # at - G\int_0^t u(s) ds
         if self._formulation.L > 0:
+            # this for the case when F \ne \emptyset (not our case)
             slack_x0 = np.vstack(self._formulation.alpha) - np.dot(self._formulation.F, x[self._formulation.K:, 0])
             real_dx = np.dot(self._formulation.F, np.cumsum(other_sol.state.dx[self._formulation.K:, :] * tau, axis=1))
             slack_dx = slack_dx - real_dx
         else:
-            slack_x0 = np.vstack(self._formulation.alpha)
-        slack_x = slack_dx + slack_x0
-        return np.all(slack_x > 0) and np.all(slack_u > 0) and np.all(slack_x0 > 0)
+            slack_x0 = np.vstack(self._formulation.alpha) # x^0 = \alpha (our case)
+        slack_x = slack_dx + slack_x0 # x(t) = \alpha  + at - G\int_0^t u(s)  (our case)
+        return np.all(slack_x >= 0) and np.all(slack_u >= 0) and np.all(slack_x0 >= 0) # changed '>' to '>=' probably this was a problem
 
     def other_objective(self, other_sol):
         t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
@@ -241,8 +241,8 @@ class SCLP_solution(generic_SCLP_solution):
         for k in range(number_of_servers):  # servers
             for j in range(number_of_buffers):  # tasks
                 for ti in range(0, number_of_time_slots):  # time slices
-                    new_matrix[j, 2 * ti] = self.u[j, ti] * self.formulation.H[k, j]
-                    new_matrix[j, 2 * ti + 1] = self.u[j, ti] * self.formulation.H[k, j]
+                    new_matrix[j, 2 * ti] = self._u[j, ti] * self.formulation.H[k, j]
+                    new_matrix[j, 2 * ti + 1] = self._u[j, ti] * self.formulation.H[k, j]
                 if self.formulation.H[k, j] > 0:
                     new_legend_tasks[j] = 'task ' + str(j + 1)
                     network_graph_tasks_indices.append(j + 1)
