@@ -86,7 +86,7 @@ class SCLP_solution(generic_SCLP_solution):
         # now we calculate important values at all points of the time partition, i.e. for t=t_0,...,t_N
         slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :]) # b - Hu(t)
         int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1) # \int_0^t u(s) ds
-        slack_dx = np.cumsum(np.vstack(self._formulation.a) * tau - np.dot(self._formulation.G, int_u)) # at - G\int_0^t u(s) ds
+        slack_dx = np.outer(self._formulation.a, np.cumsum(tau)) - np.dot(self._formulation.G, int_u) # at - G\int_0^t u(s) ds
         if self._formulation.L > 0:
             # this for the case when F \ne \emptyset (not our case)
             slack_x0 = np.vstack(self._formulation.alpha) - np.dot(self._formulation.F, x[self._formulation.K:, 0])
@@ -95,7 +95,8 @@ class SCLP_solution(generic_SCLP_solution):
         else:
             slack_x0 = np.vstack(self._formulation.alpha) # x^0 = \alpha (our case)
         slack_x = slack_dx + slack_x0 # x(t) = \alpha  + at - G\int_0^t u(s)  (our case)
-        return np.all(slack_x >= 0) and np.all(slack_u >= 0) and np.all(slack_x0 >= 0) # changed '>' to '>=' probably this was a problem
+        eps = np.finfo(np.float32).eps
+        return np.all(slack_x >= -eps) and np.all(slack_u >= -eps) and np.all(slack_x0 >= -eps) # changed '>' to '>=' probably this was a problem
 
     def other_objective(self, other_sol):
         t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
