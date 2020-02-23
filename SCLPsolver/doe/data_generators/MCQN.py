@@ -87,7 +87,7 @@ def perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0,
     # H, a, b, alpha >= 0
     G = G0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=G0.shape))
     H = H0 * (1 + rel_perturbation * np.random.uniform(0, upper, size=H0.shape))
-    F = np.zeros(F0.shape)
+    F = F0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=F0.shape))
     a = a0 * (1 + rel_perturbation * np.random.uniform(0, upper, size=a0.shape))
     b = b0 * (1 + rel_perturbation * np.random.uniform(0, upper, size=b0.shape))
     c = c0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=c0.shape))
