@@ -83,13 +83,15 @@ def perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0,
         lower, upper = -1, 1
     else:
         lower, upper = 0, 1
-    G = G0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    H = H0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    F = F0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    a = a0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    b = b0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    c = c0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    d = d0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    alpha = alpha0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
-    gamma = gamma0 * (1 + rel_perturbation * np.random.uniform(lower, upper))
+    # F = 0
+    # H, a, b, alpha >= 0
+    G = G0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=G0.shape))
+    H = H0 * (1 + rel_perturbation * np.random.uniform(0, upper, size=H0.shape))
+    F = np.zeros(F0.shape)
+    a = a0 * (1 + rel_perturbation * np.random.uniform(0, upper, size=a0.shape))
+    b = b0 * (1 + rel_perturbation * np.random.uniform(0, upper, size=b0.shape))
+    c = c0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=c0.shape))
+    d = d0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=d0.shape))
+    alpha = alpha0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=alpha0.shape))
+    gamma = gamma0 * (1 + rel_perturbation * np.random.uniform(lower, upper, size=gamma0.shape))
     return G,H,F,a,b,c,d,alpha,gamma

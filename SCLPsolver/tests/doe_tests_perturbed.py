@@ -16,9 +16,15 @@ solution0, STEPCOUNT0, Tres0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, ga
 reflexive = solution0.is_other_feasible(solution0)
 print("reflexivity of feasible solution: {}".format(reflexive))
 
-G, H, F, a, b, c, d, alpha, gamma = perturb_MCQN_data(None, 0.5, True, G0, H0, F0, a0, b0, c0, d0,
+
+rel_perturbation = 1e-10
+
+G, H, F, a, b, c, d, alpha, gamma = perturb_MCQN_data(None, rel_perturbation, True, G0, H0, F0, a0, b0, c0, d0,
                                                       alpha0, gamma0)
-print("G0={} G={} a0={} a={}".format(G0, G, a0, a))
+#print("G0={} G={} a0={} a={}".format(G0, G, a0, a))
+#print("G0 - G = {}".format(G0-G))
+
+#print("X")
 
 # num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 1, 2000, 200, 500,
 #                                                                                {'alpha_rate': 1000,
@@ -28,13 +34,21 @@ print("G0={} G={} a0={} a={}".format(G0, G, a0, a))
 #                                                                                symmetric=True,
 #                                                                                starting_seed=1000)
 
-# num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 100, 200, 20, 50,
+# num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 10, 200, 20, 50,
 #                                                                                {'alpha_rate': 1000,
 #                                                                                 'cost_scale': 20,
 #                                                                                 'a_rate': 0.1},
-#                                                                                rel_perturbation=0.01,
+#                                                                                rel_perturbation=rel_perturbation,
 #                                                                                symmetric=True,
 #                                                                                starting_seed =1000)
+
+num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 100, 400, 40, 100,
+                                                                               {'alpha_rate': 1000,
+                                                                                'cost_scale': 20,
+                                                                                'a_rate': 0.1},
+                                                                               rel_perturbation=rel_perturbation,
+                                                                               symmetric=True,
+                                                                               starting_seed =1000)
 
 # num_feasible, true_objective, perturbed_obj_vals = run_experiment_perturbation('MCQN', 100, 400, 40, 100,
 #                                                                                {'alpha_rate': 1000,
@@ -46,4 +60,4 @@ print("G0={} G={} a0={} a={}".format(G0, G, a0, a))
 
 
 #
-# print(num_feasible, true_objective, perturbed_obj_vals)
+print(num_feasible, true_objective, perturbed_obj_vals)
