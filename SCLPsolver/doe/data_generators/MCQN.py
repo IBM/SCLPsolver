@@ -66,14 +66,15 @@ def generate_MCQN_data(seed, K, I, nz = 0.4, sum_rate=0.8, gdist=np.random.rand,
         c = c_scale * c_dist(*c_dist_params, K) * np.random.choice([-1,1],K,True)
     else:
         c = np.zeros(K)
+    cost = None
     if cost_scale != 0:
         cost = cost_scale * cost_dist(*cost_dist_params, K)
         #this produce negative and positive costs!
         c += np.matmul(cost,  G)
-        buffer_cost = (np.inner(cost,  alpha),np.inner(cost,  a))
+        total_buffer_cost = (np.inner(cost,  alpha),np.inner(cost,  a))
     else:
-        buffer_cost = (0,0)
-    return G,H,F,gamma,c,d,alpha,a,b,None,buffer_cost
+        total_buffer_cost = (0,0)
+    return G,H,F,gamma,c,d,alpha,a,b,None,total_buffer_cost, cost
 
 
 def perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0):

@@ -4,12 +4,13 @@ from .data_generators.MCQN import generate_MCQN_data, perturb_MCQN_data
 from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.MCQN_routing1 import generate_MCQN_routing_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
+from .data_generators.simple_reentrant_gideon import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, solver_settings = None,
-                          use_adaptive_T = False, get_raw_tau = True, **kwargs):
+                          use_adaptive_T = False, get_raw_tau = True, xobj = False, **kwargs):
     failure_trials = 0
     ps = {'K':K,'I':I,'T':T}
     for k, v in kwargs.items():
@@ -29,11 +30,13 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
     for seed in range(starting_seed, starting_seed + exp_num):
         ps['seed'] = seed
         if exp_type == 'MCQN':
-            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, K, I, **settings)
+            G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_data(seed, K, I, **settings)
         elif exp_type == 'reentrant':
-            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_reentrant_data(seed, K, I, **settings)
+            G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_reentrant_data(seed, K, I, **settings)
+        elif exp_type == 'simple_reentrant':
+            G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_simple_reentrant_data(seed, K, I, **settings)
         elif exp_type == 'MCQN_routing':
-            G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_routing_data(seed, K, I, **settings)
+            G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_routing_data(seed, K, I, **settings)
         else:
             raise Exception('Undefined experiment type!')
         if T is None:
@@ -57,12 +60,15 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             else:
                 ps['T'] = T
             full_file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
-            write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, c)
+            if xobj:
+                write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, buffer_cost, xobj)
+            else:
+                write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, c, xobj)
             path, filename = os.path.split(full_file_name)
-            buf_cost = buffer_cost[0]*Tres+buffer_cost[1]*Tres*Tres/2.0
+            buf_cost = total_buffer_cost[0]*Tres+total_buffer_cost[1]*Tres*Tres/2.0
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
                  'intervals': NN, 'T': Tres, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
-                 'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':obj - buf_cost}
+                 'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':buf_cost - obj}
             results.append(r)
             if get_raw_tau:
                 raw_tau.append({'file': filename,'raw_tau':tau})

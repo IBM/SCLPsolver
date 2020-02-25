@@ -53,14 +53,13 @@ class SCLP_solution(generic_SCLP_solution):
             self.plot_data.append({'T': param_line.T, 'tau': self._state.tau, 'dtau': self._state.dtau})
         return res
 
-    def get_final_solution(self):
+    def get_final_solution(self, preserve = True):
         if not self._is_final:
-            self._extract_final_solution()
+            self._extract_final_solution(preserve)
         return self._t, self._state.x, self._state.q, self._u, self._p, self.pivots, self._obj, self._err, self.NN, self._state.tau
 
-    def _extract_final_solution(self):
-        #TODO: Note calc_controls produce problem in base-sequence recalculation impossible after this step....
-        self._u, self._p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK)
+    def _extract_final_solution(self, preserve = True):
+        self._u, self._p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK, preserve)
         self._t = np.cumsum(np.hstack((0, self._state.tau)))
         self._final_T = self._t[-1]
         self._obj, self._err = calc_objective(self._formulation, self._u, self._state.x, self._p, self._state.q, self._state.tau)
@@ -116,7 +115,7 @@ class SCLP_solution(generic_SCLP_solution):
         if t0 < self._final_T:
             #TODO: check last_breakpoint
             last_breakpoint = np.where(self.t<=t0)[0][-1]
-            delta_t = t0 - last_breakpoint
+            delta_t = t0 - self.t[last_breakpoint]
             self._base_sequence.remove_bases(-1, last_breakpoint, self._pivots)
             self._dx.remove(0, last_breakpoint)
             self._dq.remove(0, last_breakpoint)
@@ -124,7 +123,7 @@ class SCLP_solution(generic_SCLP_solution):
             self._state.dx = self._dx.get_matrix()
             self._state.dq = self._dq.get_matrix()
             self._state.sdx = self._state.sdx[:, last_breakpoint:]
-            self._state.sdx[:,0] = np.ones(self._state.dx.shape[0])
+            self._state.sdx[:, 0] = np.ones(self._state.dx.shape[0])
             self._state.sdq = self._state.sdq[:, last_breakpoint:]
             self._state.sdq[:, 0] = np.ones(self._state.dq.shape[0])
             self._state.tau=self._state.tau[last_breakpoint:]

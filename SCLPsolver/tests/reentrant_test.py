@@ -1,29 +1,32 @@
-import sys
-import os
-proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-sys.path.append(proj)
-from SCLP import SCLP, SCLP_settings
-from doe.data_generators.data_loader import load_data
+from doe.doe import run_experiment_series
+from subroutines.utils import relative_to_project
+from doe.cplex_integration.run_cplex_experiments import run_cplex_experiments
 from doe.doe_utils import path_utils
+from doe.results_producer import combine_results, write_results_to_csv
+import os
+from SCLP import SCLP_settings
 
-seed = 1000
-K = 600
-I = 200
+
+solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution=False)
 pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
-exp_path = pu.get_experiment_path_old('reentrant',K=K,I=I,seed=seed)
-G, H, F, gamma, c, d, alpha, a, b, T = load_data(exp_path)
-import time
-start_time = time.time()
-import cProfile, pstats, io
-pr = cProfile.Profile()
-pr.enable()
-settings = SCLP_settings(tmp_path=exp_path)
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 500, settings)
-t, x, q, u, p, pivots, obj, err, NN, tau = solution.get_final_solution()
-print(obj, err)
-print("--- %s seconds ---" % (time.time() - start_time))
-pr.disable()
-s = io.StringIO()
-ps = pstats.Stats(pr, stream=s)
-ps.print_stats()
-print(s.getvalue())
+DATADIRd = pu.get_CPLEX_data_path()
+for I in [20,30]:
+    for T in [1000,10000]:
+        settings = {'first_alpha' :1, 'alpha_rate':  1, 'cost_scale':1, 'a_rate' : 0.05, 'gamma_rate':0, 'h_rate': 0.1}
+        if I < 100:
+            results, ftrials, files, raw_tau = run_experiment_series('reentrant', 10, I * 3, I, T, settings, 1000,
+                                                                     solver_settings, True, False)
+
+            cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
+                'doe/cplex_integration/mod_files/main1.mod'), files)
+            results = combine_results(results, cplex_results, 1)
+            cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main10.mod'), files)
+            results = combine_results(results, cplex_results, 10)
+            cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main100.mod'), files)
+            results = combine_results(results, cplex_results, 100)
+            if I < 80:
+                cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
+                    'doe/cplex_integration/mod_files/main1000.mod'), files)
+                results = combine_results(results, cplex_results, 1000)
+            res_file = relative_to_project('results_long5.csv')
+            write_results_to_csv(results, res_file)

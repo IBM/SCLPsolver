@@ -252,8 +252,8 @@ class generic_SCLP_solution():
             raise Exception('Cannot calculate correct bases!')
 
     #'#@profile
-    def get_next_basis_for_solution(self, basis, place):
-        return self._base_sequence.get_next_basis(basis, place, self._pivots)
+    def get_next_basis_for_solution(self, basis, place, preserve = True):
+        return self._base_sequence.get_next_basis(basis, place, self._pivots, preserve)
 
     def print_status(self, STEPCOUNT, DEPTH, ITERATION, theta, col_info):
         print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta + col_info.delta,

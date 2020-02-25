@@ -57,8 +57,8 @@ class SCLP_base_sequence():
         return self.get_nearby_basis(place, place, pivots)
 
     #Warning changing initial basis
-    def get_next_basis(self, basis, place, pivots):
-        if place + 1 in self._places:
+    def get_next_basis(self, basis, place, pivots, preserve = True):
+        if not preserve and place + 1 in self._places:
             return self._bases[self._places.index(place + 1)]
         else:
             return dict_pivot(basis, find(basis['prim_name'] == pivots[place][0]), find(basis['dual_name'] == pivots[place][1]), self.tmp_matrix)
