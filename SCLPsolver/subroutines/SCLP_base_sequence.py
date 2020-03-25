@@ -1,7 +1,7 @@
 import numpy as np
 from .matlab_utils import find
 from .get_new_dict import get_new_dict
-from .pivot import dict_pivot
+from .pivot import pivot_mn
 
 
 class SCLP_base_sequence():
@@ -61,7 +61,7 @@ class SCLP_base_sequence():
         if not preserve and place + 1 in self._places:
             return self._bases[self._places.index(place + 1)]
         else:
-            return dict_pivot(basis, find(basis['prim_name'] == pivots[place][0]), find(basis['dual_name'] == pivots[place][1]), self.tmp_matrix)
+            return pivot_mn(basis, pivots[place][0], pivots[place][1], self.tmp_matrix)
 
     def get_nearby_place(self, N1, N2):
         result ={'N1':None, 'N2':None, 'N1v': None, 'N2v':None }

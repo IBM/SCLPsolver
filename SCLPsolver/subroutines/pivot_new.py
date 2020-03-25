@@ -1,7 +1,7 @@
 from numpy import outer
 
 
-def base_pivot(LP_form, i, j, tmp):
+def pivot_ij(LP_form, i, j, tmp):
     nam = LP_form.prim_name[i]
     LP_form.prim_name[i] = LP_form.dual_name[j]
     LP_form.dual_name[j] = nam
@@ -18,7 +18,7 @@ def base_pivot(LP_form, i, j, tmp):
     LP_form.simplex_dict[i, j] = 1. / p
     return LP_form
 
-def full_pivot(LP_form, i, j, tmp):
+def signed_pivot_ij(LP_form, i, j, tmp):
     sam = LP_form.prim_sign[i]
     LP_form.prim_sign[i] = - LP_form.dual_sign[j]
     LP_form.dual_sign[j] = - sam

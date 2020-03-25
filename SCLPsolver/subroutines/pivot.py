@@ -1,4 +1,5 @@
 import numpy as np
+from .matlab_utils import find
 #from scipy.linalg.blas import dger
 
 
@@ -67,3 +68,40 @@ def dict_pivot(dct, i, j, tmp):
     dct['A'][:, j] = c / -p
     dct['A'][i, j] = 1. / p
     return dct
+
+def pivot_ij(dct, i, j, tmp):
+    nam = dct.prim_name[i]
+    dct.prim_name[i] = dct.dual_name[j]
+    dct.dual_name[j] = nam
+    i += 1
+    j += 1
+    p = dct.simplex_dict[i, j]
+    if p == 0:
+        raise Exception('pivot on zero')
+    rp = dct.simplex_dict[i, :] / p
+    c = dct.simplex_dict[:, j].copy()
+    dct.simplex_dict -= np.outer(c, rp, out=tmp)
+    dct.simplex_dict[i, :] = rp
+    dct.simplex_dict[:, j] = c / -p
+    dct.simplex_dict[i, j] = 1. / p
+    return dct
+
+def pivot_mn(dct, m, n, tmp):
+    i = find(dct.prim_name == m)
+    j = find(dct.dual_name == n)
+    if i.size != 1 or j.size != 1:
+        raise Exception('Bad pivot names!')
+    return pivot_ij(dct, i, j, tmp)
+
+def signed_pivot_ij(dct, ps, ds, i, j, tmp):
+    sam = ps[i]
+    ps[i] = - ds[j]
+    ds[j] = - sam
+    return pivot_ij(dct, i, j, tmp), ps, ds
+
+def signed_pivot_mn(dct, ps, ds, m, n, tmp):
+    i = find(dct.prim_name == m)
+    j = find(dct.dual_name == n)
+    if i.size != 1 or j.size != 1:
+        raise Exception('Bad pivot names!')
+    return signed_pivot_ij(dct, ps, ds, i, j, tmp)

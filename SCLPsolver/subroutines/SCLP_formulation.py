@@ -1,12 +1,5 @@
 import numpy as np
 from enum import Enum
-
-from bokeh.io import output_file, show
-from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet, Arrow, OpenHead
-from bokeh.plotting import figure
-from bokeh.palettes import Category20c, Category20, Paired, Plasma256
-from bokeh.palettes import Dark2_5 as palette
-
 from .matlab_utils import find, ismember
 from .LP_formulation import LP_formulation
 from .simplex_procedures import unsigned_simplex
@@ -101,7 +94,7 @@ class SCLP_formulation():
         dsq = ismember(np.arange(0, self.J), Jset).astype(int)
         dsp = -ismember(np.arange(self.K, self.K + self.L), Kset).astype(int)
         ds = np.hstack((dsq, dsp))
-        return LP_formulation(DD, pn, dn, ps, ds)
+        return LP_formulation(DD, pn, dn), ps, ds
 
     def get_primalBoundaryLP(self):
         DD1 = np.vstack((-np.hstack((0, self.d)), np.hstack((np.vstack(self.alpha), self.F))))
@@ -122,6 +115,14 @@ class SCLP_formulation():
         dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)))
         return LP_formulation(DD0, pn, dn)
 
+    def get_general_dualBoundaryLP(self):
+        DD0 = np.vstack(
+            (np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
+             np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L))))))
+        pn = np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)))
+        dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)))
+        return LP_formulation(DD0, pn, dn)
+
     def get_dualBoundaryLP_solution(self, tolerance = 0):
         if self._formulation_type == SCLP_formulation_type.not_bounded or self._formulation_type == SCLP_formulation_type.dual_classic:
             return -self.gamma
@@ -132,7 +133,12 @@ class SCLP_formulation():
                 q_N = np.zeros(self.J + self.I)
                 q_N[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
                 return q_N
-        # MCLP not supported yet
+        LP_form = self.get_generalBoundaryLP()
+        LP_form, err = unsigned_simplex(LP_form, None, tolerance)
+        if err['result'] == 0:
+            q_N = np.zeros(self.J + self.I)
+            q_N[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
+            return q_N
         return None
 
     def get_primalBoundaryLP_solution(self, tolerance = 0):
@@ -149,6 +155,10 @@ class SCLP_formulation():
         return None
 
     def show_task_capacity_per_server(self):
+        from bokeh.io import output_file, show
+        from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet, Arrow, OpenHead
+        from bokeh.plotting import figure
+        from bokeh.palettes import Category20c, Category20, Paired, Plasma256
         # we have 12 kinds of tasks (number of columns in H) and 4 time_slots (number of rows in H)
         number_of_servers = len(self.H)
         tasks = ['task ' + str(i) for i in range(1, len(self.H[0]) + 1)]
@@ -231,6 +241,10 @@ class SCLP_formulation():
         return None
 
     def show_flow_from_outside_to_buffers_to_tasks(self):
+        from bokeh.io import output_file, show
+        from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet, Arrow, OpenHead
+        from bokeh.plotting import figure
+        from bokeh.palettes import Category20c, Category20, Paired, Plasma256
         # vector alpha >0 , vector a can be any value
         # a is input/output coming from outside
         # alpha is initial value in buffer

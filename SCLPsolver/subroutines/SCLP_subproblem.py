@@ -3,13 +3,12 @@ from .parametric_line import parametric_line
 from .prepare_subproblem_data import prepare_subproblem_basis
 from .collision_info import collision_info
 
-
 #'#@profile
-def SCLP_subproblem(pbaseDD,dbaseDD,DD, v1,v2,Kset_0, Jset_N,
+def SCLP_subproblem(new_basis, v1,v2,Kset_0, Jset_N,
                      AAN1,AAN2, totalK, totalJ, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
 
     # Excluding the k's and j's which are > 0
-    rates_LP_form, pbaseB1red, pbaseB2red = prepare_subproblem_basis(DD, pbaseDD, dbaseDD, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
+    rates_LP_form, pbaseB1red, pbaseB2red = prepare_subproblem_basis(new_basis, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
     # The starting solution
     solution = generic_SCLP_solution(rates_LP_form, totalK=totalK, totalJ=totalJ)
     # performing the left and right first pivots
@@ -53,7 +52,7 @@ def SCLP_subproblem(pbaseDD,dbaseDD,DD, v1,v2,Kset_0, Jset_N,
             return solution,  STEPCOUNT, ITERATION, pivot_problem
 
     # prepare the boundaries
-    param_line = parametric_line.get_subproblem_parametric_line(DD, pbaseDD, dbaseDD, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red)
+    param_line = parametric_line.get_subproblem_parametric_line(new_basis, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red)
 
     #############################################
     # solving the subproblem

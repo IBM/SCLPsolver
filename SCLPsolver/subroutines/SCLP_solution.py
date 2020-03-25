@@ -1,16 +1,10 @@
 import numpy as np
-from bokeh.core.property.dataspec import value
-from bokeh.io import output_file, show
-from bokeh.layouts import gridplot
-from bokeh.plotting import figure
-from bokeh.palettes import Dark2_5 as line_palette
-from bokeh.palettes import Category20, Paired, Plasma256
-import pandas as pd
 from .generic_SCLP_solution import generic_SCLP_solution
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
 from .solution_state import solution_state
 from .LP_formulation import solve_LP_in_place
+from .matlab_utils import find
 import itertools
 
 
@@ -20,8 +14,8 @@ class SCLP_solution(generic_SCLP_solution):
     plot_height = 400
 
     def __init__(self, formulation, x_0, q_N, tolerance, collect_plot_data):
-        LP_form = formulation.formulate_ratesLP(x_0, q_N)
-        err = solve_LP_in_place(LP_form, np.zeros_like(LP_form.simplex_dict), tolerance)
+        LP_form, ps, ds = formulation.formulate_ratesLP(x_0, q_N)
+        LP_form, err = solve_LP_in_place(LP_form, ps, ds, np.zeros_like(LP_form.simplex_dict), tolerance)
         if err['result'] != 0:
             raise Exception(err['message'])
         super().__init__(LP_form, formulation.K + formulation.L, formulation.J + formulation.I)
@@ -135,6 +129,29 @@ class SCLP_solution(generic_SCLP_solution):
             self._state.del_x = self._state.del_x[:, last_breakpoint:]
             self._state.del_q = self._state.del_q[:, last_breakpoint:]
 
+    def recalculate(self, param_line, t0, new_T, new_x0, settings, tolerance, mm = None):
+        if t0 >= self._final_T:
+            print('!!!')
+        else:
+            self.truncate_at(t0)
+        if new_T <= t0:
+            print('!!!')
+        if new_x0 is not None:
+            if new_T is None:
+                new_T = param_line.T
+            K_add_set = find(np.logical_and(self._state.sdx[:, 1] == 0, new_x0 > 0))
+            from .SCLP_x0_solver import SCLP_x0_solver
+            return SCLP_x0_solver(self, param_line, new_x0, new_T, K_add_set, 0, 0, dict(),
+                           settings, tolerance, settings.find_alt_line, mm)
+        else:
+            if new_T is not None:
+                from .SCLP_solver import SCLP_solver
+                return SCLP_solver(self, param_line, 'update', 0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
+            else:
+                return self, 0, {'result': 0}
+
+
+
     def plot_history(self, plt):
         if self.plot_data is not None:
             if self._final_T == 0:
@@ -177,6 +194,9 @@ class SCLP_solution(generic_SCLP_solution):
         return None
 
     def show_buffer_status(self):
+        from bokeh.io import output_file, show
+        from bokeh.plotting import figure
+        from bokeh.palettes import Dark2_5 as line_palette
         # Plots of buffers status: piecewise linear graphs where:
         # t = [0,t1,...,Tres] vector containing time partition
         # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
@@ -200,6 +220,12 @@ class SCLP_solution(generic_SCLP_solution):
         return None
 
     def show_server_utilization(self):
+        import pandas as pd
+        from bokeh.core.property.dataspec import value
+        from bokeh.io import output_file, show
+        from bokeh.layouts import gridplot
+        from bokeh.plotting import figure
+        from bokeh.palettes import Category20, Paired, Plasma256
         # Plot of time_slots utilization:  4 barcharts where each bar can contain up to 12 colors. Colors are according to kind of tasks running on server
         #                                we have 12 kinds of tasks (number of columns in H) and 4 time_slots (number of rows in H)
         #                               if specific task (j) can run on the specific server (k) then we have H[k,j] > 0

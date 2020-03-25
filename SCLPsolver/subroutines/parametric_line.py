@@ -1,9 +1,11 @@
 import numpy as np
 from enum import Enum
-from subroutines.calc_boundaries import calc_boundaries
+from .calc_boundaries import calc_boundaries
+from .LP_formulation import get_value_by_name
 
 
 class line_type(Enum):
+    SCLP_x0 = -1
     SCLP_main = 0
     SCLP_sub = 1
     SCLP_orthogonal = 2
@@ -169,14 +171,21 @@ class parametric_line():
             del_x[self._Kset_0-1] = np.random.rand(len(self._Kset_0)) - 0.5
             theta_bar =min(theta_bar, 1/np.max(np.divide(-del_x, self._x_0, where = np.logical_and(del_x < 0, self._Kset_0))))
         if type == 2 or type == 3:
-            del_q = np.zeros_like(self._x_0)
+            del_q = np.zeros_like(self._q_N)
             del_q[self._Jset_N-1] = np.random.rand(len(self._Jset_N)) - 0.5
             theta_bar = min(theta_bar, 1/np.max(np.divide(-del_q, self._q_N, where=np.logical_and(del_q < 0, self._Jset_N))))
         return parametric_line(self._x_0, self._q_N, theta_bar, self._theta, 0, del_x, del_q,
                                self._Kset_0, self._Jset_N, None, None, line_type.SCLP_orthogonal)
 
+    def get_x0_parline(self, solution, v1, v_x0):
+        lk1 = solution.klist == v1
+        del_x_0 = np.zeros_like(self._x_0)
+        del_x_0[lk1] = v_x0
+        return parametric_line(self._x_0, self._q_N, self._T, self._T, 0, del_x_0, np.zeros_like(self._q_N),
+                               self._Kset_0, self._Jset_N, None, None, line_type.SCLP_x0)
+
     @staticmethod
-    def get_subproblem_parametric_line(DD, pbaseDD, dbaseDD, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red):
+    def get_subproblem_parametric_line(basis, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red):
         x_0 = np.zeros(solution.KK)
         q_N = np.zeros(solution.JJ)
         del_x_0 = np.zeros(solution.KK)
@@ -186,13 +195,13 @@ class parametric_line():
             if not isinstance(v1, list):
                 # The case of v1 > 0, collision case iv_a
                 if v1 > 0:
-                    dx_DD_v1 = DD[1:, 0][pbaseDD == v1][0]
+                    dx_DD_v1 = get_value_by_name(basis, v1, True)
                     lk1 = solution.klist == v1
                     x_0[lk1] = -dx_DD_v1
                     del_x_0[lk1] = dx_DD_v1
                 # The case of v1 < 0, collision case iii_a
                 elif v1 < 0:
-                    dq_B2_v1 = AAN2['A'][0, 1:][AAN2['dual_name'] == v1][0]
+                    dq_B2_v1 = get_value_by_name(AAN2, v1, False)
                     lj1 = solution.jlist == -v1
                     del_q_N[lj1] = -dq_B2_v1
         #
@@ -201,12 +210,12 @@ class parametric_line():
             if not isinstance(v2, list):
                 # The case of v2 > 0, collision case iii_b
                 if v2 > 0:
-                    dx_B1_v2 = AAN1['A'][1:, 0][AAN1['prim_name'] == v2][0]
+                    dx_B1_v2 = get_value_by_name(AAN1, v2, True)
                     lk2 = solution.klist == v2
                     del_x_0[lk2] = -dx_B1_v2
                 # The case of v2 < 0, collision case iv_b
                 elif v2 < 0:
-                    dq_DD_v2 = DD[0, 1:][dbaseDD == v2][0]
+                    dq_DD_v2 = get_value_by_name(basis, v2, False)
                     lj2 = solution.jlist == -v2
                     q_N[lj2] = -dq_DD_v2
                     del_q_N[lj2] = dq_DD_v2
@@ -216,26 +225,26 @@ class parametric_line():
         else:
             if not isinstance(v1, list):
                 if v1 > 0:
-                    dx_DD_v1 = DD[1:, 0][pbaseDD == v1][0]
+                    dx_DD_v1 = get_value_by_name(basis, v1, True)
                     lk1 = solution.klist == v1
                     x_0[lk1] = -dx_DD_v1
-                    dx_B1_v1 = AAN1['A'][1:, 0][AAN1['prim_name'] == v1][0]
+                    dx_B1_v1 = get_value_by_name(AAN1, v1, True)
                     del_x_0[lk1] = -0.5 * dx_B1_v1 + dx_DD_v1
                 elif v1 < 0:
-                    dq_B2_v1 = AAN2['A'][0, 1:][AAN2['dual_name'] == v1][0]
+                    dq_B2_v1 = get_value_by_name(AAN2, v1, False)
                     lj1 = solution.jlist == -v1
                     del_q_N[lj1] = -0.5 * dq_B2_v1
             #  setting boundaries for the first exiting variable v2
             if not isinstance(v2, list):
                 if v2 > 0:
-                    dx_B1_v2 = AAN1['A'][1:, 0][AAN1['prim_name'] == v2][0]
+                    dx_B1_v2 = get_value_by_name(AAN1, v2, True)
                     lk2 = solution.klist == v2
                     del_x_0[lk2] = -0.5 * dx_B1_v2
                 elif v2 < 0:
-                    dq_DD_v2 = DD[0, 1:][dbaseDD == v2][0]
+                    dq_DD_v2 = get_value_by_name(basis, v2, False)
                     lj2 = solution.jlist == -v2
                     q_N[lj2] = -dq_DD_v2
-                    dq_B2_v2 = AAN2['A'][0, 1:][AAN2['dual_name'] == v2][0]
+                    dq_B2_v2 = get_value_by_name(AAN2, v2, False)
                     del_q_N[lj2] = -0.5 * dq_B2_v2 + dq_DD_v2
         par_line = parametric_line(x_0, q_N, 1, 1, 0, del_x_0, del_q_N, None, None, pbaseB1red, pbaseB2red, line_type.SCLP_sub)
         par_line.build_boundary_sets(solution.klist, solution.jlist)

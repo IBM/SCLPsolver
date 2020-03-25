@@ -135,13 +135,16 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             solution.update_caseI(col_info)
             rewind_required = False
         elif col_info.case == 'Case ii_' or col_info.case == 'Case iii':
-            try:
-                solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
-                                                                       col_info, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
-            except Exception as ex:
-                print('Exception during SCLP pivot:')
-                print(ex)
-                return solution, STEPCOUNT, {'result': 1}
+            solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
+                                                                       col_info, DEPTH, STEPCOUNT, ITERATION, settings,
+                                                                       tolerance)
+            # try:
+            #     solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
+            #                                                            col_info, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
+            # except Exception as ex:
+            #     print('Exception during SCLP pivot:')
+            #     print(ex)
+            #     return solution, STEPCOUNT, {'result': 1}
             while pivot_problem['result'] == 1: # theta > 1
                 print('Pivot problem: trying to resolve * ', col_info.tol_coeff, '...')
                 new_col_info, resolved = reclassify(col_info, solution, tolerance)
