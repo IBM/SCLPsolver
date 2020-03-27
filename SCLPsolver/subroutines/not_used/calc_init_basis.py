@@ -1,6 +1,6 @@
 import numpy as np
-from .matlab_utils import find, ismember
-from .simplex_procedures import simplex_procedures
+from subroutines.matlab_utils import find, ismember
+from subroutines.lp_tools.simplex_procedures import simplex_procedures
 
 #'#@profile
 def calc_init_basis(formulation, x_0, q_N, tolerance = 0):

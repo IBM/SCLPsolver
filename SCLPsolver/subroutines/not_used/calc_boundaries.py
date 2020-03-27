@@ -1,6 +1,6 @@
 import numpy as np
-from .LP_formulation import LP_formulation
-from .simplex_procedures import unsigned_simplex
+from subroutines.lp_tools.LP_formulation import LP_formulation
+from subroutines.lp_tools.simplex_procedures import unsigned_simplex
 
 
 #'#@profile

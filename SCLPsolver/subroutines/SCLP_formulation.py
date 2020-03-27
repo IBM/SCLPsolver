@@ -1,9 +1,10 @@
 import numpy as np
 from enum import Enum
 from .matlab_utils import find, ismember
-from .LP_formulation import LP_formulation
-from .simplex_procedures import unsigned_simplex
+from .lp_tools.LP_formulation import LP_formulation
+from .lp_tools.simplex_procedures import unsigned_simplex
 from .piecewise_data import piecewise_data
+from .parametric_line import parametric_line
 
 
 class SCLP_formulation_type(Enum):
@@ -154,11 +155,16 @@ class SCLP_formulation():
         # MCLP not supported yet
         return None
 
+    def get_parametric_line(self, tolerance = 0):
+        x_0 = self.get_primalBoundaryLP_solution(tolerance)
+        q_N = self.get_dualBoundaryLP_solution(tolerance)
+        return parametric_line(x_0, q_N, self.T)
+
     def show_task_capacity_per_server(self):
         from bokeh.io import output_file, show
-        from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet, Arrow, OpenHead
+        from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet
         from bokeh.plotting import figure
-        from bokeh.palettes import Category20c, Category20, Paired, Plasma256
+        from bokeh.palettes import Category20c, Category20
         # we have 12 kinds of tasks (number of columns in H) and 4 time_slots (number of rows in H)
         number_of_servers = len(self.H)
         tasks = ['task ' + str(i) for i in range(1, len(self.H[0]) + 1)]
@@ -244,7 +250,7 @@ class SCLP_formulation():
         from bokeh.io import output_file, show
         from bokeh.models import GraphRenderer, Oval, StaticLayoutProvider, ColumnDataSource, LabelSet, Arrow, OpenHead
         from bokeh.plotting import figure
-        from bokeh.palettes import Category20c, Category20, Paired, Plasma256
+        from bokeh.palettes import Plasma256
         # vector alpha >0 , vector a can be any value
         # a is input/output coming from outside
         # alpha is initial value in buffer

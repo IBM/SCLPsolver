@@ -1,7 +1,6 @@
 import numpy as np
 from enum import Enum
-from .calc_boundaries import calc_boundaries
-from .LP_formulation import get_value_by_name
+from .lp_tools.LP_formulation import get_value_by_name
 
 
 class line_type(Enum):
@@ -250,7 +249,3 @@ class parametric_line():
         par_line.build_boundary_sets(solution.klist, solution.jlist)
         return par_line
 
-    @staticmethod
-    def get_SCLP_parametric_line(formulation, tolerance):
-        x_0, q_N = calc_boundaries(formulation, tolerance)
-        return parametric_line(x_0, q_N, formulation.T)

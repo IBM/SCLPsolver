@@ -1,5 +1,5 @@
 import numpy as np
-from .matlab_utils import find
+from subroutines.matlab_utils import find
 from .pivot import pivot_ij, signed_pivot_ij
 
 #'#@profile

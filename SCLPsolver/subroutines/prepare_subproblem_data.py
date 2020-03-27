@@ -1,6 +1,6 @@
 import numpy as np
 from .matlab_utils import find
-from .LP_formulation import LP_formulation, get_dx_names, get_dq_names
+from .lp_tools.LP_formulation import LP_formulation, get_dx_names, get_dq_names
 
 #'#@profile
 def prepare_subproblem_basis(basis, Kset_0, Jset_N, v1, v2, AAN1, AAN2):

@@ -3,7 +3,7 @@ from .generic_SCLP_solution import generic_SCLP_solution
 from .calc_objective import calc_objective
 from .calc_controls import calc_controls
 from .solution_state import solution_state
-from .LP_formulation import solve_LP_in_place
+from .lp_tools.LP_formulation import solve_LP_in_place
 from .matlab_utils import find
 import itertools
 
@@ -225,7 +225,7 @@ class SCLP_solution(generic_SCLP_solution):
         from bokeh.io import output_file, show
         from bokeh.layouts import gridplot
         from bokeh.plotting import figure
-        from bokeh.palettes import Category20, Paired, Plasma256
+        from bokeh.palettes import Category20
         # Plot of time_slots utilization:  4 barcharts where each bar can contain up to 12 colors. Colors are according to kind of tasks running on server
         #                                we have 12 kinds of tasks (number of columns in H) and 4 time_slots (number of rows in H)
         #                               if specific task (j) can run on the specific server (k) then we have H[k,j] > 0

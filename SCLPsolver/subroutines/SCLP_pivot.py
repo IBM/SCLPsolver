@@ -1,5 +1,5 @@
 import numpy as np
-from .LP_formulation import solve_ratesLP, get_pivot, get_value_by_name, get_dx_names, get_dq_names
+from .lp_tools.LP_formulation import solve_ratesLP, get_pivot, get_value_by_name, get_dx_names, get_dq_names
 from .SCLP_subproblem import SCLP_subproblem
 from .pivot_storage import pivot_storage
 

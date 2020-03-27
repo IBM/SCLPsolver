@@ -1,6 +1,6 @@
 import sys
 sys.path.append('C:\DataD\Work\CERBERO\CLP\SCLPsolver')
-from subroutines.simplex_procedures import simplex_procedures
+from subroutines.lp_tools.simplex_procedures import simplex_procedures
 import os
 import numpy as np
 

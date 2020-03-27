@@ -1,5 +1,5 @@
-from .matlab_utils import find
-from .matrix_constructor import matrix_constructor
+from subroutines.matlab_utils import find
+from subroutines.matrix_constructor import matrix_constructor
 
 #`#@profile
 def calc_controls(solution, JJ, KK):

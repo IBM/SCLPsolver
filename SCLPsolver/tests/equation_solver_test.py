@@ -1,5 +1,4 @@
-from subroutines.matrix import matrix
-from subroutines.generic_equation_solver import generic_equation_solver
+from subroutines.experimental.generic_equation_solver import generic_equation_solver
 import numpy as np
 import random
 import time

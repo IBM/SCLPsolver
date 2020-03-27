@@ -1,7 +1,7 @@
 import numpy as np
 from .matlab_utils import find
 from .matrix_constructor import matrix_constructor
-from .pivot import pivot_mn
+from .lp_tools.pivot import pivot_mn
 
 
 #'#@profile

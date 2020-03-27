@@ -1,5 +1,5 @@
 import numpy as np
-import subroutines.matrix as mm
+import subroutines.experimental.matrix as mm
 
 class generic_equation_solver():
 

@@ -2,7 +2,6 @@ import os
 from subroutines.SCLP_solution import SCLP_solution
 from subroutines.SCLP_formulation import SCLP_formulation
 from subroutines.SCLP_solver import SCLP_solver
-from subroutines.parametric_line import parametric_line
 from subroutines.utils import relative_to_project
 
 class SCLP_settings():
@@ -93,7 +92,7 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
     if not settings.hot_start:
         # Initiate top level problem, by obtaining the boundary and first dictionary
         # default constructor creates main parametric line
-        param_line = parametric_line.get_SCLP_parametric_line(formulation, tolerance)
+        param_line = formulation.get_parametric_line(tolerance)
         # calculate initial basis
         solution = SCLP_solution(formulation, param_line.x_0, param_line.q_N, tolerance,
                                                               collect_plot_data=settings.collect_plot_data)

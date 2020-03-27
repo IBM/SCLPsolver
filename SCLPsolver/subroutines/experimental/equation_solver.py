@@ -1,6 +1,6 @@
 import numpy as np
-from subroutines.equation_order import equation_order
-from subroutines.generic_equation_solver import generic_equation_solver
+from subroutines.experimental.equation_order import equation_order
+from subroutines.experimental.generic_equation_solver import generic_equation_solver
 from subroutines.matlab_utils import find
 
 class equation_solver(generic_equation_solver):

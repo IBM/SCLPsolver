@@ -1,5 +1,5 @@
 import numpy as np
-from .matlab_utils import find
+from subroutines.matlab_utils import find
 #from scipy.linalg.blas import dger
 
 

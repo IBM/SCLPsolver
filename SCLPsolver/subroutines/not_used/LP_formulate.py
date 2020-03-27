@@ -1,6 +1,6 @@
 import numpy as np
-from .matlab_utils import ismember
-from .simplex_procedures import simplex_procedures
+from subroutines.matlab_utils import ismember
+from subroutines.lp_tools.simplex_procedures import simplex_procedures
 
 
 #'#@profile

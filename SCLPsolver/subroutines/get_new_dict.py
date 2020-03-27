@@ -1,4 +1,4 @@
-from .pivot import pivot_mn
+from .lp_tools.pivot import pivot_mn
 
 #'#@profile
 def get_new_dict(oldDict, oldPlace, newPlace, pivots, tmp_matrix):

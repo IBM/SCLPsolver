@@ -1,8 +1,7 @@
 import numpy as np
 import time
 from subroutines.SCLP_formulation import SCLP_formulation
-from subroutines.parametric_line import parametric_line
-from subroutines.LP_formulation import solve_LP_in_place
+from subroutines.lp_tools.LP_formulation import solve_LP_in_place
 from doe.data_generators.MCQN import generate_MCQN_data
 
 def alternativeImplementation(K, I):
@@ -58,7 +57,7 @@ i = 10
 for seed in range(1000, 1000 + num_trials):
     G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, K, i, gamma_rate = -0.1)
     formulation = SCLP_formulation(G, F, H, a, b, c, d, alpha, gamma, TT)
-    param_line = parametric_line.get_SCLP_parametric_line(formulation, tolerance)
+    param_line = formulation.get_parametric_line(tolerance)
     # start time
     start_time = time.time()
 

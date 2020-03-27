@@ -1,7 +1,7 @@
 import numpy as np
 from .matlab_utils import find
 from .get_new_dict import get_new_dict
-from .pivot import pivot_mn
+from .lp_tools.pivot import pivot_mn
 
 
 class SCLP_base_sequence():
