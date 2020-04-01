@@ -14,7 +14,7 @@ $ python setup.py build_ext --inplace
 
 if sys.platform == 'darwin':
     extra_compile_args = []
-    extra_link_args = ["-lomp", "-stdlib=libc++"]
+    extra_link_args = ["-lomp"]
 else:
     extra_compile_args = ["/openmp"]
     extra_link_args = ["/openmp"]
