@@ -86,12 +86,12 @@ class SCLP_formulation():
         DD = np.vstack((-np.hstack((0, self.c, self.d)), np.hstack((np.vstack(self.a), self.G, self.F)),
                           np.hstack((np.vstack(self.b), self.H, np.zeros((self.I, self.L))))))
         DD = np.ascontiguousarray(DD)
-        pn = np.hstack((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)))
+        pn = np.hstack((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)), dtype = int)
         psx = ismember(np.arange(0, self.K), Kset).astype(int)
         psu = -ismember(np.arange(self.J, self.J + self.I), Jset).astype(int)
         ps = np.hstack((psx, psu))
 
-        dn = np.hstack((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)))
+        dn = np.hstack((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)), dtype = int)
         dsq = ismember(np.arange(0, self.J), Jset).astype(int)
         dsp = -ismember(np.arange(self.K, self.K + self.L), Kset).astype(int)
         ds = np.hstack((dsq, dsp))
@@ -99,21 +99,21 @@ class SCLP_formulation():
 
     def get_primalBoundaryLP(self):
         DD1 = np.vstack((-np.hstack((0, self.d)), np.hstack((np.vstack(self.alpha), self.F))))
-        pn1 = np.arange(1, self.K + 1)
-        dn1 = np.arange(self.K + 1, self.K + self.L + 1)
+        pn1 = np.arange(1, self.K + 1, dtype = int)
+        dn1 = np.arange(self.K + 1, self.K + self.L + 1, dtype = int)
         return LP_formulation(DD1, pn1, dn1)
 
     def get_dualBoundaryLP(self):
         DD1 = np.vstack((np.hstack((0, np.hstack(self.b))), np.hstack((np.vstack(-self.gamma), -self.H.transpose()))))
-        pn1 = np.arange(1, self.J + 1)
-        dn1 = np.arange(self.J + 1, self.J + self.I + 1)
+        pn1 = np.arange(1, self.J + 1, dtype = int)
+        dn1 = np.arange(self.J + 1, self.J + self.I + 1, dtype = int)
         return LP_formulation(DD1, pn1, dn1)
 
     def get_generalBoundaryLP(self):
         DD0 = np.vstack((np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
                          np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L))))))
-        pn = np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)))
-        dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)))
+        pn = np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)), dtype = int)
+        dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)), dtype = int)
         return LP_formulation(DD0, pn, dn)
 
     def get_general_dualBoundaryLP(self):
