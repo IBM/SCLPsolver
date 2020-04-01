@@ -10,3 +10,7 @@ SCLPsolver/doe/cplex_integration/bin
 SCLPsolver/doe/cplex_integration/env1
 SCLPsolver/doe/cplex_integration/lib
 SCLPsolver/doe/cplex_integration/include
+build
+*.so
+*.c
+*.cpp

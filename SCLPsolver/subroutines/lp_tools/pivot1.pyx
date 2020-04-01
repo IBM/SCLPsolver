@@ -1,6 +1,4 @@
 # cython: infer_types=True
-# distutils: extra_compile_args=/openmp
-# distutils: extra_link_args=/openmp
 #cython: language_level=3
 
 from cython.parallel import prange
