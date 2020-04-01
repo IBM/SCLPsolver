@@ -1,5 +1,5 @@
 import numpy as np
-from subroutines.calc_statecollide import calc_statecollide
+from subroutines.not_used.calc_statecollide import calc_statecollide
 from subroutines.collision_info import collision_info
 from subroutines.time_collision_resolver import calc_timecollide, resolve_and_classify
 from subroutines.matlab_utils import find

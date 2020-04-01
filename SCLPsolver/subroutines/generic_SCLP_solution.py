@@ -8,7 +8,9 @@ from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
 from .matrix_constructor import matrix_constructor
 from .calc_equations import time_equations
-from .calc_states import calc_states, check_state
+#from .calc_states import calc_states, check_state
+from .state_tools.loc_min_storage import loc_min_storage
+from .state_tools.calc_states import calc_states, check_state
 
 
 class generic_SCLP_solution():
@@ -28,6 +30,7 @@ class generic_SCLP_solution():
         dx, dq = extract_rates_from_basis(LP_form, self._problem_dims)
         self._dx = matrix_constructor(dx[0], dx[1], KK)
         self._dq = matrix_constructor(dq[0], dq[1], JJ)
+        self.loc_min_storage = loc_min_storage(self._dx.get_matrix(), self._dq.get_matrix())
         self._col_info_stack = col_info_stack()
         self._last_collision = None
         self._state = solution_state()
@@ -81,16 +84,16 @@ class generic_SCLP_solution():
         state = solution_state()
         state.dx = self._dx.get_matrix()
         state.dq = self._dq.get_matrix()
-        state.sdx = np.ones((state.dx.shape[0], state.dx.shape[1] + 2))
-        state.sdq = np.ones((state.dq.shape[0], state.dq.shape[1] + 2))
-        np.sign(state.dx, out=state.sdx[:, 1:-1])
-        np.sign(state.dq, out=state.sdq[:, 1:-1])
+        # state.sdx = np.ones((state.dx.shape[0], state.dx.shape[1] + 2))
+        # state.sdq = np.ones((state.dq.shape[0], state.dq.shape[1] + 2))
+        # np.sign(state.dx, out=state.sdx[:, 1:-1])
+        # np.sign(state.dq, out=state.sdq[:, 1:-1])
         try:
             state.equations = time_equations.build_equations(param_line, self._klist, self._jlist, self._pivots,
                                                              state.dx, state.dq)
             state.tau, state.dtau = state.equations.solve()
             state.x, state.del_x, state.q, state.del_q\
-                = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau, state.sdx, state.sdq)
+                = calc_states(state.dx, state.dq, param_line, state.tau, state.dtau)
         except Exception as ex:
             print('Exception during state calculation:')
             print(ex)
@@ -134,6 +137,9 @@ class generic_SCLP_solution():
         self._dx.remove(N1 + 1, N2)
         self._dq.remove(N1 + 1, N2)
         self._pivots.remove_pivots(N1, N2)
+        if N2 == NN:
+            N2 = None
+        self.loc_min_storage.update_caseI(N1, N2, self._dx.get_matrix(), self._dq.get_matrix())
         col_info.Nnew = self.NN - NN
 
     #'#@profile
@@ -151,16 +157,22 @@ class generic_SCLP_solution():
         if matrix:
             self._dx.replace_matrix(N1 + 1, N2, dx)
             self._dq.replace_matrix(N1 + 1, N2, dq)
+            Nadd = Nnew
         else:
             self._dx.replace(N1 + 1, N2, dx[0], dx[1])
             self._dq.replace(N1 + 1, N2, dq[0], dq[1])
+            Nadd = 1
         col_info.Nnew = self.NN - NN
+        if N2 == NN:
+            N2 = None
+        self.loc_min_storage.update_caseII(N1, N2, Nadd, self._dx.get_matrix(), self._dq.get_matrix())
         if basis is not None:
             self._base_sequence.insert_basis(basis,N1+1)
 
     #'#@profile
     def update_rewind(self):
         if self.can_rewind():
+            NN = self.NN
             col_info = self._col_info_stack.pop()
             N2_cor = col_info.N2 + col_info.Nnew
             N2b = max(col_info.N2, N2_cor)
@@ -169,6 +181,13 @@ class generic_SCLP_solution():
             self._pivots.replace_pivots(col_info.N1, col_info.N1 + col_info.Nnew + Npivots, col_info.rewind_info.pivots)
             self._dx.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dx)
             self._dq.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dq)
+            Nadd = col_info.rewind_info.dx.shape[0]
+            if N2_cor == NN:
+                N2_cor = None
+            if Nadd == 0:
+                self.loc_min_storage.update_caseI(col_info.N1, N2_cor, self._dx.get_matrix(), self._dq.get_matrix())
+            else:
+                self.loc_min_storage.update_caseII(col_info.N1, N2_cor, Nadd, self._dx.get_matrix(), self._dq.get_matrix())
             self._last_collision = self._col_info_stack.last
             return col_info
         else:

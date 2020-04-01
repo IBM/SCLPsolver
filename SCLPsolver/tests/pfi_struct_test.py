@@ -1,6 +1,6 @@
 import timeit
 from subroutines.pivot_storage import *
-from subroutines.pfi_struct import *
+from subroutines.experimental.pfi_struct import *
 
 t = timeit.Timer('char in text', setup='text = "sample string"; char = "g"')
 

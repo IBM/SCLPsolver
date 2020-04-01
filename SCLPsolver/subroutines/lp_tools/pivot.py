@@ -1,5 +1,6 @@
 import numpy as np
-from subroutines.matlab_utils import find
+from .matlab_utils import find
+from .pivot1 import cy_pivot
 #from scipy.linalg.blas import dger
 
 
@@ -19,6 +20,10 @@ def base_pivot(A, i, j, pn, dn, tmp):
     A[i,:] = rp
     A[:, j] = c / -p
     A[i, j] = 1. / p
+    return A, pn, dn
+
+def base_pivot1(A,  pn, dn, i, j):
+    cy_pivot(A, pn, dn, i, j)
     return A, pn, dn
 
 
@@ -70,20 +75,21 @@ def dict_pivot(dct, i, j, tmp):
     return dct
 
 def pivot_ij(dct, i, j, tmp):
-    nam = dct.prim_name[i]
-    dct.prim_name[i] = dct.dual_name[j]
-    dct.dual_name[j] = nam
-    i += 1
-    j += 1
-    p = dct.simplex_dict[i, j]
-    if p == 0:
-        raise Exception('pivot on zero')
-    rp = dct.simplex_dict[i, :] / p
-    c = dct.simplex_dict[:, j].copy()
-    dct.simplex_dict -= np.outer(c, rp, out=tmp)
-    dct.simplex_dict[i, :] = rp
-    dct.simplex_dict[:, j] = c / -p
-    dct.simplex_dict[i, j] = 1. / p
+    cy_pivot(dct.simplex_dict, dct.prim_name, dct.dual_name, i, j)
+    # nam = dct.prim_name[i]
+    # dct.prim_name[i] = dct.dual_name[j]
+    # dct.dual_name[j] = nam
+    # i += 1
+    # j += 1
+    # p = dct.simplex_dict[i, j]
+    # if p == 0:
+    #     raise Exception('pivot on zero')
+    # rp = dct.simplex_dict[i, :] / p
+    # c = dct.simplex_dict[:, j].copy()
+    # dct.simplex_dict -= np.outer(c, rp, out=tmp)
+    # dct.simplex_dict[i, :] = rp
+    # dct.simplex_dict[:, j] = c / -p
+    # dct.simplex_dict[i, j] = 1. / p
     return dct
 
 def pivot_mn(dct, m, n, tmp):

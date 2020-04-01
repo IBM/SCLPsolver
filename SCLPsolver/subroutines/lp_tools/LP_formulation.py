@@ -1,5 +1,5 @@
 import numpy as np
-from subroutines.matlab_utils import ismember
+from .matlab_utils import ismember
 from .simplex_procedures import simplex_procedures
 
 

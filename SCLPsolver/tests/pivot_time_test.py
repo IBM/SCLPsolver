@@ -2,6 +2,7 @@ import sys
 sys.path.append('C:\DataD\Work\CERBERO\CLP\SCLPsolver')
 import os
 import numpy as np
+from subroutines.lp_tools.pivot import base_pivot, base_pivot1
 
 
 def relative_to_project(file_path):
@@ -11,36 +12,25 @@ def relative_to_project(file_path):
         proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
         return os.path.join(proj, file_path)
 import time
-A = np.load(relative_to_project('tests/data/DD.dat'))
+A = np.load(relative_to_project('tests/data/DD.dat'), allow_pickle=True)
+A = np.ascontiguousarray(A)
+pn = np.load(relative_to_project('tests/data/pn.dat'), allow_pickle=True).astype(int)[:,0]
+dn = np.load(relative_to_project('tests/data/dn.dat'), allow_pickle=True).astype(int)[:,0]
 start_time = time.time()
 for i in range(2,12):
-    p = A[i, i]
-    if p == 0:
-        raise Exception('pivot on zero')
-    rp = A[i, :] / p
-    c = A[:, i].copy()
-    A -= np.outer(c, rp)
-    # A = dger(-1.0, c, rp, a=A, overwrite_a= 1)
-    A[i, :] = rp
-    A[:, i] = c / -p
-    A[i, i] = 1. / p
+    A,pn, dn = base_pivot1(A, pn, dn, i, i)
 print("--- %s seconds ---" % (time.time() - start_time))
 X = A.copy()
-A = np.load(relative_to_project('tests/data/DD.dat'))
-start_time = time.time()
+pn1 = pn.copy()
+dn1 = dn.copy()
+A = np.load(relative_to_project('tests/data/DD.dat'), allow_pickle=True)
+pn = np.load(relative_to_project('tests/data/pn.dat'), allow_pickle=True)[:,0]
+dn = np.load(relative_to_project('tests/data/dn.dat'), allow_pickle=True)[:,0]
 B=np.zeros_like(A)
 start_time = time.time()
 for i in range(2,12):
-    p = A[i, i]
-    if p == 0:
-        raise Exception('pivot on zero')
-    rp = A[i, :] / p
-    c = A[:, i].copy()
-    A -= np.outer(c, rp, out=B)
-    # A = dger(-1.0, c, rp, a=A, overwrite_a= 1)
-    A[i, :] = rp
-    A[:, i] = c / -p
-    A[i, i] = 1. / p
+    A,pn, dn =base_pivot(A, i, i, pn, dn, B)
 print("--- %s seconds ---" % (time.time() - start_time))
 print(np.any((A-X) >10E-10))
 print(np.any((A-X) < -10E-10))
+print(np.any((pn-pn1) >10E-10),np.any((dn-dn1) >10E-10), np.any((pn-pn1) <-10E-10),np.any((dn-dn1) <-10E-10))

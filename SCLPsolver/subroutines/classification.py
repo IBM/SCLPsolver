@@ -1,5 +1,6 @@
 import numpy as np
-from .calc_statecollide import calc_statecollide
+#from .calc_statecollide import calc_statecollide
+from .state_tools.calc_statecollide import calc_statecollide
 from .collision_info import collision_info
 from .time_collision_resolver import calc_timecollide, resolve_and_classify, reclassify
 from .matlab_utils import find
@@ -28,7 +29,9 @@ def classification(solution, tolerance):
     v2 = []
     case = ''
 
-    CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, tolerance)
+    #CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state,  tolerance)
+    CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, solution.loc_min_storage, tolerance)
+    #
     problem['stateProblem'] = prob
 
     if solution.last_collision is None:

@@ -65,16 +65,16 @@ class SCLP_solution(generic_SCLP_solution):
             n = np.argmin(self._state.tau)
             print('Negative tau!', n, self._state.tau[n])
             is_ok = False
-        if np.any(self._state.x < -tolerance):
+        if np.any(self._state.x < -tolerance*10):
             n,i = np.unravel_index(np.argmin(self._state.x),self._state.x.shape)
             print('Negative primal state!',n,i, self._state.x[n,i])
             is_ok = False
-        if np.any(self._state.q < -tolerance):
+        if np.any(self._state.q < -tolerance*10):
             print('Negative dual state!')
             is_ok = False
         return is_ok
 
-    def is_other_feasible(self, other_sol):
+    def is_other_feasible(self, other_sol, tolerance=1E-11):
         t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
         # now we calculate important values at all points of the time partition, i.e. for t=t_0,...,t_N
         slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :]) # b - Hu(t)
@@ -88,8 +88,7 @@ class SCLP_solution(generic_SCLP_solution):
         else:
             slack_x0 = np.vstack(self._formulation.alpha) # x^0 = \alpha (our case)
         slack_x = slack_dx + slack_x0 # x(t) = \alpha  + at - G\int_0^t u(s)  (our case)
-        eps = np.finfo(np.float32).eps
-        return np.all(slack_x >= -eps) and np.all(slack_u >= -eps) and np.all(slack_x0 >= -eps) # changed '>' to '>=' probably this was a problem
+        return np.all(slack_x >= -tolerance*10) and np.all(slack_u >= -tolerance*10) and np.all(slack_x0 >= -tolerance*10) # changed '>' to '>=' probably this was a problem
 
     def other_objective(self, other_sol):
         t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
@@ -116,10 +115,11 @@ class SCLP_solution(generic_SCLP_solution):
             self._pivots.remove_pivots(-1, last_breakpoint)
             self._state.dx = self._dx.get_matrix()
             self._state.dq = self._dq.get_matrix()
-            self._state.sdx = self._state.sdx[:, last_breakpoint:]
-            self._state.sdx[:, 0] = np.ones(self._state.dx.shape[0])
-            self._state.sdq = self._state.sdq[:, last_breakpoint:]
-            self._state.sdq[:, 0] = np.ones(self._state.dq.shape[0])
+            self.loc_min_storage.update_caseI(-1,last_breakpoint,self._state.dx, self._state.dq)
+            # self._state.sdx = self._state.sdx[:, last_breakpoint:]
+            # self._state.sdx[:, 0] = np.ones(self._state.dx.shape[0])
+            # self._state.sdq = self._state.sdq[:, last_breakpoint:]
+            # self._state.sdq[:, 0] = np.ones(self._state.dq.shape[0])
             self._state.tau=self._state.tau[last_breakpoint:]
             self._state.dtau = self._state.dtau[last_breakpoint:]
             self._state.x = self._state.x[:,last_breakpoint:]

@@ -189,3 +189,9 @@ class matrix_constructor():
     #'#@profile
     def get_matrix(self):
         return self._matrix[:,self._left:self._right]
+
+    def get_vector(self, pos):
+        if self._left + pos >= self._right:
+            return None
+        else:
+            return self._matrix[:,self._left + pos]
