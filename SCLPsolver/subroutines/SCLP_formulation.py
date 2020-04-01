@@ -86,12 +86,12 @@ class SCLP_formulation():
         DD = np.vstack((-np.hstack((0, self.c, self.d)), np.hstack((np.vstack(self.a), self.G, self.F)),
                           np.hstack((np.vstack(self.b), self.H, np.zeros((self.I, self.L))))))
         DD = np.ascontiguousarray(DD)
-        pn = np.hstack((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)), dtype = int)
+        pn = np.hstack((np.arange(1, self.K + 1, dtype = int), -np.arange(self.J + 1, self.J + self.I + 1, dtype = int)))
         psx = ismember(np.arange(0, self.K), Kset).astype(int)
         psu = -ismember(np.arange(self.J, self.J + self.I), Jset).astype(int)
         ps = np.hstack((psx, psu))
 
-        dn = np.hstack((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)), dtype = int)
+        dn = np.hstack((-np.arange(1, self.J + 1, dtype = int), np.arange(self.K + 1, self.K + self.L + 1, dtype = int)))
         dsq = ismember(np.arange(0, self.J), Jset).astype(int)
         dsp = -ismember(np.arange(self.K, self.K + self.L), Kset).astype(int)
         ds = np.hstack((dsq, dsp))
