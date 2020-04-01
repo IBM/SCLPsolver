@@ -12,9 +12,9 @@ from libcpp.vector cimport vector
 def get_prim_loc_mins(double[:,:] v):
     x_max = v.shape[0]
     y_max = v.shape[1]
-    len_res = np.zeros(y_max-1, dtype=int)
+    len_res = np.zeros(y_max-1, dtype=np.int32)
     cdef int[:] len_res_view = len_res
-    result = np.zeros((x_max, y_max-1), dtype=int, order='F')
+    result = np.zeros((x_max, y_max-1), dtype=np.int32, order='F')
     cdef int[::1, :] result_view = result
     cdef int i, j, y
     for y in prange(y_max-1, nogil=True):
@@ -31,9 +31,9 @@ def get_prim_loc_mins(double[:,:] v):
 def get_dual_loc_mins(double[:,:] v):
     x_max = v.shape[0]
     y_max = v.shape[1]
-    len_res = np.zeros(y_max-1, dtype=int)
+    len_res = np.zeros(y_max-1, dtype=np.int32)
     cdef int[:] len_res_view = len_res
-    result = np.zeros((x_max, y_max-1), dtype=int, order='F')
+    result = np.zeros((x_max, y_max-1), dtype=np.int32, order='F')
     cdef int[::1, :] result_view = result
     cdef int i, j, y
     for y in prange(y_max-1, nogil=True):
@@ -49,7 +49,7 @@ def get_dual_loc_mins(double[:,:] v):
 @cython.wraparound(False)
 def get_loc_min(double[:] v1, double[:] v2):
     x_max = v1.shape[0]
-    result = np.zeros(x_max, dtype=int)
+    result = np.zeros(x_max, dtype=np.int32)
     cdef int[:] result_view = result
     cdef int i, j
     j=0
@@ -63,7 +63,7 @@ def get_loc_min(double[:] v1, double[:] v2):
 @cython.wraparound(False)
 def get_right_loc_min(double[:] v1):
     x_max = v1.shape[0]
-    result = np.zeros(x_max, dtype=int)
+    result = np.zeros(x_max, dtype=np.int32)
     cdef int[:] result_view = result
     cdef int i, j
     j=0
@@ -77,7 +77,7 @@ def get_right_loc_min(double[:] v1):
 @cython.wraparound(False)
 def get_left_loc_min(double[:] v1):
     x_max = v1.shape[0]
-    result = np.zeros(x_max, dtype=int)
+    result = np.zeros(x_max, dtype=np.int32)
     cdef int[:] result_view = result
     cdef int i, j
     j=0

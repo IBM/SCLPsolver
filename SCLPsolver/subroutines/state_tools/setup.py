@@ -3,8 +3,17 @@ from Cython.Build import cythonize
 import numpy
 import sys
 
+'''
+To compile this (C++ code) in cython on Mac:
+
+$ brew install cliutils/apple/libomp
+
+$ export CC="/usr/bin/clang++ -Xpreprocessor -fopenmp -stdlib=libc++"
+$ python setup.py build_ext --inplace
+'''
+
 if sys.platform == 'darwin':
-    extra_compile_args = []#["-fopenmp"]
+    extra_compile_args = []
     extra_link_args = ["-lomp", "-stdlib=libc++"]
 else:
     extra_compile_args = ["/openmp"]
