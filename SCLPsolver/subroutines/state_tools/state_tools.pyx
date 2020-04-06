@@ -12,8 +12,8 @@ from libcpp.vector cimport vector
 def get_prim_loc_mins(double[:,:] v):
     x_max = v.shape[0]
     y_max = v.shape[1]
-    len_res = np.zeros(y_max-1, dtype=np.int32)
-    cdef int[:] len_res_view = len_res
+    len_res = np.zeros(y_max-1, dtype=np.int32, order='C')
+    cdef int[::1] len_res_view = len_res
     result = np.zeros((x_max, y_max-1), dtype=np.int32, order='F')
     cdef int[::1, :] result_view = result
     cdef int i, j, y
@@ -31,8 +31,8 @@ def get_prim_loc_mins(double[:,:] v):
 def get_dual_loc_mins(double[:,:] v):
     x_max = v.shape[0]
     y_max = v.shape[1]
-    len_res = np.zeros(y_max-1, dtype=np.int32)
-    cdef int[:] len_res_view = len_res
+    len_res = np.zeros(y_max-1, dtype=np.int32, order='C')
+    cdef int[::1] len_res_view = len_res
     result = np.zeros((x_max, y_max-1), dtype=np.int32, order='F')
     cdef int[::1, :] result_view = result
     cdef int i, j, y
@@ -63,8 +63,8 @@ def get_loc_min(double[:] v1, double[:] v2):
 @cython.wraparound(False)
 def get_right_loc_min(double[:] v1):
     x_max = v1.shape[0]
-    result = np.zeros(x_max, dtype=np.int32)
-    cdef int[:] result_view = result
+    result = np.zeros(x_max, dtype=np.int32, order='C')
+    cdef int[::1] result_view = result
     cdef int i, j
     j=0
     for i in range(x_max):
@@ -77,8 +77,8 @@ def get_right_loc_min(double[:] v1):
 @cython.wraparound(False)
 def get_left_loc_min(double[:] v1):
     x_max = v1.shape[0]
-    result = np.zeros(x_max, dtype=np.int32)
-    cdef int[:] result_view = result
+    result = np.zeros(x_max, dtype=np.int32, order='C')
+    cdef int[::1] result_view = result
     cdef int i, j
     j=0
     for i in range(x_max):
@@ -113,34 +113,34 @@ def get_rz_bb(double[:, :] del_state, double[:, :] state, list loc_mins, list le
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def calc_state_prim(double[:, :] dv, double[:] tau, double[:] state0):
+def calc_state_prim(double[:, ::1] dv, int from_, int to_, double[:] tau, double[::1] state0):
     i_max = dv.shape[0]
-    j_max = dv.shape[1]
+    cdef int j_max = to_ - from_
     cdef Py_ssize_t i, j
-    result = np.zeros((i_max, j_max+1), dtype= np.float64)
+    result = np.zeros((i_max, j_max+1), dtype= np.float64, order='C')
     cdef double[:,::1] result_view = result
     if state0 is not None:
         for i in range(i_max):
             result_view[i, 0] = state0[i]
     for i in prange(i_max, nogil=True):
         for j in range(j_max):
-            if dv[i, j] != 0.:
-                result_view[i, j+1] = dv[i, j]  * tau[j] +  result_view[i, j]
+            if dv[i, j + from_] != 0.:
+                result_view[i, j+1] = dv[i, j + from_]  * tau[j] +  result_view[i, j]
     return result
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def calc_state_dual(double[:, :] dv, double[:] tau, double[:] state0):
+def calc_state_dual(double[:, ::1] dv, int from_, int to_, double[:] tau, double[::1] state0):
     i_max = dv.shape[0]
-    j_max = dv.shape[1]
+    cdef int j_max = to_ - from_
     cdef Py_ssize_t i, j
-    result = np.zeros((i_max, j_max+1), dtype= np.float64)
+    result = np.zeros((i_max, j_max+1), dtype= np.float64, order='C')
     cdef double[:,::1] result_view = result
     if state0 is not None:
         for i in range(i_max):
             result_view[i, j_max] = state0[i]
     for i in prange(i_max, nogil=True):
         for j in range(j_max-1, -1, -1):
-            if dv[i, j] != 0.:
-                result_view[i, j] = dv[i, j]  * tau[j] +  result_view[i, j+1]
+            if dv[i, j + from_] != 0.:
+                result_view[i, j] = dv[i, j + from_]  * tau[j] +  result_view[i, j+1]
     return result

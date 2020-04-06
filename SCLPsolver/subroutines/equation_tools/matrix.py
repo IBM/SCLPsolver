@@ -8,10 +8,10 @@ class matrix():
     def __init__(self, data, allocation_size):
         self._allocation_size = allocation_size
 
-        self._matrix = np.eye(allocation_size)
+        self._matrix = np.zeros((allocation_size, allocation_size), order='C')
 
-        self._top = 0
-        self._left = 0
+        self._top = round(allocation_size/2)
+        self._left = round(allocation_size/2)
 
         if data is not None:
             self._bottom = self._top+1
@@ -36,7 +36,7 @@ class matrix():
         if size > 0:
             if self._bottom+size>self._allocation_size:
                 self._allocation_size = 2 * (self._allocation_size + size)
-                mat = np.eye(self._allocation_size)
+                mat = np.zeros((self._allocation_size, self._allocation_size), order='C')
                 mat[self._top:self._bottom,self._left:self._right] = self._matrix[self._top:self._bottom,self._left:self._right]
                 self._matrix = mat
             self._bottom += size

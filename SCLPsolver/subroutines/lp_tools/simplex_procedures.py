@@ -3,7 +3,7 @@ from .matlab_utils import find
 from .pivot import pivot_ij, signed_pivot_ij
 
 #'#@profile
-def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
+def simplex_procedures(dct, ps, ds, tolerance = 0):
 
     err = dict()
     err['result'] = 0
@@ -34,7 +34,7 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
                     j = jj[0]
                 else:
                     raise Exception('*** No pivot available')
-        dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j, tmp_matrix)
+        dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j)
         pneg = find(ps == -1)
 
     dneg = find(ds == -1)
@@ -61,7 +61,7 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
                     i = ii[0]
                 else:
                     raise Exception('*** No pivot available')
-        dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j, tmp_matrix)
+        dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j)
         dneg = find(ds == -1)
 
     ptest = find(np.logical_and(ps == 0,  dct.simplex_dict[1:, 0] < 0))
@@ -78,7 +78,7 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
                 err['result'] = 1
                 err['message'] = '***  problem is primal infeasible'
                 return dct, ps, ds, err
-            dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j, tmp_matrix)
+            dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j)
             ptest = find(np.logical_and(ps == 0, dct.simplex_dict[1:, 0] < 0))
     elif ptest.size == 0 and dtest.size > 0:
         while dtest.size > 0:
@@ -91,10 +91,10 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
                 err['result'] = 2
                 err['message'] = '***  problem is dual infeasible'
                 return dct, ps, ds, err
-            dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j, tmp_matrix)
+            dct, ps, ds = signed_pivot_ij(dct, ps, ds, i, j)
             dtest = find(np.logical_and(ds == 0, dct.simplex_dict[0, 1:] < 0))
     elif ptest.size > 0 and dtest.size > 0:
-        B = np.zeros((mm+1,nn+1))
+        B = np.zeros((mm+1,nn+1), order='C')
         tmp_matrix = np.zeros_like(B)
         B[:-1,-1:] = np.random.rand(mm, 1) + 1
         B[-1:,:-1] = np.random.rand(1, nn) + 1
@@ -117,7 +117,7 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
                     dct2.simplex_dict[0, 0] = np.inf
                     err['result'] = 2
                     err['message'] = '***  problem is dual infeasible'
-                    return LP_formulation(dct2.simplex_dict[:-1,:-1], dct2.prim_name, dct2.dual_name), ps, ds, err
+                    return LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name), ps, ds, err
             else:
                 div = dct2.simplex_dict[0, 1:-1] + mu * dct2.simplex_dict[-1, 1:-1]
                 mat = np.divide(-dct2.simplex_dict[i + 1, 1:-1], div, out=np.zeros_like(dct2.simplex_dict[i + 1, 1:-1], -1), where= np.logical_and(div !=0, ds != 1))
@@ -126,8 +126,8 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
                     dct2.simplex_dict[0, 0] = - np.inf
                     err['result'] = 1
                     err['message'] = '***  problem is primal infeasible'
-                    return LP_formulation(dct2.simplex_dict[:-1,:-1], dct2.prim_name, dct2.dual_name), ps, ds, err
-            dct2, ps, ds = signed_pivot_ij(dct2, ps, ds, i, j, tmp_matrix)
+                    return LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name), ps, ds, err
+            dct2, ps, ds = signed_pivot_ij(dct2, ps, ds, i, j)
             mat = np.divide(-dct2.simplex_dict[0, 1:-1], dct2.simplex_dict[-1, 1:-1], out=np.zeros_like(dct2.simplex_dict[0, 1:-1]), where=np.logical_and(dct2.simplex_dict[-1, 1:-1] > 0, ds != 1))
             j = np.argmax(mat)
             mu1 = mat[j]
@@ -135,10 +135,10 @@ def simplex_procedures(dct, ps, ds, tmp_matrix, tolerance = 0):
             i = np.argmax(mat)
             mu2 = mat[i]
             mu = max(mu1, mu2)
-        dct = LP_formulation(dct2.simplex_dict[:-1,:-1], dct2.prim_name, dct2.dual_name)
+        dct = LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name)
     return dct, ps, ds, err
 
-def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
+def unsigned_simplex(LP_form, tolerance = 0):
 
     err = dict()
     err['result'] = 0
@@ -146,8 +146,6 @@ def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
     dtest = find(LP_form.simplex_dict[0, 1:] < 0)
 
     if ptest.size > 0 and dtest.size == 0:
-        if tmp_matrix is None:
-            tmp_matrix = np.zeros_like(LP_form.simplex_dict)
         while ptest.size > 0:
             i = ptest[0]
             mat = np.divide(-LP_form.simplex_dict[i + 1, 1:], LP_form.simplex_dict[0, 1:],
@@ -158,11 +156,9 @@ def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
                 err['result'] = 1
                 err['message'] = '***  problem is primal infeasible'
                 return LP_form, err
-            LP_form = pivot_ij(LP_form, i, j, tmp_matrix)
+            LP_form = pivot_ij(LP_form, i, j)
             ptest = find(LP_form.simplex_dict[1:, 0] < 0)
     elif ptest.size == 0 and dtest.size > 0:
-        if tmp_matrix is None:
-            tmp_matrix = np.zeros_like(LP_form.simplex_dict)
         while dtest.size > 0:
             j = dtest[0]
             mat = np.divide(LP_form.simplex_dict[1:, j + 1], LP_form.simplex_dict[1:, 0],
@@ -173,13 +169,12 @@ def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
                 err['result'] = 2
                 err['message'] = '***  problem is dual infeasible'
                 return LP_form, err
-            LP_form = pivot_ij(LP_form, i, j, tmp_matrix)
+            LP_form = pivot_ij(LP_form, i, j)
             dtest = find(LP_form.simplex_dict[0, 1:] < 0)
     elif ptest.size > 0 and dtest.size > 0:
         mm = LP_form.simplex_dict.shape[0]
         nn = LP_form.simplex_dict.shape[1]
-        B = np.zeros((mm+1,nn+1))
-        tmp_matrix = np.zeros_like(B)
+        B = np.zeros((mm+1,nn+1), order='C')
         B[:-1,-1:] = np.random.rand(mm, 1) + 1
         B[-1:,:-1] = np.random.rand(1, nn) + 1
         B[:-1, :-1] = LP_form.simplex_dict
@@ -201,7 +196,7 @@ def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
                     B[0, 0] = np.inf
                     err['result'] = 2
                     err['message'] = '***  problem is dual infeasible'
-                    LP_form.simplex_dict = LP_form2.simplex_dict[:-1,:-1]
+                    LP_form.simplex_dict = np.ascontiguousarray(LP_form2.simplex_dict[:-1,:-1])
                     return LP_form, err
             else:
                 div = LP_form2.simplex_dict[0, 1:-1] + mu * LP_form2.simplex_dict[-1, 1:-1]
@@ -211,9 +206,9 @@ def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
                     B[0, 0] = - np.inf
                     err['result'] = 1
                     err['message'] = '***  problem is primal infeasible'
-                    LP_form.simplex_dict = LP_form2.simplex_dict[:-1, :-1]
+                    LP_form.simplex_dict = np.ascontiguousarray(LP_form2.simplex_dict[:-1, :-1])
                     return LP_form, err
-            LP_form2 = pivot_ij(LP_form2, i, j, tmp_matrix)
+            LP_form2 = pivot_ij(LP_form2, i, j)
             mat = np.divide(-LP_form2.simplex_dict[0, 1:-1], LP_form2.simplex_dict[-1, 1:-1],
                             out=np.zeros_like(LP_form2.simplex_dict[0, 1:-1]), where=LP_form2.simplex_dict[-1, 1:-1] > 0)
             j = np.argmax(mat)
@@ -222,5 +217,5 @@ def unsigned_simplex(LP_form, tmp_matrix = None, tolerance = 0):
             i = np.argmax(mat)
             mu2 = mat[i]
             mu = max(mu1, mu2)
-        LP_form.simplex_dict = LP_form2.simplex_dict[:-1, :-1]
+        LP_form.simplex_dict = np.ascontiguousarray(LP_form2.simplex_dict[:-1, :-1])
     return LP_form, err

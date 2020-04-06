@@ -18,10 +18,11 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         if  not isinstance(v1, list):
             Jset = Jset[Jset!= v1]
             if v1 > 0:
+                Kset = Kset_0.copy()
                 Kset = np.append(Kset, v1)
         else:
             print('v1',v1)
-        new_basis, err = solve_ratesLP(AAN2, Kset, Jset, solution.tmp_matrix, tolerance)
+        new_basis, err = solve_ratesLP(AAN2, Kset, Jset, tolerance)
         pp21 = get_pivot(new_basis, AAN2, True)
         pp22 = get_pivot(new_basis, AAN2, False)
         if np.size(pp21) == 0 and np.size(pp22) == 0:
@@ -40,7 +41,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
                 Jset = np.append(Jset, v2)
         else:
             print('v2', v2)
-        new_basis, err = solve_ratesLP(AAN1, Kset, Jset, solution.tmp_matrix, tolerance)
+        new_basis, err = solve_ratesLP(AAN1, Kset, Jset, tolerance)
         pp11 = get_pivot(AAN1, new_basis, True)
         pp12 = get_pivot(AAN1, new_basis, False)
         if np.size(pp11) == 0 and np.size(pp12) == 0:
@@ -60,7 +61,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         Kset = Kset[Kset != v2]
         Jset = get_dq_names(AAN2)
         Jset = Jset[Jset != v1]
-        new_basis, err = solve_ratesLP(AAN2, Kset, Jset, solution.tmp_matrix, tolerance)
+        new_basis, err = solve_ratesLP(AAN2, Kset, Jset, tolerance)
         pp21 = get_pivot(new_basis, AAN2, True)
         pp22 = get_pivot(new_basis, AAN2, False)
         pp11 = get_pivot(AAN1, new_basis, True)

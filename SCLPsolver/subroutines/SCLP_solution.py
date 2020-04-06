@@ -15,7 +15,7 @@ class SCLP_solution(generic_SCLP_solution):
 
     def __init__(self, formulation, x_0, q_N, tolerance, collect_plot_data):
         LP_form, ps, ds = formulation.formulate_ratesLP(x_0, q_N)
-        LP_form, err = solve_LP_in_place(LP_form, ps, ds, np.zeros_like(LP_form.simplex_dict), tolerance)
+        LP_form, err = solve_LP_in_place(LP_form, ps, ds, tolerance)
         if err['result'] != 0:
             raise Exception(err['message'])
         super().__init__(LP_form, formulation.K + formulation.L, formulation.J + formulation.I)

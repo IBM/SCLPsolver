@@ -11,6 +11,9 @@ def SCLP_subproblem(new_basis, v1,v2,Kset_0, Jset_N,
     rates_LP_form, pbaseB1red, pbaseB2red = prepare_subproblem_basis(new_basis, Kset_0, Jset_N, v1, v2, AAN1, AAN2)
     # The starting solution
     solution = generic_SCLP_solution(rates_LP_form, totalK=totalK, totalJ=totalJ)
+    # prepare the boundaries
+    param_line = parametric_line.get_subproblem_parametric_line(new_basis, solution, v1, v2, AAN1, AAN2, pbaseB1red,
+                                                                pbaseB2red)
     # performing the left and right first pivots
     #		the right pivot:
     K_0 = []
@@ -50,9 +53,6 @@ def SCLP_subproblem(new_basis, v1,v2,Kset_0, Jset_N,
         if pivot_problem['result'] == 1:
             print('Problem during left pivot...')
             return solution,  STEPCOUNT, ITERATION, pivot_problem
-
-    # prepare the boundaries
-    param_line = parametric_line.get_subproblem_parametric_line(new_basis, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red)
 
     #############################################
     # solving the subproblem

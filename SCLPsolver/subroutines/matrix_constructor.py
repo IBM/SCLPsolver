@@ -7,7 +7,7 @@ class matrix_constructor():
     def __init__(self, data, indexes, row_num, align = 0, col_num = None):
         if col_num is None:
             col_num = row_num
-        self._matrix = np.zeros(shape=(row_num, col_num))
+        self._matrix = np.zeros(shape=(row_num, col_num), order='C')
         self._align = align
         if self._align == 0:
             self._left = math.floor(row_num/2)
@@ -63,7 +63,7 @@ class matrix_constructor():
 
     def _increase_col_num(self, where = 0, min_num = None):
         col_num = max(math.floor(self._matrix.shape[1] / 2), min_num * 2)
-        mat = np.zeros(shape=(self._matrix.shape[0], self._matrix.shape[1] + col_num))
+        mat = np.zeros(shape=(self._matrix.shape[0], self._matrix.shape[1] + col_num), order='C')
         if self._align == -1:
             mat[:,:self._right] = self._matrix[:,:self._right]
         elif self._align == 1:
@@ -189,6 +189,9 @@ class matrix_constructor():
     #'#@profile
     def get_matrix(self):
         return self._matrix[:,self._left:self._right]
+
+    def get_raw_matrix(self):
+        return self._matrix, self._left, self._right
 
     def get_vector(self, pos):
         if self._left + pos >= self._right:

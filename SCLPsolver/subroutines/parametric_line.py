@@ -185,10 +185,10 @@ class parametric_line():
 
     @staticmethod
     def get_subproblem_parametric_line(basis, solution, v1, v2, AAN1, AAN2, pbaseB1red, pbaseB2red):
-        x_0 = np.zeros(solution.KK)
-        q_N = np.zeros(solution.JJ)
-        del_x_0 = np.zeros(solution.KK)
-        del_q_N = np.zeros(solution.JJ)
+        x_0 = np.zeros(solution.KK, order='C')
+        q_N = np.zeros(solution.JJ, order='C')
+        del_x_0 = np.zeros(solution.KK, order='C')
+        del_q_N = np.zeros(solution.JJ, order='C')
         # Boundary values for one sided subproblem, collision at t=0
         if AAN1 is None:
             if not isinstance(v1, list):

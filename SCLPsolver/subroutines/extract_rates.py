@@ -24,7 +24,7 @@ def extract_rates_from_basis(dct, problem_dims):
         dq = (dct.simplex_dict[0,jlist2+1], jn2-1)
     return dx, dq
 
-def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims, tmp_matrix):
+def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims):
     # Warning this based on assumption that first basis in new_base_sequence is equal to the AAN1 and/or last basis is equal to the AAN2
     if len(pivots) > 0:
         if AAN1 is not None:
@@ -38,7 +38,7 @@ def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims, tmp_matrix):
                 dx = matrix_constructor(None, None, problem_dims.KK, -1, len(pivots)+1)
                 dq = matrix_constructor(None, None, problem_dims.JJ, -1, len(pivots)+1)
             for i, piv1 in ran:
-                AAN1 = pivot_mn(AAN1, piv1[0], piv1[1], tmp_matrix)
+                AAN1 = pivot_mn(AAN1, piv1[0], piv1[1])
                 ndx, ndq = extract_rates_from_basis(AAN1, problem_dims)
                 dx.append(ndx)
                 dq.append(ndq)
@@ -47,7 +47,7 @@ def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims, tmp_matrix):
             dq = matrix_constructor(None, None, problem_dims.JJ, 1, len(pivots) + 1)
             AAN2 = AAN2.copy()
             for i, piv1 in enumerate(reversed(pivots)):
-                AAN2 = pivot_mn(AAN2, piv1[1], piv1[0], tmp_matrix)
+                AAN2 = pivot_mn(AAN2, piv1[1], piv1[0])
                 ndx, ndq = extract_rates_from_basis(AAN2, problem_dims)
                 dx.prepend(ndx)
                 dq.prepend(ndq)

@@ -86,12 +86,14 @@ class SCLP_formulation():
         DD = np.vstack((-np.hstack((0, self.c, self.d)), np.hstack((np.vstack(self.a), self.G, self.F)),
                           np.hstack((np.vstack(self.b), self.H, np.zeros((self.I, self.L))))))
         DD = np.ascontiguousarray(DD)
-        pn = np.hstack((np.arange(1, self.K + 1, dtype = np.int32), -np.arange(self.J + 1, self.J + self.I + 1, dtype =  np.int32))).astype(np.int32)
+        pn = np.ascontiguousarray(np.hstack((np.arange(1, self.K + 1, dtype = np.int32),
+                                             -np.arange(self.J + 1, self.J + self.I + 1, dtype =  np.int32))), dtype = np.int32)
         psx = ismember(np.arange(0, self.K), Kset).astype(int)
         psu = -ismember(np.arange(self.J, self.J + self.I), Jset).astype(int)
         ps = np.hstack((psx, psu))
 
-        dn = np.hstack((-np.arange(1, self.J + 1, dtype =  np.int32), np.arange(self.K + 1, self.K + self.L + 1, dtype =  np.int32))).astype(np.int32)
+        dn = np.ascontiguousarray(np.hstack((-np.arange(1, self.J + 1, dtype =  np.int32),
+                                             np.arange(self.K + 1, self.K + self.L + 1, dtype = np.int32))), dtype = np.int32)
         dsq = ismember(np.arange(0, self.J), Jset).astype(int)
         dsp = -ismember(np.arange(self.K, self.K + self.L), Kset).astype(int)
         ds = np.hstack((dsq, dsp))
@@ -99,57 +101,57 @@ class SCLP_formulation():
 
     def get_primalBoundaryLP(self):
         DD1 = np.vstack((-np.hstack((0, self.d)), np.hstack((np.vstack(self.alpha), self.F))))
-        pn1 = np.arange(1, self.K + 1, dtype = int)
-        dn1 = np.arange(self.K + 1, self.K + self.L + 1, dtype = int)
+        pn1 = np.arange(1, self.K + 1, dtype = np.int32)
+        dn1 = np.arange(self.K + 1, self.K + self.L + 1, dtype = np.int32)
         return LP_formulation(DD1, pn1, dn1)
 
     def get_dualBoundaryLP(self):
         DD1 = np.vstack((np.hstack((0, np.hstack(self.b))), np.hstack((np.vstack(-self.gamma), -self.H.transpose()))))
-        pn1 = np.arange(1, self.J + 1, dtype = int)
-        dn1 = np.arange(self.J + 1, self.J + self.I + 1, dtype = int)
+        pn1 = np.arange(1, self.J + 1, dtype = np.int32)
+        dn1 = np.arange(self.J + 1, self.J + self.I + 1, dtype = np.int32)
         return LP_formulation(DD1, pn1, dn1)
 
     def get_generalBoundaryLP(self):
-        DD0 = np.vstack((np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
-                         np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L))))))
-        pn = np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)), dtype = int)
-        dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)), dtype = int)
+        DD0 = np.ascontiguousarray(np.vstack((np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
+                         np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L)))))))
+        pn = np.ascontiguousarray(np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1))), dtype = np.int32)
+        dn = np.ascontiguousarray(np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1))), dtype = np.int32)
         return LP_formulation(DD0, pn, dn)
 
     def get_general_dualBoundaryLP(self):
-        DD0 = np.vstack(
+        DD0 = np.ascontiguousarray(np.vstack(
             (np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
-             np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L))))))
-        pn = np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1)))
-        dn = np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1)))
+             np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L)))))))
+        pn = np.ascontiguousarray(np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1))), dtype = np.int32)
+        dn = np.ascontiguousarray(np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1))), dtype = np.int32)
         return LP_formulation(DD0, pn, dn)
 
     def get_dualBoundaryLP_solution(self, tolerance = 0):
         if self._formulation_type == SCLP_formulation_type.not_bounded or self._formulation_type == SCLP_formulation_type.dual_classic:
-            return -self.gamma
+            return np.ascontiguousarray(-self.gamma)
         elif self._formulation_type == SCLP_formulation_type.primal_classic or self._formulation_type == SCLP_formulation_type.weiss:
             LP_form = self.get_dualBoundaryLP()
-            LP_form, err = unsigned_simplex(LP_form, None, tolerance)
+            LP_form, err = unsigned_simplex(LP_form, tolerance)
             if err['result'] == 0:
-                q_N = np.zeros(self.J + self.I)
+                q_N = np.zeros(self.J + self.I, order='C')
                 q_N[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
                 return q_N
         LP_form = self.get_generalBoundaryLP()
-        LP_form, err = unsigned_simplex(LP_form, None, tolerance)
+        LP_form, err = unsigned_simplex(LP_form, tolerance)
         if err['result'] == 0:
-            q_N = np.zeros(self.J + self.I)
+            q_N = np.zeros(self.J + self.I, order='C')
             q_N[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
             return q_N
         return None
 
     def get_primalBoundaryLP_solution(self, tolerance = 0):
         if self._formulation_type == SCLP_formulation_type.not_bounded or self._formulation_type == SCLP_formulation_type.primal_classic:
-            return self.alpha
+            return np.ascontiguousarray(self.alpha)
         elif self._formulation_type == SCLP_formulation_type.dual_classic or self._formulation_type == SCLP_formulation_type.weiss:
             LP_form = self.get_primalBoundaryLP()
-            LP_form, err = unsigned_simplex(LP_form, None, tolerance)
+            LP_form, err = unsigned_simplex(LP_form, tolerance)
             if err['result'] == 0:
-                x_0 = np.zeros(self.K + self.L)
+                x_0 = np.zeros(self.K + self.L, order='C')
                 x_0[LP_form.prim_name - 1] = LP_form.simplex_dict[1:, 0]
                 return x_0
         # MCLP not supported yet

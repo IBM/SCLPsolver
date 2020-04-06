@@ -33,6 +33,6 @@ def prepare_subproblem_basis(basis, Kset_0, Jset_N, v1, v2, AAN1, AAN2):
 
     lKDDin = np.logical_not(np.in1d(basis.prim_name, Kexclude, assume_unique=True))
     lJDDin = np.logical_not(np.in1d(basis.dual_name, -Jexclude, assume_unique=True))
-    DDred = basis.simplex_dict[find(np.hstack(([True], lKDDin)))[:, None], find(np.hstack(([True], lJDDin)))]
-    return LP_formulation(DDred, basis.prim_name[lKDDin], basis.dual_name[lJDDin]), pbaseB1red, pbaseB2red
+    DDred = np.ascontiguousarray(basis.simplex_dict[find(np.hstack(([True], lKDDin)))[:, None], find(np.hstack(([True], lJDDin)))])
+    return LP_formulation(DDred, np.ascontiguousarray(basis.prim_name[lKDDin]), np.ascontiguousarray(basis.dual_name[lJDDin])), pbaseB1red, pbaseB2red
 

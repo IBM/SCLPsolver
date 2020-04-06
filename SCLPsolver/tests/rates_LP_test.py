@@ -62,7 +62,7 @@ for seed in range(1000, 1000 + num_trials):
     start_time = time.time()
 
     LP_form, ps, ds = formulation.formulate_ratesLP(param_line.x_0, param_line.q_N)
-    LP_form, err = solve_LP_in_place(LP_form, ps, ds, np.zeros_like(LP_form.simplex_dict), tolerance)
+    LP_form, err = solve_LP_in_place(LP_form, ps, ds, tolerance)
     # end time
     end_time = time.time()
     print('time taken for new implementation:', end_time - start_time)

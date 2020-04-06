@@ -20,22 +20,22 @@ class LP_formulation():
     def copy(self):
         return self.__copy__()
         
-def solve_ratesLP(LP_form, Kset, nJset, tmp_matrix, tolerance=0):
+def solve_ratesLP(LP_form, Kset, nJset, tolerance=0):
     prim_sign = np.zeros((len(LP_form.prim_name)), dtype=int)
     prim_sign[ismember(LP_form.prim_name, Kset)] = 1
     prim_sign[ismember(LP_form.prim_name, nJset)] = -1
     dual_sign = np.zeros((len(LP_form.dual_name)), dtype=int)
     dual_sign[ismember(LP_form.dual_name, nJset)] = 1
     dual_sign[ismember(LP_form.dual_name, Kset)] = -1
-    LP_form, ps, ds, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tmp_matrix, tolerance)
+    LP_form, ps, ds, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tolerance)
     return LP_form, err
 
-def solve_LP(LP_form, ps, ds, tmp_matrix, tolerance=0):
-    LP_form, ps, ds, err = simplex_procedures(LP_form.copy(), ps, ds, tmp_matrix, tolerance)
+def solve_LP(LP_form, ps, ds, tolerance=0):
+    LP_form, ps, ds, err = simplex_procedures(LP_form.copy(), ps, ds, tolerance)
     return LP_form, err
 
-def solve_LP_in_place(LP_form, ps, ds, tmp_matrix, tolerance=0):
-    LP_form, ps, ds, err = simplex_procedures(LP_form, ps, ds, tmp_matrix, tolerance)
+def solve_LP_in_place(LP_form, ps, ds, tolerance=0):
+    LP_form, ps, ds, err = simplex_procedures(LP_form, ps, ds, tolerance)
     return LP_form, err
 
 
