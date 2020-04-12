@@ -13,17 +13,17 @@ class SCLP_solution(generic_SCLP_solution):
     plot_width = 800
     plot_height = 400
 
-    def __init__(self, formulation, x_0, q_N, tolerance, collect_plot_data):
+    def __init__(self, formulation, x_0, q_N, tolerance, solver_settings):
         LP_form, ps, ds = formulation.formulate_ratesLP(x_0, q_N)
         LP_form, err = solve_LP_in_place(LP_form, ps, ds, tolerance)
         if err['result'] != 0:
             raise Exception(err['message'])
-        super().__init__(LP_form, formulation.K + formulation.L, formulation.J + formulation.I)
+        super().__init__(LP_form, solver_settings, formulation.K + formulation.L, formulation.J + formulation.I)
         self._formulation = formulation
         self._final_T = 0
         self._is_final = False
         self._u, self._p, self._t, self._obj, self._err= None, None, None, None, None
-        if collect_plot_data:
+        if solver_settings.collect_plot_data:
             self.plot_data = []
         else:
             self.plot_data = None

@@ -11,12 +11,13 @@ from .equation_tools.calc_equations import time_equations
 #from .calc_states import calc_states, check_state
 from .state_tools.loc_min_storage import loc_min_storage
 from .state_tools.calc_states import calc_states, check_state
+from .bases_memory_manager import bases_memory_manager
 #from .equation_tools.eq_solver import eq_solver
 
 
 class generic_SCLP_solution():
 
-    def __init__(self, LP_form, KK=None, JJ=None, totalK = None, totalJ = None):
+    def __init__(self, LP_form, settings, KK=None, JJ=None, totalK = None, totalJ = None):
         self._klist = np.ascontiguousarray(np.sort(np.append(LP_form.prim_name[LP_form.prim_name > 0], LP_form.dual_name[LP_form.dual_name > 0])), dtype=np.int32)
         self._jlist = np.ascontiguousarray(np.sort(-np.append(LP_form.prim_name[LP_form.prim_name < 0], LP_form.dual_name[LP_form.dual_name < 0])), dtype=np.int32)
         if KK is None:
@@ -33,7 +34,10 @@ class generic_SCLP_solution():
         self.loc_min_storage = loc_min_storage(self._dx.get_matrix(), self._dq.get_matrix())
         #self._eq_solver = eq_solver(max(KK, JJ))
         self._col_info_stack = col_info_stack()
+        self.bases_mm = bases_memory_manager()
         self._last_collision = None
+        self._suppress_printing = settings.suppress_printing
+        self.rewind_max_delta = settings.rewind_max_delta
         self._state = solution_state()
 
     @property
@@ -136,7 +140,7 @@ class generic_SCLP_solution():
         self._last_collision = col_info
         N1 = col_info.N1
         N2 = col_info.N2
-        self._base_sequence.remove_bases(N1, N2, self._pivots)
+        self._base_sequence.remove_bases(N1, N2, self._pivots, self.bases_mm)
         self._dx.remove(N1 + 1, N2)
         self._dq.remove(N1 + 1, N2)
         #rem_pivots = self._pivots[N1:N2]
@@ -157,7 +161,7 @@ class generic_SCLP_solution():
         #     self._col_info_stack.clear()
         N1 = col_info.N1
         N2 = col_info.N2
-        self._base_sequence.replace_bases(N1, N2, Nnew, AAN1, AAN2)
+        self._base_sequence.replace_bases(N1, N2, Nnew, AAN1, AAN2, self.bases_mm)
         self._pivots.replace_pivots(N1, N2, pivots)
         if matrix:
             self._dx.replace_matrix(N1 + 1, N2, dx)
@@ -183,7 +187,7 @@ class generic_SCLP_solution():
             col_info = self._col_info_stack.pop()
             N2_cor = col_info.N2 + col_info.Nnew
             N2b = max(col_info.N2, N2_cor)
-            self._base_sequence.remove_bases(col_info.N1, N2b, self._pivots, col_info.Nnew)
+            self._base_sequence.remove_bases(col_info.N1, N2b, self._pivots, self.bases_mm, col_info.Nnew)
             Npivots = len(col_info.rewind_info.pivots)
             self._pivots.replace_pivots(col_info.N1, col_info.N1 + col_info.Nnew + Npivots, col_info.rewind_info.pivots)
             self._dx.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dx)
@@ -206,27 +210,31 @@ class generic_SCLP_solution():
     def can_rewind(self):
         return not self._col_info_stack.is_empty()
 
+    #'#@profile
     def store_rewind_info(self, col_info):
-        N1 = col_info.N1
-        N2 = col_info.N2
-        cor_N1 = N1 + 1
-        if col_info.case == 'Case iii':
-            if N1 > -1:
-                pivots = self.pivots[N1:N2].copy()
+        if col_info.delta < self.rewind_max_delta:
+            N1 = col_info.N1
+            N2 = col_info.N2
+            cor_N1 = N1 + 1
+            if col_info.case == 'Case iii':
+                if N1 > -1:
+                    pivots = self.pivots[N1:N2].copy()
+                else:
+                    pivots = pivot_storage()
             else:
-                pivots = pivot_storage()
+                if N1 > -1:
+                    pivots = self.pivots[N1:N2 + 1].copy()
+                else:
+                    pivots = self.pivots[N1 + 1:N2 + 1].copy()
+            dx = self._dx.get_sub_matrix(cor_N1, N2)
+            dq = self._dq.get_sub_matrix(cor_N1, N2)
+            col_info.rewind_info = rewind_info(pivots, dx, dq)
+            if not col_info.had_resolution:
+                if len(self._col_info_stack) == 1 and not self._col_info_stack.last.had_resolution:
+                    self._col_info_stack.clear()
+            self._col_info_stack.push(col_info)
         else:
-            if N1 > -1:
-                pivots = self.pivots[N1:N2 + 1].copy()
-            else:
-                pivots = self.pivots[N1 + 1:N2 + 1].copy()
-        dx = self._dx.get_sub_matrix(cor_N1, N2)
-        dq = self._dq.get_sub_matrix(cor_N1, N2)
-        col_info.rewind_info = rewind_info(pivots, dx, dq)
-        if not col_info.had_resolution:
-            if len(self._col_info_stack) == 1 and not self._col_info_stack.last.had_resolution:
-                self._col_info_stack.clear()
-        self._col_info_stack.push(col_info)
+            self._col_info_stack.clear()
 
     def store_ztau_ind(self, ztau_ind):
         if len(ztau_ind) > 0:
@@ -285,12 +293,14 @@ class generic_SCLP_solution():
         return self._base_sequence.get_next_basis(basis, place, self._pivots, preserve)
 
     def print_status(self, STEPCOUNT, DEPTH, ITERATION, theta, col_info):
-        print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta + col_info.delta,
-              col_info.case, col_info.N1, col_info.N2,  col_info.v1, col_info.v2, len(self.base_sequence.places))
+        if not self._suppress_printing:
+            print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta + col_info.delta,
+                  col_info.case, col_info.N1, col_info.N2,  col_info.v1, col_info.v2, len(self.base_sequence.places))
 
     def print_short_status(self, STEPCOUNT, DEPTH, ITERATION, theta, theta1, case):
-        print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta1,
-              case, len(self.base_sequence.places))
+        if not self._suppress_printing:
+            print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta1,
+                  case, len(self.base_sequence.places))
 
     def prepare_to_save(self):
         self._base_sequence.keep_only_one()

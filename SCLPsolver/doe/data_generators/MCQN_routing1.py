@@ -45,7 +45,7 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
         P_K = gdist(K,K)
     else:
         P_K = gdist(*gdist_params, (K,K))
-    P_K-= (1- nz) * np.ones((K,K)) - np.eye(K)
+    P_K-= (1- nz) * np.ones((K,K)) + np.eye(K)
     P_K[P_K < 0] = 0
     P_K[0, K-1] += 0.1
     coeff = (1/sum_rate - 1) * 2

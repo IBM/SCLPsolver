@@ -86,7 +86,7 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
     perturbed_obj_vals = list()
 
     # 1. generate the "true" MCQN data
-    G0, H0, F0, gamma0, c0, d0, alpha0, a0, b0, TT0, buffer_cost0 = generate_MCQN_data(starting_seed, K, I, **settings)
+    G0, H0, F0, gamma0, c0, d0, alpha0, a0, b0, TT0, buffer_cost0, xcost0 = generate_MCQN_data(starting_seed, K, I, **settings)
 
     # 2. Solve using SCLP
     solution0, STEPCOUNT0, Tres0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)

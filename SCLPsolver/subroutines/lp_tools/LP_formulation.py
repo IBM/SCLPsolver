@@ -1,6 +1,7 @@
 import numpy as np
 from .matlab_utils import ismember
 from .simplex_procedures import simplex_procedures
+from .pivot1 import get_sign
 
 
 class LP_formulation():
@@ -20,22 +21,28 @@ class LP_formulation():
     def copy(self):
         return self.__copy__()
         
-def solve_ratesLP(LP_form, Kset, nJset, tolerance=0):
-    prim_sign = np.zeros((len(LP_form.prim_name)), dtype=int)
-    prim_sign[ismember(LP_form.prim_name, Kset)] = 1
-    prim_sign[ismember(LP_form.prim_name, nJset)] = -1
-    dual_sign = np.zeros((len(LP_form.dual_name)), dtype=int)
-    dual_sign[ismember(LP_form.dual_name, nJset)] = 1
-    dual_sign[ismember(LP_form.dual_name, Kset)] = -1
-    LP_form, ps, ds, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tolerance)
-    return LP_form, err
+def solve_ratesLP(LP_form, Kset, nJset, bases_mm, tolerance=0):
+    # prim_sign = np.zeros((len(LP_form.prim_name)), dtype=int)
+    # prim_sign[ismember(LP_form.prim_name, Kset)] = 1
+    # prim_sign[ismember(LP_form.prim_name, nJset)] = -1
+    # dual_sign = np.zeros((len(LP_form.dual_name)), dtype=int)
+    # dual_sign[ismember(LP_form.dual_name, nJset)] = 1
+    # dual_sign[ismember(LP_form.dual_name, Kset)] = -1
+    prim_sign = get_sign(LP_form.prim_name, Kset, nJset, 1)
+    dual_sign = get_sign(LP_form.dual_name, Kset, nJset, -1)
+    tmp_dict = bases_mm.pop()
+    if tmp_dict is None:
+        LP_form, ps, ds, pivots, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tolerance)
+    else:
+        LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, prim_sign, dual_sign, tolerance, tmp_dict)
+    return LP_form, pivots, err
 
 def solve_LP(LP_form, ps, ds, tolerance=0):
-    LP_form, ps, ds, err = simplex_procedures(LP_form.copy(), ps, ds, tolerance)
+    LP_form, ps, ds, pivots, err = simplex_procedures(LP_form.copy(), ps, ds, tolerance)
     return LP_form, err
 
 def solve_LP_in_place(LP_form, ps, ds, tolerance=0):
-    LP_form, ps, ds, err = simplex_procedures(LP_form, ps, ds, tolerance)
+    LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, ps, ds, tolerance)
     return LP_form, err
 
 

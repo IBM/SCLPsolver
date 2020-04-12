@@ -1,6 +1,5 @@
 import numpy as np
-from .matlab_utils import find
-from .get_new_dict import get_new_dict
+from .get_new_dict import calc_nearby_bases
 from .lp_tools.pivot import pivot_mn
 
 
@@ -23,24 +22,26 @@ class SCLP_base_sequence():
             self._places.append(place)
             self._bases.append(basis)
 
-    def remove_bases(self, N1, N2, pivots, Nnew = None):
+    def remove_bases(self, N1, N2, pivots, bases_mm, Nnew = None):
         if Nnew is None:
             Nnew = N2 - N1 - 1
-        lplaces = np.logical_or(np.asarray(self._places) <= N1, np.asarray(self._places) >= N2)
-        places = find(lplaces)
-        if len(places) == 0:
-            new_mat, new_place = self.get_nearby_basis(N1, N2, pivots)
+        rem_indexes = [i for i,v in enumerate(self._places) if N1 < v < N2]
+        rem_places = [self._places.pop(i) for i in reversed(rem_indexes)]
+        rem_bases = [self._bases.pop(i) for i in reversed(rem_indexes)]
+        bases_mm.add(rem_bases)
+        if len(self._places) == 0:
+            new_mat, new_place = calc_nearby_bases(N1, N2, pivots, rem_bases, rem_places)
             self._places = [new_place if new_place == N1 else new_place - Nnew]
             self._bases = [new_mat]
         else:
-            self._bases = [self._bases[i] for i in places]
-            new_place = [self._places[i] for i in places]
-            self._places = [v if v < N2 else v - Nnew for v in new_place]
+            self._places = [v if v < N2 else v - Nnew for v in self._places]
 
-    def replace_bases(self, N1, N2, Nnew, AAN1, AAN2):
-        lplaces = np.logical_or(np.asarray(self._places) <= N1, np.asarray(self._places) >= N2)
-        places = find(lplaces)
-        if len(places) == 0:
+    def replace_bases(self, N1, N2, Nnew, AAN1, AAN2, bases_mm):
+        rem_indexes = [i for i, v in enumerate(self._places) if N1 < v < N2]
+        rem_places = [self._places.pop(i) for i in reversed(rem_indexes)]
+        rem_bases = [self._bases.pop(i) for i in reversed(rem_indexes)]
+        bases_mm.add(rem_bases)
+        if len(self._places) == 0:
             if AAN1 is not None:
                 self._places = [N1]
                 self._bases = [AAN1]
@@ -48,9 +49,7 @@ class SCLP_base_sequence():
                 self._places = [N1 + Nnew + 1]
                 self._bases = [AAN2]
         else:
-            self._bases = [self._bases[i] for i in places]
-            new_place = [self._places[i] for i in places]
-            self._places = [v if v < N2 else v - (N2 - N1 - 1) + Nnew for v in new_place]
+            self._places = [v if v < N2 else v - (N2 - N1 - 1) + Nnew for v in self._places]
 
     def get_basis_at(self, place, pivots):
         return self.get_nearby_basis(place, place, pivots)
@@ -103,24 +102,7 @@ class SCLP_base_sequence():
         elif N2 in self._places:
             return self._bases[self._places.index(N2)],N2
         else:
-            NN = len(pivots)
-            if N1 >= 0:
-                test1 = np.fabs(np.asarray(self._places) - N1)
-                ind1 = np.argmin(test1)
-                if N2 <= NN:
-                    test2 = np.fabs(np.asarray(self._places) - N2)
-                    ind2 = np.argmin(test2)
-                    if test1[ind1] < test2[ind2]:
-                        return get_new_dict(self._bases[ind1], self._places[ind1], N1, pivots), N1
-                    else:
-                        return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots), N2
-                else:
-                    return get_new_dict(self._bases[ind1], self._places[ind1], N1, pivots), N1
-            else:
-                test2 = np.fabs(np.asarray(self._places) - N2)
-                ind2 = np.argmin(test2)
-                return get_new_dict(self._bases[ind2], self._places[ind2], N2, pivots), N2
-
+            return calc_nearby_bases(N1, N2, pivots, self._bases, self._places)
 
     def clear_base_sequense(self, numBasesToRemove, maxBases, NN):
         basesActive = len(self._places)

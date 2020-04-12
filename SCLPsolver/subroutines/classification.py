@@ -5,7 +5,6 @@ from .collision_info import collision_info
 from .time_collision_resolver import calc_timecollide, resolve_and_classify, reclassify
 from .matlab_utils import find
 
-#function [ cases, Delta, N1, N2, v1,v2, problem ] =
 
 #'#@profile
 def classification(solution, tolerance):

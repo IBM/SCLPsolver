@@ -5,11 +5,10 @@ from subroutines.SCLP_solver import SCLP_solver
 from subroutines.utils import relative_to_project
 
 class SCLP_settings():
-    __slots__ = ['find_alt_line', 'save_solution', 'memory_management', 'tmp_path', 'hot_start', 'check_final_solution',
-                 'check_intermediate_solution', 'collect_plot_data', 'max_iteration']
 
     def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False,
-                 check_final_solution=True, check_intermediate_solution=False, collect_plot_data=False, max_iteration = None):
+                 check_final_solution=True, check_intermediate_solution=False, suppress_printing = False, rewind_max_delta =
+                10E-5, collect_plot_data=False, max_iteration = None):
         self.find_alt_line = find_alt_line
         self.hot_start = hot_start
         self.save_solution = save_solution
@@ -17,6 +16,8 @@ class SCLP_settings():
         self.check_intermediate_solution = check_intermediate_solution
         self.memory_management = memory_management
         self.max_iteration = max_iteration
+        self.suppress_printing = suppress_printing
+        self.rewind_max_delta = rewind_max_delta
         self.collect_plot_data = collect_plot_data
         if tmp_path is None:
             self.tmp_path = relative_to_project('')
@@ -94,8 +95,7 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         # default constructor creates main parametric line
         param_line = formulation.get_parametric_line(tolerance)
         # calculate initial basis
-        solution = SCLP_solution(formulation, param_line.x_0, param_line.q_N, tolerance,
-                                                              collect_plot_data=settings.collect_plot_data)
+        solution = SCLP_solution(formulation, param_line.x_0, param_line.q_N, tolerance, settings)
         # building Kset0 and JsetN
         param_line.build_boundary_sets(solution.klist, solution.jlist)
     else:

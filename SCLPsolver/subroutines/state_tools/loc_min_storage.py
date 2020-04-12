@@ -23,6 +23,7 @@ class loc_min_storage():
             self.dx_min.insert(N1, get_loc_min(dx[:, N1], dx[:, N1+1]))
             self.dq_min.insert(N1+1, get_loc_min(dq[:, N1+1], dq[:, N1]))
 
+    #'#@profile
     def update_caseII(self, N1, N2, Nnew, dx, dq):
         if N1 == -1:
             self.dx_min.delete(0, N2)
