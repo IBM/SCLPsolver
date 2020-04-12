@@ -2,7 +2,7 @@ import sys
 sys.path.append('C:\DataD\Work\CERBERO\CLP\SCLPsolver')
 import os
 import numpy as np
-from subroutines.lp_tools.pivot import base_pivot, base_pivot1
+from subroutines.not_used.old_pivot import base_pivot, base_pivot1
 
 
 def relative_to_project(file_path):

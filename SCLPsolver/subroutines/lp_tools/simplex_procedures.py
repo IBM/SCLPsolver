@@ -2,7 +2,7 @@ import numpy as np
 from .matlab_utils import find
 from .pivot import pivot_ij, signed_pivot_ij
 from .in_out_pivot import in_out_pivot
-from .pivot1 import prim_ratio_test, dual_ratio_test
+from .cy_lp_tools import prim_ratio_test, dual_ratio_test
 
 #'#@profile
 def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
@@ -78,10 +78,6 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
         while ptest.size > 0:
             i = ptest[0]
             j = prim_ratio_test(dct.simplex_dict, i, ds)-1
-            # mat = np.divide(-dct.simplex_dict[i + 1, 1:], dct.simplex_dict[0, 1:], out=np.zeros_like(dct.simplex_dict[i + 1, 1:]), where=np.logical_and(dct.simplex_dict[0, 1:]!=0, ds != 1))
-            # j = np.argmax(mat)
-            #j = np.argmax(mat * (ds != 1))
-            #if mat[j] <= 0:
             if j < -1:
                 dct.simplex_dict[0, 0] = -np.inf
                 err['result'] = 1
@@ -95,12 +91,6 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
         while dtest.size > 0:
             j = dtest[0]
             i = dual_ratio_test(dct.simplex_dict, j, ps)-1
-            # i1 = np.argmax(np.divide(dct.simplex_dict[1:, j + 1], dct.simplex_dict[1:, 0], out=np.zeros_like(dct.simplex_dict[1:, j + 1]), where=np.logical_and(dct.simplex_dict[1:, 0] != 0, ps != 1)))
-            # if i != i1:
-            #     raise Exception("Strange")
-            # i = np.argmax(mat)
-            #i = np.argmax(mat * (ps != 1))
-            # if mat[j] <= 0:
             if i < -1:
                 dct.simplex_dict[0, 0] = np.inf
                 err['result'] = 2

@@ -1,7 +1,6 @@
 import numpy as np
-from .matlab_utils import ismember
 from .simplex_procedures import simplex_procedures
-from .pivot1 import get_sign
+from .cy_lp_tools import get_sign
 
 
 class LP_formulation():

@@ -1,7 +1,7 @@
 import numpy as np
 from subroutines.matlab_utils import find
 from subroutines.sparse_matrix_constructor import sparse_matrix_constructor
-from subroutines.lp_tools.pivot import base_pivot
+from subroutines.not_used.old_pivot import base_pivot
 
 
 #'#@profile

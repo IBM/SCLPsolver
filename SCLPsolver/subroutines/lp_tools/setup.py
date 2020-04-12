@@ -23,7 +23,7 @@ else:
 
 setup(
     name='pivot app',
-    ext_modules=cythonize([Extension("pivot1", ["pivot1.pyx"], include_dirs=[numpy.get_include()], extra_compile_args=extra_compile_args,
+    ext_modules=cythonize([Extension("cy_lp_tools", ["cy_lp_tools.pyx"], include_dirs=[numpy.get_include()], extra_compile_args=extra_compile_args,
                 extra_link_args=extra_link_args)]),
     zip_safe=False
 )
