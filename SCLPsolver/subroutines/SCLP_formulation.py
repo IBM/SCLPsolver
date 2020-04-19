@@ -120,7 +120,7 @@ class SCLP_formulation():
 
     def get_general_dualBoundaryLP(self):
         DD0 = np.ascontiguousarray(np.vstack(
-            (np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha, self.G, self.F)),
+            (np.hstack((0, -self.gamma, np.zeros((1, self.L)), self.d)), np.hstack((self.alpha + self.a * self.T, self.G, self.F)),
              np.hstack((np.zeros((self.I, 1)), self.H, np.zeros((self.I, self.L)))))))
         pn = np.ascontiguousarray(np.concatenate((np.arange(1, self.K + 1), -np.arange(self.J + 1, self.J + self.I + 1))), dtype = np.int32)
         dn = np.ascontiguousarray(np.concatenate((-np.arange(1, self.J + 1), np.arange(self.K + 1, self.K + self.L + 1))), dtype = np.int32)

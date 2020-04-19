@@ -82,7 +82,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
                 dct.simplex_dict[0, 0] = -np.inf
                 err['result'] = 1
                 err['message'] = '***  problem is primal infeasible'
-                return dct, ps, ds, err
+                return dct, ps, ds, pivots, err
             (dct, in_, out_), ps, ds = signed_pivot_ij(dct, ps, ds, i, j, res_dct)
             pivots.pivot(in_, out_)
             res_dct = None
@@ -95,7 +95,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
                 dct.simplex_dict[0, 0] = np.inf
                 err['result'] = 2
                 err['message'] = '***  problem is dual infeasible'
-                return dct, ps, ds, err
+                return dct, ps, ds, pivots, err
             (dct, in_, out_), ps, ds = signed_pivot_ij(dct, ps, ds, i, j, res_dct)
             pivots.pivot(in_, out_)
             res_dct = None
@@ -124,7 +124,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
                     dct2.simplex_dict[0, 0] = np.inf
                     err['result'] = 2
                     err['message'] = '***  problem is dual infeasible'
-                    return LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name), ps, ds, err
+                    return LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name), ps, ds, pivots, err
             else:
                 div = dct2.simplex_dict[0, 1:-1] + mu * dct2.simplex_dict[-1, 1:-1]
                 mat = np.divide(-dct2.simplex_dict[i + 1, 1:-1], div, out=np.zeros_like(dct2.simplex_dict[i + 1, 1:-1]), where= np.logical_and(div !=0, ds != 1))
@@ -133,7 +133,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
                     dct2.simplex_dict[0, 0] = - np.inf
                     err['result'] = 1
                     err['message'] = '***  problem is primal infeasible'
-                    return LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name), ps, ds, err
+                    return LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name), ps, ds, pivots,  err
             (dct2, in_, out_), ps, ds = signed_pivot_ij(dct2, ps, ds, i, j)
             pivots.pivot(in_, out_)
             mat = np.divide(-dct2.simplex_dict[0, 1:-1], dct2.simplex_dict[-1, 1:-1], out=np.zeros_like(dct2.simplex_dict[0, 1:-1]), where=np.logical_and(dct2.simplex_dict[-1, 1:-1] > 0, ds != 1))

@@ -39,6 +39,14 @@ class path_utils:
                 path += str(k) + str(v) + '_'
         return path + 'data.dat'
 
+    def get_tmp_data_file_name(self, exp_type, translation_table = None, **kwargs):
+        path = self.home_path + '/tmp/' + exp_type + '_'
+        if kwargs is not None:
+            kwargs = self.translate_param_names(translation_table, **kwargs)
+            for k,v in kwargs.items():
+                path += str(k) + str(v) + '_'
+        return path
+
     def get_CPLEX_data_path(self):
         return self.home_path + '/CPLEX'
 

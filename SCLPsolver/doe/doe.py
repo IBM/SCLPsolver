@@ -20,7 +20,8 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             ps[k] = v.__name__[:4]
         else:
             ps[k] = str(v)
-    pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
+    #pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
+    pu = path_utils("C:/DataD/SCLP_data")
     results = []
     files = []
     if get_raw_tau:
@@ -44,12 +45,13 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
                 raise Exception('Undefined time horizon!')
             else:
                 T = TT
-        import time
-        start_time = time.time()
         if solver_settings is None:
             solver_settings = SCLP_settings(find_alt_line=False)
+        solver_settings.file_name = pu.get_tmp_data_file_name()
+        import time
+        start_time = time.time()
         solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
-        t, x, q, u, p, pivots, obj, err, NN, tau = solution.get_final_solution()
+        t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
         print(obj, err)
         time_to_solve = time.time() - start_time
         print("--- %s seconds ---" % time_to_solve)
@@ -67,7 +69,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             path, filename = os.path.split(full_file_name)
             buf_cost = total_buffer_cost[0]*Tres+total_buffer_cost[1]*Tres*Tres/2.0
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,
-                 'intervals': NN, 'T': Tres, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
+                 'intervals': NN, 'T': Tres, 'maxT': maxT, 'mean_tau': np.mean(tau), 'max_tau': np.max(tau), 'min_tau':np.min(tau),
                  'std_tau':np.std(tau), 'buffer_cost': buf_cost, 'real_objective':buf_cost - obj}
             results.append(r)
             if get_raw_tau:
@@ -90,7 +92,7 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
 
     # 2. Solve using SCLP
     solution0, STEPCOUNT0, Tres0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
-    t, x, q, u, p, pivots, obj, err, NN, tau = solution0.get_final_solution()
+    t, x, q, u, p, pivots, obj, err, NN, tau, maxT= solution0.get_final_solution()
     if True:
         true_objective = obj
 

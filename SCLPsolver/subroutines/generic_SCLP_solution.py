@@ -7,10 +7,9 @@ from .rewind_info import rewind_info
 from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
 from .matrix_constructor import matrix_constructor
-from .equation_tools.calc_equations import time_equations
-#from .calc_states import calc_states, check_state
+from .equation_tools.calc_equations import get_equations
 from .state_tools.loc_min_storage import loc_min_storage
-from .state_tools.calc_states import calc_states, check_state
+from .state_tools.calc_states import calc_states, check_state, calc_specific_state
 from .bases_memory_manager import bases_memory_manager
 #from .equation_tools.eq_solver import eq_solver
 
@@ -38,6 +37,10 @@ class generic_SCLP_solution():
         self._last_collision = None
         self._suppress_printing = settings.suppress_printing
         self.rewind_max_delta = settings.rewind_max_delta
+        if self._problem_dims.totalK >= 100:
+            self.partial_states = True
+        else:
+            self.partial_states = False
         self._state = solution_state()
 
     @property
@@ -84,29 +87,34 @@ class generic_SCLP_solution():
     def totalJ(self):
         return self._problem_dims.totalJ
 
+    def get_raw_dx(self):
+        return self._dx.get_raw_matrix()
+
+    def get_raw_dq(self):
+        return self._dq.get_raw_matrix()
+
     #'#@profile
     def update_state(self, param_line, check_state = False, tolerance=0):
         #state = solution_state()
         self._state.dx = self._dx.get_matrix()
         self._state.dq = self._dq.get_matrix()
-        #self._eq_solver.solve(param_line)
-        # state.sdx = np.ones((state.dx.shape[0], state.dx.shape[1] + 2))
-        # state.sdq = np.ones((state.dq.shape[0], state.dq.shape[1] + 2))
-        # np.sign(state.dx, out=state.sdx[:, 1:-1])
-        # np.sign(state.dq, out=state.sdq[:, 1:-1])
-        self._state.equations = time_equations.build_equations(param_line, self._klist, self._jlist, self._pivots,
+        equations = get_equations(param_line, self._klist, self._jlist, self._pivots,
                                                          self._state.dx, self._state.dq)
-        try:
-
-            # if np.any(np.fabs(state.equations.coeff - self._eq_solver.get_matrix()) >= 10E-10):
-            #     raise Exception('State build')
-            self._state.tau, self._state.dtau = self._state.equations.solve()
-            self._state.x, self._state.del_x, self._state.q, self._state.del_q\
-                = calc_states(self._dx.get_raw_matrix(), self._dq.get_raw_matrix(), param_line, self._state.tau, self._state.dtau)
-        except Exception as ex:
-            print('Exception during state calculation:')
-            print(ex)
-            return False
+        # if np.any(np.fabs(state.equations.coeff - self._eq_solver.get_matrix()) >= 10E-10):
+        #     raise Exception('State build')
+        tau, dtau = equations.solve()
+        self._state.tau, self._state.dtau = tau, dtau
+        if check_state or not self.partial_states:
+            self._state.x, self._state.del_x, self._state.q, self._state.del_q \
+                = calc_states(self._dx.get_raw_matrix(), self._dq.get_raw_matrix(), param_line, self._state.tau,
+                              self._state.dtau, check_state)
+        # try:
+        #
+        #
+        # except Exception as ex:
+        #     print('Exception during state calculation:')
+        #     print(ex)
+        #     return False
         if check_state:
             if self._check_state(self._state, tolerance):
                 return True
@@ -114,6 +122,22 @@ class generic_SCLP_solution():
                 return False
         else:
             return True
+
+    def get_specific_state(self, n, i, is_primal, is_del, param_line):
+        if self.partial_states:
+            return calc_specific_state(n, i, is_primal, is_del, self._dx.get_raw_matrix(), self._dq.get_raw_matrix(),
+                                       param_line, self._state.tau, self._state.dtau)
+        else:
+            if is_primal:
+                if is_del:
+                    return self._state.del_x[i, n]
+                else:
+                    return self._state.x[i, n]
+            else:
+                if is_del:
+                    return self._state.del_q[i, n]
+                else:
+                    return self._state.q[i, n]
 
     def _check_state(self, state, tolerance):
         if self._state is not None:
@@ -192,7 +216,7 @@ class generic_SCLP_solution():
             self._pivots.replace_pivots(col_info.N1, col_info.N1 + col_info.Nnew + Npivots, col_info.rewind_info.pivots)
             self._dx.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dx)
             self._dq.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dq)
-            Nadd = col_info.rewind_info.dx.shape[0]
+            Nadd = col_info.rewind_info.dx.shape[1]
             if N2_cor == NN:
                 N2_cor = None
             if Nadd == 0:

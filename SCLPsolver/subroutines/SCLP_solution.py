@@ -4,6 +4,7 @@ from .calc_objective import calc_objective
 from .calc_controls import calc_controls
 from .solution_state import solution_state
 from .lp_tools.LP_formulation import solve_LP_in_place
+from .state_tools.calc_states import calc_states
 from .matlab_utils import find
 import itertools
 
@@ -21,6 +22,7 @@ class SCLP_solution(generic_SCLP_solution):
         super().__init__(LP_form, solver_settings, formulation.K + formulation.L, formulation.J + formulation.I)
         self._formulation = formulation
         self._final_T = 0
+        self.max_valid_T = 0
         self._is_final = False
         self._u, self._p, self._t, self._obj, self._err= None, None, None, None, None
         if solver_settings.collect_plot_data:
@@ -50,7 +52,7 @@ class SCLP_solution(generic_SCLP_solution):
     def get_final_solution(self, preserve = True):
         if not self._is_final:
             self._extract_final_solution(preserve)
-        return self._t, self._state.x, self._state.q, self._u, self._p, self.pivots, self._obj, self._err, self.NN, self._state.tau
+        return self._t, self._state.x, self._state.q, self._u, self._p, self.pivots, self._obj, self._err, self.NN, self._state.tau, self.max_valid_T
 
     def _extract_final_solution(self, preserve = True):
         self._u, self._p = calc_controls(self, self._problem_dims.JJ, self._problem_dims.KK, preserve)
@@ -75,7 +77,7 @@ class SCLP_solution(generic_SCLP_solution):
         return is_ok
 
     def is_other_feasible(self, other_sol, tolerance=1E-11):
-        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
+        t,x,q,u,p,pivots,obj,err,NN,tau, maxT = other_sol.get_final_solution()
         # now we calculate important values at all points of the time partition, i.e. for t=t_0,...,t_N
         slack_u = np.vstack(self._formulation.b) - np.dot(self._formulation.H, u[:self._formulation.J, :]) # b - Hu(t)
         int_u = np.cumsum(u[:self._formulation.J,:]*tau, axis=1) # \int_0^t u(s) ds
@@ -91,7 +93,7 @@ class SCLP_solution(generic_SCLP_solution):
         return np.all(slack_x >= -tolerance*10) and np.all(slack_u >= -tolerance*10) and np.all(slack_x0 >= -tolerance*10) # changed '>' to '>=' probably this was a problem
 
     def other_objective(self, other_sol):
-        t,x,q,u,p,pivots,obj,err,NN,tau = other_sol.get_final_solution()
+        t,x,q,u,p,pivots,obj,err,NN,tau, maxT = other_sol.get_final_solution()
         TT = t[NN]
         part1 = np.dot(np.dot(self._formulation.gamma, u[:self._formulation.J, :]), tau)
         ddtau = tau * (t[:-1] + t[1:]) / 2
@@ -102,7 +104,7 @@ class SCLP_solution(generic_SCLP_solution):
             part3 = np.dot(np.dot(self._formulation.d, ((x[self._formulation.K:, :-1] + x[self._formulation.K:, 1:]) / 2)), tau)
         return part1 + part2 + part3
 
-    def truncate_at(self, t0):
+    def truncate_at(self, t0, param_line, check_state = False):
         self.t = np.cumsum(np.hstack((0, self._state.tau)))
         self._final_T = self.t[-1]
         if t0 < self._final_T:
@@ -116,12 +118,11 @@ class SCLP_solution(generic_SCLP_solution):
             self._state.dx = self._dx.get_matrix()
             self._state.dq = self._dq.get_matrix()
             self.loc_min_storage.update_caseI(-1,last_breakpoint,self._state.dx, self._state.dq)
-            # self._state.sdx = self._state.sdx[:, last_breakpoint:]
-            # self._state.sdx[:, 0] = np.ones(self._state.dx.shape[0])
-            # self._state.sdq = self._state.sdq[:, last_breakpoint:]
-            # self._state.sdq[:, 0] = np.ones(self._state.dq.shape[0])
             self._state.tau=self._state.tau[last_breakpoint:]
             self._state.dtau = self._state.dtau[last_breakpoint:]
+            if self.partial_states:
+                self._state.x, self._state.del_x, self._state.q, self._state.del_q = calc_states(self._dx.get_raw_matrix(),
+                    self._dq.get_raw_matrix(), param_line, self._state.tau, self._state.dtau, check_state)
             self._state.x = self._state.x[:,last_breakpoint:]
             self._state.x[:, 0] += self._state.dx[:, 0] * delta_t
             self._state.q = self._state.q[:, last_breakpoint:]
@@ -133,13 +134,13 @@ class SCLP_solution(generic_SCLP_solution):
         if t0 >= self._final_T:
             print('!!!')
         else:
-            self.truncate_at(t0)
+            self.truncate_at(t0, param_line)
         if new_T <= t0:
             print('!!!')
         if new_x0 is not None:
             if new_T is None:
                 new_T = param_line.T
-            K_add_set = find(np.logical_and(self._state.sdx[:, 1] == 0, new_x0 > 0))
+            K_add_set = find(np.logical_and(self._state.dx[:, 0] == 0, new_x0 > 0))
             from .SCLP_x0_solver import SCLP_x0_solver
             return SCLP_x0_solver(self, param_line, new_x0, new_T, K_add_set, 0, 0, dict(),
                            settings, tolerance, settings.find_alt_line, mm)
@@ -149,8 +150,6 @@ class SCLP_solution(generic_SCLP_solution):
                 return SCLP_solver(self, param_line, 'update', 0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
             else:
                 return self, 0, {'result': 0}
-
-
 
     def plot_history(self, plt):
         if self.plot_data is not None:
@@ -200,8 +199,7 @@ class SCLP_solution(generic_SCLP_solution):
         # Plots of buffers status: piecewise linear graphs where:
         # t = [0,t1,...,Tres] vector containing time partition
         # X = (12,len(t)) matrix representing quantities at each of 12 buffers at each timepoint
-        if not hasattr(self, 't'):
-            self.get_final_solution()
+        self.get_final_solution()
 
         number_of_buffers = self.formulation.K
 

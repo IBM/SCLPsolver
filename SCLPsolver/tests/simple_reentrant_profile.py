@@ -23,7 +23,7 @@ for seed in range(1000, 2000):
     start_time = time.time()
     pr.enable()
     solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
-    t, x, q, u, p, pivots, obj, err, NN, tau = solution.get_final_solution(False)
+    t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
     pr.disable()
     print(obj, err)
     print("--- %s seconds ---" % (time.time() - start_time))

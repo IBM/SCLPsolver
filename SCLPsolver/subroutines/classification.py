@@ -7,7 +7,7 @@ from .matlab_utils import find
 
 
 #'#@profile
-def classification(solution, tolerance):
+def classification(solution, param_line, tolerance):
 #idenitfy next collision and classify it
 #problem
 #   result = 0 Ok
@@ -29,7 +29,8 @@ def classification(solution, tolerance):
     case = ''
 
     #CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state,  tolerance)
-    CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, solution.loc_min_storage, tolerance)
+    CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, solution.get_raw_dx(),
+                                  solution.get_raw_dq(), param_line, solution.loc_min_storage, solution.partial_states, tolerance)
     #
     problem['stateProblem'] = prob
 
@@ -72,7 +73,7 @@ def classification(solution, tolerance):
             col_info.had_resolution = True
         if abs(Didle) <= 1000 * tolerance:
             if problem['timeProblem']['result'] == 0 and len(CC2) >1:
-                col_info1, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
+                col_info1, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, param_line, 1, tolerance)
                 if prob1['result'] == 0:
                     col_info.alternative = col_info1
         return col_info, problem
@@ -91,7 +92,7 @@ def classification(solution, tolerance):
                 N2 = CC2[1][1] + 1
                 col_info = collision_info('Case i__', 0, N1, N2, [], [], None, 1)
             else:
-                col_info, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, 1, tolerance)
+                col_info, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, param_line, 1, tolerance)
                 tol2 = 10 * tolerance
                 inegDTAU = solution.state.dtau < -tol2
                 izerTAU = np.fabs(solution.state.tau) <= tol2

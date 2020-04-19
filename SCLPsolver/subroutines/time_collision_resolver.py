@@ -73,7 +73,7 @@ def get_shrinking_intervals(delta, rz, inegDTAU, tol1, tol2, tol_coeff, tol_coef
             problem = 0
             return [nn1, nn2], problem, tol_coeff, False
 
-def resolve_and_classify(delta, rz, solution, tol_coeff0, tolerance, shrinking_ind = None):
+def resolve_and_classify(delta, rz, solution, param_line, tol_coeff0, tolerance, shrinking_ind = None):
     problem = {'result': 0}
     tol2 = 10 * tolerance
     tol1 = tol2
@@ -99,7 +99,7 @@ def resolve_and_classify(delta, rz, solution, tol_coeff0, tolerance, shrinking_i
             problem['result'] = 5
             print('Max tolerance coefficient reached ....')
             return None, problem
-        col_info = classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, tolerance)
+        col_info = classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, param_line, tolerance)
         if col_info is None:
             had_resolution = True
         else:
@@ -109,12 +109,12 @@ def resolve_and_classify(delta, rz, solution, tol_coeff0, tolerance, shrinking_i
     problem['result'] = 5
     return None, problem
 
-def reclassify(col_info, solution, tolerance, stateN=None):
+def reclassify(col_info, solution, param_line, tolerance, stateN=None):
     if col_info.from_ztau:
         res = solution.pivots.find_N1_N2_around(col_info.ztau_ind, col_info.N1-1)
         if res is not None:
             col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                          solution, tolerance)
+                                          solution, param_line, tolerance)
             if col is not None:
                 if col != col_info:
                     col.from_ztau = True
@@ -123,7 +123,7 @@ def reclassify(col_info, solution, tolerance, stateN=None):
         res = solution.pivots.find_N1_N2_around(col_info.ztau_ind, col_info.N1, col_info.N2 + 1)
         if res is not None:
             col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                          solution, tolerance)
+                                          solution, param_line, tolerance)
             if col is not None:
                 if col != col_info:
                     col.from_ztau = True
@@ -140,7 +140,7 @@ def reclassify(col_info, solution, tolerance, stateN=None):
             if col_info.alternative is not None:
                 stateN = col_info.N1
                 col_info = col_info.alternative
-                new_col_info, problem = resolve_and_classify(col_info.delta, col_info.rz, solution, tol_coeff, tolerance)
+                new_col_info, problem = resolve_and_classify(col_info.delta, col_info.rz, solution, param_line, tol_coeff, tolerance)
                 if problem['result'] > 0:
                     return col_info, False
                 elif new_col_info.N1 <= stateN and stateN <= new_col_info.N2:
@@ -151,7 +151,7 @@ def reclassify(col_info, solution, tolerance, stateN=None):
             else:
                 return col_info, resolved
         while tol_coeff <= 0.01/tolerance:
-            new_col_info, problem = resolve_and_classify(col_info.delta, col_info.rz, solution, tol_coeff, tolerance)
+            new_col_info, problem = resolve_and_classify(col_info.delta, col_info.rz, solution, param_line, tol_coeff, tolerance)
             tol_coeff = tol_coeff * 10
             if problem['result'] > 0:
                 break
@@ -168,14 +168,14 @@ def reclassify(col_info, solution, tolerance, stateN=None):
                 return col_info.alternative, True
         return col_info, resolved
 
-def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
+def reclassify_ztau(col_info, solution, param_line, ztau_ind, tolerance, hard_find=False):
     if len(ztau_ind) >= 3:
         if ztau_ind[1] - ztau_ind[0] > 2:
             if  ztau_ind[-1] - ztau_ind[-2] > 2:
                 res = solution.pivots.find_N1_N2_around(ztau_ind[1:-1])
                 if res is not None:
                     col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                                  solution, tolerance)
+                                                  solution, param_line, tolerance)
                     if col is not None:
                         col.from_ztau = True
                         col.ztau_ind = ztau_ind
@@ -183,7 +183,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
             res = solution.pivots.find_N1_N2_around(ztau_ind[1:])
             if res is not None:
                 col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                              solution, tolerance)
+                                              solution, param_line, tolerance)
                 if col is not None:
                     col.from_ztau = True
                     col.ztau_ind = ztau_ind
@@ -192,7 +192,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
             res = solution.pivots.find_N1_N2_around(ztau_ind[:-1])
             if res is not None:
                 col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                              solution, tolerance)
+                                              solution, param_line, tolerance)
                 if col is not None:
                     col.from_ztau = True
                     col.ztau_ind = ztau_ind
@@ -202,7 +202,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
             res = solution.pivots.find_N1_N2_around(ztau_ind[n:])
             if res is not None:
                 col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                              solution, tolerance)
+                                              solution, param_line, tolerance)
                 if col is not None:
                     col.from_ztau = True
                     col.ztau_ind = ztau_ind[n:]
@@ -211,7 +211,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
             res = solution.pivots.find_N1_N2_around(ztau_ind[:-n])
             if res is not None:
                 col = classify_time_collision(col_info.delta, col_info.rz, col_info.tol_coeff, res[0], res[1],
-                                              solution, tolerance)
+                                              solution, param_line, tolerance)
                 if col is not None:
                     col.from_ztau = True
                     col.ztau_ind = ztau_ind[:-n]
@@ -219,7 +219,7 @@ def reclassify_ztau(col_info, solution, ztau_ind, tolerance, hard_find=False):
     return None
 
 
-def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, tolerance):
+def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, param_line, tolerance):
     if N1 == -1 or N2 == solution.NN:
         return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
     else:
@@ -231,7 +231,8 @@ def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, tolerance):
             return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
         elif len(vlist) == 2:
             case = 'Case ii_'
-            order_ratio, correct = calc_order_ratio(vlist[0], vlist[1], N1, N2, solution.klist, solution.jlist, solution.state, delta / 2)
+            #order_ratio, correct = calc_order_ratio_old(vlist[0], vlist[1], N1, N2, solution, param_line, delta / 2)
+            order_ratio, correct = calc_order_ratio(vlist[0], vlist[1], N1, N2, solution, param_line, delta / 2)
             if abs(abs(order_ratio) - 1) < tolerance:
                 print('Tolerance in R unclear...')
             if abs(order_ratio) < 1:

@@ -6,11 +6,12 @@ from subroutines.utils import relative_to_project
 
 class SCLP_settings():
 
-    def __init__(self, find_alt_line =True, tmp_path=None, memory_management= True, hot_start =False, save_solution = False,
-                 check_final_solution=True, check_intermediate_solution=False, suppress_printing = False, rewind_max_delta =
-                10E-5, collect_plot_data=False, max_iteration = None):
+    def __init__(self, find_alt_line =True, tmp_path=None, file_name = None, memory_management= True, hot_start =False,
+                 save_solution = False, check_final_solution=True, check_intermediate_solution=False, suppress_printing = False,
+                 rewind_max_delta = 10E-2, collect_plot_data=False, max_iteration = None):
         self.find_alt_line = find_alt_line
         self.hot_start = hot_start
+        self.file_name = file_name
         self.save_solution = save_solution
         self.check_final_solution = check_final_solution
         self.check_intermediate_solution = check_intermediate_solution
@@ -101,9 +102,15 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
     else:
         import pickle
         print('Loading solution!')
+        if settings.file_name is not None:
+            solution_file_name = settings.tmp_path + '/' + settings.file_name + '_solution.dat'
+            line_file_name = settings.tmp_path + '/' + settings.file_name + '_param_line.dat'
+        else:
+            solution_file_name = settings.tmp_path + '/solution.dat'
+            line_file_name = settings.tmp_path + '/param_line.dat'
         try:
-            solution = pickle.load(open(settings.tmp_path + '/solution.dat', 'rb'))
-            param_line = pickle.load(open(settings.tmp_path + '/param_line.dat','rb'))
+            solution = pickle.load(open(solution_file_name, 'rb'))
+            param_line = pickle.load(open(line_file_name,'rb'))
         except IOError:
             raise Exception('Solution files not found in: ' + settings.tmp_path)
         param_line.theta_bar = TT
@@ -119,14 +126,17 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
                                            0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
 
     # extract solution for output
-    solution.update_state(param_line)
-    is_ok = True
-    if settings.check_final_solution:
-        is_ok = solution.check_final_solution(tolerance)
+    is_ok = solution.update_state(param_line, check_state=settings.check_final_solution, tolerance = tolerance *10)
     if pivot_problem['result'] > 0 or settings.save_solution or not is_ok:
         print('Saving solution!')
         solution.prepare_to_save()
         import pickle
-        pickle.dump(solution, open(settings.tmp_path + '/solution.dat', 'wb'))
-        pickle.dump(param_line, open(settings.tmp_path + '/param_line.dat', 'wb'))
+        if settings.file_name is None:
+            file_name = 'SCLP'
+        else:
+            file_name = settings.file_name
+        solution_file_name = settings.tmp_path + '/' + file_name + '_' + str(STEPCOUNT) +'_solution.dat'
+        line_file_name = settings.tmp_path + '/' + file_name + '_' + str(STEPCOUNT) + '_param_line.dat'
+        pickle.dump(solution, open(solution_file_name, 'wb'))
+        pickle.dump(param_line, open(line_file_name, 'wb'))
     return solution, STEPCOUNT, param_line.T, pivot_problem['result']

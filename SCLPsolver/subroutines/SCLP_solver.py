@@ -20,17 +20,17 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         # if not solution.base_sequence.check_places():
         #     raise Exception('Bases placement failure!')
         if not rewind_required:
-            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*100)
-            if not res:
-                return solution, STEPCOUNT, {'result': 1}
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
                 return solution, STEPCOUNT, pivot_problem
-            col_info, problem = classification(solution, tolerance)
+            res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*100)
+            if not res:
+                return solution, STEPCOUNT, {'result': 1}
+            col_info, problem = classification(solution, param_line, tolerance)
             if problem['result'] > 0:
                 ztau_ind = solution.get_ztau_ind()
                 if ztau_ind is not None:
-                    new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance, DEPTH>0)
+                    new_col_info = reclassify_ztau(col_info, solution, param_line, ztau_ind, tolerance, DEPTH>0)
                     if new_col_info is None:
                         rewind_required = True
                     else:
@@ -67,7 +67,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     if not res:
                         return solution, STEPCOUNT, {'result': 1}
                     solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, lastCollision)
-                    col_info, resolved = reclassify(lastCollision, solution, tolerance)
+                    col_info, resolved = reclassify(lastCollision, solution, param_line, tolerance)
                     if not resolved:
                         lastCollision = solution.update_rewind()
                     else:
@@ -114,6 +114,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         if DEPTH == 0 and param_line.is_end(col_info.delta):
             col_info.case = 'solved__'
             solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, col_info)
+            solution.max_valid_T = param_line.theta + col_info.delta
             param_line.forward_to_end()
             return solution, STEPCOUNT, pivot_problem
 
@@ -147,7 +148,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             #     return solution, STEPCOUNT, {'result': 1}
             while pivot_problem['result'] == 1: # theta > 1
                 print('Pivot problem: trying to resolve * ', col_info.tol_coeff, '...')
-                new_col_info, resolved = reclassify(col_info, solution, tolerance)
+                new_col_info, resolved = reclassify(col_info, solution, param_line,  tolerance)
                 if resolved:
                     print('resolved!')
                     col_info = new_col_info
