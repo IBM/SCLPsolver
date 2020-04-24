@@ -14,6 +14,7 @@ K = 100
 I = 20
 solver_settings = SCLP_settings()
 solver_settings.suppress_printing = True
+solver_settings.memory_management = False
 settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.8, "alpha_rate2": 0.45}
 import time
 import cProfile, pstats, io

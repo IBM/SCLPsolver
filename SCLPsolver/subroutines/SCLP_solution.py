@@ -43,8 +43,8 @@ class SCLP_solution(generic_SCLP_solution):
         self.tmp_matrix = np.zeros_like(self._base_sequence.bases[0]['A'])
         self._state = solution_state()
 
-    def update_state(self, param_line, check_state=False, tolerance=0):
-        res = super().update_state(param_line, check_state, tolerance)
+    def update_state(self, param_line, check_state=False, tolerance=0, up_rewind=False):
+        res = super().update_state(param_line, check_state, tolerance, up_rewind)
         if res and self.plot_data is not None:
             self.plot_data.append({'T': param_line.T, 'tau': self._state.tau, 'dtau': self._state.dtau})
         return res

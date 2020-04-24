@@ -2,7 +2,8 @@
 
 class collision_info():
 
-    def __init__(self, case, delta=None, N1=None, N2=None, v1=None, v2=None, rz = None, tol_coeff=1, had_resolution=False):
+    def __init__(self, case, delta=None, N1=None, N2=None, v1=None, v2=None, rz = None, tol_coeff=1,
+                 had_resolution=False, stable_iteration = True):
         self._N1 = N1
         self._N2 = N2
         self._rz = rz
@@ -23,6 +24,7 @@ class collision_info():
         self._ztau_ind = None
         self.from_ztau = False
         self.alternative = None
+        self.stable_iteration = stable_iteration
 
     @property
     def N1(self):

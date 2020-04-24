@@ -9,7 +9,8 @@ from doe.doe_utils import path_utils
 K = 1000
 I = 100
 seed = 1000
-solver_settings = SCLP_settings()
+solver_settings = SCLP_settings(find_alt_line =False)
+
 settings = {'alpha_rate':  1, 'cost_scale':2, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
                     'gamma_rate':0, 'c_scale': 0, 'h_rate': 0.2}
 G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_data(seed, K, I, **settings)

@@ -1,5 +1,7 @@
 from subroutines.experimental.generic_equation_solver import generic_equation_solver
 import numpy as np
+from scipy.linalg import lu_factor, lu_solve
+from scipy.linalg import solve as sp_solve
 import random
 import time
 
@@ -78,7 +80,19 @@ def test_add(input_matrix, equation_solver_parameter):
     print("--- %s inv seconds ---" % (time.time() - start_time))
 
     start_time = time.time()
-    result_8  = np.linalg.solve(matrix_2, vector_2)
+    result_7 = lu_factor(matrix_2)
+    print("--- %s lu seconds ---" % (time.time() - start_time))
+    result_8 = lu_solve(result_7, vector_2)
+    # step 8
+    print("--- %s lu_solve seconds ---" % (time.time() - start_time))
+
+    start_time = time.time()
+    result_8 = sp_solve(matrix_2, vector_2)
+    # step 8
+    print("--- %s scipy solve seconds ---" % (time.time() - start_time))
+
+    start_time = time.time()
+    result_8 = np.linalg.solve(matrix_2, vector_2)
     # step 8
     print("--- %s solve seconds ---" % (time.time() - start_time))
 

@@ -7,7 +7,7 @@ from .matlab_utils import find
 
 
 #'#@profile
-def classification(solution, param_line, tolerance):
+def classification(solution, param_line, tolerance, time_only=False):
 #idenitfy next collision and classify it
 #problem
 #   result = 0 Ok
@@ -29,10 +29,13 @@ def classification(solution, param_line, tolerance):
     case = ''
 
     #CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state,  tolerance)
-    CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, solution.get_raw_dx(),
-                                  solution.get_raw_dq(), param_line, solution.loc_min_storage, solution.partial_states, tolerance)
-    #
-    problem['stateProblem'] = prob
+    if not time_only:
+        CC1, prob = calc_statecollide(solution.klist,solution.jlist, solution.state, solution.get_raw_dx(),
+                                      solution.get_raw_dq(), param_line, solution.loc_min_storage, solution.partial_states, tolerance)
+        #
+        problem['stateProblem'] = prob
+    else:
+        CC1 =[]
 
     if solution.last_collision is None:
         lastN1 = 0

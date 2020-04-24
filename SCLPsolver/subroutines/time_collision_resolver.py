@@ -262,7 +262,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
     d = 1
 
     while np.any(inegTAU):
-        print('negative interval length...')
+        print('negative interval length...', np.min(TAU))
         problem['had_resolution'] = True
         problem['resolved_types'].append(1)
         d = d * 10

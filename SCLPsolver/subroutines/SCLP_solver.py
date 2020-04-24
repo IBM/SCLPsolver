@@ -27,6 +27,9 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             if not res:
                 return solution, STEPCOUNT, {'result': 1}
             col_info, problem = classification(solution, param_line, tolerance)
+            # if problem['result'] > 0:
+            #     solution.recalc_tau(param_line, settings.check_intermediate_solution)
+            #     col_info, problem = classification(solution, param_line, tolerance, True)
             if problem['result'] > 0:
                 ztau_ind = solution.get_ztau_ind()
                 if ztau_ind is not None:
@@ -63,7 +66,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                     # rewinding to previous iteration
                     print('rewind... ')
                     param_line.backward_to(lastCollision.delta)
-                    res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*10)
+                    res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance*10, up_rewind =True)
                     if not res:
                         return solution, STEPCOUNT, {'result': 1}
                     solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, lastCollision)

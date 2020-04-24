@@ -1,49 +1,117 @@
 import numpy as np
-from .eq_tools import build_equations
+from scipy.linalg import lu_factor, lu_solve
+from .eq_tools import build_equations, get_rows, get_new_col, reorder_solution, get_left_stability_idx, get_reordered_copy, ftran2eta
 
 
 class time_equations():
 
-    __slots__=['coeff','rrhs']
+    def __init__(self):
+        self.coeff = None
+        self.lu = None
+        self.rrhs = None
+        self.var_names = None
+        self.var_nums = None
+        self.iteration = 0
+        self._max_iterations = 10
+        self.row_order = np.zeros((2,self._max_iterations), dtype=np.int32, order='C')
+        self.pivot_idxs = np.zeros(self._max_iterations, dtype=np.int32, order='C')
+        self.solution = None
+        self.etas = None
 
-    def __init__(self, coeff, rrhs):
-        self.coeff = coeff
-        self.rrhs = rrhs
+    def build(self, param_line, klist, jlist, pivots, dx, dq, test=False):
+        if not test:
+            self.iteration = 0
+        if len(pivots.outpivots) > 0:
+            outp = np.asarray(pivots.outpivots, dtype=np.int32, order='C')
+            inp = np.asarray(pivots.inpivots, dtype=np.int32, order='C')
+            left_idx = get_left_stability_idx(outp, inp)
+            self.coeff, self.var_names, self.var_nums, self.rrhs=\
+                build_equations(klist, jlist, outp, inp, dx, dq, param_line.x_0, param_line.del_x_0, param_line.q_N, param_line.del_q_N)
+        else:
+            self.coeff = np.eye(1)
+            self.rrhs = np.zeros((1, 2))
+            left_idx = 0
+        #
+        # if len(pivots.outpivots) > 0:
+        #     lx = bound_var_names > 0
+        #     xx = var_nums[lx]
+        #     self.rrhs[np.where(lx), 0] = -param_line.x_0[xx]
+        #     if param_line.del_x_0 is not None:
+        #         self.rrhs[np.where(lx), 1] = -param_line.del_x_0[xx]
+        #     lq = bound_var_names < 0
+        #     qq = var_nums[lq]
+        #     self.rrhs[np.where(lq), 0] = -param_line.q_N[qq]
+        #     if param_line.del_q_N is not None:
+        #         self.rrhs[np.where(lq), 1] = -param_line.del_q_N[qq]
+        self.rrhs[-1, 0] = param_line.T
+        self.rrhs[-1, 1] = param_line.del_T
+        return left_idx
+
+    def can_update(self, col_info):
+        if col_info.case == 'Case ii_' and col_info.N2 - col_info.N1 == 2 and col_info.Nnew == 0:
+            return self.iteration < self._max_iterations and col_info.delta > 1E-5
+        else:
+            return False
+
+    def get_reordered_coeff(self):
+        cf = self.coeff.copy()
+        for n in range(self.iteration):
+            tmp = cf[self.row_order[0,n],:].copy()
+            cf[self.row_order[0,n],:] = cf[self.row_order[1,n],:]
+            cf[self.row_order[1,n], :] = tmp
+        return cf
+
+    def update(self, n, dx, dq):
+        if self.iteration == 0:
+            self.etas = np.zeros((self._max_iterations, self.coeff.shape[0]), dtype=np.double, order='C')
+        row1, row2 = get_rows(n-1, n, self.row_order, self.iteration)
+        vec = get_new_col(self.coeff,  self.var_nums,  self.var_names, n, row1, row2, dx, dq)
+        self.coeff[:, n] = vec
+        vec1 = lu_solve(self.lu, vec, check_finite=False)
+
+        #v = vec1.copy()
+        ftran2eta(vec1, self.etas, self.pivot_idxs, self.iteration, n)
+        # etm = np.eye(len(vec1))
+        # if self.iteration == 0:
+        #     etm[:, n] = v
+        #     #rrr = self.etas[self.iteration, :] - to_eta(v, n)
+        # elif self.iteration == 1:
+        #     b = ftran(v, self.etas[self.iteration - 1, :], self.pivot_idxs[self.iteration - 1])
+        #     etm[:, n] = b
+        # else:
+        #     b = ftran(ftran(v, self.etas[self.iteration - 2, :], self.pivot_idxs[self.iteration - 2]),
+        #               self.etas[self.iteration - 1, :], self.pivot_idxs[self.iteration - 1])
+        #     etm[:, n] = b
+        # a = np.matmul(self.coeff, etm)
+        # #self.coeff[:, n] = vec
+        # test1 = np.fabs(a - self.coeff) >= 10E-10
+        # if np.any(test1):
+        #     print(np.where(test1))
+
+        ftran(self.solution[:, 1], self.etas[self.iteration, :], n)
+
+        #rdatu = get_reordered_copy(self.solution, self.row_order, self.iteration)
+
+        self.iteration += 1
+        #return sol[:, 0], sol[:, 1] #, vec,  u_rrhs, cf, eta, n
+        return self.solution[:, 1].copy(), self.solution[:, 1]
 
     #'#@profile
     def solve(self):
-        #sol = np.linalg.solve(self.coeff, np.hstack((np.reshape(self.rhs, (-1, 1)), np.reshape(self.drhs, (-1, 1)))))
-        sol = np.linalg.solve(self.coeff, self.rrhs)
-        return sol[:, 0], sol[:, 1]
+        self.lu = lu_factor(self.coeff, check_finite=False)
+        self.solution = lu_solve(self.lu, self.rrhs, check_finite=False)
+        return self.solution[:, 0].copy(), self.solution[:, 1].copy()
 
-#'#@profile
-def get_equations(param_line, klist, jlist, pivots, dx, dq):
-    if len(pivots.outpivots) > 0:
-        outp = np.asarray(pivots.outpivots, dtype = np.int32, order='C')
-        inp =  np.asarray(pivots.inpivots, dtype = np.int32, order='C')
-        coeff, bound_var_names, var_nums = build_equations(klist, jlist, outp, inp, dx, dq)
-    else:
-        coeff = np.eye(1)
-    rrhs = np.zeros((coeff.shape[0], 2))
-    #TODO: this should be reviewed and restructured
-    if len(pivots.outpivots) > 0:
-        lx = bound_var_names > 0
-        xx = var_nums[lx]
-        rrhs[np.where(lx), 0] = -param_line.x_0[xx]
-        if param_line.del_x_0 is not None:
-            rrhs[np.where(lx), 1] = -param_line.del_x_0[xx]
-        lq = bound_var_names < 0
-        qq = var_nums[lq]
-        rrhs[np.where(lq), 0] = -param_line.q_N[qq]
-        if param_line.del_q_N is not None:
-            rrhs[np.where(lq), 1] = -param_line.del_q_N[qq]
-    rrhs[-1, 0] = param_line.T
-    rrhs[-1, 1] = param_line.del_T
-    # old_coeff, rhs, drhs = time_equations.build_equations_old(param_line, klist, jlist, pivots, dx, dq)
-    # if np.any(np.fabs(old_coeff - coeff) >= 10E-10):
-    #      raise Exception('Coeff_problem')
-    # if np.any(np.fabs(rrhs[:,0] - rhs) >= 10E-10):
-    #     raise Exception('Rhs_problem')
-    # if np.any(np.fabs(rrhs[:,1] - drhs) >= 10E-10):
-    #     raise Exception('drhs_problem')
-    return time_equations(coeff, rrhs)
+def to_eta(values, index_to_pivot):
+    pivot_val = values[index_to_pivot]
+    values /= -values[index_to_pivot]
+    values[index_to_pivot] = 1./pivot_val
+    return values
+
+def ftran(values, eta, index_to_pivot):
+    if values[index_to_pivot] != 0:
+        pivot_val = values[index_to_pivot] * eta[index_to_pivot]
+        values[:len(eta)] += values[index_to_pivot] * eta
+        values[index_to_pivot] = pivot_val
+    return values
+

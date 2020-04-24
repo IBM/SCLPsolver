@@ -3,6 +3,7 @@ from .get_new_dict import calc_nearby_bases
 from .lp_tools.pivot import pivot_mn
 
 
+#TODO: overall idea to speedup this class - replase list of plases to 0,1 array where 0- no dict and 1 has dict
 class SCLP_base_sequence():
 
     def __init__(self, basis, place=0):

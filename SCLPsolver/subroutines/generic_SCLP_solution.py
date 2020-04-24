@@ -7,7 +7,7 @@ from .rewind_info import rewind_info
 from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
 from .matrix_constructor import matrix_constructor
-from .equation_tools.calc_equations import get_equations
+from .equation_tools.calc_equations import time_equations
 from .state_tools.loc_min_storage import loc_min_storage
 from .state_tools.calc_states import calc_states, check_state, calc_specific_state
 from .bases_memory_manager import bases_memory_manager
@@ -25,13 +25,14 @@ class generic_SCLP_solution():
             JJ = np.size(self._jlist)
         self._problem_dims = problem_dimensions(KK, JJ, totalK, totalJ)
         self._pivots = pivot_storage()
-        #self._base_sequence = SCLP_base_sequence({'prim_name': LP_form.prim_name, 'dual_name': LP_form.dual_name, 'A': LP_form.simplex_dict}, self.tmp_matrix)
         self._base_sequence = SCLP_base_sequence(LP_form)
         dx, dq = extract_rates_from_basis(LP_form, self._problem_dims)
         self._dx = matrix_constructor(dx[0], dx[1], KK)
         self._dq = matrix_constructor(dq[0], dq[1], JJ)
         self.loc_min_storage = loc_min_storage(self._dx.get_matrix(), self._dq.get_matrix())
-        #self._eq_solver = eq_solver(max(KK, JJ))
+        self._equations = time_equations()
+        ###test
+        self.test_equations = time_equations()
         self._col_info_stack = col_info_stack()
         self.bases_mm = bases_memory_manager()
         self._last_collision = None
@@ -41,7 +42,8 @@ class generic_SCLP_solution():
             self.partial_states = True
         else:
             self.partial_states = False
-        self._state = solution_state()
+        self._state = solution_state(max(KK,JJ))
+        self.stable_iteration = True
 
     @property
     def klist(self):
@@ -94,16 +96,52 @@ class generic_SCLP_solution():
         return self._dq.get_raw_matrix()
 
     #'#@profile
-    def update_state(self, param_line, check_state = False, tolerance=0):
+    def update_state(self, param_line, check_state = False, tolerance=0, up_rewind =False):
         #state = solution_state()
         self._state.dx = self._dx.get_matrix()
         self._state.dq = self._dq.get_matrix()
-        equations = get_equations(param_line, self._klist, self._jlist, self._pivots,
-                                                         self._state.dx, self._state.dq)
-        # if np.any(np.fabs(state.equations.coeff - self._eq_solver.get_matrix()) >= 10E-10):
-        #     raise Exception('State build')
-        tau, dtau = equations.solve()
-        self._state.tau, self._state.dtau = tau, dtau
+        if self._last_collision and self._equations.can_update(self._last_collision) and not check_state and\
+                param_line.is_main() and not up_rewind:
+            dtau, dtau2 = self._equations.update(self._last_collision.N1 + 1, self._state.dx, self._state.dq)
+            self._state.update_tau(self._last_collision, param_line.T)
+            self.stable_iteration = False
+            # self.test_equations.build(param_line, self._klist, self._jlist, self._pivots,
+            #                       self._state.dx, self._state.dq)
+            # tau1, dtau1 = self.test_equations.solve()
+            # test1 = np.fabs(dtau1 - dtau) >= 10E-8
+            # if np.any(test1):
+            #     print(np.where(np.fabs(dtau2 -dtau1) >= 10E-8))
+            #     a = self._equations.get_reordered_coeff()
+            #     print(np.where(test1))
+            #     c = self.test_equations.coeff - a
+            #     raise Exception('unstable dtau')
+            # test1 = np.fabs(tau1 - self._state.tau) >= 10E-10
+            # if np.any(test1):
+            #     print(np.where(test1))
+            #     raise Exception('unstable tau')
+        else:
+            left_idx = self._equations.build(param_line, self._klist, self._jlist, self._pivots,
+                                  self._state.dx, self._state.dq)
+            tau, dtau = self._equations.solve()
+            if np.any(tau < -tolerance):
+                idx = np.argmin(tau)
+                if  self._last_collision:
+                    next_tau = self._last_collision.delta * dtau[idx] + tau[idx]
+                else:
+                    next_tau = 0.01 * dtau[idx] + tau[idx]
+                print('Warning tau=', idx, 'has value', tau[idx], 'increase by', dtau[idx], 'to', next_tau)
+                if self._last_collision and not check_state and param_line.is_main() and not up_rewind and\
+                    tau[idx] > -10E-5:
+                    print('Updating...')
+                    self.stable_iteration = False
+                    self._state.update_tau(self._last_collision, param_line.T)
+                else:
+                    self.stable_iteration = True
+                    self._state.tau = tau
+            else:
+                self._state.tau = tau
+                self.stable_iteration = True
+        self._state.dtau = dtau
         if check_state or not self.partial_states:
             self._state.x, self._state.del_x, self._state.q, self._state.del_q \
                 = calc_states(self._dx.get_raw_matrix(), self._dq.get_raw_matrix(), param_line, self._state.tau,
@@ -122,6 +160,17 @@ class generic_SCLP_solution():
                 return False
         else:
             return True
+
+    def recalc_tau(self, param_line, check_state = False):
+        left_idx = self._equations.build(param_line, self._klist, self._jlist, self._pivots,
+                                         self._state.dx, self._state.dq)
+        tau, dtau = self._equations.solve()
+        self._state.tau = tau
+        self._state.dtau = dtau
+        if check_state or not self.partial_states:
+            self._state.x, self._state.del_x, self._state.q, self._state.del_q \
+                = calc_states(self._dx.get_raw_matrix(), self._dq.get_raw_matrix(), param_line, self._state.tau,
+                              self._state.dtau, check_state)
 
     def get_specific_state(self, n, i, is_primal, is_del, param_line):
         if self.partial_states:
