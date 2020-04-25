@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.linalg import lu_factor, lu_solve
-from .eq_tools import build_equations, get_rows, get_new_col, reorder_solution, get_left_stability_idx, get_reordered_copy, ftran2eta
+from .eq_tools import build_equations, get_rows, get_new_col, get_left_stability_idx, ftran2eta
 
-
+#TODO: build method can further improved if we reuse all matricies
 class time_equations():
 
     def __init__(self):
@@ -31,18 +31,6 @@ class time_equations():
             self.coeff = np.eye(1)
             self.rrhs = np.zeros((1, 2))
             left_idx = 0
-        #
-        # if len(pivots.outpivots) > 0:
-        #     lx = bound_var_names > 0
-        #     xx = var_nums[lx]
-        #     self.rrhs[np.where(lx), 0] = -param_line.x_0[xx]
-        #     if param_line.del_x_0 is not None:
-        #         self.rrhs[np.where(lx), 1] = -param_line.del_x_0[xx]
-        #     lq = bound_var_names < 0
-        #     qq = var_nums[lq]
-        #     self.rrhs[np.where(lq), 0] = -param_line.q_N[qq]
-        #     if param_line.del_q_N is not None:
-        #         self.rrhs[np.where(lq), 1] = -param_line.del_q_N[qq]
         self.rrhs[-1, 0] = param_line.T
         self.rrhs[-1, 1] = param_line.del_T
         return left_idx
@@ -53,6 +41,7 @@ class time_equations():
         else:
             return False
 
+    #TODO: this function does not always correct - however it is not used
     def get_reordered_coeff(self):
         cf = self.coeff.copy()
         for n in range(self.iteration):

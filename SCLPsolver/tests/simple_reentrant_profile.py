@@ -10,8 +10,8 @@ from doe.doe_utils import path_utils
 
 
 
-K = 100
-I = 20
+K = 500
+I = 100
 solver_settings = SCLP_settings()
 solver_settings.suppress_printing = True
 solver_settings.memory_management = False
@@ -19,7 +19,7 @@ settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.8, "alpha_rate2": 0
 import time
 import cProfile, pstats, io
 pr = cProfile.Profile()
-for seed in range(1000, 2000):
+for seed in range(1000, 1010):
     G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_simple_reentrant_data(seed, K, I, **settings)
     start_time = time.time()
     pr.enable()

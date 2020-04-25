@@ -1,6 +1,6 @@
 import numpy as np
-from .state_tools import get_rz_bb, calc_rz_bb_prim, calc_rz_bb_dual
-
+from .state_tools import get_rz_bb
+from .state_collide import calc_state_ratio_prim, calc_state_ratio_dual
 
 #'#@profile
 def calc_statecollide(klist, jlist, state, raw_dx, raw_dq, param_line, loc_min, has_no_state, tolerance):
@@ -12,20 +12,13 @@ def calc_statecollide(klist, jlist, state, raw_dx, raw_dq, param_line, loc_min, 
 
     #TODO: paralellize
     if has_no_state:
-        bb_x, kk_x, nn_x = calc_rz_bb_prim(raw_dx[0], raw_dx[1], raw_dx[2], state.tau, state.dtau, param_line.x_0,
-                                           param_line.del_x_0, loc_min.dx_min.data, loc_min.dx_min.sizes)
-        bb_q, kk_q, nn_q = calc_rz_bb_dual(raw_dq[0], raw_dq[1], raw_dq[2], state.tau, state.dtau, param_line.q_N,
-                                           param_line.del_q_N, loc_min.dq_min.data, loc_min.dq_min.sizes)
+        bb_x, kk_x, nn_x = calc_state_ratio_prim(raw_dx[0], raw_dx[1], raw_dx[2], state.tau, state.dtau, param_line.x_0,
+                                           param_line.del_x_0, loc_min.dx_min.data, loc_min.dx_min.sizes, state.del_x, state.x, 0)
+        bb_q, kk_q, nn_q = calc_state_ratio_dual(raw_dq[0], raw_dq[1], raw_dq[2], state.tau, state.dtau, param_line.q_N,
+                                           param_line.del_q_N, loc_min.dq_min.data, loc_min.dq_min.sizes, state.del_q, state.q, 0)
     else:
         bb_x, kk_x, nn_x = get_rz_bb(state.del_x[:, 1:], state.x[:, 1:], loc_min.dx_min.data, loc_min.dx_min.sizes)
         bb_q, kk_q, nn_q = get_rz_bb(state.del_q[:, :-1], state.q[:, :-1], loc_min.dq_min.data, loc_min.dq_min.sizes)
-    # if kk_x1 != kk_x or nn_x1 != nn_x or abs(bb_x-bb_x1) > 0.0001:
-    #     raise Exception("rz_bb calculation!")
-    ###
-    #
-    # if kk_q1 != kk_q or nn_q1 != nn_q or abs(bb_q - bb_q1) > 0.0001:
-    #     raise Exception("rz_bb calculation!")
-    #end
     if bb_x > bb_q:
         if bb_x == 0:
             print(kk_x, nn_x)
@@ -59,7 +52,7 @@ def calc_statecollide(klist, jlist, state, raw_dx, raw_dq, param_line, loc_min, 
                 return [test1, nn, vv], problem
             else:                   # test1 >= tolerance
                 bb = bb_q
-    # TODO: paralellize
+    # TODO: this check now impossible
     # test2 = np.add(np.divide(rz_x, bb, where=w_x), -1.0, where=w_x)
     # zstates = np.less(np.fabs(test2, where=w_x), tolerance, where = w_x, out=w_x)
     # sz_x = np.sum(zstates)

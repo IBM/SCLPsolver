@@ -22,7 +22,7 @@ def SCLP_x0_solver(solution, param_line, target_x0, target_T, K_add_set, DEPTH, 
         res = solution.update_state(param_line, settings.check_intermediate_solution, tolerance * 100)
         if not res:
             return solution, STEPCOUNT, {'result': 1}
-        col_info, problem = classification(solution, tolerance)
+        col_info, problem = classification(solution, param_line, tolerance)
         theta = param_line.theta
         if param_line.is_end(col_info.delta):
             param_line.forward_to_end()

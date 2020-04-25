@@ -42,7 +42,7 @@ class generic_SCLP_solution():
             self.partial_states = True
         else:
             self.partial_states = False
-        self._state = solution_state(max(KK,JJ))
+        self._state = solution_state(2*max(KK,JJ), JJ, KK)
         self.stable_iteration = True
 
     @property

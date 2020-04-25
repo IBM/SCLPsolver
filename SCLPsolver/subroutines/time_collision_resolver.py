@@ -231,7 +231,6 @@ def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, param_line, 
             return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
         elif len(vlist) == 2:
             case = 'Case ii_'
-            #order_ratio, correct = calc_order_ratio_old(vlist[0], vlist[1], N1, N2, solution, param_line, delta / 2)
             order_ratio, correct = calc_order_ratio(vlist[0], vlist[1], N1, N2, solution, param_line, delta / 2)
             if abs(abs(order_ratio) - 1) < tolerance:
                 print('Tolerance in R unclear...')

@@ -1,5 +1,5 @@
 import numpy as np
-from .matrix import matrix
+from subroutines.equation_tools.not_used.matrix import matrix
 from .eq_tools import add_cols, add_cols2
 
 
