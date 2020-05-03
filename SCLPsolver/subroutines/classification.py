@@ -110,11 +110,11 @@ def classification(solution, param_line, tolerance, time_only=False):
                         if not (col_info.N1 <= CC1[1] and CC1[1] <= col_info.N2):
                             print('time shrink as well as state hits zero elsewhere...')
                             col_info, resolved = reclassify(col_info, solution, tolerance, CC1[1])
-                            if not resolved:
-                                print('time shrink as well as state hits zero elsewhere...\n')
-                                problem['result'] = problem['result'] + 4
-                                problem['compoundProblem']['result'] = 1
-                                col_info = collision_info('', Delta, N1, N2, v1, v2)
+                            # if not resolved:
+                            #     print('time shrink as well as state hits zero elsewhere...\n')
+                            #     problem['result'] = problem['result'] + 4
+                            #     problem['compoundProblem']['result'] = 1
+                            #     col_info = collision_info('', Delta, N1, N2, v1, v2)
         if abs(Didle) <= 1000 * tolerance:
             if len(CC1) > 1:
                 if col_info.case != '':

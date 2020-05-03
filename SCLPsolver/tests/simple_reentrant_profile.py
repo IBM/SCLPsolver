@@ -10,12 +10,12 @@ from doe.doe_utils import path_utils
 
 
 
-K = 500
+K = 1000
 I = 100
 solver_settings = SCLP_settings()
 solver_settings.suppress_printing = True
 solver_settings.memory_management = False
-settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.8, "alpha_rate2": 0.45}
+settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.6, "alpha_rate2": 0.45}
 import time
 import cProfile, pstats, io
 pr = cProfile.Profile()

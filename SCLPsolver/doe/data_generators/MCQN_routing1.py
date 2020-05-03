@@ -85,7 +85,7 @@ def generate_MCQN_routing_data(seed, K, I, J, nz = 0.4, sum_rate=0.8, gdist=np.r
     cols = np.arange(J)
     np.random.shuffle(cols)
     H = np.zeros((I, J))
-    rows = np.concatenate((np.arange(I), np.random.choice(I, J-I, True)))
+    rows = np.concatenate((np.arange(I), np.random.choice(I, J - I, True)))
     H[rows, cols] = h_0 + h_rate * hdist(*hdist_params, J)
 
     # initial fluid

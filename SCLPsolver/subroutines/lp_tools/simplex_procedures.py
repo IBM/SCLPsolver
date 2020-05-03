@@ -55,10 +55,10 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
         else:
             mat = -dct.simplex_dict[1:, j + 1] / dct.simplex_dict[1:, 0]
             if dct.simplex_dict[0, j + 1] < 0:
-                i = np.argmax(mat * (ps != 1))
+                i = np.nanargmax(mat * (ps != 1))
                 m = mat[i]
             else:
-                i = np.argmin(mat * (ps != 1))
+                i = np.nanargmin(mat * (ps != 1))
                 m = -mat[i]
             if m <=0:
                 ii = find(dct.simplex_dict[1:, j+1])
@@ -114,7 +114,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
         mu2 = mat[i]
         mu = max(mu1,mu2)
         from .LP_formulation import LP_formulation
-        dct2 = LP_formulation(B, dct.prim_name, dct.dual_name)
+        dct2 = LP_formulation(B, dct.prim_name.copy(), dct.dual_name.copy())
         while mu > 0:
             if mu1 > mu2:
                 div = dct2.simplex_dict[1:-1, 0] + mu * dct2.simplex_dict[1:-1, -1]

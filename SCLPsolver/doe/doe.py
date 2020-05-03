@@ -10,7 +10,7 @@ from SCLP import SCLP, SCLP_settings
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, solver_settings = None,
-                          use_adaptive_T = False, get_raw_tau = True, xobj = False, **kwargs):
+                          use_adaptive_T = False, get_raw_tau = True, **kwargs):
     failure_trials = 0
     ps = {'K':K,'I':I,'T':T}
     for k, v in kwargs.items():
@@ -47,13 +47,13 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
                 T = TT
         if solver_settings is None:
             solver_settings = SCLP_settings(find_alt_line=False)
-        solver_settings.file_name = pu.get_tmp_data_file_name()
+        solver_settings.file_name = pu.get_tmp_data_file_name(exp_type)
         import time
         start_time = time.time()
         solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
-        t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
-        print(obj, err)
+        t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
         time_to_solve = time.time() - start_time
+        print(obj, err, maxT)
         print("--- %s seconds ---" % time_to_solve)
         print("--- seed %s ---" % seed)
         if res == 0 or use_adaptive_T:
@@ -62,10 +62,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
             else:
                 ps['T'] = T
             full_file_name = pu.get_CPLEX_data_file_name(exp_type, **ps)
-            if xobj:
-                write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, buffer_cost, xobj)
-            else:
-                write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, c, xobj)
+            write_CPLEX_dat(full_file_name, Tres, G, H, alpha, a, b, gamma, c, buffer_cost)
             path, filename = os.path.split(full_file_name)
             buf_cost = total_buffer_cost[0]*Tres+total_buffer_cost[1]*Tres*Tres/2.0
             r = {'file': filename, 'seed': seed, 'result': res, 'objective': obj, 'time': time_to_solve,'steps': STEPCOUNT,

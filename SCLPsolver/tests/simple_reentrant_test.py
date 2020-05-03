@@ -12,9 +12,9 @@ solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution
 #pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
 pu = path_utils("C:/DataD/SCLP_data")
 DATADIRd = pu.get_CPLEX_data_path()
-for I in [10, 20, 30, 40]:
-    results, ftrials, files, raw_tau = run_experiment_series('simple_reentrant', 10, I * 5, I, None, {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.8, "alpha_rate2": 0.45}, 1000,
-                                                             solver_settings, True, False, xobj = True)
+for I in [100]:
+    results, ftrials, files, raw_tau = run_experiment_series('simple_reentrant', 10, I * 10, I, None, {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.4, "alpha_rate2": 0.45}, 1000,
+                                                             solver_settings, True, False)
 
     cplex_results = run_cplex_experiments(DATADIRd, relative_to_project('doe/cplex_integration/mod_files/main1xobj.mod'), files)
     results = combine_results(results, cplex_results, 1, xobj=True)
@@ -26,5 +26,5 @@ for I in [10, 20, 30, 40]:
         cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
             'doe/cplex_integration/mod_files/main1000xobj.mod'), files)
         results = combine_results(results, cplex_results, 1000, xobj=True)
-    res_file = relative_to_project('results_8.csv')
+    res_file = relative_to_project('results_9.csv')
     write_results_to_csv(results, res_file)

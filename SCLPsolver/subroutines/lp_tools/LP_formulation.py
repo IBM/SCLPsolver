@@ -1,6 +1,6 @@
 import numpy as np
 from .simplex_procedures import simplex_procedures
-from .cy_lp_tools import get_sign
+from .cy_lp_tools import get_sign, get_sign1
 
 
 class LP_formulation():
@@ -21,14 +21,14 @@ class LP_formulation():
         return self.__copy__()
         
 def solve_ratesLP(LP_form, Kset, nJset, bases_mm, tolerance=0):
-    prim_sign = get_sign(LP_form.prim_name, Kset, nJset, 1)
-    dual_sign = get_sign(LP_form.dual_name, Kset, nJset, -1)
+    get_sign1(LP_form.prim_name, Kset, nJset, 1, bases_mm.ps)
+    get_sign1(LP_form.dual_name, Kset, nJset, -1, bases_mm.ds)
     tmp_dict = bases_mm.pop()
     if tmp_dict is None:
         tmp_dict = LP_formulation(np.empty_like(LP_form.simplex_dict), None, None)
         #LP_form, ps, ds, pivots, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tolerance)
     #else:
-    LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, prim_sign, dual_sign, tolerance, tmp_dict)
+    LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, bases_mm.ps, bases_mm.ds, tolerance, tmp_dict)
     return LP_form, pivots, err
 
 def solve_LP(LP_form, ps, ds, tolerance=0):

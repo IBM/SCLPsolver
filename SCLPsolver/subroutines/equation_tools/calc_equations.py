@@ -12,7 +12,7 @@ class time_equations():
         self.var_names = None
         self.var_nums = None
         self.iteration = 0
-        self._max_iterations = 10
+        self._max_iterations = 30
         self.row_order = np.zeros((2,self._max_iterations), dtype=np.int32, order='C')
         self.pivot_idxs = np.zeros(self._max_iterations, dtype=np.int32, order='C')
         self.solution = None
@@ -24,7 +24,7 @@ class time_equations():
         if len(pivots.outpivots) > 0:
             outp = np.asarray(pivots.outpivots, dtype=np.int32, order='C')
             inp = np.asarray(pivots.inpivots, dtype=np.int32, order='C')
-            left_idx = get_left_stability_idx(outp, inp)
+            left_idx = None#get_left_stability_idx(outp, inp)
             self.coeff, self.var_names, self.var_nums, self.rrhs=\
                 build_equations(klist, jlist, outp, inp, dx, dq, param_line.x_0, param_line.del_x_0, param_line.q_N, param_line.del_q_N)
         else:
@@ -83,13 +83,13 @@ class time_equations():
 
         self.iteration += 1
         #return sol[:, 0], sol[:, 1] #, vec,  u_rrhs, cf, eta, n
-        return self.solution[:, 1].copy(), self.solution[:, 1]
+        return self.solution[:, 1].copy()
 
     #'#@profile
     def solve(self):
         self.lu = lu_factor(self.coeff, check_finite=False)
         self.solution = lu_solve(self.lu, self.rrhs, check_finite=False)
-        return self.solution[:, 0].copy(), self.solution[:, 1].copy()
+        return self.solution[:, 0], self.solution[:, 1].copy()
 
 def to_eta(values, index_to_pivot):
     pivot_val = values[index_to_pivot]

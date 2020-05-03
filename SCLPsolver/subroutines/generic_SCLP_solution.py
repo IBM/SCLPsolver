@@ -2,7 +2,7 @@ import numpy as np
 from .pivot_storage import pivot_storage
 from .col_info_stack import col_info_stack
 from .extract_rates import extract_rates_from_basis, extract_rates_from_subproblem
-from .SCLP_base_sequence import SCLP_base_sequence
+from .SCLP_base_sequence_new import SCLP_base_sequence
 from .rewind_info import rewind_info
 from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
@@ -31,10 +31,8 @@ class generic_SCLP_solution():
         self._dq = matrix_constructor(dq[0], dq[1], JJ)
         self.loc_min_storage = loc_min_storage(self._dx.get_matrix(), self._dq.get_matrix())
         self._equations = time_equations()
-        ###test
-        self.test_equations = time_equations()
         self._col_info_stack = col_info_stack()
-        self.bases_mm = bases_memory_manager()
+        self.bases_mm = bases_memory_manager(LP_form.prim_name.shape[0], LP_form.dual_name.shape[0])
         self._last_collision = None
         self._suppress_printing = settings.suppress_printing
         self.rewind_max_delta = settings.rewind_max_delta
@@ -42,7 +40,7 @@ class generic_SCLP_solution():
             self.partial_states = True
         else:
             self.partial_states = False
-        self._state = solution_state(2*max(KK,JJ), JJ, KK)
+        self._state = solution_state(4*max(KK,JJ), JJ, KK)
         self.stable_iteration = True
 
     @property
@@ -102,7 +100,7 @@ class generic_SCLP_solution():
         self._state.dq = self._dq.get_matrix()
         if self._last_collision and self._equations.can_update(self._last_collision) and not check_state and\
                 param_line.is_main() and not up_rewind:
-            dtau, dtau2 = self._equations.update(self._last_collision.N1 + 1, self._state.dx, self._state.dq)
+            dtau = self._equations.update(self._last_collision.N1 + 1, self._state.dx, self._state.dq)
             self._state.update_tau(self._last_collision, param_line.T)
             self.stable_iteration = False
             # self.test_equations.build(param_line, self._klist, self._jlist, self._pivots,
@@ -130,8 +128,8 @@ class generic_SCLP_solution():
                 else:
                     next_tau = 0.01 * dtau[idx] + tau[idx]
                 print('Warning tau=', idx, 'has value', tau[idx], 'increase by', dtau[idx], 'to', next_tau)
-                if self._last_collision and not check_state and param_line.is_main() and not up_rewind and\
-                    tau[idx] > -10E-5:
+                if self._last_collision and not check_state and param_line.is_main() and not up_rewind and dtau[idx] > -tolerance: # and\
+                        #(next_tau >  0 or tau[idx] > -10E-5):
                     print('Updating...')
                     self.stable_iteration = False
                     self._state.update_tau(self._last_collision, param_line.T)
@@ -143,10 +141,13 @@ class generic_SCLP_solution():
                 self.stable_iteration = True
         self._state.dtau = dtau
         if check_state or not self.partial_states:
-            self._state.x, self._state.del_x, self._state.q, self._state.del_q \
-                = calc_states(self._dx.get_raw_matrix(), self._dq.get_raw_matrix(), param_line, self._state.tau,
+            x, del_x, q, del_q = calc_states(self._dx.get_raw_matrix(), self._dq.get_raw_matrix(), param_line, self._state.tau,
                               self._state.dtau, check_state)
-        # try:
+            self._state.x = x
+            self._state.del_x = del_x
+            self._state.q = q
+            self._state.del_q = del_q
+            # try:
         #
         #
         # except Exception as ex:
@@ -216,12 +217,10 @@ class generic_SCLP_solution():
         self._base_sequence.remove_bases(N1, N2, self._pivots, self.bases_mm)
         self._dx.remove(N1 + 1, N2)
         self._dq.remove(N1 + 1, N2)
-        #rem_pivots = self._pivots[N1:N2]
         self._pivots.remove_pivots(N1, N2)
         if N2 == NN:
             N2 = None
         self.loc_min_storage.update_caseI(N1, N2, self._dx.get_matrix(), self._dq.get_matrix())
-        #self._eq_solver.update_caseI(N1, N2, self._pivots, rem_pivots)
         col_info.Nnew = self.NN - NN
 
     #'#@profile
@@ -248,8 +247,6 @@ class generic_SCLP_solution():
         if N2 == NN:
             N2 = None
         self.loc_min_storage.update_caseII(N1, N2, Nadd, self._dx.get_matrix(), self._dq.get_matrix())
-        #self._eq_solver.update_caseII(self._klist, self._jlist, self._pivots, self._dx.get_matrix(), self._dq.get_matrix(),
-        #                              N1, N2, Nnew)
         if basis is not None:
             self._base_sequence.insert_basis(basis,N1+1)
 
@@ -259,8 +256,7 @@ class generic_SCLP_solution():
             NN = self.NN
             col_info = self._col_info_stack.pop()
             N2_cor = col_info.N2 + col_info.Nnew
-            N2b = max(col_info.N2, N2_cor)
-            self._base_sequence.remove_bases(col_info.N1, N2b, self._pivots, self.bases_mm, col_info.Nnew)
+            self._base_sequence.remove_bases(col_info.N1, N2_cor, self._pivots, self.bases_mm, col_info.N2-col_info.N1-1)
             Npivots = len(col_info.rewind_info.pivots)
             self._pivots.replace_pivots(col_info.N1, col_info.N1 + col_info.Nnew + Npivots, col_info.rewind_info.pivots)
             self._dx.replace_matrix(col_info.N1 + 1, N2_cor, col_info.rewind_info.dx)
@@ -270,11 +266,8 @@ class generic_SCLP_solution():
                 N2_cor = None
             if Nadd == 0:
                 self.loc_min_storage.update_caseI(col_info.N1, N2_cor, self._dx.get_matrix(), self._dq.get_matrix())
-            #    self._eq_solver.update_caseI(col_info.N1, N2_cor, self._pivots, col_info.rewind_info.pivots)
             else:
                 self.loc_min_storage.update_caseII(col_info.N1, N2_cor, Nadd, self._dx.get_matrix(), self._dq.get_matrix())
-            #    self._eq_solver.update_caseII(self._klist, self._jlist, self._pivots, self._dx.get_matrix(),
-            #                                  self._dq.get_matrix(), col_info.N1, N2_cor, Nadd)
             self._last_collision = self._col_info_stack.last
             return col_info
         else:
@@ -328,16 +321,16 @@ class generic_SCLP_solution():
 
     #'#@profile
     def get_name_diff_with0(self, name):
-        ind, place = self._base_sequence.get_nearby_place_at(0)
-        pn = self._base_sequence.bases[ind].prim_name
+        place, basis = self._base_sequence.get_nearby_basis_at0()
+        pn = basis.prim_name
         pn0 = self._pivots.get_prim_name_at0(place,pn)
         return np.setdiff1d(pn0,name, assume_unique=True)
 
     #'#@profile
     def get_name_diff_withN(self, name):
-        ind, place = self._base_sequence.get_nearby_place_at(self.NN-1)
-        pn = self._base_sequence.bases[ind].prim_name
-        pnN = self._pivots.get_prim_name_atN(place,pn)
+        place, basis = self._base_sequence.get_nearby_basis_atN()
+        pn = basis.prim_name
+        pnN = self._pivots.get_prim_name_atN(self.NN + place,pn)
         return np.setdiff1d(pnN,name, assume_unique=True)
 
     def check_if_complete(self, param_line):
@@ -368,12 +361,12 @@ class generic_SCLP_solution():
     def print_status(self, STEPCOUNT, DEPTH, ITERATION, theta, col_info):
         if not self._suppress_printing:
             print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta + col_info.delta,
-                  col_info.case, col_info.N1, col_info.N2,  col_info.v1, col_info.v2, len(self.base_sequence.places))
+                  col_info.case, col_info.N1, col_info.N2,  col_info.v1, col_info.v2, self.base_sequence.num_bases)
 
     def print_short_status(self, STEPCOUNT, DEPTH, ITERATION, theta, theta1, case):
         if not self._suppress_printing:
             print(STEPCOUNT, DEPTH, ITERATION, self.JJ, 'x', self.KK, self.NN, theta, theta1,
-                  case, len(self.base_sequence.places))
+                  case, self.base_sequence.num_bases)
 
     def prepare_to_save(self):
         self._base_sequence.keep_only_one()

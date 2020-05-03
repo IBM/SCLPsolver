@@ -34,6 +34,7 @@ tuple MATRIX {
 {MATRIX} alpha = ...;
 {MATRIX} gamma = ...;
 {MATRIX} c = ...;
+{MATRIX} buf_cost = ...;
 
 {MATRIX} H_i[r in rowsH] = {H_i | H_i in H : H_i.row == r};
 {MATRIX} G_i[r in rowsG] = {G_i | G_i in G : G_i.row == r};

@@ -8,7 +8,7 @@ class SCLP_settings():
 
     def __init__(self, find_alt_line =True, tmp_path=None, file_name = None, memory_management= True, hot_start =False,
                  save_solution = False, check_final_solution=True, check_intermediate_solution=False, suppress_printing = False,
-                 rewind_max_delta = 10E-2, collect_plot_data=False, max_iteration = None):
+                 rewind_max_delta = 1, collect_plot_data=False, max_iteration = None):
         self.find_alt_line = find_alt_line
         self.hot_start = hot_start
         self.file_name = file_name
@@ -132,11 +132,11 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         solution.prepare_to_save()
         import pickle
         if settings.file_name is None:
-            file_name = 'SCLP'
+            file_name = settings.tmp_path + '/SCLP'
         else:
             file_name = settings.file_name
-        solution_file_name = settings.tmp_path + '/' + file_name + '_' + str(STEPCOUNT) +'_solution.dat'
-        line_file_name = settings.tmp_path + '/' + file_name + '_' + str(STEPCOUNT) + '_param_line.dat'
+        solution_file_name = file_name + '_' + str(STEPCOUNT) +'_solution.dat'
+        line_file_name = file_name + '_' + str(STEPCOUNT) + '_param_line.dat'
         pickle.dump(solution, open(solution_file_name, 'wb'))
         pickle.dump(param_line, open(line_file_name, 'wb'))
     return solution, STEPCOUNT, param_line.T, pivot_problem['result']

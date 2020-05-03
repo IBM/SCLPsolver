@@ -254,7 +254,7 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
     max_neg_coeff = 100000
     tol_coeff = 1
 
-    NN = len(TAU)
+    NN = TAU.shape[0]
     iposTAU = TAU > tol2
     izerTAU = np.fabs(TAU) <= tol2
     inegTAU = TAU < -tol2

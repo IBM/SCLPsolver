@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 
-def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c, xobj = False):
+def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c, buf_cost):
     f1 = file_name + 'g.mtx'
     mmwrite(f1, csr_matrix(G))
     f2 = file_name + 'h.mtx'
@@ -50,10 +50,11 @@ def write_CPLEX_dat(file_name, T, G, H, alpha, a, b, gamma, c, xobj = False):
     for i in np.nonzero(b)[0]:
         fout.write('<{:d} {:d} {:.16f}>\n'.format(i+1, 1, b[i]))
     fout.write('};\n\n')
-    if xobj:
-        fout.write('buf_cost = {\n')
-    else:
-        fout.write('c = {\n')
+    fout.write('buf_cost = {\n')
+    for i in np.nonzero(buf_cost)[0]:
+        fout.write('<{:d} {:d} {:.16f}>\n'.format(i + 1, 1, buf_cost[i]))
+    fout.write('};\n\n')
+    fout.write('c = {\n')
     for i in np.nonzero(c)[0]:
         fout.write('<{:d} {:d} {:.16f}>\n'.format(i+1, 1, c[i]))
     fout.write('};\n\n')

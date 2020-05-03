@@ -49,8 +49,8 @@ def get_dual_loc_mins(double[:,:] v):
 @cython.wraparound(False)
 def get_loc_min(double[:] v1, double[:] v2):
     x_max = v1.shape[0]
-    result = np.zeros(x_max, dtype=np.int32)
-    cdef int[:] result_view = result
+    result = np.zeros(x_max, dtype=np.int32, order='C')
+    cdef int[::1] result_view = result
     cdef int i, j
     j=0
     for i in range(x_max):
@@ -112,7 +112,7 @@ def get_rz_bb(double[:, :] del_state, double[:, :] state, list loc_mins, list le
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def calc_state_prim(double[:, ::1] dv, int from_, int to_, double[:] tau, double[::1] state0, bint checked = False):
+def calc_state_prim(double[:, ::1] dv, int from_, int to_, double[::1] tau, double[::1] state0, bint checked = False):
     i_max = dv.shape[0]
     cdef int j_max = to_ - from_
     cdef Py_ssize_t i, j
@@ -129,7 +129,7 @@ def calc_state_prim(double[:, ::1] dv, int from_, int to_, double[:] tau, double
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def calc_state_dual(double[:, ::1] dv, int from_, int to_, double[:] tau, double[::1] state0, bint checked = False):
+def calc_state_dual(double[:, ::1] dv, int from_, int to_, double[::1] tau, double[::1] state0, bint checked = False):
     i_max = dv.shape[0]
     cdef int j_max = to_ - from_
     cdef Py_ssize_t i, j
@@ -146,7 +146,7 @@ def calc_state_dual(double[:, ::1] dv, int from_, int to_, double[:] tau, double
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def calc_specific_state_prim(int n, int k, double[:, ::1] dv, int from_, int to_, double[:] tau, double[::1] state0):
+def calc_specific_state_prim(int n, int k, double[:, ::1] dv, int from_, int to_, double[::1] tau, double[::1] state0):
     cdef Py_ssize_t i
     cdef double result = 0
     if state0 is not None:
@@ -158,7 +158,7 @@ def calc_specific_state_prim(int n, int k, double[:, ::1] dv, int from_, int to_
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def calc_specific_state_dual(int n, int j, double[:, ::1] dv, int from_, int to_, double[:] tau, double[::1] state0):
+def calc_specific_state_dual(int n, int j, double[:, ::1] dv, int from_, int to_, double[::1] tau, double[::1] state0):
     cdef Py_ssize_t i
     cdef double result = 0
     cdef int j_max = to_ - from_

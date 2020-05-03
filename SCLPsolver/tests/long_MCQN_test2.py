@@ -17,7 +17,7 @@ for I in [200]:
                     'gamma_rate':0, 'c_scale': 0, 'h_rate': 0.2}
         if I <= 100:
             results, ftrials, files, raw_tau = run_experiment_series('MCQN', 10, I * 10, I, T, settings, 1000,
-                                                                     solver_settings, True, False, xobj = True)
+                                                                     solver_settings, True, False)
 
             cplex_results = run_cplex_experiments(DATADIRd,
                                                   relative_to_project('doe/cplex_integration/mod_files/main1xobj.mod'),
@@ -40,7 +40,7 @@ for I in [200]:
             if I == 200:
                 results, ftrials, files, raw_tau = run_experiment_series('MCQN', 2, I * 10, I, T,
                                                                          settings, 1000,
-                                                                         solver_settings, True, False, xobj = True)
+                                                                         solver_settings, True, False)
 
                 cplex_results = run_cplex_experiments(DATADIRd,
                                                       relative_to_project(

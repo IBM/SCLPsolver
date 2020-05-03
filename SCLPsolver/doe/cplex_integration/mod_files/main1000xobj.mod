@@ -33,6 +33,7 @@ tuple MATRIX {
 {MATRIX} a = ...;
 {MATRIX} alpha = ...;
 {MATRIX} gamma = ...;
+{MATRIX} c = ...;
 {MATRIX} buf_cost = ...;
 
 {MATRIX} H_i[r in rowsH] = {H_i | H_i in H : H_i.row == r};

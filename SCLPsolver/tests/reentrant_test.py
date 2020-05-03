@@ -10,11 +10,11 @@ from SCLP import SCLP_settings
 solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution=False)
 pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
 DATADIRd = pu.get_CPLEX_data_path()
-for I in [20,30]:
+for I in [60]:
     for T in [1000,10000]:
-        settings = {'first_alpha' :1, 'alpha_rate':  1, 'cost_scale':1, 'a_rate' : 0.05, 'gamma_rate':0, 'h_rate': 0.1}
+        settings = {'first_alpha' :1, 'alpha_rate':  1, 'cost_scale':2, 'a_rate' : 0.1, 'gamma_rate':0, 'h_rate': 0.4}
         if I < 100:
-            results, ftrials, files, raw_tau = run_experiment_series('reentrant', 10, I * 3, I, T, settings, 1000,
+            results, ftrials, files, raw_tau = run_experiment_series('reentrant', 10, I * 5, I, T, settings, 1000,
                                                                      solver_settings, True, False)
 
             cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
@@ -28,5 +28,5 @@ for I in [20,30]:
                 cplex_results = run_cplex_experiments(DATADIRd, relative_to_project(
                     'doe/cplex_integration/mod_files/main1000.mod'), files)
                 results = combine_results(results, cplex_results, 1000)
-            res_file = relative_to_project('results_long5.csv')
+            res_file = relative_to_project('results_long7.csv')
             write_results_to_csv(results, res_file)

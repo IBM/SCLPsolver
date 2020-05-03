@@ -8,7 +8,7 @@ from cython.parallel import prange
 cimport cython
 from libcpp.vector cimport vector
 from libcpp cimport bool
-cdef inline double __calc_dstate_prim(double[:, ::1] dv, int from_, double[:] dtau, double[:,::1] dstate_view, int i,
+cdef inline double __calc_dstate_prim(double[:, ::1] dv, int from_, double[::1] dtau, double[:,::1] dstate_view, int i,
  int x_1, bool first, int dfrom, vector[bool] found_min) nogil:
     cdef int j, dv_idx
     if not found_min[i]:
@@ -20,7 +20,7 @@ cdef inline double __calc_dstate_prim(double[:, ::1] dv, int from_, double[:] dt
                 dstate_view[i, j+1] = dstate_view[i, j]
     return dstate_view[i, x_1]
 
-cdef inline double __calc_state_ratio_prim(double[:, ::1] dv, int from_, double[:] tau, double[:,::1] state_view, int x_1, int i,
+cdef inline double __calc_state_ratio_prim(double[:, ::1] dv, int from_, double[::1] tau, double[:,::1] state_view, int x_1, int i,
  double val, int dfrom, vector[bool] found_min) nogil:
     cdef int j, dv_idx
     if not found_min[i]:
@@ -33,7 +33,7 @@ cdef inline double __calc_state_ratio_prim(double[:, ::1] dv, int from_, double[
         found_min[i] = True
     return -val / state_view[i, x_1]
 
-def calc_state_ratio_prim(double[:, ::1] dv, int from_, int to_, double[:] tau, double[:] dtau, double[::1] state0,
+def calc_state_ratio_prim(double[:, ::1] dv, int from_, int to_, double[::1] tau, double[::1] dtau, double[::1] state0,
  double[::1] dstate0, list loc_mins, list lens, double[:,::1] dstate_view, double[:,::1] state_view, int dfrom):
     i_max = dv.shape[0]
     cdef int y, i, x, y_max, j_max = to_ - from_, r_ind = -1, c_ind = -1, x_max = <int>len(loc_mins)
@@ -85,7 +85,7 @@ def calc_state_ratio_prim(double[:, ::1] dv, int from_, int to_, double[:] tau, 
             first = False
     return max_val, r_ind, c_ind
 
-cdef inline double __calc_dstate_dual(double[:, ::1] dv, int from_, double[:] dtau, double[:,::1] dstate_view, int i,
+cdef inline double __calc_dstate_dual(double[:, ::1] dv, int from_, double[::1] dtau, double[:,::1] dstate_view, int i,
  int x, int j_max, bool first, int dfrom, vector[bool] found_min) nogil:
     cdef int j, dv_idx
     if not found_min[i]:
@@ -97,7 +97,7 @@ cdef inline double __calc_dstate_dual(double[:, ::1] dv, int from_, double[:] dt
                 dstate_view[i, j] = dstate_view[i, j+1]
     return dstate_view[i, x]
 
-cdef inline double __calc_state_ratio_dual(double[:, ::1] dv, int from_, double[:] tau, double[:,::1] state_view, int x, int i,
+cdef inline double __calc_state_ratio_dual(double[:, ::1] dv, int from_, double[::1] tau, double[:,::1] state_view, int x, int i,
  int j_max, double val, int dfrom, vector[bool] found_min) nogil:
     cdef int j, dv_idx
     if not found_min[i]:
@@ -110,7 +110,7 @@ cdef inline double __calc_state_ratio_dual(double[:, ::1] dv, int from_, double[
         found_min[i] = True
     return -val / state_view[i, x]
 
-def calc_state_ratio_dual(double[:, ::1] dv, int from_, int to_, double[:] tau, double[:] dtau, double[::1] state0,
+def calc_state_ratio_dual(double[:, ::1] dv, int from_, int to_, double[::1] tau, double[::1] dtau, double[::1] state0,
  double[::1] dstate0, list loc_mins, list lens, double[:,::1] dstate_view, double[:,::1] state_view, int dfrom):
     i_max = dv.shape[0]
     cdef int y, i, x, y_max, j_max = to_ - from_, r_ind = -1, c_ind = -1, x_max = <int>len(loc_mins)
