@@ -1,5 +1,5 @@
 import numpy as np
-from .lp_tools.LP_formulation import solve_ratesLP, get_pivot, get_value_by_name, get_dx_names, get_dq_names
+from .lp_tools.LP_formulation import solve_ratesLP, get_value_by_name, get_dx_names, get_dq_names, solve_simple_caseII
 from .SCLP_subproblem import SCLP_subproblem
 from .pivot_storage import pivot_storage
 
@@ -51,22 +51,56 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         piv1 = pivot_storage(list(pp11), list(pp12))
     else:
         AAN1, AAN2 = solution.get_bases(col_info.N1, col_info.N2)
-        #TODO: should be revised
+        #this for the collusion case III
         if isinstance(v1, list) or isinstance(v2, list):
-            vv = get_pivot(AAN1, AAN2, True)
+            #vv = get_pivot(AAN1, AAN2, True)
+            vv = solution.pivots.outpivots[col_info.N1]
+            out_diff = {vv}
             if isinstance(v2, list):
                 v2 = vv
             else:
                 v1 = vv
+        else:
+            out_diff = {v1, v2}
         Kset = get_dx_names(AAN1)
         Kset = Kset[Kset != v2]
         Jset = get_dq_names(AAN2)
         Jset = Jset[Jset != v1]
-        new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
+        in_diff = solution.pivots.get_in_difference(col_info.N1,col_info.N2)
+        if col_info.N2 - col_info.N1 == 2:
+            in_diff_list = list(in_diff)
+            ok, new_basis, lp_pivots, err = solve_simple_caseII(AAN2, Kset, Jset, solution.bases_mm, v1, in_diff_list)
+            if ok == 1:
+                in_diff_list.remove(lp_pivots[1])
+                piv1 = pivot_storage([v2, v1], in_diff_list + [lp_pivots[1]])
+                solution.update_from_basis(col_info, piv1, AAN1, AAN2, new_basis)
+                return solution, STEPCOUNT, ITERATION, pivot_problem
+        else:
+            new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
+        # new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
+        # if col_info.N2 - col_info.N1 == 2:
+        #     in_diff_list = list(in_diff)
+        #     ok, prim_vars, dual_vars, i, j = partial_solve_caseII(AAN2, Kset, Jset, solution.bases_mm, v1, in_diff_list)
+        #     if ok == 0:
+        #         new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance, build_sign=False)
+        #     else:
+        #         prim_name, dual_name = AAN2.prim_name.copy(), AAN2.dual_name.copy()
+        #         in_diff_list.remove(prim_name[i])
+        #         piv1 = pivot_storage([v2, v1], in_diff_list + [prim_name[i]])
+        #         tmp = dual_name[j]
+        #         dual_name[j] = prim_name[i]
+        #         prim_name[i] = tmp
+        #         solution.update_from_partial(col_info, piv1, AAN1, AAN2, prim_vars, dual_vars, prim_name, dual_name)
+        #         return solution, STEPCOUNT, ITERATION, pivot_problem
+        # else:
+        #     new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
+        #new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
         pp21 = lp_pivots.in_.copy()
         pp22 = lp_pivots.out_.copy()
-        #TODO: In general it is possible to pass v1, v2 instead of solution.pivots.get_out_difference
-        lp_pivots.extr(solution.pivots.get_out_difference(col_info.N1,col_info.N2), solution.pivots.get_in_difference(col_info.N1,col_info.N2))
+        #instead of solution.pivots.get_out_difference
+        # if out_diff != solution.pivots.get_out_difference(col_info.N1, col_info.N2):
+        #     print('aaa')
+        lp_pivots.extr(out_diff, set(in_diff))
         pp11 = lp_pivots.in_
         pp12 = lp_pivots.out_
         if len(pp11) == 0 and len(pp12) == 0:

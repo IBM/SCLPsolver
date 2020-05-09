@@ -2,6 +2,8 @@ import numpy as np
 from .calc_order_ratio import calc_order_ratio
 from .collision_info import collision_info
 from .matlab_utils import find
+from .equation_tools.eq_tools import get_time_ratio
+import math
 
 
 def get_shrinking_intervals(delta, rz, inegDTAU, tol1, tol2, tol_coeff, tol_coeff2, tolerance, shrinking_ind = None):
@@ -62,6 +64,8 @@ def get_shrinking_intervals(delta, rz, inegDTAU, tol1, tol2, tol_coeff, tol_coef
         if shrinking_ind is not None:
             ind1 = np.logical_or(ind1, shrinking_ind)
         ishrink = find(ind1)
+        if (ishrink.shape[0] == 0):
+            print('here!')
         nn1 = np.min(ishrink)
         nn2 = np.max(ishrink)
         if len(ishrink) < nn2 - nn1:
@@ -197,7 +201,7 @@ def reclassify_ztau(col_info, solution, param_line, ztau_ind, tolerance, hard_fi
                     col.from_ztau = True
                     col.ztau_ind = ztau_ind
                     return col
-    if (len(ztau_ind) > 3 and (max(ztau_ind) - min(ztau_ind) + 1)/len(ztau_ind) < 0.9) or hard_find:
+    if (len(ztau_ind) > 3 and (max(ztau_ind) - min(ztau_ind) + 1)/len(ztau_ind) > 0.9) or hard_find:
         for n in range(len(ztau_ind)):
             res = solution.pivots.find_N1_N2_around(ztau_ind[n:])
             if res is not None:
@@ -218,7 +222,6 @@ def reclassify_ztau(col_info, solution, param_line, ztau_ind, tolerance, hard_fi
                     return col
     return None
 
-
 def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, param_line, tolerance):
     if N1 == -1 or N2 == solution.NN:
         return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
@@ -231,20 +234,22 @@ def classify_time_collision(delta, rz, tol_coeff, N1, N2, solution, param_line, 
             return collision_info('Case i__', delta, N1, N2, [], [], rz, tol_coeff)
         elif len(vlist) == 2:
             case = 'Case ii_'
-            order_ratio, correct = calc_order_ratio(vlist[0], vlist[1], N1, N2, solution, param_line, delta / 2)
-            if abs(abs(order_ratio) - 1) < tolerance:
-                print('Tolerance in R unclear...')
-            if abs(order_ratio) < 1:
-                v1 = vlist[0]
-                v2 = vlist[1]
+            if N2 - N1 == 2:
+                return collision_info(case, delta, N1, N2, solution.pivots.outpivots[N1], solution.pivots.outpivots[N1+1], rz, tol_coeff)
             else:
-                v1 = vlist[1]
-                v2 = vlist[0]
-            if correct:
-                return collision_info(case, delta, N1, N2, v1, v2, rz, tol_coeff)
-            else:
-                return None
-
+                order_ratio, correct = calc_order_ratio(vlist[0], vlist[1], N1, N2, solution, param_line, delta / 2)
+                if abs(abs(order_ratio) - 1) < tolerance:
+                    print('Tolerance in R unclear...')
+                if abs(order_ratio) < 1:
+                    v1 = vlist[0]
+                    v2 = vlist[1]
+                else:
+                    v1 = vlist[1]
+                    v2 = vlist[0]
+                if correct:
+                    return collision_info(case, delta, N1, N2, v1, v2, rz, tol_coeff)
+                else:
+                    return None
 
 def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
 
@@ -254,42 +259,51 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
     max_neg_coeff = 100000
     tol_coeff = 1
 
+    min_tau = np.min(TAU)
+    if min_tau < -tol2:
+        print('negative interval length...', min_tau)
+        problem['had_resolution'] = True
+        tol2 = 10**math.ceil(math.log10(-min_tau))
+        if tol2 > tolerance * max_neg_coeff:
+            print('fail!')
+            problem['result'] = 1
+            problem['data'] = find(min_tau)
+            return [0], problem
+        print('resolved!')
+    # while np.any(inegTAU):
+    #     print('negative interval length...', np.min(TAU))
+    #     problem['had_resolution'] = True
+    #     problem['resolved_types'].append(1)
+    #     d = d * 10
+    #     if d > max_neg_coeff:
+    #         print('fail!')
+    #         problem['result'] = 1
+    #         problem['data'] = find(inegTAU)
+    #         return [0], problem
+    #     else:
+    #         print('resolving * ', d)
+    #         tol2 = 10 * tolerance * d
+    #         iposTAU = TAU > tol2
+    #         izerTAU = np.fabs(TAU) <= tol2
+    #         inegTAU = TAU < -tol2
+
     NN = TAU.shape[0]
     iposTAU = TAU > tol2
     izerTAU = np.fabs(TAU) <= tol2
     inegTAU = TAU < -tol2
-    d = 1
-
-    while np.any(inegTAU):
-        print('negative interval length...', np.min(TAU))
-        problem['had_resolution'] = True
-        problem['resolved_types'].append(1)
-        d = d * 10
-        if d > max_neg_coeff:
-            print('fail!')
-            problem['result'] = 1
-            problem['data'] = find(inegTAU)
-            return [0], problem
-        else:
-            print('resolving * ', d)
-            tol2 = 10 * tolerance * d
-            iposTAU = TAU > tol2
-            izerTAU = np.fabs(TAU) <= tol2
-            inegTAU = TAU < -tol2
-
-
     #iposDTAU = DTAU > tolerance
     izerDTAU = np.fabs(DTAU) <= tol2
     inegDTAU = DTAU < -tol2
 
+    # TODO: take this to cython
     test1 = np.logical_and(izerTAU, inegDTAU)
     zflag = np.any(test1)
-    last_col_int= np.arange(lastN1+1,lastN2, dtype=int)
     if zflag:
         problem['had_resolution'] = True
         problem['resolved_types'].append(2)
         ztau_ind = find(test1)
         print('zero length interval shrinks:', ztau_ind, 'last N1:', lastN1, ' N2:', lastN2)
+        last_col_int = np.arange(lastN1 + 1, lastN2, dtype=int)
         ind1 = len(np.intersect1d(ztau_ind, last_col_int, assume_unique=True)) == 0
         # zmin = np.min(ztau_ind)
         # zmax = np.max(ztau_ind)
@@ -340,27 +354,34 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
                     problem['data'] = find(test1)
                     return [0], problem
                 else:
-                    test3 = inegDTAU
-                    if not np.any(test3):
+                    delta, rz = get_time_ratio(TAU, DTAU, inegTAU, inegDTAU, tol2 * tol_coeff)
+                    if delta < 0:
                         return [], problem
-                    xTAU = TAU.copy()
-                    xTAU[inegTAU] = tol2 * tol_coeff
-                    rz = np.divide(-DTAU, xTAU, where=test3, out=np.zeros_like(TAU))
-                    zz_ind = np.argmax(rz)
-                    zz = rz[zz_ind]
-                    rz[ztau_ind] = zz
-                    return [1 / zz, rz], problem
+                    else:
+                        return [delta, rz], problem
+                    # test3 = inegDTAU
+                    # if not np.any(test3):
+                    #     return [], problem
+                    # xTAU = TAU.copy()
+                    # xTAU[inegTAU] = tol2 * tol_coeff
+                    # rz = np.divide(-DTAU, xTAU, where=test3, out=np.zeros_like(TAU))
+                    # zz_ind = np.argmax(rz)
+                    # zz = rz[zz_ind]
+                    # rz[ztau_ind] = zz
+                    # return [1 / zz, rz], problem
         else:
             print('zero length interval shrinks\n ')
             problem['result'] = 2
             problem['data'] = find(test1)
             return [0], problem
 
+    # TODO: take this to cython
     test2 = np.logical_and(izerTAU, izerDTAU)
     zflag = np.any(test2)
     if zflag:
         problem['had_resolution'] = True
         problem['resolved_types'].append(5)
+        #this should be test2 - othervise this true
         if len(np.intersect1d(find(test1), np.arange(lastN1 + 1, lastN2, dtype=int), assume_unique=True)) == 0:
             print('zero length interval does not expand')
             tol_coeff = 0.1
@@ -384,15 +405,20 @@ def calc_timecollide(TAU, DTAU, lastN1, lastN2, tolerance):
             #TODO: here is the source of potential bug!!!
             return [0], problem
 
-    #test3 = np.logical_and(iposTAU, inegDTAU)
-    #inegDTAU = DTAU < -tol2 * tol_coeff
-    test3 = inegDTAU
-    if not np.any(test3):
+    delta, rz = get_time_ratio(TAU, DTAU, inegTAU, inegDTAU, tol2 * tol_coeff)
+    if delta < 0:
         return [], problem
-
-    xTAU = TAU.copy()
-    xTAU[inegTAU] = tol2 * tol_coeff
-    rz = np.divide(-DTAU, xTAU, where=test3, out=np.zeros_like(TAU))
-    zz_ind = np.argmax(rz)
-    zz = rz[zz_ind]
-    return [1/zz, rz], problem
+    else:
+        return [delta, rz], problem
+    # #test3 = np.logical_and(iposTAU, inegDTAU)
+    # #inegDTAU = DTAU < -tol2 * tol_coeff
+    # test3 = inegDTAU
+    # if not np.any(test3):
+    #     return [], problem
+    #
+    # xTAU = TAU.copy()
+    # xTAU[inegTAU] = tol2 * tol_coeff
+    # rz = np.divide(-DTAU, xTAU, where=test3, out=np.zeros_like(TAU))
+    # zz_ind = np.argmax(rz)
+    # zz = rz[zz_ind]
+    # return [1/zz, rz], problem

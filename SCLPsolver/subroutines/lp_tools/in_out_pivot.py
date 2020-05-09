@@ -16,9 +16,7 @@ class in_out_pivot():
         else:
             self.out_.add(out_)
 
-    def extr(self, out_diff, in_diff):
-        set_out_ = set(out_diff)
-        set_in_ = set(in_diff)
+    def extr(self, set_out_, set_in_):
         for p in self.out_:
             if p in set_in_:
                 set_in_.remove(p)

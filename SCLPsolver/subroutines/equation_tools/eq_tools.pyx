@@ -4,6 +4,7 @@
 
 from cython.parallel import prange
 cimport cython
+cimport numpy as np
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -176,3 +177,22 @@ def ftran2eta(double[::1] vec, double[:, ::1] etas, int[::1] pivots, int last, i
         etas[last,j] = vec[j]/pivot_val
     etas[last,new_pivot] = -1./pivot_val
     pivots[last] = new_pivot
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def get_time_ratio(double[::1] tau, double[::1] dtau, np.uint8_t[::1] ineg_tau, np.uint8_t[::1] ineg_dtau, double tol):
+    cdef Py_ssize_t NN = tau.shape[0]
+    result = np.zeros(NN, dtype=np.double, order='C')
+    cdef double[::1] res_view = result
+    cdef double r, ratio = -1.
+    cdef int n
+    for n in range(NN):
+        if ineg_dtau[n]:
+            if not ineg_tau[n]:
+                r = -dtau[n]/tau[n]
+            else:
+                r = -dtau[n]/tol
+            res_view[n] =  r
+            if r > ratio:
+                ratio = r
+    return 1/ratio, result

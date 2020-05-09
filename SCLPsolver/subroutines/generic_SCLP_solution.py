@@ -1,7 +1,7 @@
 import numpy as np
 from .pivot_storage import pivot_storage
 from .col_info_stack import col_info_stack
-from .extract_rates import extract_rates_from_basis, extract_rates_from_subproblem
+from .extract_rates import extract_rates_from_basis, extract_rates_from_subproblem, extract_rates_from_partial
 from .SCLP_base_sequence_new import SCLP_base_sequence
 from .rewind_info import rewind_info
 from .problem_dimensions import problem_dimensions
@@ -155,7 +155,7 @@ class generic_SCLP_solution():
         #     print(ex)
         #     return False
         if check_state:
-            if self._check_state(self._state, tolerance):
+            if self._check_state(self._state, tolerance*100):
                 return True
             else:
                 return False
@@ -206,6 +206,10 @@ class generic_SCLP_solution():
     def update_from_basis(self, col_info, piv, AAN1, AAN2, basis):
         dx, dq = extract_rates_from_basis(basis, self._problem_dims)
         self._update_caseII(col_info, dx, dq, AAN1, AAN2, piv, 1, basis, False)
+
+    def update_from_partial(self, col_info, piv, AAN1, AAN2, prim_vars, dual_vars, prim_names, dual_names):
+        dx, dq = extract_rates_from_partial(prim_vars, dual_vars, prim_names, dual_names, self._problem_dims)
+        self._update_caseII(col_info, dx, dq, AAN1, AAN2, piv, 1, None, False)
 
     #'#@profile
     def update_caseI(self, col_info):

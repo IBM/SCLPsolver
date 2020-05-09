@@ -2,9 +2,8 @@ import numpy as np
 from .matlab_utils import find
 from .pivot import pivot_ij, signed_pivot_ij
 from .in_out_pivot import in_out_pivot
-from .cy_lp_tools import prim_ratio_test, dual_ratio_test
+from .cy_lp_tools import prim_ratio_test, dual_ratio_test, find_i
 
-#'#@profile
 def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
 
     err = dict()
@@ -45,27 +44,37 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
     dneg = find(ds == -1)
     while dneg.size > 0:
         j = dneg[0]
-        if tolerance == 0:
-            cond = dct.simplex_dict[1:, j + 1] != 0
-        else:
-            cond = np.absolute(dct.simplex_dict[1:, j + 1]) > tolerance
-        ii = find(np.logical_and(ps == -1, cond))
-        if ii.size > 0:
-            i = ii[0]
-        else:
-            mat = -dct.simplex_dict[1:, j + 1] / dct.simplex_dict[1:, 0]
-            if dct.simplex_dict[0, j + 1] < 0:
-                i = np.nanargmax(mat * (ps != 1))
-                m = mat[i]
-            else:
-                i = np.nanargmin(mat * (ps != 1))
-                m = -mat[i]
-            if m <=0:
-                ii = find(dct.simplex_dict[1:, j+1])
-                if ii.size > 0:
-                    i = ii[0]
-                else:
-                    raise Exception('*** No pivot available')
+        #TODO: this should be double-checked
+        i = find_i(dct.simplex_dict, j, ps, 0.)
+        # if tolerance == 0:
+        #     cond = dct.simplex_dict[1:, j + 1] != 0
+        # else:
+        #     cond = np.absolute(dct.simplex_dict[1:, j + 1]) > tolerance
+        # ii = find(np.logical_and(ps == -1, cond))
+        # if ii.size > 0:
+        #     i = ii[0]
+        # else:
+        #     mat = -dct.simplex_dict[1:, j + 1] / dct.simplex_dict[1:, 0]
+        #     if dct.simplex_dict[0, j + 1] < 0:
+        #         i = np.nanargmax(mat * (ps != 1))
+        #         print('max_pivot:', i, j)
+        #         test = True
+        #         m = mat[i]
+        #     else:
+        #         i = np.nanargmin(mat * (ps != 1))
+        #         print('min_pivot:', i, j)
+        #         test = True
+        #         m = -mat[i]
+        #     if m <=0:
+        #         ii = find(dct.simplex_dict[1:, j+1])
+        #         if ii.size > 0:
+        #             i = ii[0]
+        #         else:
+        #             raise Exception('*** No pivot available')
+        if i < 0:
+            raise Exception('*** No pivot available')
+        # if i1 != i:
+        #     raise Exception('Incorrect i')
         (dct, in_, out_), ps, ds= signed_pivot_ij(dct, ps, ds, i, j, res_dct)
         pivots.pivot(in_, out_)
         res_dct = None
@@ -76,6 +85,8 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
 
     if ptest.size > 0 and dtest.size == 0:
         while ptest.size > 0:
+            # if test:
+            #     print('here primal')
             i = ptest[0]
             j = prim_ratio_test(dct.simplex_dict, i, ds)-1
             if j < -1:
@@ -89,6 +100,8 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
             ptest = find(np.logical_and(ps == 0, dct.simplex_dict[1:, 0] < 0))
     elif ptest.size == 0 and dtest.size > 0:
         while dtest.size > 0:
+            # if test:
+            #     print('here dual')
             j = dtest[0]
             i = dual_ratio_test(dct.simplex_dict, j, ps)-1
             if i < -1:
@@ -101,6 +114,8 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
             res_dct = None
             dtest = find(np.logical_and(ds == 0, dct.simplex_dict[0, 1:] < 0))
     elif ptest.size > 0 and dtest.size > 0:
+        # if test:
+        #     print('there')
         B = np.zeros((mm+1,nn+1), order='C')
         tmp_matrix = np.zeros_like(B)
         B[:-1,-1:] = np.random.rand(mm, 1) + 1

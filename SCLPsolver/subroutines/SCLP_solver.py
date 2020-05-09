@@ -17,9 +17,9 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
 
     while True:
 
-        # if not solution.base_sequence.check_places():
-        #     raise Exception('Bases placement failure!')
         if not rewind_required:
+            if STEPCOUNT ==  6436:
+                print('here')
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
                 return solution, STEPCOUNT, pivot_problem
@@ -27,13 +27,10 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             if not res:
                 return solution, STEPCOUNT, {'result': 1}
             col_info, problem = classification(solution, param_line, tolerance)
-            # if problem['result'] > 0:
-            #     solution.recalc_tau(param_line, settings.check_intermediate_solution)
-            #     col_info, problem = classification(solution, param_line, tolerance, True)
             if problem['result'] > 0:
                 ztau_ind = solution.get_ztau_ind()
                 if ztau_ind is not None:
-                    new_col_info = reclassify_ztau(col_info, solution, param_line, ztau_ind, tolerance, DEPTH>0)
+                    new_col_info = reclassify_ztau(col_info, solution, param_line, ztau_ind, tolerance, DEPTH>0 or not solution.can_rewind())
                     if new_col_info is None:
                         rewind_required = True
                     else:
@@ -41,19 +38,6 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                         rewind_required = False
                 else:
                     rewind_required = True
-                # if solution.last_collision.case == 'Case iii':
-                #     ztau_ind = solution.get_ztau_ind()
-                #     if ztau_ind is not None:
-                #         new_col_info = reclassify_ztau(col_info, solution, ztau_ind, tolerance)
-                #         if new_col_info is None:
-                #             rewind_required = True
-                #         else:
-                #             col_info = new_col_info
-                #             rewind_required = False
-                #     else:
-                #         rewind_required = True
-                # else:
-                #     rewind_required = True
             else:
                 rewind_required = False
 
@@ -142,13 +126,6 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
             solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
                                                                        col_info, DEPTH, STEPCOUNT, ITERATION, settings,
                                                                        tolerance)
-            # try:
-            #     solution, STEPCOUNT, ITERATION, pivot_problem = SCLP_pivot(param_line.Kset_0, param_line.Jset_N, solution,
-            #                                                            col_info, DEPTH, STEPCOUNT, ITERATION, settings, tolerance)
-            # except Exception as ex:
-            #     print('Exception during SCLP pivot:')
-            #     print(ex)
-            #     return solution, STEPCOUNT, {'result': 1}
             while pivot_problem['result'] == 1: # theta > 1
                 print('Pivot problem: trying to resolve * ', col_info.tol_coeff, '...')
                 new_col_info, resolved = reclassify(col_info, solution, param_line,  tolerance)

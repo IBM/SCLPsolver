@@ -79,6 +79,7 @@ def classification(solution, param_line, tolerance, time_only=False):
                 col_info1, prob1 = resolve_and_classify(CC2[0], CC2[1], solution, param_line, 1, tolerance)
                 if prob1['result'] == 0:
                     col_info.alternative = col_info1
+                    col_info.alternative.had_resolution = True
         return col_info, problem
     elif (len(CC1) == 0 and len(CC2) > 0) or Didle >= 0:
         if problem['timeProblem']['result'] != 0:
@@ -120,9 +121,12 @@ def classification(solution, param_line, tolerance, time_only=False):
                 if col_info.case != '':
                     col_info.alternative = collision_info('Case iii', CC1[0], CC1[1], CC1[1] + 1,
                                                       *((CC1[2], None) if CC1[2] < 0 else (None, CC1[2])))
+                    col_info.alternative.had_resolution = True
                 else:
-                    return collision_info('Case iii', CC1[0], CC1[1], CC1[1] + 1,
-                                                      *((CC1[2], None) if CC1[2] < 0 else (None, CC1[2]))), {'result': 0, 'stateProblem': [], 'timeProblem': [], 'compoundProblem': {'result':0, 'data': []}}
+                    col_info = collision_info('Case iii', CC1[0], CC1[1], CC1[1] + 1,
+                                                      *((CC1[2], None) if CC1[2] < 0 else (None, CC1[2])))
+                    col_info.had_resolution = True
+                    return  col_info, {'result': 0, 'stateProblem': [], 'timeProblem': [], 'compoundProblem': {'result':0, 'data': []}}
         return col_info, problem
     problem['result'] = 8
     return None, problem

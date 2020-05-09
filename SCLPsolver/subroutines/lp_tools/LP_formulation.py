@@ -1,6 +1,7 @@
 import numpy as np
 from .simplex_procedures import simplex_procedures
-from .cy_lp_tools import get_sign, get_sign1
+from .cy_lp_tools import get_sign, get_sign1, partial_pivotII
+from .pivot import signed_pivot_ij
 
 
 class LP_formulation():
@@ -20,16 +21,64 @@ class LP_formulation():
     def copy(self):
         return self.__copy__()
         
-def solve_ratesLP(LP_form, Kset, nJset, bases_mm, tolerance=0):
-    get_sign1(LP_form.prim_name, Kset, nJset, 1, bases_mm.ps)
-    get_sign1(LP_form.dual_name, Kset, nJset, -1, bases_mm.ds)
+def solve_ratesLP(LP_form, Kset, nJset, bases_mm, tolerance=0, build_sign=True):
+    if build_sign:
+        get_sign1(LP_form.prim_name, Kset, nJset, 1, bases_mm.ps)
+        get_sign1(LP_form.dual_name, Kset, nJset, -1, bases_mm.ds)
+    # part = False
+    # if v1 is not None:
+    #     ok, prim_vars, dual_vars, i, j = partial_pivotII(LP_form.simplex_dict, LP_form.prim_name, LP_form.dual_name, bases_mm.ps, bases_mm.ds, v1, in_diff[0], in_diff[1])
+    #     if ok == 1:
+    #         part = True
+    #         prim_name, dual_name = LP_form.prim_name, LP_form.dual_name
     tmp_dict = bases_mm.pop()
     if tmp_dict is None:
         tmp_dict = LP_formulation(np.empty_like(LP_form.simplex_dict), None, None)
         #LP_form, ps, ds, pivots, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tolerance)
     #else:
     LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, bases_mm.ps, bases_mm.ds, tolerance, tmp_dict)
+    # if part:
+    #     dual_name = dual_name.copy()
+    #     tmp = dual_name[j]
+    #     dual_name[j] = prim_name[i]
+    #     prim_name = prim_name.copy()
+    #     prim_name[i] = tmp
+    #     if np.setdiff1d(prim_name, LP_form.prim_name, assume_unique=True).shape[0] > 0 or\
+    #         np.setdiff1d(dual_name, LP_form.dual_name, assume_unique=True).shape[0] > 0:
+
+
+        # if np.any(np.fabs(prim_vars[1:] - LP_form.simplex_dict[1:,0]) > 1E-10) or\
+        #         np.any(np.fabs(dual_vars[1:] -LP_form.simplex_dict[0,1:]) > 1E-10):
+        #     dual_name = dual_name.copy()
+        #     tmp = dual_name[j]
+        #     dual_name[j] = prim_name[i]
+        #     prim_name = prim_name.copy()
+        #     prim_name[i] = tmp
+        #     print(np.any(LP_form.dual_name == v1), np.any(LP_form.dual_name == v2))
+        #    print('????')
     return LP_form, pivots, err
+
+def partial_solve_caseII(LP_form, Kset, nJset, bases_mm, v1, in_diff):
+    get_sign1(LP_form.prim_name, Kset, nJset, 1, bases_mm.ps)
+    get_sign1(LP_form.dual_name, Kset, nJset, -1, bases_mm.ds)
+    ok, prim_vars, dual_vars, i, j = partial_pivotII(LP_form.simplex_dict, LP_form.prim_name, LP_form.dual_name,
+                                                     bases_mm.ps, bases_mm.ds, v1, in_diff[0], in_diff[1])
+    return ok, prim_vars, dual_vars, i, j
+
+def solve_simple_caseII(LP_form, Kset, nJset, bases_mm, v1, in_diff):
+    get_sign1(LP_form.prim_name, Kset, nJset, 1, bases_mm.ps)
+    get_sign1(LP_form.dual_name, Kset, nJset, -1, bases_mm.ds)
+    ok, prim_vars, dual_vars, i, j = partial_pivotII(LP_form.simplex_dict, LP_form.prim_name, LP_form.dual_name,
+                                                     bases_mm.ps, bases_mm.ds, v1, in_diff[0], in_diff[1])
+    tmp_dict = bases_mm.pop()
+    if tmp_dict is None:
+        tmp_dict = LP_formulation(np.empty_like(LP_form.simplex_dict), None, None)
+    if ok==1:
+        (LP_form, in_, out_), ps, ds = signed_pivot_ij(LP_form, bases_mm.ps, bases_mm.ds, i, j, tmp_dict)
+        return ok, LP_form, (in_, out_), None
+    else:
+        LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, bases_mm.ps, bases_mm.ds, 0, tmp_dict)
+        return ok, LP_form, pivots, err
 
 def solve_LP(LP_form, ps, ds, tolerance=0):
     LP_form, ps, ds, pivots, err = simplex_procedures(LP_form.copy(), ps, ds, tolerance)

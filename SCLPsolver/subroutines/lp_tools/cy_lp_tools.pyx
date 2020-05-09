@@ -2,10 +2,119 @@
 #cython: language_level=3
 
 
-
+import numpy as np
 from cython.parallel import prange
 cimport cython
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef inline int do_partial_pivot(double[:, ::1] dct, int[::1] pn, int[::1] dn, int[::1] ps, int[::1] ds,
+ double[::1] prim_v, double[::1] dual_v, int i, int j, Py_ssize_t x_max, Py_ssize_t y_max, double c , double r) nogil:
+    cdef int x, y
+    if pn[i-1] > 0 and c < 0:
+        return 0
+    if dn[j-1] < 0 and r < 0:
+        return 0
+    for y in range(1, y_max):
+        dual_v[y] = dct[0, y] + c * dct[i, y]
+        if ds[y-1] == 0 and dual_v[y] < 0:
+            if y != j:
+               return 0
+    dual_v[j] = c
+    for x in range(1, x_max):
+        prim_v[x] = dct[x, 0] - r * dct[x, j]
+        if ps[x-1] == 0 and prim_v[x] < 0:
+            if x != i:
+               return 0
+    prim_v[i] = r
+    return 1
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def partial_pivotII(double[:, ::1] dct, int[::1] pn, int[::1] dn, int[::1] ps, int[::1] ds, int v_in, int v_out1, int v_out2):
+    cdef int j, i=0, index = -1, in_idx, out_idx1=-1, out_idx2=-1
+    x_max = dct.shape[0]
+    y_max = dct.shape[1]
+    for j in range(y_max-1):
+        if dn[j] == v_in:
+            in_idx = j
+            break
+    for i in range(x_max-1):
+        if pn[i] == v_out1:
+            out_idx1 = i
+            if out_idx2 != -1:
+                break
+        elif pn[i] == v_out2:
+            out_idx2 = i
+            if out_idx1 != -1:
+                break
+    j = in_idx + 1
+    cdef double p1, p2, r, c, rate1 =-1., rate2 = -1.
+    prim_vars = np.empty(x_max, dtype=np.double, order='C')
+    dual_vars = np.empty(y_max, dtype=np.double, order='C')
+    cdef double[::1] prim_v = prim_vars
+    cdef double[::1] dual_v = dual_vars
+    cdef int x, y, ok = 0
+    p1 = dct[out_idx1 + 1, j]
+    p2 = dct[out_idx2 + 1, j]
+    if p1 != 0:
+        rate1 =  -dct[0, j] * dct[out_idx1 + 1, 0] / p1
+    if p2 != 0:
+        rate2 =  -dct[0, j] * dct[out_idx2 + 1, 0] / p2
+    if rate1 >= rate2:
+        if rate1 > 0.:
+            i = out_idx1 + 1
+            ok = do_partial_pivot(dct, pn, dn, ps, ds, prim_v, dual_v, i, j, x_max, y_max, -dct[0, j] / p1, dct[i, 0] / p1)
+            if ok == 0:
+                if rate2 > 0.:
+                    i = out_idx2 + 1
+                    ok = do_partial_pivot(dct, pn, dn, ps, ds, prim_v, dual_v, i, j, x_max, y_max, -dct[0, j] / p2, dct[i, 0] / p2)
+    else:
+        if rate2 > 0.:
+            i = out_idx2 + 1
+            ok = do_partial_pivot(dct, pn, dn, ps, ds, prim_v, dual_v, i, j, x_max, y_max, -dct[0, j] / p2, dct[i, 0] / p2)
+            if ok == 0:
+                if rate1 > 0.:
+                    i = out_idx1 + 1
+                    ok = do_partial_pivot(dct, pn, dn, ps, ds, prim_v, dual_v, i, j, x_max, y_max, -dct[0, j] / p1, dct[i, 0] / p1)
+    return ok, prim_vars, dual_vars, i-1, j-1
+
+def partial_ratio_test(double[:, ::1] dct, int[::1] dn, int[::1] ps, int v_in):
+    cdef int j, i, index = -1, in_idx
+    cdef double m = 1., v
+    x_max = dct.shape[0]
+    y_max = dct.shape[1]
+    for j in range(y_max-1):
+        if dn[j] == v_in:
+            in_idx = j
+            break
+    if dct[0, j + 1] < 0:
+        for i in range(x_max-1):
+            if ps[i] != 1:
+                if dct[i+1, 0] != 0.:
+                    v = -dct[i+1, j + 1]/dct[i+1, 0]
+                    if v > m:
+                        m = v
+                        index = i
+                else:
+                    if dct[i+1, j + 1] < 0:
+                        m = -1
+                        index = i
+                        break
+    else:
+        for i in range(x_max-1):
+            if ps[i] != 1:
+                if dct[i+1, 0] != 0.:
+                    v = -dct[i+1, j + 1]/dct[i+1, 0]
+                    if v < m:
+                        m = v
+                        index = i
+                else:
+                    if dct[i+1, j + 1] > 0:
+                        m = -1
+                        index = i
+                        break
+    return index, in_idx, m
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -231,3 +340,54 @@ def copy_pivot3(double[:, ::1] dct, int[::1] pn, int[::1] dn, int i, int j, doub
             res[x, j] /= -p
         res[i, j] = 1. / p
     return in_, out_
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def find_i(double[:, ::1] dct, int j, int[::1] ps, double tolerance):
+    cdef int index = -1, i
+    cdef double m = 1., v
+    cdef Py_ssize_t i_max = ps.shape[0]
+    if tolerance == 0.:
+        for i in range(i_max):
+            if ps[i] == -1:
+                if dct[i+1,j+1] !=0.:
+                    index = i
+                    break
+    else:
+        for i in range(i_max):
+            if ps[i] == -1:
+                if abs(dct[i+1,j+1]) > tolerance:
+                    index = i
+                    break
+    if index ==-1:
+        if dct[0, j + 1] < 0:
+            for i in range(i_max):
+                if ps[i] != 1:
+                    if dct[i+1, 0] != 0.:
+                        v = dct[i+1, j + 1]/dct[i+1, 0]
+                        if v > m:
+                            m = v
+                            index = i
+                    else:
+                        if dct[i+1, j + 1] < 0:
+                            m = -1
+                            index = i
+                            break
+        else:
+            for i in range(i_max):
+                if ps[i] != 1:
+                    if dct[i+1, 0] != 0.:
+                        v = -dct[i+1, j + 1]/dct[i+1, 0]
+                        if v < m:
+                            m = v
+                            index = i
+                    else:
+                        if dct[i+1, j + 1] > 0:
+                            m = -1
+                            index = i
+                            break
+        if m > 0.:
+            for i in range(i_max):
+                if dct[i+1, j+1] != 0:
+                    return i
+    return index

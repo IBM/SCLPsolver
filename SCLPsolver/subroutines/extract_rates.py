@@ -24,6 +24,25 @@ def extract_rates_from_basis(dct, problem_dims):
         dq = (dct.simplex_dict[0,jlist2+1], jn2-1)
     return dx, dq
 
+def extract_rates_from_partial(prim_vars, dual_vars, prim_name, dual_name, problem_dims):
+    klist1 = find(prim_name > 0)
+    jlist2 = find(dual_name < 0)
+    kn1 =  prim_name[klist1]
+    jn2 = -dual_name[jlist2]
+    if problem_dims.KK < problem_dims.totalK:
+        kn2 =  dual_name[dual_name > 0]
+        kord = np.argsort(np.argsort(np.hstack((kn1, kn2))))[:len(kn1)]
+        dx = (prim_vars[klist1+1], kord)
+    else:
+        dx = (prim_vars[klist1+1], kn1-1)
+    if problem_dims.JJ < problem_dims.totalJ:
+        jn1 = -prim_name[prim_name < 0]
+        jord = np.argsort(np.argsort(np.hstack((jn1, jn2))))[len(jn1):]
+        dq = (dual_vars[jlist2+1], jord)
+    else:
+        dq = (dual_vars[jlist2+1], jn2-1)
+    return dx, dq
+
 def extract_rates_from_subproblem(pivots, AAN1, AAN2, problem_dims):
     # Warning this based on assumption that first basis in new_base_sequence is equal to the AAN1 and/or last basis is equal to the AAN2
     if len(pivots) > 0:

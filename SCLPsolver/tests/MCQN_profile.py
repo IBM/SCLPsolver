@@ -8,7 +8,7 @@ from doe.doe_utils import path_utils
 
 K = 1000
 I = 100
-seed = 1000
+seed = 1001
 solver_settings = SCLP_settings(find_alt_line =False)
 
 settings = {'alpha_rate':  1, 'cost_scale':2, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,

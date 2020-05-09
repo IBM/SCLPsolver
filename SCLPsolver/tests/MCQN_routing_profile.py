@@ -11,7 +11,7 @@ I = 100
 seed = 1000
 solver_settings = SCLP_settings(find_alt_line =False)
 
-settings = {'J':700, 'alpha_rate':  20, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.9, 'nz': 0.5,
+settings = {'J':700, 'alpha_rate':  20, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.7, 'nz': 0.5,
                     'gamma_rate':0, 'c_scale': 0, 'h_rate': 4}
 G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_routing_data(seed, K, I, **settings)
 TT = 1000
