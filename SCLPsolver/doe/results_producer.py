@@ -17,7 +17,7 @@ def combine_results(python_results, cplex_results, discr, dual=False, xobj=False
                 else:
                     pres[prefix+'_objective'] = cres['objective']
                     pres[prefix + '_real_objective'] = pres['buffer_cost'] - cres['objective']
-                pres['cplex_'+d+str(discr)+'_time'] = cres['time']
+                pres[prefix+'_time'] = cres['time']
                 if xobj:
                     optimality_gap = cres['objective'] - pres['real_objective']
                 elif dual:
