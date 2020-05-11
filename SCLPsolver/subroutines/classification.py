@@ -1,5 +1,4 @@
 import numpy as np
-#from .calc_statecollide import calc_statecollide
 from .state_tools.calc_statecollide import calc_statecollide
 from .collision_info import collision_info
 from .time_collision_resolver import calc_timecollide, resolve_and_classify, reclassify

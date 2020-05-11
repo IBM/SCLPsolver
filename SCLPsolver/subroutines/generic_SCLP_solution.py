@@ -128,8 +128,8 @@ class generic_SCLP_solution():
                 else:
                     next_tau = 0.01 * dtau[idx] + tau[idx]
                 print('Warning tau=', idx, 'has value', tau[idx], 'increase by', dtau[idx], 'to', next_tau)
-                if self._last_collision and not check_state and param_line.is_main() and not up_rewind and dtau[idx] > -tolerance: # and\
-                        #(next_tau >  0 or tau[idx] > -10E-5):
+                if self._last_collision and not check_state and param_line.is_main() and not up_rewind and\
+                        dtau[idx] > -tolerance and next_tau > -10E-5:
                     print('Updating...')
                     self.stable_iteration = False
                     self._state.update_tau(self._last_collision, param_line.T)

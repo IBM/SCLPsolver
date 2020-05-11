@@ -18,7 +18,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
     while True:
 
         if not rewind_required:
-            if STEPCOUNT ==  6436:
+            if STEPCOUNT ==  15058:
                 print('here')
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
@@ -35,7 +35,10 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
                         rewind_required = True
                     else:
                         col_info = new_col_info
-                        rewind_required = False
+                        if new_col_info.N1 >= solution.last_collision.N1 and new_col_info.N2 <= solution.last_collision.N2 + solution.last_collision.Nnew:
+                            rewind_required = True
+                        else:
+                            rewind_required = False
                 else:
                     rewind_required = True
             else:
