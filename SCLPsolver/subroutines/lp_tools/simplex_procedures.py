@@ -85,8 +85,6 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
 
     if ptest.size > 0 and dtest.size == 0:
         while ptest.size > 0:
-            # if test:
-            #     print('here primal')
             i = ptest[0]
             j = prim_ratio_test(dct.simplex_dict, i, ds)-1
             if j < -1:
@@ -100,8 +98,6 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
             ptest = find(np.logical_and(ps == 0, dct.simplex_dict[1:, 0] < 0))
     elif ptest.size == 0 and dtest.size > 0:
         while dtest.size > 0:
-            # if test:
-            #     print('here dual')
             j = dtest[0]
             i = dual_ratio_test(dct.simplex_dict, j, ps)-1
             if i < -1:
@@ -114,8 +110,6 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
             res_dct = None
             dtest = find(np.logical_and(ds == 0, dct.simplex_dict[0, 1:] < 0))
     elif ptest.size > 0 and dtest.size > 0:
-        # if test:
-        #     print('there')
         B = np.zeros((mm+1,nn+1), order='C')
         tmp_matrix = np.zeros_like(B)
         B[:-1,-1:] = np.random.rand(mm, 1) + 1

@@ -2,7 +2,7 @@ import numpy as np
 from .pivot_storage import pivot_storage
 from .col_info_stack import col_info_stack
 from .extract_rates import extract_rates_from_basis, extract_rates_from_subproblem, extract_rates_from_partial
-from .SCLP_base_sequence_new import SCLP_base_sequence
+from .SCLP_base_sequence import SCLP_base_sequence
 from .rewind_info import rewind_info
 from .problem_dimensions import problem_dimensions
 from .solution_state import solution_state
@@ -11,7 +11,6 @@ from .equation_tools.calc_equations import time_equations
 from .state_tools.loc_min_storage import loc_min_storage
 from .state_tools.calc_states import calc_states, check_state, calc_specific_state
 from .bases_memory_manager import bases_memory_manager
-#from .equation_tools.eq_solver import eq_solver
 
 
 class generic_SCLP_solution():
@@ -103,20 +102,6 @@ class generic_SCLP_solution():
             dtau = self._equations.update(self._last_collision.N1 + 1, self._state.dx, self._state.dq)
             self._state.update_tau(self._last_collision, param_line.T)
             self.stable_iteration = False
-            # self.test_equations.build(param_line, self._klist, self._jlist, self._pivots,
-            #                       self._state.dx, self._state.dq)
-            # tau1, dtau1 = self.test_equations.solve()
-            # test1 = np.fabs(dtau1 - dtau) >= 10E-8
-            # if np.any(test1):
-            #     print(np.where(np.fabs(dtau2 -dtau1) >= 10E-8))
-            #     a = self._equations.get_reordered_coeff()
-            #     print(np.where(test1))
-            #     c = self.test_equations.coeff - a
-            #     raise Exception('unstable dtau')
-            # test1 = np.fabs(tau1 - self._state.tau) >= 10E-10
-            # if np.any(test1):
-            #     print(np.where(test1))
-            #     raise Exception('unstable tau')
         else:
             left_idx = self._equations.build(param_line, self._klist, self._jlist, self._pivots,
                                   self._state.dx, self._state.dq)
@@ -147,13 +132,6 @@ class generic_SCLP_solution():
             self._state.del_x = del_x
             self._state.q = q
             self._state.del_q = del_q
-            # try:
-        #
-        #
-        # except Exception as ex:
-        #     print('Exception during state calculation:')
-        #     print(ex)
-        #     return False
         if check_state:
             if self._check_state(self._state, tolerance*100):
                 return True
@@ -231,10 +209,7 @@ class generic_SCLP_solution():
     def _update_caseII(self, col_info, dx, dq, AAN1, AAN2, pivots, Nnew, basis = None, matrix = True):
         NN = self.NN
         self._last_collision = col_info
-        #if col_info.case == 'Case ii_' or col_info.alternative is not None:
         self.store_rewind_info(col_info)
-        # else:
-        #     self._col_info_stack.clear()
         N1 = col_info.N1
         N2 = col_info.N2
         self._base_sequence.replace_bases(N1, N2, Nnew, AAN1, AAN2, self.bases_mm)

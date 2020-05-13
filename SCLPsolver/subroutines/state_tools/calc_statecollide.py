@@ -10,7 +10,7 @@ def calc_statecollide(klist, jlist, state, raw_dx, raw_dq, param_line, loc_min, 
     #           result = 2  multiple states hit zero    data = TODO
     problem = {'result': 0, 'data': []}
 
-    #TODO: paralellize
+    #TODO: paralellize?
     if has_no_state:
         bb_x, kk_x, nn_x = calc_state_ratio_prim(raw_dx[0], raw_dx[1], raw_dx[2], state.tau, state.dtau, param_line.x_0,
                                            param_line.del_x_0, loc_min.dx_min.data, loc_min.dx_min.sizes, state.del_x, state.x, 0)
@@ -21,7 +21,7 @@ def calc_statecollide(klist, jlist, state, raw_dx, raw_dq, param_line, loc_min, 
         bb_q, kk_q, nn_q = get_rz_bb(state.del_q[:, :-1], state.q[:, :-1], loc_min.dq_min.data, loc_min.dq_min.sizes)
     if bb_x > bb_q:
         if bb_x == 0:
-            print(kk_x, nn_x)
+            #print(kk_x, nn_x)
             return [np.inf, 0, 0], problem
         else:
             test1 = 1. / bb_x
@@ -38,7 +38,7 @@ def calc_statecollide(klist, jlist, state, raw_dx, raw_dq, param_line, loc_min, 
                 bb = bb_x
     else:
         if bb_q == 0:
-            print(kk_q, nn_q)
+            #print(kk_q, nn_q)
             return [np.inf, 0, 0], problem
         else:
             nn = nn_q - 1

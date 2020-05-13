@@ -2,7 +2,7 @@ import numpy as np
 from scipy.linalg import lu_factor, lu_solve
 from .eq_tools import build_equations, get_rows, get_new_col, get_left_stability_idx, ftran2eta
 
-#TODO: build method can further improved if we reuse all matricies
+#TODO: build method can further improved if we reuse all matricies - note LU factorization is slower if matrix is not contnignous
 class time_equations():
 
     def __init__(self):
@@ -24,7 +24,7 @@ class time_equations():
         if len(pivots.outpivots) > 0:
             outp = np.asarray(pivots.outpivots, dtype=np.int32, order='C')
             inp = np.asarray(pivots.inpivots, dtype=np.int32, order='C')
-            left_idx = None#get_left_stability_idx(outp, inp)
+            left_idx = None #get_left_stability_idx(outp, inp)
             self.coeff, self.var_names, self.var_nums, self.rrhs=\
                 build_equations(klist, jlist, outp, inp, dx, dq, param_line.x_0, param_line.del_x_0, param_line.q_N, param_line.del_q_N)
         else:
@@ -57,35 +57,11 @@ class time_equations():
         vec = get_new_col(self.coeff,  self.var_nums,  self.var_names, n, row1, row2, dx, dq)
         self.coeff[:, n] = vec
         vec1 = lu_solve(self.lu, vec, check_finite=False)
-
-        #v = vec1.copy()
         ftran2eta(vec1, self.etas, self.pivot_idxs, self.iteration, n)
-        # etm = np.eye(len(vec1))
-        # if self.iteration == 0:
-        #     etm[:, n] = v
-        #     #rrr = self.etas[self.iteration, :] - to_eta(v, n)
-        # elif self.iteration == 1:
-        #     b = ftran(v, self.etas[self.iteration - 1, :], self.pivot_idxs[self.iteration - 1])
-        #     etm[:, n] = b
-        # else:
-        #     b = ftran(ftran(v, self.etas[self.iteration - 2, :], self.pivot_idxs[self.iteration - 2]),
-        #               self.etas[self.iteration - 1, :], self.pivot_idxs[self.iteration - 1])
-        #     etm[:, n] = b
-        # a = np.matmul(self.coeff, etm)
-        # #self.coeff[:, n] = vec
-        # test1 = np.fabs(a - self.coeff) >= 10E-10
-        # if np.any(test1):
-        #     print(np.where(test1))
-
         ftran(self.solution[:, 1], self.etas[self.iteration, :], n)
-
-        #rdatu = get_reordered_copy(self.solution, self.row_order, self.iteration)
-
         self.iteration += 1
-        #return sol[:, 0], sol[:, 1] #, vec,  u_rrhs, cf, eta, n
         return self.solution[:, 1].copy()
 
-    #'#@profile
     def solve(self):
         self.lu = lu_factor(self.coeff, check_finite=False)
         self.solution = lu_solve(self.lu, self.rrhs, check_finite=False)
