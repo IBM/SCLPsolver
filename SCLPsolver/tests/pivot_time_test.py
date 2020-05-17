@@ -14,8 +14,8 @@ def relative_to_project(file_path):
 import time
 A = np.load(relative_to_project('tests/data/DD.dat'), allow_pickle=True)
 A = np.ascontiguousarray(A)
-pn = np.load(relative_to_project('tests/data/pn.dat'), allow_pickle=True).astype(int)[:,0]
-dn = np.load(relative_to_project('tests/data/dn.dat'), allow_pickle=True).astype(int)[:,0]
+pn = np.load(relative_to_project('tests/data/pn.dat'), allow_pickle=True).astype(int32)[:,0]
+dn = np.load(relative_to_project('tests/data/dn.dat'), allow_pickle=True).astype(int32)[:,0]
 B=np.zeros_like(A)
 pn1 = pn.copy()
 dn1 = dn.copy()
