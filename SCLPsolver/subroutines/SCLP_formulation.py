@@ -88,14 +88,14 @@ class SCLP_formulation():
         DD = np.ascontiguousarray(DD)
         pn = np.ascontiguousarray(np.hstack((np.arange(1, self.K + 1, dtype = np.int32),
                                              -np.arange(self.J + 1, self.J + self.I + 1, dtype =  np.int32))), dtype = np.int32)
-        psx = ismember(np.arange(0, self.K), Kset).astype(int)
-        psu = -ismember(np.arange(self.J, self.J + self.I), Jset).astype(int)
+        psx = ismember(np.arange(0, self.K), Kset).astype(np.int32)
+        psu = -ismember(np.arange(self.J, self.J + self.I), Jset).astype(np.int32)
         ps = np.hstack((psx, psu))
 
         dn = np.ascontiguousarray(np.hstack((-np.arange(1, self.J + 1, dtype =  np.int32),
                                              np.arange(self.K + 1, self.K + self.L + 1, dtype = np.int32))), dtype = np.int32)
-        dsq = ismember(np.arange(0, self.J), Jset).astype(int)
-        dsp = -ismember(np.arange(self.K, self.K + self.L), Kset).astype(int)
+        dsq = ismember(np.arange(0, self.J), Jset).astype(np.int32)
+        dsp = -ismember(np.arange(self.K, self.K + self.L), Kset).astype(np.int32)
         ds = np.hstack((dsq, dsp))
         return LP_formulation(DD, pn, dn), ps, ds
 
