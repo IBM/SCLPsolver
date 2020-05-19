@@ -11,7 +11,7 @@ from doe.doe_utils import path_utils
 
 
 K = 1000
-I = 100
+I = 200
 solver_settings = SCLP_settings()
 solver_settings.suppress_printing = True
 solver_settings.memory_management = False
