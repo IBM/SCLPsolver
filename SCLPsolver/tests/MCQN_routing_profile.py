@@ -6,15 +6,15 @@ from SCLP import SCLP, SCLP_settings
 from doe.data_generators.MCQN_routing1 import generate_MCQN_routing_data
 from doe.doe_utils import path_utils
 
-K = 800
-I = 80
+K = 600
+I = 60
 seed = 1000
 solver_settings = SCLP_settings(find_alt_line =False)
 
-settings = {'J':1200, 'alpha_rate':  20, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.7, 'nz': 0.5,
+settings = {'J':1200, 'alpha_rate':  4, 'cost_scale':2, 'a_rate' : 0.1, 'sum_rate':0.8, 'nz': 0.5,
                     'gamma_rate':0, 'c_scale': 0, 'h_rate': 4}
 G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_routing_data(seed, K, I, **settings)
-TT = 1000
+TT = 100
 import time
 import cProfile, pstats, io
 pr = cProfile.Profile()
