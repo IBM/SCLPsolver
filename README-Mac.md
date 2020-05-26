@@ -33,6 +33,8 @@
 
 ## 3. Prerequisite: Get code from Github
 
+That is, get this repo.
+
 1. `cd SCLPsolver`
 
 ## 4. Prerequisite: Set up an Anaconda environment
@@ -48,7 +50,17 @@ An Anaconda environment will allow you to install packages and configure Python 
 2. Install OpenMP. `conda install -c conda-forge openmp`
 3. If you want to run the Design of Experiments, and you have CPlex installed, install the CLEX installer PIP installer `pip install -r doe/cplex_integration/cplex_requirements.txt`. Note: as of this writing, you cannot use *conda install* for the *doopl* package on Mac.
 
+## 6. Install XCode command line tools
+
+1. `xcode-select --install`
+
 ## 7. Compile cython files
+
+_Note: there is now a script for Mac that compiles and runs all of the below steps._
+
+0. `./cythonize.sh`
+
+Or do it manually:
 
 1. `cd subroutines/equation_tools`
 2. `python setup.py build_ext --inplace`
