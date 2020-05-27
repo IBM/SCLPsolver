@@ -14,7 +14,7 @@ K = 400
 I = 20
 seed = 1002
 solver_settings = SCLP_settings()
-solver_settings.suppress_printing = True
+solver_settings.suppress_printing = False
 solver_settings.memory_management = False
 settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.08, "alpha_rate2": 0.045}
 import time
