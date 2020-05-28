@@ -22,6 +22,7 @@ class SCLP_solution(generic_SCLP_solution):
         super().__init__(LP_form, solver_settings, formulation.K + formulation.L, formulation.J + formulation.I)
         self._formulation = formulation
         self._final_T = 0
+        self.last_T = 0
         self.max_valid_T = 0
         self._is_final = False
         self._u, self._p, self._t, self._obj, self._err= None, None, None, None, None

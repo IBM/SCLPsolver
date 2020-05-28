@@ -53,7 +53,7 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
         t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
         time_to_solve = time.time() - start_time
-        print(obj, err, maxT)
+        print(obj, err, solution.last_T, maxT)
         print("--- %s seconds ---" % time_to_solve)
         print("--- seed %s ---" % seed)
         if res == 0 or use_adaptive_T:
