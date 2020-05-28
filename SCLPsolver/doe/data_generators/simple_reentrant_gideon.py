@@ -10,7 +10,8 @@ def generate_simple_reentrant_data(seed, K, I, h_rate1 = 0.08, h_rate2 = 0.045, 
     G = np.eye(K) - np.diag(np.ones(K - 1), -1)
 
     # initial fluid
-    alpha_mean = np.arange(0.5 * (K+1), 0.5, -0.5)
+    cf = round(15 / K, 6)
+    alpha_mean = np.arange(cf * (K+0.99), cf, -cf)
     alpha = alpha_rate1 * alpha_mean + alpha_rate2 * alpha_mean * alpha_dist(*alpha_dist_params, K)
 
     # exogenous input rate
@@ -45,4 +46,4 @@ def generate_simple_reentrant_data(seed, K, I, h_rate1 = 0.08, h_rate2 = 0.045, 
         total_buffer_cost = (np.inner(cost, alpha), np.inner(cost, a))
     else:
         total_buffer_cost = (0, 0)
-    return G, H, F, gamma, c, d, alpha, a, b, 2 * K, total_buffer_cost, cost
+    return G, H, F, gamma, c, d, alpha, a, b, 1.5 * K, total_buffer_cost, cost
