@@ -17,7 +17,7 @@ import os
 proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 sys.path.append(proj)
 from SCLP import SCLP, SCLP_settings
-from doe.data_generators.simple_reentrant_gideon import generate_simple_reentrant_data
+from doe.data_generators.simple_reentrant import generate_simple_reentrant_data
 from doe.doe_utils import path_utils
 
 

@@ -18,7 +18,7 @@ from .data_generators.MCQN import generate_MCQN_data, perturb_MCQN_data
 from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.MCQN_routing1 import generate_MCQN_routing_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
-from .data_generators.simple_reentrant_gideon import generate_simple_reentrant_data
+from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
