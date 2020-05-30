@@ -19,7 +19,7 @@ matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
 
 seed = 1000
-G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_data(seed, 12, 4)
+G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_data(seed, 12, 4)
 T = 150
 import time
 start_time = time.time()
@@ -28,8 +28,8 @@ solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solv
 
 t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
 
-solution.show_buffer_status()
-solution.show_server_utilization()
+# solution.show_buffer_status()
+# solution.show_server_utilization()
 
 print(obj, err)
 time_to_solve = time.time() - start_time

@@ -24,9 +24,9 @@ from SCLP import SCLP_settings
 solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution=False)
 pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
 DATADIRd = pu.get_CPLEX_data_path()
-for I in [60]:
-    for T in [10000]:
-        settings = {'first_alpha' :10, 'alpha_rate':  1, 'cost_scale':2, 'a_rate' : 0.1, 'gamma_rate':0, 'h_rate': 1}
+for I in [80]:
+    for T in [1000]:
+        settings = {'first_alpha' :10, 'alpha_rate':  10, 'cost_scale':2, 'a_rate' : 0.1, 'gamma_rate':0, 'h_rate': 1}
         if I < 100:
             results, ftrials, files, raw_tau = run_experiment_series('reentrant', 1, I * 5, I, T, settings, 1000,
                                                                      solver_settings, True, False)
