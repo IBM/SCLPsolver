@@ -9,6 +9,6 @@ G, H, F, gamma, c, d, alpha, a, b, TT, buffer_cost = generate_MCQN_routing_data(
         'alpha_rate':  20, 'cost_scale':1, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5, 'h_rate': 0.05, 'gamma_rate':0, 'c_scale': 0})
 print(a)
 print(c)
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 100, settings)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 100, settings)
 t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
 print(obj, err)

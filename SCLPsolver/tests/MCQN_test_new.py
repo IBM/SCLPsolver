@@ -8,7 +8,7 @@ from doe.doe_utils import path_utils
 K = 800
 I = 80
 import time
-solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution=False,  memory_management= False, suppress_printing = True)
+solver_settings = SCLP_settings(find_alt_line=False, check_intermediate_solution=False,  memory_management= False, suppress_printing = False)
 
 settings = {'alpha_rate':  1, 'cost_scale':2, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
                     'gamma_rate':0, 'c_scale': 0, 'h_rate': 0.2}
@@ -20,9 +20,14 @@ TT = 100
 # pr = cProfile.Profile()
 #pr.enable()
 start_time = time.time()
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
-t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 3/12 * TT, solver_settings)
+t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(True)
 #pr.disable()
+print(obj, err, maxT)
+print("--- %s seconds ---" % (time.time() - start_time))
+start_time = time.time()
+solution.recalculate(param_line, 1/12 * TT, 4/12 * TT, None, solver_settings, 10E-11, mm = None)
+t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(True)
 print(obj, err, maxT)
 print("--- %s seconds ---" % (time.time() - start_time))
 # s = io.StringIO()

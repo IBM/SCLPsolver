@@ -50,12 +50,13 @@ def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 
         solver_settings.file_name = pu.get_tmp_data_file_name(exp_type)
         import time
         start_time = time.time()
-        solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+        solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
         t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
         time_to_solve = time.time() - start_time
         print(obj, err, solution.last_T, maxT)
         print("--- %s seconds ---" % time_to_solve)
         print("--- seed %s ---" % seed)
+        Tres  = param_line.T
         if res == 0 or use_adaptive_T:
             if res != 0:
                 ps['T'] = 'adpt'
@@ -88,7 +89,7 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
     G0, H0, F0, gamma0, c0, d0, alpha0, a0, b0, TT0, buffer_cost0, xcost0 = generate_MCQN_data(starting_seed, K, I, **settings)
 
     # 2. Solve using SCLP
-    solution0, STEPCOUNT0, Tres0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
+    solution0, STEPCOUNT0, param_line0, res0 = SCLP(G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0, T, solver_settings)
     t, x, q, u, p, pivots, obj, err, NN, tau, maxT= solution0.get_final_solution()
     if True:
         true_objective = obj
@@ -103,7 +104,7 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
         G, H, F, a, b, c, d, alpha, gamma = perturb_MCQN_data(seed, rel_perturbation, symmetric, G0, H0, F0, a0, b0, c0, d0, alpha0, gamma0)
 
         # 4. Solve the SCLP with perturbed MCQN
-        solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+        solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
 
         # 5. Test
         # a. Check if the "true" values are feasible under perturbation

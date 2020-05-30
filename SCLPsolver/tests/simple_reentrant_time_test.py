@@ -10,17 +10,17 @@ from doe.doe_utils import path_utils
 
 
 
-K = 400
-I = 20
-seed = 1002
+K = 1200
+I = 60
+seed = 1005
 solver_settings = SCLP_settings()
 solver_settings.suppress_printing = False
 solver_settings.memory_management = False
-settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.08, "alpha_rate2": 0.045}
+settings = {"c_scale": 0, "cost_scale": 10, "alpha_rate1": 0.8, "alpha_rate2": 0.45}
 import time
 G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_simple_reentrant_data(seed, K, I, **settings)
 start_time = time.time()
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT,  solver_settings)
 t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))

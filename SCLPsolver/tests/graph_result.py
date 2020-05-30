@@ -30,7 +30,7 @@ T = time_horizon
 import time
 start_time = time.time()
 solver_settings = SCLP_settings(find_alt_line=False)
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, T, solver_settings)
 t, X, q, U, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
 print(obj, err)
 time_to_solve = time.time() - start_time

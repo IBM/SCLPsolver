@@ -139,4 +139,4 @@ def SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, settings = SCLP_settings(), tole
         line_file_name = file_name + '_' + str(STEPCOUNT) + '_param_line.dat'
         pickle.dump(solution, open(solution_file_name, 'wb'))
         pickle.dump(param_line, open(line_file_name, 'wb'))
-    return solution, STEPCOUNT, param_line.T, pivot_problem['result']
+    return solution, STEPCOUNT, param_line, pivot_problem['result']

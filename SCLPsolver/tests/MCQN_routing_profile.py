@@ -20,7 +20,7 @@ import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
 start_time = time.time()
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
 t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
 pr.disable()
 print(obj, err, maxT)

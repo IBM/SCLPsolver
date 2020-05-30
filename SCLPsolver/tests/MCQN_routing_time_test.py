@@ -18,7 +18,7 @@ G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate
 TT = 200
 import time
 start_time = time.time()
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
 t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
 print(obj, err, maxT)
 print("--- %s seconds ---" % (time.time() - start_time))

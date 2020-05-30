@@ -23,7 +23,7 @@ for seed in range(1000, 1010):
     G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_simple_reentrant_data(seed, K, I, **settings)
     start_time = time.time()
     pr.enable()
-    solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
     t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
     pr.disable()
     print(obj, err)

@@ -6,6 +6,7 @@ from .solution_state import solution_state
 from .lp_tools.LP_formulation import solve_LP_in_place
 from .state_tools.calc_states import calc_states
 from .matlab_utils import find
+from .parametric_line import parametric_line
 import itertools
 
 
@@ -112,24 +113,25 @@ class SCLP_solution(generic_SCLP_solution):
             #TODO: check last_breakpoint
             last_breakpoint = np.where(self.t<=t0)[0][-1]
             delta_t = t0 - self.t[last_breakpoint]
-            self._base_sequence.remove_bases(-1, last_breakpoint, self._pivots)
-            self._dx.remove(0, last_breakpoint)
-            self._dq.remove(0, last_breakpoint)
+            self._base_sequence.remove_bases(-1, last_breakpoint, self._pivots, self.bases_mm)
             self._pivots.remove_pivots(-1, last_breakpoint)
-            self._state.dx = self._dx.get_matrix()
-            self._state.dq = self._dq.get_matrix()
-            self.loc_min_storage.update_caseI(-1,last_breakpoint,self._state.dx, self._state.dq)
-            self._state.tau=self._state.tau[last_breakpoint:]
-            self._state.dtau = self._state.dtau[last_breakpoint:]
             if self.partial_states:
                 self._state.x, self._state.del_x, self._state.q, self._state.del_q = calc_states(self._dx.get_raw_matrix(),
                     self._dq.get_raw_matrix(), param_line, self._state.tau, self._state.dtau, check_state)
-            self._state.x = self._state.x[:,last_breakpoint:]
-            self._state.x[:, 0] += self._state.dx[:, 0] * delta_t
-            self._state.q = self._state.q[:, last_breakpoint:]
-            self._state.q[:, 0] -= self._state.dq[:, 0] * delta_t
+            self._state.tau=self._state.tau[last_breakpoint:]
+            self._state.dtau = self._state.dtau[last_breakpoint:]
             self._state.del_x = self._state.del_x[:, last_breakpoint:]
             self._state.del_q = self._state.del_q[:, last_breakpoint:]
+            self._state.x = self._state.x[:,last_breakpoint:]
+            self._state.q = self._state.q[:, last_breakpoint:]
+            self._dx.remove(0, last_breakpoint)
+            self._dq.remove(0, last_breakpoint)
+            self._state.dx = self._dx.get_matrix()
+            self._state.dq = self._dq.get_matrix()
+            self.loc_min_storage.update_caseI(-1, last_breakpoint, self._state.dx, self._state.dq)
+            self._state.x[:, 0] += self._state.dx[:, 0] * delta_t
+            self._state.q[:, 0] += self._state.dq[:, 0] * delta_t
+
 
     def recalculate(self, param_line, t0, new_T, new_x0, settings, tolerance, mm = None):
         if t0 >= self._final_T:
@@ -148,6 +150,9 @@ class SCLP_solution(generic_SCLP_solution):
         else:
             if new_T is not None:
                 from .SCLP_solver import SCLP_solver
+                param_line  = parametric_line(np.ascontiguousarray(self._state.x[:, 0]), param_line.q_N, new_T, param_line.T -t0, del_T =1)
+                param_line.build_boundary_sets(self.klist, self.jlist)
+                self._state.reserve_memory_for_states()
                 return SCLP_solver(self, param_line, 'update', 0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
             else:
                 return self, 0, {'result': 0}
