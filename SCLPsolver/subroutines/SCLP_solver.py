@@ -32,8 +32,6 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
     while True:
 
         if not rewind_required:
-            if STEPCOUNT ==  15058:
-                print('here')
             if solution.check_if_complete(param_line):
                 solution.print_short_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, param_line.theta, 'complete')
                 return solution, STEPCOUNT, pivot_problem
@@ -118,6 +116,7 @@ def SCLP_solver(solution, param_line, case, DEPTH, STEPCOUNT, ITERATION, setting
         if DEPTH == 0 and param_line.is_end(col_info.delta):
             col_info.case = 'solved__'
             solution.print_status(STEPCOUNT, DEPTH, ITERATION[DEPTH], param_line.theta, col_info)
+            solution.last_T = param_line.theta
             solution.max_valid_T = param_line.theta + col_info.delta
             param_line.forward_to_end()
             return solution, STEPCOUNT, pivot_problem

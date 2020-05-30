@@ -53,7 +53,7 @@ class solution_state():
         tau = np.zeros(self._max_tau_size, dtype=np.double, order='C')
         tau[:self._tau_size] = self._tau[:self._tau_size]
         self._tau = tau
-        self._reserve_memory_for_states()
+        self.reserve_memory_for_states()
 
     @property
     def tau(self):
@@ -65,10 +65,10 @@ class solution_state():
         if self._tau_size > self._max_tau_size:
             self._max_tau_size = self._tau_size * 2
             self._tau = np.zeros(self._max_tau_size, dtype=np.double, order='C')
-            self._reserve_memory_for_states()
+            self.reserve_memory_for_states()
         self._tau[:self._tau_size] = value
 
-    def _reserve_memory_for_states(self):
+    def reserve_memory_for_states(self):
         self.x = np.zeros((self.x.shape[0], self._max_tau_size + 1), dtype=np.float64, order='C')
         self.del_x = np.zeros((self.del_x.shape[0], self._max_tau_size + 1), dtype=np.float64, order='C')
         self.q = np.zeros((self.q.shape[0], self._max_tau_size + 1), dtype=np.float64, order='C')

@@ -39,7 +39,7 @@ import cProfile, pstats, io
 pr = cProfile.Profile()
 pr.enable()
 start_time = time.time()
-solution, STEPCOUNT, Tres, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 5000)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 5000)
 t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
 print(obj, err)
 print("--- %s seconds ---" % (time.time() - start_time))
