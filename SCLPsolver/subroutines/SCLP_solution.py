@@ -106,7 +106,7 @@ class SCLP_solution(generic_SCLP_solution):
             part3 = np.dot(np.dot(self._formulation.d, ((x[self._formulation.K:, :-1] + x[self._formulation.K:, 1:]) / 2)), tau)
         return part1 + part2 + part3
 
-    def truncate_at(self, t0, param_line, check_state = False):
+    def truncate_at(self, t0):
         self.t = np.cumsum(np.hstack((0, self._state.tau)))
         self._final_T = self.t[-1]
         if t0 < self._final_T:
@@ -115,9 +115,6 @@ class SCLP_solution(generic_SCLP_solution):
             delta_t = t0 - self.t[last_breakpoint]
             self._base_sequence.remove_bases(-1, last_breakpoint, self._pivots, self.bases_mm)
             self._pivots.remove_pivots(-1, last_breakpoint)
-            if self.partial_states:
-                self._state.x, self._state.del_x, self._state.q, self._state.del_q = calc_states(self._dx.get_raw_matrix(),
-                    self._dq.get_raw_matrix(), param_line, self._state.tau, self._state.dtau, check_state)
             self._state.tau=self._state.tau[last_breakpoint:]
             self._state.dtau = self._state.dtau[last_breakpoint:]
             self._state.del_x = self._state.del_x[:, last_breakpoint:]
@@ -137,7 +134,7 @@ class SCLP_solution(generic_SCLP_solution):
         if t0 >= self._final_T:
             print('!!!')
         else:
-            self.truncate_at(t0, param_line)
+            self.truncate_at(t0)
         if new_T <= t0:
             print('!!!')
         if new_x0 is not None:
@@ -150,12 +147,15 @@ class SCLP_solution(generic_SCLP_solution):
         else:
             if new_T is not None:
                 from .SCLP_solver import SCLP_solver
-                param_line  = parametric_line(np.ascontiguousarray(self._state.x[:, 0]), param_line.q_N, new_T, param_line.T -t0, del_T =1)
+                param_line  = parametric_line(np.ascontiguousarray(self._state.x[:, 0]), param_line.q_N, new_T-param_line.T, param_line.T-t0, del_T =1)
                 param_line.build_boundary_sets(self.klist, self.jlist)
                 self._state.reserve_memory_for_states()
-                return SCLP_solver(self, param_line, 'update', 0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
+                solution, STEPCOUNT, pivot_problem = SCLP_solver(self, param_line, 'update', 0, 0, dict(), settings, tolerance, settings.find_alt_line, mm)
+                is_ok = solution.update_state(param_line, check_state=settings.check_final_solution,
+                                              tolerance=tolerance * 10)
+                return STEPCOUNT, pivot_problem
             else:
-                return self, 0, {'result': 0}
+                return 0, {'result': 0}
 
     def plot_history(self, plt):
         if self.plot_data is not None:
