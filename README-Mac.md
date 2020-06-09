@@ -73,9 +73,10 @@ Or do it manually:
 
 1. `cd tests`
 2. Generate random re-entrant line problem and solve it using simplex-type algorithm and CPLEX discretization.
-_Note: if you have no CPLEX you should comment all starting from line 69 to the end of the file_   
+_Note: if you have no CPLEX you should comment all starting from line 70 to the end of the file_   
  `DYLD_LIBRARY_PATH=/Applications/CPLEX_Studio_Community1210/opl/bin/x86-64_osx PYTHONPATH=.. python simple_reentrant_test.py`
 3. Generate random MCQN problem and solve it using simplex-type algorithm and CPLEX discretization.
-_Note: if you have no CPLEX you should comment all starting from line 78 to the end of the file_  `DYLD_LIBRARY_PATH=/Applications/CPLEX_Studio_Community1210/opl/bin/x86-64_osx PYTHONPATH=.. python MCQN_test.py`
+_Note: if you have no CPLEX you should comment all starting from line 79 to the end of the file_  `DYLD_LIBRARY_PATH=/Applications/CPLEX_Studio_Community1210/opl/bin/x86-64_osx PYTHONPATH=.. python MCQN_test.py`
+4. For the explanations on parameters and results look to the comments in the code and to the [results.md](results.md)
 
 

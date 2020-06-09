@@ -52,7 +52,8 @@ t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(Fal
 pobj = tot_buf_cost - obj
 print("SCLP objective:", obj, "Problem objective:", pobj, "steps:", STEPCOUNT, "intervals:", len(tau))
 sol_time = time.time() - start_time
-print("Time: --- %s seconds ---" % (sol_time))
+print("Solution time: %s seconds" % (sol_time))
+print("----------------------------------------------")
 # preparing CPLEX .dat file name
 ps = {'K': K, 'I': I, 'T': TT}
 for k, v in settings.items():
@@ -60,7 +61,7 @@ for k, v in settings.items():
         ps[k] = v.__name__[:4]
     else:
         ps[k] = str(v)
-# uses current directory change if you wnat to store CPLEX dat file in the specific directory
+# uses current directory change if you want to store CPLEX dat file in the specific directory
 pu = path_utils('')
 full_file_name = pu.get_CPLEX_data_file_name('simple_reentrant', **ps)
 # writing .dat file for CPLEX
