@@ -16,35 +16,21 @@ import sys
 import os
 proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 sys.path.append(proj)
-from SCLP import SCLP
-from doe.data_generators.data_loader import load_data
-from doe.doe_utils import path_utils
+from SCLP import SCLP, SCLP_settings
+from doe.data_generators.MCQN import generate_MCQN_data
 
+K = 1000
+I = 100
+seed = 1000
+solver_settings = SCLP_settings(find_alt_line =False)
 
-def relative_to_project(file_path):
-    if os.path.isabs(file_path):
-        return file_path
-    else:
-        proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-        return os.path.join(proj, file_path)
-
-seed = 1013
-K = 2000
-I = 200
-pu = path_utils(os.path.expanduser('~/Box/SCLP comparison/data'))
-exp_path = pu.get_experiment_path('MCQN',K=K,I=I,seed=seed)
-G, H, F, gamma, c, d, alpha, a, b, T = load_data(exp_path)
+settings = {'alpha_rate':  1, 'cost_scale':2, 'a_rate' : 0.05, 'sum_rate':0.95, 'nz': 0.5,
+                    'gamma_rate':0, 'c_scale': 0, 'h_rate': 0.2}
+G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_data(seed, K, I, **settings)
+TT = 1000
 import time
-import cProfile, pstats, io
-pr = cProfile.Profile()
-pr.enable()
 start_time = time.time()
-solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, 5000)
-t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution()
-print(obj, err)
+solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT, solver_settings)
+t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(False)
+print(obj, err, maxT)
 print("--- %s seconds ---" % (time.time() - start_time))
-pr.disable()
-s = io.StringIO()
-ps = pstats.Stats(pr, stream=s)
-ps.print_stats()
-print(s.getvalue())
