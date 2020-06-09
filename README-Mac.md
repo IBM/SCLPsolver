@@ -52,7 +52,7 @@ An Anaconda environment will allow you to install packages and configure Python 
 
 1. Use conda installer. `conda install --yes --file sclp_requirements.txt`
 2. Install OpenMP. `conda install -c conda-forge openmp`
-3. If you want to run the Design of Experiments, and you have CPlex installed, install the CLEX installer PIP installer `pip install -r doe/cplex_integration/cplex_requirements.txt`. Note: as of this writing, you cannot use *conda install* for the *doopl* package on Mac.
+3. If you want to run the Design of Experiments, and you have CPLEX installed, install the CPLEX installer PIP installer `pip install -r doe/cplex_integration/cplex_requirements.txt`. Note: as of this writing, you cannot use *conda install* for the *doopl* package on Mac.
 
 ## 7. Compile cython files
 
