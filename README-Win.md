@@ -26,7 +26,7 @@ An Anaconda environment will allow you to install packages and configure Python 
 
 ## 5. Install Microsoft C++ Build Tools
 
-1. Go to Microsoft C++ Build Tools site: [https://visualstudio.microsoft.com/visual-cpp-build-tools/] https://visualstudio.microsoft.com/visual-cpp-build-tools/
+1. Go to Microsoft C++ Build Tools site: [https://visualstudio.microsoft.com/visual-cpp-build-tools/]( https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 2. Download and install Microsoft C++ Build Tools
 
 ## 6. Prerequisite: Install required packages
