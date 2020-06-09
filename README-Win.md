@@ -52,6 +52,10 @@ Or do it manually:
 ## 8. Optional: run doe tests
 
 1. `cd tests`
-2. `DYLD_LIBRARY_PATH=/Applications/CPLEX_Studio_Community1210/opl/bin/x86-64_osx PYTHONPATH=.. python test.py`
-3. **This test requires access to our Box folder.** `DYLD_LIBRARY_PATH=/Applications/CPLEX_Studio_Community1210/opl/bin/x86-64_osx PYTHONPATH=.. python MCQN_test.py`
+2. Generate random re-entrant line problem and solve it using simplex-type algorithm and CPLEX discretization.
+_Note: if you have now CPLEX you should comment lines 66 and 72_  
+ `python simple_reentrant_test.py`
+3. Generate random MCQN problem and solve it using simplex-type algorithm and CPLEX discretization.
+_Note: if you have now CPLEX you should comment lines 76 and 82_  
+`python MCQN_test.py`
 
