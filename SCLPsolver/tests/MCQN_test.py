@@ -73,6 +73,6 @@ full_file_name = pu.get_CPLEX_data_file_name('MCQN', **ps)
 write_CPLEX_dat(full_file_name, TT, G, H, alpha, a, b, gamma, c, buffer_cost)
 # next line requires CPLEX - comment this line if you have no CPLEX
 from doe.cplex_integration.run_cplex_experiments import run_cplex_experiments
-cplex_results = run_cplex_experiments(pu.get_CPLEX_data_path(), relative_to_project('doe/cplex_integration/mod_files/main100xobj.mod'),
+cplex_results = run_cplex_experiments(pu.get_CPLEX_data_path(), relative_to_project('doe/cplex_integration/mod_files/main10xobj.mod'),
                                       [full_file_name])
 
