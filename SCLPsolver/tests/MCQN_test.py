@@ -20,6 +20,7 @@ from SCLP import SCLP, SCLP_settings
 from doe.data_generators.MCQN import generate_MCQN_data
 from doe.data_generators.write_CPLEX_dat import write_CPLEX_dat
 from doe.doe_utils import path_utils
+from subroutines.utils import relative_to_project
 
 
 # I - number of servers
@@ -59,7 +60,7 @@ t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(Fal
 print(obj, err, tot_buf_cost - obj, maxT)
 print("--- %s seconds ---" % (time.time() - start_time))
 # preparing CPLEX .dat file name
-ps = {'K': K, 'I': I, 'T': T}
+ps = {'K': K, 'I': I, 'T': TT}
 for k, v in settings.items():
     if isinstance(v, object) and hasattr(v, '__name__'):
         ps[k] = v.__name__[:4]
@@ -72,4 +73,6 @@ full_file_name = pu.get_CPLEX_data_file_name('MCQN', **ps)
 write_CPLEX_dat(full_file_name, TT, G, H, alpha, a, b, gamma, c, buffer_cost)
 # next line requires CPLEX - comment this line if you have no CPLEX
 from doe.cplex_integration.run_cplex_experiments import run_cplex_experiments
-run_cplex_experiments(pu.get_CPLEX_data_path(), '', [full_file_name])
+cplex_results = run_cplex_experiments(pu.get_CPLEX_data_path(), relative_to_project('doe/cplex_integration/mod_files/main100xobj.mod'),
+                                      [full_file_name])
+
