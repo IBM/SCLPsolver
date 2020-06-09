@@ -31,6 +31,9 @@ class path_utils:
             self.home_path = os.path.expanduser('~/Box/SCLP comparison/data')
         else:
             self.home_path = home_path
+        cplex_data_path = os.path.join(home_path,'CPLEX')
+        if not os.path.exists(cplex_data_path):
+            os.makedirs(cplex_data_path)
 
     def get_experiment_type_path(self, exp_type):
         return self.home_path + '/' + exp_type
@@ -46,7 +49,7 @@ class path_utils:
         return path
 
     def get_CPLEX_data_file_name(self, exp_type, translation_table = None, **kwargs):
-        path = self.home_path + '/CPLEX/' + exp_type + '_'
+        path = os.path.join(self.home_path,'CPLEX', exp_type + '_')
         if kwargs is not None:
             kwargs = self.translate_param_names(translation_table, **kwargs)
             for k,v in kwargs.items():
@@ -62,7 +65,7 @@ class path_utils:
         return path
 
     def get_CPLEX_data_path(self):
-        return self.home_path + '/CPLEX'
+        return os.path.join(self.home_path,'CPLEX')
 
     def translate_param_names(self, translation_table=None, **kwargs):
         if translation_table is None:
