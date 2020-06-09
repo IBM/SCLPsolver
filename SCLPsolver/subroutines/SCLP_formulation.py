@@ -17,7 +17,6 @@ from enum import Enum
 from .matlab_utils import find, ismember
 from .lp_tools.LP_formulation import LP_formulation
 from .lp_tools.simplex_procedures import unsigned_simplex
-from .piecewise_data import piecewise_data
 from .parametric_line import parametric_line
 
 
@@ -75,16 +74,16 @@ class SCLP_formulation():
                     self._formulation_type = SCLP_formulation_type.dual_MCLP
             else:
                 self._formulation_type = SCLP_formulation_type.weiss
-        if isinstance(a, piecewise_data):
-            if isinstance(c, piecewise_data):
-                self._data_type = SCLP_data_type.piecewise_linear
-            else:
-                self._data_type = SCLP_data_type.primal_piecewise_linear
-        else:
-            if isinstance(c, piecewise_data):
-                self._data_type = SCLP_data_type.dual_piecewise_linear
-            else:
-                self._data_type = SCLP_data_type.linear
+        # if isinstance(a, piecewise_data):
+        #     if isinstance(c, piecewise_data):
+        #         self._data_type = SCLP_data_type.piecewise_linear
+        #     else:
+        #         self._data_type = SCLP_data_type.primal_piecewise_linear
+        # else:
+        #     if isinstance(c, piecewise_data):
+        #         self._data_type = SCLP_data_type.dual_piecewise_linear
+        #     else:
+        #         self._data_type = SCLP_data_type.linear
 
     @property
     def data_type(self):
