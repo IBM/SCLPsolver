@@ -3,3 +3,5 @@ scipy
 cython
 psutil
 bokeh
+pytest
+matplotlib

@@ -14,12 +14,55 @@
 
 import os
 import numpy as np
+from functools import partial
+from math import sin, pi
 from .data_generators.MCQN import generate_MCQN_data, perturb_MCQN_data
 from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
 from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
+
+def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple) -> np.ndarray:
+    """Generate functions for producing the "uncertain" values of parameters.
+
+    This function takes a vector/matrix of parameters and
+    generates corresponding continuous functions that are
+    a random distance away from the original parameters.
+    The functions each take the time value from the domain
+    parameter and produce an output in the range.
+    The result will be an np.ndarray of such functions.
+    The shape of the resulting array is the same as
+    the shape of the input parameter.
+
+    Parameters
+    ----------
+    params : np.ndarray of numbers
+        The parameters which will be randomized over time.
+    domain : tuple of int
+        The time domain of the functions
+    codomain : tuple of int
+        The output range of the functions
+
+    Returns
+    -------
+    np.ndarray
+        Functions from the domain to the range,
+        randomly perturbed from the input.
+    """
+    shape = params.shape
+    left, right = domain
+    width = right - left
+    low, high = codomain
+    height = high - low
+    result = np.empty(shape, dtype=object)
+    k = 10
+    def uncertain(amps, freqs, shifts, t):
+        # print(f'low={low} height={height} amps={amps} freqs={freqs} shifts={shifts}')
+        return low + height/2 + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+    for index, value in np.ndenumerate(params):
+       result[index] = partial(uncertain, [height / k]*k, range(1,k+1), np.random.uniform(0, 2*pi, k))
+    return result
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, solver_settings = None,
