@@ -23,7 +23,7 @@ from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
-def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple) -> np.ndarray:
+def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed: int = 1) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
     This function takes a vector/matrix of parameters and
@@ -43,6 +43,8 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple) -> n
         The time domain of the functions
     codomain : tuple of int
         The output range of the functions
+    seed: int
+        Random number generator seed. Defaults to 1.
 
     Returns
     -------
@@ -50,6 +52,7 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple) -> n
         Functions from the domain to the range,
         randomly perturbed from the input.
     """
+    np.random.seed(seed)
     shape = params.shape
     left, right = domain
     width = right - left
@@ -58,7 +61,6 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple) -> n
     result = np.empty(shape, dtype=object)
     k = 10
     def uncertain(amps, freqs, shifts, t):
-        # print(f'low={low} height={height} amps={amps} freqs={freqs} shifts={shifts}')
         return low + height/2 + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
     for index, value in np.ndenumerate(params):
        result[index] = partial(uncertain, [height / k]*k, range(1,k+1), np.random.uniform(0, 2*pi, k))
