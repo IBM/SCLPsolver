@@ -62,8 +62,11 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
     k = 10
     def uncertain(amps, freqs, shifts, t):
         return low + height/2 + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
-    for index, value in np.ndenumerate(params):
-       result[index] = partial(uncertain, [height / k]*k, range(1,k+1), np.random.uniform(0, 2*pi, k))
+    for index, h in np.ndenumerate(params):
+        if h == 0:
+            result[index] = lambda t: 0
+        else:
+            result[index] = partial(uncertain, [height / k]*k, range(1,k+1), np.random.uniform(0, 2*pi, k))
     return result
 
 
@@ -173,3 +176,5 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
 
     return num_feasible, true_objective, perturbed_obj_vals
 
+def run_experiment_randomized():
+    return 0
