@@ -52,7 +52,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         if not isinstance(v2, list):
             Kset = Kset[Kset!=v2]
             if v2 < 0:
-                Jset = np.append(Jset, v2)
+                Jset = np.append(Jset, v2).astype(np.int32)
         else:
             print('v2', v2)
         new_basis, lp_pivots, err = solve_ratesLP(AAN1, Kset, Jset, solution.bases_mm, tolerance)
