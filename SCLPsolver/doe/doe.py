@@ -23,7 +23,7 @@ from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
-def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed: int = 1) -> np.ndarray:
+def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
     This function takes a vector/matrix of parameters and
@@ -38,13 +38,13 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
     Parameters
     ----------
     params : np.ndarray of numbers
-        The parameters which will be randomized over time.
+        The parameters which will be randomized over time. For each 0 value, the 0 function will be generated.
     domain : tuple of int
         The time domain of the functions
     codomain : tuple of int
         The output range of the functions
     seed: int
-        Random number generator seed. Defaults to 1.
+        Random number generator seed or None (default).
 
     Returns
     -------
@@ -52,7 +52,8 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
         Functions from the domain to the range,
         randomly perturbed from the input.
     """
-    np.random.seed(seed)
+    if seed:
+        np.random.seed(seed)
     shape = params.shape
     left, right = domain
     width = right - left
