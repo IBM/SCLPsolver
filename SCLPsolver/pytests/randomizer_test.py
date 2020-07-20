@@ -9,24 +9,29 @@ with_plots = False
 def test_gen_uncertain_param():
     """Test that the gen_uncertain_param function works"""
     domain = (left, right) = (0, 100)
-    codomain = (low, high) = (1, 3.5)
+    perturbation = (low, high) = (0, 0.1)
     shape = (5, 5)
-    params = np.ones(shape, dtype=np.float32)
-    p = gen_uncertain_param(params, domain, codomain, seed=1)
+    params = np.eye(shape[0], dtype=np.float32)
+    p = gen_uncertain_param(params, domain, perturbation, seed=1)
     assert p.shape == shape
     # for i, f in np.ndenumerate(p):
     #     for t in range(*domain):
     #         if f(t) < low or f(t) > high:
     #             print(f'i={i} t={t} f(t)={f(t)}')
-    assert all([low <= f(t) <= high for i, f in np.ndenumerate(p) for t in range(*domain)])
+    # assert all([low <= f(t) <= high for i, f in np.ndenumerate(p) for t in range(*domain)])
 
     if with_plots:
         xs = np.linspace(left, right, 50)
         y1 = [p[(0,0)](x) for x in xs]
-        y2 = [p[(1,0)](x) for x in xs]
-        y3 = [p[(2,1)](x) for x in xs]
-        y4 = [p[(3,4)](x) for x in xs]
+        y2 = [p[(1,1)](x) for x in xs]
+        y3 = [p[(2,2)](x) for x in xs]
+        y4 = [p[(3,3)](x) for x in xs]
 
+        plt.axhline(y=1, xmin=0.1, xmax=0.9)
+        if low != 0:
+            plt.axhline(y=(1 + low), xmin=0.1, xmax=0.9, linestyle='dotted')
+        if high != 0:
+            plt.axhline(y=(1 + high), xmin=0.1, xmax=0.9, linestyle='dotted')
         plt.plot(xs, y1)
         plt.plot(xs, y2)
         plt.plot(xs, y3)

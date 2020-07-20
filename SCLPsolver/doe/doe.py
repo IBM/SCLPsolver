@@ -23,7 +23,8 @@ from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
-def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed: int = None) -> np.ndarray:
+
+def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
     This function takes a vector/matrix of parameters and
@@ -41,8 +42,8 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
         The parameters which will be randomized over time. For each 0 value, the 0 function will be generated.
     domain : tuple of int
         The time domain of the functions
-    codomain : tuple of int
-        The output range of the functions
+    perturbation : tuple of numbers
+        The relative amount to perturb the output range of the functions
     seed: int
         Random number generator seed or None (default).
 
@@ -57,17 +58,17 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
     shape = params.shape
     left, right = domain
     width = right - left
-    low, high = codomain
-    height = high - low
     result = np.empty(shape, dtype=object)
-    k = 10
-    def uncertain(amps, freqs, shifts, t):
-        return low + height/2 + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+    k = 1
+    perturb_low, perturb_high = perturbation
+    height = perturb_high - perturb_low
+    def uncertain(h, amps, freqs, shifts, t):
+        return h * (1 + 0.5*height) + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
     for index, h in np.ndenumerate(params):
         if h == 0:
             result[index] = lambda t: 0
         else:
-            result[index] = partial(uncertain, [height / k]*k, range(1,k+1), np.random.uniform(0, 2*pi, k))
+            result[index] = partial(uncertain, h, [h*height/k] * k, range(1,k+1), np.random.uniform(0, 2*pi, k))
     return result
 
 
