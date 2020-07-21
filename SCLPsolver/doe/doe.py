@@ -24,7 +24,7 @@ from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
 
-def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, seed: int = None) -> np.ndarray:
+def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, k: int = 4, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
     This function takes a vector/matrix of parameters and
@@ -43,7 +43,10 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, 
     domain : tuple of int
         The time domain of the functions
     perturbation : tuple of numbers
-        The relative amount to perturb the output range of the functions
+        The relative amount to perturb the output range of the functions.
+        For example, (0, 0.1) will perturb the parameters 10% on the upside.
+    k: int
+        The number of sine wave perturbations. Default is 4.
     seed: int
         Random number generator seed or None (default).
 
@@ -59,7 +62,6 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, 
     left, right = domain
     width = right - left
     result = np.empty(shape, dtype=object)
-    k = 1
     perturb_low, perturb_high = perturbation
     height = perturb_high - perturb_low
     def uncertain(h, amps, freqs, shifts, t):
