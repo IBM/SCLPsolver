@@ -23,6 +23,39 @@ from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
+
+def sin_uncertainty(h: float, height: float, width: float, amps: list, freqs: list, shifts: list, t: float):
+    """Generate a sine-based continuous uncertainty function of time, centered around h
+    and evaluate it at t.
+
+    Parameters
+    ----------
+    h: float
+        The true point.
+    height:
+        The total height of the uncertainty.
+    width: float
+        The width of the time interval.
+    amps: list
+        The amplitudes of each sine function.
+    freqs: list
+        The frequencies of each sine function.
+    shifts: list
+        The amount to shift the sin functions.
+    t: float
+        The time to
+    Returns
+    -------
+    float
+        The random function evaluated at t
+    """
+    k = len(amps)
+    if k != len(freqs):
+        raise RuntimeError("amps and freqs parameters must have same length")
+    if k != len(shifts):
+        raise RuntimeError("amps and shifts parameters must have same length")
+    return h * (1 + 0.5*height) + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+
 # 1. This implemntation defined as \tau(t) = \overline{\tau} + \tilde{\tau}\theta(t), where \tilde{\tau} =
 #      perturbation[1] \overline{\tau} and \overline{\tau} are non-zero entries of H. We also need
 #      consider perturbation of \mu  = \overline{\mu} + \tilde{\mu}\theta(t) where \tilde{\mu} =  perturbation[1] \overline{\mu}
@@ -32,7 +65,8 @@ from SCLP import SCLP, SCLP_settings
 #       and similar for \mu
 #  3. Please make "uncertain" function to be parameter and define it separately in this file... default value of this parameter
 #       will be your "uncertain" function.
-def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, k: int = 4, seed: int = None) -> np.ndarray:
+def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple,
+                        uncertain_func = sin_uncertainty, k: int = 4, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
     This function takes a vector/matrix of parameters and
@@ -53,6 +87,10 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, 
     perturbation : tuple of numbers
         The relative amount to perturb the output range of the functions.
         For example, (0, 0.1) will perturb the parameters 10% on the upside.
+    uncertain_func: function
+        Function that generates uncertainty functions of time.
+        Must accept parameters h, height, width, amps, freqs, shifts, t.
+        Default is sin_uncertainty(h, height, width, amps, freqs, shifts, t).
     k: int
         The number of sine wave perturbations. Default is 4.
     seed: int
@@ -72,13 +110,13 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, 
     result = np.empty(shape, dtype=object)
     perturb_low, perturb_high = perturbation
     height = perturb_high - perturb_low
-    def uncertain(h, amps, freqs, shifts, t):
-        return h * (1 + 0.5*height) + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+
     for index, h in np.ndenumerate(params):
         if h == 0:
             result[index] = lambda t: 0
         else:
-            result[index] = partial(uncertain, h, [h*height/k] * k, range(1,k+1), np.random.uniform(0, 2*pi, k))
+            result[index] = partial(uncertain_func, h, height, width, [h*height/k] * k, range(1,k+1), np.random.uniform(0, 2*pi, k))
+
     return result
 
 
