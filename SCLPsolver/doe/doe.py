@@ -23,7 +23,15 @@ from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
-
+# 1. This implemntation defined as \tau(t) = \overline{\tau} + \tilde{\tau}\theta(t), where \tilde{\tau} =
+#      perturbation[1] \overline{\tau} and \overline{\tau} are non-zero entries of H. We also need
+#      consider perturbation of \mu  = \overline{\mu} + \tilde{\mu}\theta(t) where \tilde{\mu} =  perturbation[1] \overline{\mu}
+#      and \overline{\mu} = 1/\overline{\tau}
+#  2. For both cases we should implement uncertainty budget - it will be parameter \Gamma: vector of dimension I (number of rows
+#       in matrix H). Generated functions should satisfy \sum_{j:s(i)=j} \tilde{\tau}\theta(t) \le \Gamma_i \sum_{j:s(i)=j} \tilde{\tau}
+#       and similar for \mu
+#  3. Please make "uncertain" function to be parameter and define it separately in this file... default value of this parameter
+#       will be your "uncertain" function.
 def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, k: int = 4, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
