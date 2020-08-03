@@ -75,18 +75,21 @@ def test_random_service_rates(perturbation):
 
     seed = 1000
 
-    T = 10.0
-    I = 10
-    K = 15
-    J = K
+    T = 10.0    # max time
+    I = 10      # number of servers
+    K = 15      # number of job classes
+    J = K       # number of flows from buffer to buffer
 
     settings = {'alpha_rate': 1, 'cost_scale': 2, 'a_rate': 0.05, 'sum_rate': 0.95, 'nz': 0.5,
                 'gamma_rate': 0, 'c_scale': 0, 'h_rate': 0.2}
 
     G, H, F, gamma, c, d, alpha, a, b, TT, total_buffer_cost, buffer_cost = generate_MCQN_data(seed, K, I, **settings)
 
+    # H is I x J
+
     assert (H >= 0).all()
     assert (H <= settings['h_rate']).all()
+
 
     X = np.where(H==0., 0., 1/H)
 
