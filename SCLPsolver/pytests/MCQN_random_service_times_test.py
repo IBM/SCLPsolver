@@ -91,7 +91,7 @@ def test_random_service_rates(perturbation):
     assert (H <= settings['h_rate']).all()
 
 
-    X = np.where(H==0., 0., 1/H)
+    X = np.where(H==0, 0, 1/H)
 
     domain = (0, T)
     X_prime = gen_uncertain_param(X, domain, (0, perturbation), seed=1)
@@ -199,7 +199,7 @@ def test_random_service_rates_feasible(perturbation):
                                                                                                **settings)
 
     # rate is the inverse of time H
-    X0 = np.where(H0==0., 0., 1/H0)
+    X0 = np.where(H0==0, 0, 1/H0)
 
     # Create the nominal solution
     solver_settings = SCLP_settings()

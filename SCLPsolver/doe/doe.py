@@ -56,16 +56,8 @@ def sin_uncertainty(h: float, height: float, width: float, amps: list, freqs: li
         raise RuntimeError("amps and shifts parameters must have same length")
     return h * (1 + 0.5*height) + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
 
-# 1. This implemntation defined as \tau(t) = \overline{\tau} + \tilde{\tau}\theta(t), where \tilde{\tau} =
-#      perturbation[1] \overline{\tau} and \overline{\tau} are non-zero entries of H. We also need
-#      consider perturbation of \mu  = \overline{\mu} + \tilde{\mu}\theta(t) where \tilde{\mu} =  perturbation[1] \overline{\mu}
-#      and \overline{\mu} = 1/\overline{\tau}
-#  2. For both cases we should implement uncertainty budget - it will be parameter \Gamma: vector of dimension I (number of rows
-#       in matrix H). Generated functions should satisfy \sum_{j:s(i)=j} \tilde{\tau}\theta(t) \le \Gamma_i \sum_{j:s(i)=j} \tilde{\tau}
-#       and similar for \mu
-#  3. Please make "uncertain" function to be parameter and define it separately in this file... default value of this parameter
-#       will be your "uncertain" function.
-def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple,
+
+def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, budget: tuple = None,
                         uncertain_func = sin_uncertainty, k: int = 4, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
@@ -87,6 +79,9 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple,
     perturbation : tuple of numbers
         The relative amount to perturb the output range of the functions.
         For example, (0, 0.1) will perturb the parameters 10% on the upside.
+    budget : tuple of numbers
+        The maximum total uncertainty per row of parameters at any time t.
+        Default is None.
     uncertain_func: function
         Function that generates uncertainty functions of time.
         Must accept parameters h, height, width, amps, freqs, shifts, t.
@@ -104,7 +99,7 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple,
     """
     if seed:
         np.random.seed(seed)
-    shape = params.shape
+    I, J = shape = params.shape
     left, right = domain
     width = right - left
     result = np.empty(shape, dtype=object)
@@ -117,7 +112,36 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple,
         else:
             result[index] = partial(uncertain_func, h, height, width, [h*height/k] * k, range(1,k+1), np.random.uniform(0, 2*pi, k))
 
-    return result
+    if budget is None:
+        return result
+    else:
+        param_rows = params.sum(axis=1)
+        b_result = np.empty(shape, dtype=object)
+
+        def excess(i, t):
+            r = []
+            for j in range(J):
+                f = result[i, j]
+                r.append((j, (f(t) - params[i, j])))
+            return sorted(r, key=lambda x: x[1]/params[i, j], reverse=True)
+
+        def budget_row(i, j, t):
+            excess_row = partial(excess, i)
+            total = sum([x for i, x in excess_row(t)])
+            for jj, diff in excess_row(t):
+                f = result[i, jj]
+                if total > 0 and diff > budget[i] * params[i, j]:
+                    amt = (diff - budget[i] * params[i, j])
+                    amt = min(total, amt)
+                    total -= amt
+                else:
+                    amt = 0
+                if j == jj:
+                    return f(t) - amt
+        for i, p in np.ndenumerate(params):
+            b_result[i] = partial(budget_row, i[0], i[1])
+
+        return b_result
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, solver_settings = None,
