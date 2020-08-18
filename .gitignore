@@ -14,3 +14,4 @@ build
 *.so
 *.c
 *.cpp
+.DS_Store
