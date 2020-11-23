@@ -20,17 +20,21 @@ from .pivot import signed_pivot_ij
 
 class LP_formulation():
 
-    __slots__ = ["simplex_dict", "prim_name", "dual_name", "prim_sign", "dual_sign"]
+    __slots__ = ["simplex_dict", "prim_name", "dual_name", "prim_sign", "dual_sign", "prim_zvars", "dual_zvars"]
 
-    def __init__(self, simplex_dict, prim_name, dual_name, prim_sign=None, dual_sign=None):
-        self.simplex_dict, self.prim_name, self.dual_name, self.prim_sign, self.dual_sign =\
-            simplex_dict, prim_name, dual_name, prim_sign, dual_sign
+    def __init__(self, simplex_dict, prim_name, dual_name, prim_sign=None, dual_sign=None, prim_zvars= None, dual_zvars=None):
+        self.simplex_dict, self.prim_name, self.dual_name, self.prim_sign, self.dual_sign, self.prim_zvars, self.dual_zvars= \
+            simplex_dict, prim_name, dual_name, prim_sign, dual_sign, prim_zvars, dual_zvars
 
     def __copy__(self):
+        prim_zvars = self.prim_zvars.copy() if self.prim_zvars else None
+        dual_zvars = self.dual_zvars.copy() if self.dual_zvars else None
         if self.prim_sign is None:
-            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy())
+            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy(),
+                                  prim_zvars=prim_zvars, dual_zvars=dual_zvars)
         else:
-            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy(), self.prim_sign.copy(), self.dual_sign.copy())
+            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy(),
+                                  self.prim_sign.copy(), self.dual_sign.copy(), prim_zvars, dual_zvars)
 
     def copy(self):
         return self.__copy__()
