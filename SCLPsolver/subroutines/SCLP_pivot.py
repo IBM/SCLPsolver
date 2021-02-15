@@ -13,13 +13,46 @@
 # limitations under the License.
 
 import numpy as np
+
+from .collision_info import collision_info
+from .generic_SCLP_solution import generic_SCLP_solution
 from .lp_tools.LP_formulation import solve_ratesLP, get_value_by_name, get_dx_names, get_dq_names, solve_simple_caseII
 from .SCLP_subproblem import SCLP_subproblem
 from .pivot_storage import pivot_storage
-
+#from ..SCLP import SCLP_settings
 
 #'#@profile
-def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, settings, tolerance):
+
+
+def SCLP_pivot(Kset_0:np.ndarray, Jset_N:np.ndarray, solution:generic_SCLP_solution,
+               col_info:collision_info, DEPTH:int, STEPCOUNT:int, ITERATION:dict, settings:dict, tolerance:float):
+    """Perform an SCLP pivot operation on the basis in the simplex-like algorithm.
+
+    Parameters
+    ----------
+    Kset_0: np.ndarray
+        Array of K indexes of {k: x^0_k > 0} where x^0 is at t=0.
+    Jset_N: np.ndarray
+        Array of J indexes of {j: q^N_j > 0} where q^N is at t=T.
+    solution: generic_SCLP_solution
+        The previous solution.
+    col_info: collision_info
+        Description of the collision that occurred.
+    DEPTH: int
+        Depth within the recursion starting at 0.
+    STEPCOUNT: int
+        Counter of how many steps the algorithm has taken overall.
+    ITERATION: dict
+        Counter of how many steps the algorithm has taken for each specific problem or subproblem.
+    settings: SCLP_settings
+        Solver settings.
+    tolerance: float
+        The numerical tolerance for floating point comparisons.
+    Returns
+    -------
+    generic_SCLP_solution, int, dict, dict
+        New solution, STEPCOUNT, ITERATION, pivot_problem
+    """
 
     pivot_problem = {'result': 0}
     v1 = col_info.v1
@@ -29,7 +62,7 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         AAN2 = solution.get_basis_at(col_info.N2)
         Jset = get_dq_names(AAN2)
         Kset = Kset_0
-        if  not isinstance(v1, list):
+        if not isinstance(v1, list):
             Jset = Jset[Jset!= v1]
             if v1 > 0:
                 Kset = Kset_0.copy()
@@ -90,6 +123,8 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
                 solution.update_from_basis(col_info, piv1, AAN1, AAN2, new_basis)
                 return solution, STEPCOUNT, ITERATION, pivot_problem
         else:
+            # TBD getting a new basis, in_out_pivot, error
+            # need to work on pivots
             new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
         # new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
         # if col_info.N2 - col_info.N1 == 2:
@@ -109,13 +144,22 @@ def SCLP_pivot(Kset_0, Jset_N, solution, col_info, DEPTH, STEPCOUNT, ITERATION, 
         # else:
         #     new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
         #new_basis, lp_pivots, err = solve_ratesLP(AAN2, Kset, Jset, solution.bases_mm, tolerance)
-        pp21 = lp_pivots.in_.copy()
+
+        # Pivots in and out of the new basis from the previous basis
+        #
+        # pp1[12] indexes that were part of the pivot during this step from left
+        # pp2[12] indexes that were part of the pivot during this step from right
+        # If the lengths are 1, then they are neighbours
+        #
+        # Note: values are in new_basis and AAN2(old) (class LP_form)
+        # simplex dictionary with first row, first column, also names of variables
+        pp21 = lp_pivots.in_.copy() - new_basis.prim_zvars
         pp22 = lp_pivots.out_.copy()
         #instead of solution.pivots.get_out_difference
         # if out_diff != solution.pivots.get_out_difference(col_info.N1, col_info.N2):
         #     print('aaa')
         lp_pivots.extr(out_diff, set(in_diff))
-        pp11 = lp_pivots.in_
+        pp11 = lp_pivots.in_ - new_basis.prim_zvars
         pp12 = lp_pivots.out_
         if len(pp11) == 0 and len(pp12) == 0:
             pivot_problem['result'] = 1
