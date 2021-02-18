@@ -153,13 +153,14 @@ def SCLP_pivot(Kset_0:np.ndarray, Jset_N:np.ndarray, solution:generic_SCLP_solut
         #
         # Note: values are in new_basis and AAN2(old) (class LP_form)
         # simplex dictionary with first row, first column, also names of variables
-        pp21 = lp_pivots.in_.copy() - new_basis.prim_zvars
+
+        pp21 = lp_pivots.in_.copy() # pp21 = lp_pivots.in_.copy() - new_basis.prim_zvars
         pp22 = lp_pivots.out_.copy()
         #instead of solution.pivots.get_out_difference
         # if out_diff != solution.pivots.get_out_difference(col_info.N1, col_info.N2):
         #     print('aaa')
         lp_pivots.extr(out_diff, set(in_diff))
-        pp11 = lp_pivots.in_ - new_basis.prim_zvars
+        pp11 = lp_pivots.in_ # pp11 = lp_pivots.in_ - new_basis.prim_zvars
         pp12 = lp_pivots.out_
         if len(pp11) == 0 and len(pp12) == 0:
             pivot_problem['result'] = 1
