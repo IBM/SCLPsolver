@@ -43,7 +43,7 @@ def generate_workload_placement_data(T, I, J, R, P, a, mu, x0, r, rprime):
         Time horizon
     I : int
         Number of servers
-    J : int
+    J : intֹ
         Number of job classes
     R : np.ndarray
         1D array of `int` (size I) containing the total RAM on servers
@@ -93,7 +93,7 @@ def generate_workload_placement_data(T, I, J, R, P, a, mu, x0, r, rprime):
     F = np.array([[jj == j for jj in range(J)] * (I-1) for j in range(J)], dtype="int")
 
     # alpha initial values of tasks in buffers
-    alpha = x0.copy()
+    alpha = x0.sum(axis=0)
 
     # gamma unit cost per unit time of CPU of server and class
     gamma = np.zeros(K)
