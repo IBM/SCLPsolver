@@ -7,7 +7,9 @@ proj = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__))
 sys.path.append(proj)
 
 from SCLPsolver.SCLP import SCLP, SCLP_settings
-from SCLPsolver.doe.data_generators.WorkloadPlacement import generate_workload_placement_data
+from SCLPsolver.doe.data_generators.WorkloadPlacement import *
+
+from SCLPsolver.doe.doe import gen_uncertain_param
 
 
 def test_generate_workload_placement_data():
@@ -108,3 +110,24 @@ def test_workload_placement_to_sclp(seed):
     t, x, q, u, p, pivots, obj, err, NN, tau, maxT = solution.get_final_solution(True)
 
     assert t is not None
+
+
+@pytest.mark.parametrize("mu1, mu2", [(60.0, 25.0), (50.0, 22.0)])
+def test_generate_one_server_two_classes(mu1, mu2):
+    TT = 10
+    tau1, tau2 = 1.0/mu1, 1.0/mu2
+
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_one_server_two_classes(40.0, 20.0, 1.0, 1.0, 1.0, tau1, tau2, 100.0, 100.0, True)
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau, maxT = solution.get_final_solution(True)
+
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_one_server_two_classes(40.0, 20.0, 1.0, 1.0, 1.0, tau1, tau2, 100.0, 100.0, True)
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t1, x1, q1, u1, p1, pivots1, SCLP_obj1, err1, NN1, tau1, maxT1 = solution.get_final_solution(True)
+
+    assert np.array_equal(t, t1)
+    assert abs(SCLP_obj - SCLP_obj1) < 0.001
+
+    tot_buf_cost = np.inner(cost, alpha * TT) + np.inner(cost,  a) * TT**2/2
+    real_obj = tot_buf_cost - SCLP_obj
+    print(f'real_obj={real_obj} SCLP_obj={SCLP_obj} t={t} u={u}')

@@ -115,3 +115,26 @@ def generate_workload_placement_data(T, I, J, R, P, a, mu, x0, r, rprime):
 
     return G,H,F,gamma,c,d,alpha,a,b,T,total_buffer_cost,cost
 
+
+
+def generate_one_server_two_classes(a1,a2,b1,c1,c2,tau1,tau2,alpha1,alpha2,flag=True):
+    a = np.array((a1,a2))
+    b = np.array((b1,))
+    d = np.empty(0)
+    alpha = np.array((alpha1, alpha2))
+    mu1, mu2 = 1.0/tau1, 1.0/tau2
+    if flag:
+        gamma = np.zeros(2)
+        G = np.diag((1.0, 1.0))
+        H = np.array(((tau1, tau2),))
+    else:
+        gamma = np.zeros(2)
+        G = np.diag((mu1, mu2))
+        H = np.array(((1.0, 1.0),))
+    F = np.empty((2, 0))
+    cost = np.array((c1, c2))
+    total_buffer_cost = (np.inner(cost, alpha), np.inner(cost, a))
+    c = np.matmul(cost, G)
+    T = None
+
+    return G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost
