@@ -116,13 +116,15 @@ def generate_workload_placement_data(T, I, J, R, P, a, mu, x0, r, rprime):
     return G,H,F,gamma,c,d,alpha,a,b,T,total_buffer_cost,cost
 
 
-
-def generate_one_server_two_classes(a1,a2,b1,c1,c2,tau1,tau2,alpha1,alpha2,flag=True):
+def generate_workload_placement_data_new(a1,a2,b1,c1,c2,tau1,tau2,alpha1,alpha2,flag=True):
     a = np.array((a1,a2))
     b = np.array((b1,))
     d = np.empty(0)
     alpha = np.array((alpha1, alpha2))
-    mu1, mu2 = 1.0/tau1, 1.0/tau2
+    if callable(tau1):
+        mu1, mu2 = lambda t: 1/tau1(t), lambda t: 1/tau2(t)
+    else:
+        mu1, mu2 = 1.0 / tau1, 1.0 / tau2
     if flag:
         gamma = np.zeros(2)
         G = np.diag((1.0, 1.0))

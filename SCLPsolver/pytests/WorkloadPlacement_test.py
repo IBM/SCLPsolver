@@ -117,11 +117,11 @@ def test_generate_one_server_two_classes(mu1, mu2):
     TT = 10
     tau1, tau2 = 1.0/mu1, 1.0/mu2
 
-    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_one_server_two_classes(40.0, 20.0, 1.0, 1.0, 1.0, tau1, tau2, 100.0, 100.0, True)
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, tau1, tau2, 100.0, 100.0, False)
     solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
     t, x, q, u, p, pivots, SCLP_obj, err, NN, tau, maxT = solution.get_final_solution(True)
 
-    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_one_server_two_classes(40.0, 20.0, 1.0, 1.0, 1.0, tau1, tau2, 100.0, 100.0, True)
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, tau1, tau2, 100.0, 100.0, True)
     solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
     t1, x1, q1, u1, p1, pivots1, SCLP_obj1, err1, NN1, tau1, maxT1 = solution.get_final_solution(True)
 
@@ -130,4 +130,36 @@ def test_generate_one_server_two_classes(mu1, mu2):
 
     tot_buf_cost = np.inner(cost, alpha * TT) + np.inner(cost,  a) * TT**2/2
     real_obj = tot_buf_cost - SCLP_obj
-    print(f'real_obj={real_obj} SCLP_obj={SCLP_obj} t={t} u={u}')
+    print(f'real_obj={real_obj} SCLP_obj={SCLP_obj} t={t} u={u} u1={u1}')
+
+
+@pytest.mark.parametrize("epsilon, mu1, mu2", [(0.1, 60.0, 25.0)])
+def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
+
+    np.random.seed(seed)
+
+    TT = 10
+    tau1, tau2 = 1.0/mu1, 1.0/mu2
+
+    tau = np.array((tau1, tau2))
+    mu = np.array((mu1, mu2))
+
+    tau1_bar, tau2_bar = tau_bar = tau * (1 + 0.5*epsilon)
+    mu1_bar, mu2_bar = mu_bar = mu / (1 - 0.5*epsilon)
+
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, tau1_bar, tau2_bar, 100.0, 100.0, True)
+
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
+
+    u1 = np.multiply(u[0:2,:].transpose(), tau_bar).transpose()
+
+    eta = np.multiply(u[0:2,:].transpose(), tau * (1-0.5*epsilon)).transpose()
+    print(f'from tau_bar: t={t} tau={tau} tau_bar={tau_bar} u={u} u1={u1} eta={eta}')
+
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, 1/mu1_bar, 1/mu2_bar, 100.0, 100.0, True)
+
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
+
+    print(f'from mu_bar: t={t} mu={mu} mu_bar={mu_bar} u={u}')
