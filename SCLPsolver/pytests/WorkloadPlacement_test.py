@@ -11,6 +11,8 @@ from SCLPsolver.doe.data_generators.WorkloadPlacement import *
 
 from SCLPsolver.doe.doe import gen_uncertain_param
 
+from functools import partial
+
 
 def test_generate_workload_placement_data():
     """ Test generating data from Workload Placement model for SCLP
@@ -133,6 +135,27 @@ def test_generate_one_server_two_classes(mu1, mu2):
     print(f'real_obj={real_obj} SCLP_obj={SCLP_obj} t={t} u={u} u1={u1}')
 
 
+def integrate(f, low, up, intervals=100):
+    tt = np.linspace(low, up, intervals+1)
+    y = [f(t) for t in tt]
+    F = (0.5*(y[0]+y[-1]) + np.sum(y[1:-1]))*(up-low)/intervals
+    return F
+integrate_m = np.vectorize(integrate)
+
+
+def test_integrate():
+    assert abs(integrate(lambda x: 1, 0, 4) - 4) < 0.001
+    assert abs(integrate(lambda x: x, 2, 6) - 16) < 0.001
+    assert abs(integrate(lambda x: np.sin(x), 0, np.pi/2.0) - 1) < 0.001
+
+
+def test_integrate_m():
+    H1 = np.array((lambda x: 1,))
+    assert abs(integrate_m(H1, 0, 4) - 4) < 0.001
+    H2 = np.array(((lambda x: 1, lambda x: x),(lambda x: np.pi*np.sin(np.pi*x), lambda x: np.pi*np.sin(2*np.pi*x))))
+    assert np.allclose(integrate_m(H2, 0, 1, intervals=1000), np.array(((1.0, 0.5), (2.0, 0.0))))
+
+
 @pytest.mark.parametrize("epsilon, mu1, mu2", [(0.1, 60.0, 25.0)])
 def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
 
@@ -156,6 +179,8 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
 
     eta = np.multiply(u[0:2,:].transpose(), tau * (1-0.5*epsilon)).transpose()
     print(f'from tau_bar: t={t} tau={tau} tau_bar={tau_bar} u={u} u1={u1} eta={eta}')
+
+
 
     G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, 1/mu1_bar, 1/mu2_bar, 100.0, 100.0, True)
 
