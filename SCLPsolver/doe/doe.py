@@ -23,7 +23,6 @@ from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
 from SCLP import SCLP, SCLP_settings
 
-
 def sin_uncertainty(h: float, height: float, width: float, amps: list, freqs: list, shifts: list, t: float):
     """Generate a sine-based continuous uncertainty function of time, centered around h
     and evaluate it at t.
@@ -55,6 +54,39 @@ def sin_uncertainty(h: float, height: float, width: float, amps: list, freqs: li
     if k != len(shifts):
         raise RuntimeError("amps and shifts parameters must have same length")
     return h * (1 + 0.5*height) + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+
+
+def sin_uncertainty_low(h: float, height: float, width: float, amps: list, freqs: list, shifts: list, t: float):
+    """Generate a sine-based continuous uncertainty function of time, centered around h
+    and evaluate it at t.
+
+    Parameters
+    ----------
+    h: float
+        The true point.
+    height:
+        The total height of the uncertainty.
+    width: float
+        The width of the time interval.
+    amps: list
+        The amplitudes of each sine function.
+    freqs: list
+        The frequencies of each sine function.
+    shifts: list
+        The amount to shift the sin functions.
+    t: float
+        The time to
+    Returns
+    -------
+    float
+        The random function evaluated at t
+    """
+    k = len(amps)
+    if k != len(freqs):
+        raise RuntimeError("amps and freqs parameters must have same length")
+    if k != len(shifts):
+        raise RuntimeError("amps and shifts parameters must have same length")
+    return h + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
 
 
 def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, budget: tuple = None,
@@ -99,7 +131,11 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, 
     """
     if seed:
         np.random.seed(seed)
-    I, J = shape = params.shape
+    shape = params.shape
+    if len(shape) > 1:
+        J = shape[1]
+    else:
+        J = shape[0]
     left, right = domain
     width = right - left
     result = np.empty(shape, dtype=object)

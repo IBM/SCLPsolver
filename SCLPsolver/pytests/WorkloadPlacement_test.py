@@ -9,9 +9,7 @@ sys.path.append(proj)
 from SCLPsolver.SCLP import SCLP, SCLP_settings
 from SCLPsolver.doe.data_generators.WorkloadPlacement import *
 
-from SCLPsolver.doe.doe import gen_uncertain_param
-
-from functools import partial
+from SCLPsolver.doe.doe import *
 
 
 def test_generate_workload_placement_data():
@@ -155,8 +153,7 @@ def test_integrate_m():
     H2 = np.array(((lambda x: 1, lambda x: x),(lambda x: np.pi*np.sin(np.pi*x), lambda x: np.pi*np.sin(2*np.pi*x))))
     assert np.allclose(integrate_m(H2, 0, 1, intervals=1000), np.array(((1.0, 0.5), (2.0, 0.0))))
 
-
-@pytest.mark.parametrize("epsilon, mu1, mu2", [(0.1, 60.0, 25.0)])
+@pytest.mark.parametrize("epsilon, mu1, mu2", [(0.2, 60.0, 25.0)])
 def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
 
     np.random.seed(seed)
@@ -167,24 +164,120 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
     tau = np.array((tau1, tau2))
     mu = np.array((mu1, mu2))
 
+    a1, a2 = 40.0, 20.0           # arrival rates tasks per unit time
+    b1 = 1.0                      # cpu limit
+    c1, c2 = 1.0, 1.0             # cost per unit time of buffers
+    alpha1, alpha2 = 100.0, 100.0 # initial buffer quantities
+
+    # 1. Model 1, eta is control var
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(a1,
+                                                                                                         a2,
+                                                                                                         b1,
+                                                                                                         c1,
+                                                                                                         c2,
+                                                                                                         tau1,
+                                                                                                         tau2,
+                                                                                                         alpha1,
+                                                                                                         alpha2,
+                                                                                                         False)
+
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
+    tot_buf_cost = np.inner(cost, alpha * TT) + np.inner(cost, a) * TT ** 2 / 2
+    real_obj1 = tot_buf_cost - SCLP_obj
+
+    eta = u[0:2,:]
+    u = np.multiply(eta.transpose(), mu).transpose()
+
+    print(f'Step 1 (Model 1): t={t} tau={tau} mu={mu} u={u} eta={eta}')
+
+    # 2. Model 2, u is control var
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(a1,
+                                                                                                         a2,
+                                                                                                         b1,
+                                                                                                         c1,
+                                                                                                         c2,
+                                                                                                         tau1,
+                                                                                                         tau2,
+                                                                                                         alpha1,
+                                                                                                         alpha2,
+                                                                                                         True)
+
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
+    tot_buf_cost = np.inner(cost, alpha * TT) + np.inner(cost, a) * TT ** 2 / 2
+    real_obj2 = tot_buf_cost - SCLP_obj
+
+    u = u[0:2,:]
+    eta = np.multiply(u.transpose(), tau).transpose()
+
+    print(f'Step 2 (Model 2): t={t} tau={tau} mu={mu} u={u} eta={eta}')
+
+    # 3. make sure objectives of 1,2 are the same
+    print(f'Step 3: objectives obj1={real_obj1}  obj2={real_obj2}')
+
+    assert abs(real_obj1 - real_obj2) < 0.001
+
+    # 4. Define tau_j(t)
+    tau_t = gen_uncertain_param(tau, (0, TT), (-epsilon / 2.0, epsilon / 2.0), uncertain_func=sin_uncertainty_low)
+
+    t_print = tuple(range(0, TT+1, 2))
+
+    print(f'Step 4: uncertain tau({t_print})={np.array([(tau_t[0](t), tau_t[1](t)) for t in t_print]).transpose()}')
+
+    # 5. Robust model with Box uncertainty Model 2 with tau_bar
     tau1_bar, tau2_bar = tau_bar = tau * (1 + 0.5*epsilon)
     mu1_bar, mu2_bar = mu_bar = mu / (1 - 0.5*epsilon)
 
-    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, tau1_bar, tau2_bar, 100.0, 100.0, True)
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(a1,
+                                                                                                         a2,
+                                                                                                         b1,
+                                                                                                         c1,
+                                                                                                         c2,
+                                                                                                         tau1_bar,
+                                                                                                         tau2_bar,
+                                                                                                         alpha1,
+                                                                                                         alpha2,
+                                                                                                         True)
 
     solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
     t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
+    tot_buf_cost = np.inner(cost, alpha * TT) + np.inner(cost, a) * TT ** 2 / 2
+    real_obj5 = tot_buf_cost - SCLP_obj
 
-    u1 = np.multiply(u[0:2,:].transpose(), tau_bar).transpose()
+    u = u[0:2,:]
+    eta = np.multiply(u.transpose(), tau).transpose()
 
-    eta = np.multiply(u[0:2,:].transpose(), tau * (1-0.5*epsilon)).transpose()
-    print(f'from tau_bar: t={t} tau={tau} tau_bar={tau_bar} u={u} u1={u1} eta={eta}')
+    print(f'Step 5 (Model 2 with tau_bar): t={t} tau_bar={tau_bar} mu={mu} u={u} eta={eta}')
+    print(f'     Objectives: model 2: {real_obj2} model 5: {real_obj5}')
+    assert real_obj5 >= real_obj2
+
+    t_index = lambda x: min([i-1 for i, ti in enumerate(t) if ti > x] + [len(t)-2])
+    eta_t = np.array([
+        lambda x: u[0, t_index(x)] * tau[0] * (1 - 0.5 * epsilon),
+        lambda x: u[1, t_index(x)] * tau[1] * (1 - 0.5 * epsilon)
+    ])
+
+    print(f'eta={eta}')
+    print(f'eta_t({[t for t in range(0,TT+1,2)]}) = {np.array([(eta_t[0](t), eta_t[1](t)) for t in t_print]).transpose()}')
+
+    u_t = np.array([
+        lambda x: eta_t[0](x) / tau_t[0](x),
+        lambda x: eta_t[1](x) / tau_t[1](x)
+    ])
+    print(f'u_t({[t for t in range(0,TT+1,2)]}) = {np.array([(u_t[0](t), u_t[1](t)) for t in t_print]).transpose()}')
+
+    x_R_t = np.array([
+        lambda x: alpha1 + a1 * x - integrate(u_t[0], 0, x),
+        lambda x: alpha2 + a2 * x - integrate(u_t[1], 0, x)
+    ])
+    print(f'x_R_t({[t for t in range(0,TT+1,2)]}) = {np.array([(x_R_t[0](t), x_R_t[1](t)) for t in t_print]).transpose()}')
+
+    obj_5 = np.sum([
+        integrate(x_R_t[0], 0, TT),
+        integrate(x_R_t[1], 0, TT)
+    ])
+    print(f'Step 5: real_obj1={real_obj1} real_obj5={real_obj5} obj_5={obj_5}')
 
 
 
-    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(40.0, 20.0, 1.0, 1.0, 1.0, 1/mu1_bar, 1/mu2_bar, 100.0, 100.0, True)
-
-    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
-    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
-
-    print(f'from mu_bar: t={t} mu={mu} mu_bar={mu_bar} u={u}')

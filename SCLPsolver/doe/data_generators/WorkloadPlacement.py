@@ -116,21 +116,61 @@ def generate_workload_placement_data(T, I, J, R, P, a, mu, x0, r, rprime):
     return G,H,F,gamma,c,d,alpha,a,b,T,total_buffer_cost,cost
 
 
-def generate_workload_placement_data_new(a1,a2,b1,c1,c2,tau1,tau2,alpha1,alpha2,flag=True):
+def generate_workload_placement_data_new(a1, a2, b1, c1, c2, tau1, tau2, alpha1, alpha2, normalize=True):
+    """
+    Generate workload data, new format.
+    This function currently works for a single server with two queues for servicing two job classes.
+
+    Parameters
+    ----------
+    a1 : float
+        task arrival rate of class 1 in tasks per unit time
+    a2 : float
+        task arrival rate of class 2 in tasks per unit time
+    b1 : float
+        cpu limit of server 1
+    c1 : float
+        cost per unit time of buffer 1
+    c2 : float
+        cost per unit time of buffer 2
+    tau1 : float
+        time to complete task of class 1
+    tau2 : float
+        time to complete task of class 2
+    alpha1 : float
+        initial quantity of buffer 1
+    alpha2 : float
+        initial quantity of buffer 2
+    normalize : bool
+        Generate a model where the decision variable is normalized to a fraction of the total server capacity (True),
+        or is the actual flow rate (False).
+        Default True.
+    Returns
+    -------
+    A tuple with the following values:
+        G
+        H
+        F
+        gamma
+        c
+        d
+        alpha
+        a
+        b
+        T
+        total_buffer_cost
+        cost
+    """
     a = np.array((a1,a2))
     b = np.array((b1,))
     d = np.empty(0)
     alpha = np.array((alpha1, alpha2))
-    if callable(tau1):
-        mu1, mu2 = lambda t: 1/tau1(t), lambda t: 1/tau2(t)
-    else:
-        mu1, mu2 = 1.0 / tau1, 1.0 / tau2
-    if flag:
-        gamma = np.zeros(2)
+    gamma = np.zeros(2)
+    mu1, mu2 = 1.0 / tau1, 1.0 / tau2
+    if normalize:
         G = np.diag((1.0, 1.0))
         H = np.array(((tau1, tau2),))
     else:
-        gamma = np.zeros(2)
         G = np.diag((mu1, mu2))
         H = np.array(((1.0, 1.0),))
     F = np.empty((2, 0))
