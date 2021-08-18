@@ -227,7 +227,6 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
 
     # 5. Robust model with Box uncertainty Model 2 with tau_bar
     tau1_bar, tau2_bar = tau_bar = tau * (1 + 0.5*epsilon)
-    mu1_bar, mu2_bar = mu_bar = mu / (1 - 0.5*epsilon)
 
     G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(a1,
                                                                                                          a2,
@@ -277,7 +276,60 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
         integrate(x_R_t[0], 0, TT),
         integrate(x_R_t[1], 0, TT)
     ])
-    print(f'Step 5: real_obj1={real_obj1} real_obj5={real_obj5} obj_5={obj_5}')
+    print(f'Step 5: real_obj2={real_obj2} real_obj5={real_obj5} obj_5={obj_5}')
 
+    # 6. Robust model with Box uncertainty Model 1 with mu_bar
+    mu1_bar, mu2_bar = mu_bar = mu / (1 - 0.5*epsilon)
+    tau1_bar_bar, tau2_bar_bar = 1 / mu1_bar, 1 / mu2_bar
+
+    G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost = generate_workload_placement_data_new(a1,
+                                                                                                         a2,
+                                                                                                         b1,
+                                                                                                         c1,
+                                                                                                         c2,
+                                                                                                         tau1_bar_bar,
+                                                                                                         tau2_bar_bar,
+                                                                                                         alpha1,
+                                                                                                         alpha2,
+                                                                                                         False)
+
+    solution, STEPCOUNT, param_line, res = SCLP(G, H, F, a, b, c, d, alpha, gamma, TT)
+    t, x, q, u, p, pivots, SCLP_obj, err, NN, tau_intervals, maxT = solution.get_final_solution(True)
+    tot_buf_cost = np.inner(cost, alpha * TT) + np.inner(cost, a) * TT ** 2 / 2
+    real_obj6 = tot_buf_cost - SCLP_obj
+
+    eta = u[0:2, :]
+    u = np.multiply(eta.transpose(), mu).transpose()
+
+    print(f'Step 6 (Model 1 with mu_bar): t={t} mu_bar={mu_bar} mu={mu} u={u} eta={eta}')
+    print(f'     Objectives: model 1: {real_obj1} model 6: {real_obj6}')
+    assert real_obj6 <= real_obj1
+
+    t_index = lambda x: min([i-1 for i, ti in enumerate(t) if ti > x] + [len(t)-2])
+    eta_t = np.array([
+        lambda x: u[0, t_index(x)] * tau[0] * (1 - 0.5 * epsilon),
+        lambda x: u[1, t_index(x)] * tau[1] * (1 - 0.5 * epsilon)
+    ])
+
+    print(f'eta={eta}')
+    print(f'eta_t({[t for t in range(0,TT+1,2)]}) = {np.array([(eta_t[0](t), eta_t[1](t)) for t in t_print]).transpose()}')
+
+    u_t = np.array([
+        lambda x: eta_t[0](x) / tau_t[0](x),
+        lambda x: eta_t[1](x) / tau_t[1](x)
+    ])
+    print(f'u_t({[t for t in range(0,TT+1,2)]}) = {np.array([(u_t[0](t), u_t[1](t)) for t in t_print]).transpose()}')
+
+    x_R_t = np.array([
+        lambda x: alpha1 + a1 * x - integrate(u_t[0], 0, x),
+        lambda x: alpha2 + a2 * x - integrate(u_t[1], 0, x)
+    ])
+    print(f'x_R_t({[t for t in range(0,TT+1,2)]}) = {np.array([(x_R_t[0](t), x_R_t[1](t)) for t in t_print]).transpose()}')
+
+    obj_6 = np.sum([
+        integrate(x_R_t[0], 0, TT),
+        integrate(x_R_t[1], 0, TT)
+    ])
+    print(f'Step 6: real_obj1={real_obj1} real_obj6={real_obj6} obj_6={obj_6}')
 
 
