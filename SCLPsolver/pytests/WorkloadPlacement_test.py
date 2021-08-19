@@ -153,8 +153,8 @@ def test_integrate_m():
     H2 = np.array(((lambda x: 1, lambda x: x),(lambda x: np.pi*np.sin(np.pi*x), lambda x: np.pi*np.sin(2*np.pi*x))))
     assert np.allclose(integrate_m(H2, 0, 1, intervals=1000), np.array(((1.0, 0.5), (2.0, 0.0))))
 
-@pytest.mark.parametrize("epsilon, mu1, mu2", [(0.2, 60.0, 25.0)])
-def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
+@pytest.mark.parametrize("epsilon, mu1, mu2, seed", [(0.2, 60.0, 25.0, 12)])
+def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed):
 
     np.random.seed(seed)
 
@@ -188,6 +188,8 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
 
     eta = u[0:2,:]
     u = np.multiply(eta.transpose(), mu).transpose()
+    u_m1 = u.copy()
+    t_m1 = t.copy()
 
     print(f'Step 1 (Model 1): t={t} tau={tau} mu={mu} u={u} eta={eta}')
 
@@ -331,5 +333,35 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed=1):
         integrate(x_R_t[1], 0, TT)
     ])
     print(f'Step 6: real_obj1={real_obj1} real_obj6={real_obj6} obj_6={obj_6}')
+
+    # 7. Model 1 again
+
+    t = t_m1.copy()
+    u = u_m1.copy()
+    t_index = lambda x: min([i-1 for i, ti in enumerate(t) if ti > x] + [len(t)-2])
+
+    print('Step 7: u={u}')
+
+    # 8. Compute optimistic model
+
+    u_t = np.array([
+        lambda x: u[0, t_index(x)] * tau[0] / tau_t[0](x),
+        lambda x: u[1, t_index(x)] * tau[1] / tau_t[1](x)
+    ])
+
+    print(f'u_t({[t for t in range(0,TT+1,2)]}) = {np.array([(u_t[0](t), u_t[1](t)) for t in t_print]).transpose()}')
+
+    x_R_t = np.array([
+        lambda x: max(alpha1 + a1 * x - integrate(u_t[0], 0, x), 0),
+        lambda x: max(alpha2 + a2 * x - integrate(u_t[1], 0, x), 0)
+    ])
+    print(f'x_R_t({[t for t in range(0,TT+1,2)]}) = {np.array([(x_R_t[0](t), x_R_t[1](t)) for t in t_print]).transpose()}')
+
+    obj_8 = np.sum([
+        integrate(x_R_t[0], 0, TT),
+        integrate(x_R_t[1], 0, TT)
+    ])
+
+    print(f'Step 8: real_obj1={real_obj1} real_obj6={real_obj6} obj_5={obj_5} obj_6={obj_6} obj_8={obj_8}')
 
 
