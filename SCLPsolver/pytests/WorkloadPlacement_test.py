@@ -153,7 +153,8 @@ def test_integrate_m():
     H2 = np.array(((lambda x: 1, lambda x: x),(lambda x: np.pi*np.sin(np.pi*x), lambda x: np.pi*np.sin(2*np.pi*x))))
     assert np.allclose(integrate_m(H2, 0, 1, intervals=1000), np.array(((1.0, 0.5), (2.0, 0.0))))
 
-@pytest.mark.parametrize("epsilon, mu1, mu2, seed", [(0.2, 60.0, 25.0, 12)])
+
+@pytest.mark.parametrize("epsilon, mu1, mu2, seed", [(0.2, 60.0, 25.0, 1+3*i) for i in range(10)])
 def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed):
 
     np.random.seed(seed)
@@ -223,9 +224,13 @@ def test_generate_one_server_two_classes_perturbed(epsilon, mu1, mu2, seed):
     # 4. Define tau_j(t)
     tau_t = gen_uncertain_param(tau, (0, TT), (-epsilon / 2.0, epsilon / 2.0), uncertain_func=sin_uncertainty_low)
 
-    t_print = tuple(range(0, TT+1, 2))
+    t_print = tuple(range(0, TT+1))
 
     print(f'Step 4: uncertain tau({t_print})={np.array([(tau_t[0](t), tau_t[1](t)) for t in t_print]).transpose()}')
+
+    import matplotlib.pyplot as plt
+    plt.plot(t_print, [(tau_t[0](t), tau_t[1](t)) for t in t_print])
+    plt.show()
 
     # 5. Robust model with Box uncertainty Model 2 with tau_bar
     tau1_bar, tau2_bar = tau_bar = tau * (1 + 0.5*epsilon)
