@@ -180,3 +180,64 @@ def generate_workload_placement_data_new(a1, a2, b1, c1, c2, tau1, tau2, alpha1,
     T = None
 
     return G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost
+
+def generate_workload_placement_data_paper(a, b, c, tau, alpha, normalize=True):
+    """
+    Generate workload data, new format.
+    This function currently works for a single server with two queues for servicing two job classes.
+
+    Parameters
+    ----------
+    a : list of float
+        task arrival rates by job buffer (vector of size K)
+    b : list of float
+        cpu limits per server (vector of size I)
+    c : list of float
+        holding cost per unit time per buffer (vector of size K)
+    tau : list of float
+        mean time to complete tasks by job class (vector of size J)
+    alpha : alpha float
+        initial quantity of buffers (vector of size K)
+    normalize : bool
+        Generate a model where the decision variable is normalized to a fraction of the total server capacity (True),
+        or is the actual flow rate (False).
+        Default True.
+    Returns
+    -------
+    A tuple with the following values:
+        G
+        H
+        F
+        gamma
+        c
+        d
+        alpha
+        a
+        b
+        T
+        total_buffer_cost
+        cost
+    """
+    I = len(b)
+    K = len(tau)
+    J = len(a)
+    a = np.array(a)
+    b = np.array(b)
+    d = np.empty(0)
+    alpha = np.array(alpha)
+    gamma = np.zeros(K)
+    tau = np.array(tau)
+    mu = np.divide(np.ones(shape=tau.shape), tau)
+    if normalize:
+        G = np.eye(K) # no flows between buffers yet
+        H = np.array([[j % I == i and tau[j] or 0 for j in range(J)] for i in range(I)])
+    else:
+        G = np.diag(mu)
+        H = np.array([[j % I == i and 1 for j in range(J)] for i in range(I)])
+    F = np.empty((K, 0))
+    cost = np.array(c)
+    total_buffer_cost = (np.inner(cost, alpha), np.inner(cost, a))
+    c = np.matmul(cost, G)
+    T = None
+
+    return G, H, F, gamma, c, d, alpha, a, b, T, total_buffer_cost, cost
