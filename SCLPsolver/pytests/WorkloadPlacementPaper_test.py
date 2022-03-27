@@ -1,6 +1,7 @@
 import pandas as pd
 import pytest
-from scipy.integrate import quad, trapezoid
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
 
 import os, sys
 import numpy as np
@@ -23,7 +24,7 @@ seeds = [1234]
 #     return F
 
 def integrate(f, low, up):
-    val, est_err = quad(f,low,up, limit=20)
+    val, est_err = quad(f,low,up)
     return val
 
 integrate_m = np.vectorize(integrate)
@@ -43,7 +44,7 @@ def test_integrate_m():
 
 np.random.seed(1234)
 
-TT = 50
+TT = 100
 I = 10      # num servers
 K = 100     # num buffers
 J = K       # num flows
@@ -54,7 +55,7 @@ cc = np.random.uniform(1.0, 2.0, K)  # cost per unit time of buffers
 alpha0 = np.random.uniform(10.0, 20.0, K)  # initial buffer quantities
 mu = np.random.uniform(5.0, 25.0, K) # mean job service rates
 
-ntests = 2
+ntests = 100
 
 epsilons = [(0.02), (0.04), (0.1), (0.2), (0.4)]
 
@@ -118,13 +119,12 @@ def test_perturbed(epsilon):
     tau_t_1 = gen_uncertain_param(tau, (0, TT), (-epsilon / 2.0, epsilon / 2.0), uncertain_func=sin_uncertainty_low)
     tau_t_2 = gen_uncertain_param(tau, (0, TT), (-epsilon / 2.0, epsilon / 2.0), uncertain_func=sin_uncertainty_low)
 
-    import matplotlib.pyplot as plt
     plt.rcParams['font.family'] = 'serif'
     plt.rcParams['font.serif'] = ['Times','Palatino', 'New Century Schoolbook', 'Bookman', 'Computer Modern Roman']
     plt.rcParams['text.usetex'] = True
     plt.rcParams['xtick.labelsize'] = 8
     plt.rcParams['ytick.labelsize'] = 8
-    plt.rcParams['axes.labelsize'] = 8
+    plt.rcParams['axes.labelsize'] = 12
 
     plt.clf()
     plt.plot(t_print, [(tau_t_1[0](t), tau_t_2[0](t)) for t in t_print])
@@ -182,16 +182,18 @@ def test_perturbed(epsilon):
         # print(f'eta={eta}')
         # print(f'eta_t({[t for t in range(0,TT+1,2)]}) = {np.array([list(eta_t[j](t) for j in range(J)) for t in t_print]).transpose()}')
 
-        def make_u_t(k):
-            return lambda t: eta_t[k](t) / tau_t[k](t)
+        u_mat = np.array([[eta_t[k]((t+5.0)/10.0)/tau_t[k]((t+5.0)/10.0) for t in range(TT*10)] for k in range(K)])
+        # def make_u_t(k):
+        #      return lambda t: eta_t[k](t) / tau_t[k](t)
 
-        u_t = np.array([make_u_t(k) for k in range(K)])
+        #u_t = np.array([make_u_t[k] for k in range(K)])
 
         # print(f'u={u}')
         # print(f'u_t({[t for t in range(0,TT+1,2)]}) = {np.array([list(u_t[j](t) for j in range(J)) for t in t_print]).transpose()}')
 
         def make_x_R_t(k):
-            return lambda t: alpha[k] + a[k] * t - integrate(u_t[k], 0, t)
+            # return lambda t: alpha[k] + a[k] * t - integrate(u_t[k], 0, t)
+            return lambda t: alpha[k] + a[k] * t - np.sum(u_mat[k,0:round(t*10)])/10.0
 
         x_R_t = np.array([make_x_R_t(k) for k in range(K)])
         # print(f'x_R_t({[t for t in range(0,TT+1,2)]}) = {np.array([list(x_R_t[j](t) for j in range(J)) for t in t_print]).transpose()}')
@@ -233,16 +235,20 @@ def test_perturbed(epsilon):
         #
         # print(f'x_R_t({[t for t in range(0,TT+1,2)]}) = {np.array([(x_R_t[0](t), x_R_t[1](t)) for t in t_print]).transpose()}')
 
-        def make_u2_t(k):
-            return lambda x: eta[k, t_index(x)] / tau_t[k](x)
-
-        u2_t = np.array([make_u2_t(k) for k in range(K)])
+        u_mat2 = np.array([[eta[k,t_index((t+5.0)/10.0)]/tau_t[k]((t+5.0)/10.0) for t in range(TT*10)] for k in range(K)])
+        # def make_u2_t(k):
+        #     return lambda x: eta[k, t_index(x)] / tau_t[k](x)
+        #
+        # u2_t = np.array([make_u2_t(k) for k in range(K)])
 
         # print(f'u={u}')
         # print(f'u_t({[t for t in range(0,TT+1,2)]}) = {np.array([list(u_t[j](t) for j in range(J)) for t in t_print]).transpose()}')
 
+
         def make_x_R2_t(k):
-            return lambda x: alpha[k] + a[k] * x - integrate(u2_t[k], 0, x)
+            # return lambda x: alpha[k] + a[k] * x - integrate(u2_t[k], 0, x)
+            return lambda t: alpha[k] + a[k] * t - np.sum(u_mat2[k,0:round(t*10)])/10.0
+
         x_R2_t = np.array([make_x_R2_t(k) for k in range(K)])
 
         obj_6 = np.sum([integrate(x_R2_t[k], 0, TT) * cost[k] for k in range(K)])
@@ -279,6 +285,8 @@ def test_perturbed(epsilon):
     plt.savefig(f'rel_diff_hist_{epsilon}.pdf')
 
     plt.clf()
-    plt.scatter(means_df['epsilon'], means_df['MeanRelDiff'])
-    plt.xlabel('Percent improvement of objective value')
+    plt.scatter(means_df['epsilon']/2, means_df['MeanRelDiff'])
+    plt.xlabel('Uncertainty $\epsilon$')
+    plt.ylabel('Percent improvement')
+    plt.xticks(np.arange(0.0, 0.21, 0.02))
     plt.savefig(f'mean_rel_diff.pdf')
