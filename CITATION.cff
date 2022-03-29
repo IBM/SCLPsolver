@@ -5,8 +5,12 @@ authors:
     affiliation: "IBM Research, Haifa"
     family-names: Shindin
     given-names: Evgeny
+  -
+    affiliation: "IBM Research, Haifa"
+    family-names: Ship
+    given-names: Harold
 cff-version: "1.1.0"
-date-released: 2021-07-21
+date-released: 2022-03-28
 license: "Apache-2.0"
 message: "If you use this software, please cite it using these metadata."
 title: "SCLP-Python"
