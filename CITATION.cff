@@ -5,10 +5,6 @@ authors:
     affiliation: "IBM Research, Haifa"
     family-names: Shindin
     given-names: Evgeny
-  -
-    affiliation: "IBM Research, Haifa"
-    family-names: Ship
-    given-names: Harold
 cff-version: "1.1.0"
 date-released: 2022-07-21
 license: "Apache-2.0"
