@@ -18,24 +18,91 @@ from .cy_lp_tools import get_sign, get_sign1, partial_pivotII
 from .pivot import signed_pivot_ij
 
 
-class LP_formulation():
+class LP_formulation:
+    """
+    LP formulation of the problem.
 
-    __slots__ = ["simplex_dict", "prim_name", "dual_name", "prim_sign", "dual_sign"]
+    Attributes
+    ----------
+    simplex_dict: simplex_dict
+        a simplex dictionary.
+    prim_name: set
+        a set of "names" of the primal variables
+    dual_name: set
+        a set of "names" of the dual variables
+    prim_sign: set
+        a set of "signs" of the primal variables
+    dual_sign: set
+        a set of "signs" of the dual variables
+    prim_zvars: set
+        a set of "names" of primal variables with zero values
+    dual_zvars: set
+        a set of "names" of dual variables with zero values
 
-    def __init__(self, simplex_dict, prim_name, dual_name, prim_sign=None, dual_sign=None):
-        self.simplex_dict, self.prim_name, self.dual_name, self.prim_sign, self.dual_sign =\
-            simplex_dict, prim_name, dual_name, prim_sign, dual_sign
+    Methods
+    -------
+    copy()
+        Makes a copy of this object.
+    compute_zvars(tolerance)
+        Computes updated contents of prim_zvars and dual_zvars.
+    """
+
+    __slots__ = ["simplex_dict", "prim_name", "dual_name", "prim_sign", "dual_sign", "prim_zvars", "dual_zvars"]
+
+    def __init__(self, simplex_dict, prim_name, dual_name, prim_sign=None, dual_sign=None, prim_zvars=set(), dual_zvars=set()):
+        self.simplex_dict, self.prim_name, self.dual_name, self.prim_sign, self.dual_sign, self.prim_zvars, self.dual_zvars= \
+            simplex_dict, prim_name, dual_name, prim_sign, dual_sign, prim_zvars, dual_zvars
 
     def __copy__(self):
+        prim_zvars = self.prim_zvars.copy() if self.prim_zvars else set()
+        dual_zvars = self.dual_zvars.copy() if self.dual_zvars else set()
         if self.prim_sign is None:
-            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy())
+            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy(),
+                                  prim_zvars=prim_zvars, dual_zvars=dual_zvars)
         else:
-            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy(), self.prim_sign.copy(), self.dual_sign.copy())
+            return LP_formulation(self.simplex_dict.copy(), self.prim_name.copy(), self.dual_name.copy(),
+                                  self.prim_sign.copy(), self.dual_sign.copy(), prim_zvars, dual_zvars)
 
     def copy(self):
+        """Makes a copy of this object.
+        """
+
         return self.__copy__()
-        
+
+    def compute_zvars(self, tolerance):
+        """Computes updated contents of prim_zvars and dual_zvars.
+
+        Parameters
+        ----------
+        tolerance: float
+            The numerical tolerance for floating point comparisons.
+        """
+        self.dual_zvars = {self.dual_name[i] for i, v in enumerate(self.simplex_dict[0, 1:]) if v < tolerance}
+        self.prim_zvars = {self.prim_name[i] for i, v in enumerate(self.simplex_dict[1:, 0]) if v < tolerance}
+
+
 def solve_ratesLP(LP_form, Kset, nJset, bases_mm, tolerance=0, build_sign=True):
+    """Solve the 'Rates LP' for the solution.
+
+    Parameters
+    ----------
+    LP_form: LP_formulation
+        Represents the LP formulation of the problem.
+    Kset: np.ndarray
+        Array of K indexes of {k: x_k > 0} where dx_k can be either positive or negative.
+    nJset: np.ndarray
+        Array of J indexes of {j: q_j > 0} where dq_j can be either positive or negative.
+    bases_mm: bases_memory_manager
+        Bases memory manager for caching bases for reuse.
+    tolerance: float
+        The numerical tolerance for floating point comparisons.
+    build_sign: bool
+        Builds the signs when True.
+    Returns
+    -------
+    LP_formulation, in_out_pivot, dict
+        LP_form (updated), pivots, error
+    """
     if build_sign:
         get_sign1(LP_form.prim_name, Kset, nJset, 1, bases_mm.ps)
         get_sign1(LP_form.dual_name, Kset, nJset, -1, bases_mm.ds)
@@ -51,6 +118,8 @@ def solve_ratesLP(LP_form, Kset, nJset, bases_mm, tolerance=0, build_sign=True):
         #LP_form, ps, ds, pivots, err = simplex_procedures(LP_form.copy(), prim_sign, dual_sign, tolerance)
     #else:
     LP_form, ps, ds, pivots, err = simplex_procedures(LP_form, bases_mm.ps, bases_mm.ds, tolerance, tmp_dict)
+    LP_form.compute_zvars(tolerance)
+
     # if part:
     #     dual_name = dual_name.copy()
     #     tmp = dual_name[j]

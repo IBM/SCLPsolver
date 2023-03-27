@@ -18,8 +18,6 @@ from .calc_objective import calc_objective
 from .calc_controls import calc_controls
 from .solution_state import solution_state
 from .lp_tools.LP_formulation import solve_LP_in_place
-from .state_tools.calc_states import calc_states
-from .matlab_utils import find
 from .parametric_line import parametric_line
 import itertools
 
@@ -141,24 +139,27 @@ class SCLP_solution(generic_SCLP_solution):
             self._state.dq = self._dq.get_matrix()
             self.loc_min_storage.update_caseI(-1, last_breakpoint, self._state.dx, self._state.dq)
             self._state.x[:, 0] += self._state.dx[:, 0] * delta_t
+            self._state.x[self._state.dx[:, 0]==0, 0] = 0
             self._state.q[:, 0] += self._state.dq[:, 0] * delta_t
 
 
     def recalculate(self, param_line, t0, new_T, new_x0, settings, tolerance, mm = None):
         if t0 >= self._final_T:
             print('!!!')
-        else:
-            self.truncate_at(t0)
         if new_T <= t0:
             print('!!!')
+        self._is_final = False
         if new_x0 is not None:
             if new_T is None:
                 new_T = param_line.T
-            K_add_set = find(np.logical_and(self._state.dx[:, 0] == 0, new_x0 > 0))
             from .SCLP_x0_solver import SCLP_x0_solver
-            return SCLP_x0_solver(self, param_line, new_x0, new_T, K_add_set, 0, 0, dict(),
+            STEPCOUNT, pivot_problem = SCLP_x0_solver(self, param_line, new_x0, new_T - t0, 0, 0, dict(),
                            settings, tolerance, settings.find_alt_line, mm)
+            is_ok = self.update_state(param_line, check_state=settings.check_final_solution,
+                                          tolerance=tolerance * 10)
+            return STEPCOUNT, pivot_problem
         else:
+            self.truncate_at(t0)
             if new_T is not None:
                 from .SCLP_solver import SCLP_solver
                 param_line  = parametric_line(np.ascontiguousarray(self._state.x[:, 0]), param_line.q_N, new_T-param_line.T, param_line.T-t0, del_T =1)
@@ -182,18 +183,22 @@ class SCLP_solution(generic_SCLP_solution):
             ax1.plot([0,last_T], [last_T,0])
             prev_T = 0
             prev_dtau = self.plot_data[0]['dtau']
-            xstarts = self.plot_data[0]['tau']
+            xstarts = [0]
+            prev_tau = self.plot_data[0]['tau']
             yticks = []
-            for dt_entry in self.plot_data[1:]:
+            for r, dt_entry in enumerate(self.plot_data[1:]):
                 y1 = last_T - prev_T
                 y2 = last_T - dt_entry['T']
                 ax1.plot([0, xstarts[-1]],[y1,y1], color='k')
-                xends = xstarts + prev_dtau * (dt_entry['T'] - prev_T)
+                xends = np.cumsum(prev_tau + prev_tau * prev_dtau * (y1-y2))
+                print(r)
                 for i in range(len(xstarts)):
+                    print(xstarts[i], y1, xends[i], y2)
                     ax1.plot([xstarts[i],xends[i]], [y1, y2], color='k')
                 prev_T = dt_entry['T']
                 xstarts = np.cumsum(dt_entry['tau'])
-                prev_dtau = np.cumsum(dt_entry['dtau'])
+                prev_dtau = dt_entry['dtau']
+                prev_tau = dt_entry['tau']
                 yticks.append(y1)
             # set the x-spine (see below for more info on `set_position`)
             ax1.spines['left'].set_position('zero')

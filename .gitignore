@@ -14,3 +14,6 @@ build
 *.so
 *.c
 *.cpp
+.DS_Store
+/SCLPsolver/SCLP_[0-9]*_param_line.dat
+/SCLPsolver/SCLP_[0-9]*_solution.dat

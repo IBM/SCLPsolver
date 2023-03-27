@@ -213,6 +213,11 @@ def get_sign(int[::1] name, int[::1] k_set, int[::1] nj_set, int sign):
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def get_sign1(int[::1] name, int[::1] k_set, int[::1] nj_set, int sign, int[::1] result_view):
+    """returns a vector of length the same as the variable-name vector, containing:
+        0 when the variable is positive
+        1 when the variable is non-restricted
+        -1 when the variable is 0
+    """
     x_max = name.shape[0]
     k_max = k_set.shape[0]
     j_max = nj_set.shape[0]

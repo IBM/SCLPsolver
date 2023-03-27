@@ -21,6 +21,15 @@ class in_out_pivot():
         self.out_ = set()
 
     def pivot(self, in_, out_):
+        """Normalizes the in_ and out_ according the active pivot.
+
+        Parameters
+        ----------
+        in_: int
+            name of incoming variable for the basis.
+        out_: int
+            name of the outgoing variable for the basis.
+        """
         if in_ in self.out_:
             self.out_.remove(in_)
         else:
@@ -31,6 +40,13 @@ class in_out_pivot():
             self.out_.add(out_)
 
     def extr(self, set_out_, set_in_):
+        """Update the internal in_ and out_ members with names of variables that changed.
+
+        :param set_out_: set
+            Set containing the names of the variables that left the basis
+        :param set_in_: set
+            Set containing the names of the variables that entered the basis
+        """
         for p in self.out_:
             if p in set_in_:
                 set_in_.remove(p)

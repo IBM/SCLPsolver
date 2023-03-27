@@ -21,9 +21,76 @@ from .data_generators.reentrant import generate_reentrant_data
 from .data_generators.write_CPLEX_dat import write_CPLEX_dat
 from .data_generators.simple_reentrant import generate_simple_reentrant_data
 from .doe_utils import path_utils
-from SCLP import SCLP, SCLP_settings
+from ..SCLP import SCLP, SCLP_settings
 
-def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed: int = 1) -> np.ndarray:
+def sin_uncertainty(h: float, height: float, width: float, amps: list, freqs: list, shifts: list, t: float):
+    """Generate a sine-based continuous uncertainty function of time, centered around h
+    and evaluate it at t.
+
+    Parameters
+    ----------
+    h: float
+        The true point.
+    height:
+        The total height of the uncertainty.
+    width: float
+        The width of the time interval.
+    amps: list
+        The amplitudes of each sine function.
+    freqs: list
+        The frequencies of each sine function.
+    shifts: list
+        The amount to shift the sin functions.
+    t: float
+        The time to
+    Returns
+    -------
+    float
+        The random function evaluated at t
+    """
+    k = len(amps)
+    if k != len(freqs):
+        raise RuntimeError("amps and freqs parameters must have same length")
+    if k != len(shifts):
+        raise RuntimeError("amps and shifts parameters must have same length")
+    return h * (1 + 0.5*height) + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+
+
+def sin_uncertainty_low(h: float, height: float, width: float, amps: list, freqs: list, shifts: list, t: float):
+    """Generate a sine-based continuous uncertainty function of time, centered around h
+    and evaluate it at t.
+
+    Parameters
+    ----------
+    h: float
+        The true point.
+    height:
+        The total height of the uncertainty.
+    width: float
+        The width of the time interval.
+    amps: list
+        The amplitudes of each sine function.
+    freqs: list
+        The frequencies of each sine function.
+    shifts: list
+        The amount to shift the sin functions.
+    t: float
+        The time to
+    Returns
+    -------
+    float
+        The random function evaluated at t
+    """
+    k = len(amps)
+    if k != len(freqs):
+        raise RuntimeError("amps and freqs parameters must have same length")
+    if k != len(shifts):
+        raise RuntimeError("amps and shifts parameters must have same length")
+    return h + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
+
+
+def gen_uncertain_param(params: np.ndarray, domain: tuple, perturbation: tuple, budget: tuple = None,
+                        uncertain_func = sin_uncertainty, k: int = 4, seed: int = None) -> np.ndarray:
     """Generate functions for producing the "uncertain" values of parameters.
 
     This function takes a vector/matrix of parameters and
@@ -38,13 +105,29 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
     Parameters
     ----------
     params : np.ndarray of numbers
-        The parameters which will be randomized over time.
+        The parameters which will be randomized over time. For each 0 value, the 0 function will be generated.
     domain : tuple of int
         The time domain of the functions
+<<<<<<< HEAD
     codomain : tuple of int
         The output range of the functions
     seed: int
         Random number generator seed. Defaults to 1.
+=======
+    perturbation : tuple of numbers
+        The relative amount to perturb the output range of the functions.
+        For example, (0, 0.1) will perturb the parameters 10% on the upside.
+    budget : tuple of numbers
+        The maximum total uncertainty per row of parameters at any time t.
+        Default is None.
+    uncertain_func: function
+        Function that generates uncertainty functions of time.
+        Must accept parameters h, height, width, amps, freqs, shifts, t.
+        Default is sin_uncertainty(h, height, width, amps, freqs, shifts, t).
+    k: int
+        The number of sine wave perturbations. Default is 4.
+    seed: int
+        Random number generator seed or None (default).
 
     Returns
     -------
@@ -52,19 +135,56 @@ def gen_uncertain_param(params: np.ndarray, domain: tuple, codomain: tuple, seed
         Functions from the domain to the range,
         randomly perturbed from the input.
     """
-    np.random.seed(seed)
+
+    if seed:
+        np.random.seed(seed)
     shape = params.shape
+    if len(shape) > 1:
+        J = shape[1]
+    else:
+        J = shape[0]
     left, right = domain
     width = right - left
-    low, high = codomain
-    height = high - low
     result = np.empty(shape, dtype=object)
-    k = 10
-    def uncertain(amps, freqs, shifts, t):
-        return low + height/2 + 0.5 * sum([amps[i] * sin(freqs[i] * pi * t / width + shifts[i]) for i in range(k)])
-    for index, value in np.ndenumerate(params):
-       result[index] = partial(uncertain, [height / k]*k, range(1,k+1), np.random.uniform(0, 2*pi, k))
-    return result
+    perturb_low, perturb_high = perturbation
+    height = perturb_high - perturb_low
+
+    for index, h in np.ndenumerate(params):
+        if h == 0:
+            result[index] = lambda t: 0
+        else:
+            result[index] = partial(uncertain_func, h, height, width, [h*height/k] * k, range(1,k+1), np.random.uniform(0, 2*pi, k))
+
+    if budget is None:
+        return result
+    else:
+        param_rows = params.sum(axis=1)
+        b_result = np.empty(shape, dtype=object)
+
+        def excess(i, t):
+            r = []
+            for j in range(J):
+                f = result[i, j]
+                r.append((j, (f(t) - params[i, j])))
+            return sorted(r, key=lambda x: x[1]/params[i, j], reverse=True)
+
+        def budget_row(i, j, t):
+            excess_row = partial(excess, i)
+            total = sum([x for i, x in excess_row(t)])
+            for jj, diff in excess_row(t):
+                f = result[i, jj]
+                if total > 0 and diff > budget[i] * params[i, j]:
+                    amt = (diff - budget[i] * params[i, j])
+                    amt = min(total, amt)
+                    total -= amt
+                else:
+                    amt = 0
+                if j == jj:
+                    return f(t) - amt
+        for i, p in np.ndenumerate(params):
+            b_result[i] = partial(budget_row, i[0], i[1])
+
+        return b_result
 
 
 def run_experiment_series(exp_type, exp_num, K, I, T, settings, starting_seed = 1000, solver_settings = None,
@@ -173,3 +293,5 @@ def run_experiment_perturbation(exp_type, exp_num, K, I, T, settings, rel_pertur
 
     return num_feasible, true_objective, perturbed_obj_vals
 
+def run_experiment_randomized():
+    return 0
