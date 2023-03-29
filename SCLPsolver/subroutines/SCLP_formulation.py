@@ -113,13 +113,13 @@ class SCLP_formulation():
         return LP_formulation(DD, pn, dn), ps, ds
 
     def get_primalBoundaryLP(self):
-        DD1 = np.vstack((-np.hstack((0, self.d)), np.hstack((np.vstack(self.alpha), self.F))))
+        DD1 = np.ascontiguousarray(np.vstack((-np.hstack((0, self.d)), np.hstack((np.vstack(self.alpha), self.F)))))
         pn1 = np.arange(1, self.K + 1, dtype = np.int32)
         dn1 = np.arange(self.K + 1, self.K + self.L + 1, dtype = np.int32)
         return LP_formulation(DD1, pn1, dn1)
 
     def get_dualBoundaryLP(self):
-        DD1 = np.vstack((np.hstack((0, np.hstack(self.b))), np.hstack((np.vstack(-self.gamma), -self.H.transpose()))))
+        DD1 = np.ascontiguousarray(np.vstack((np.hstack((0, np.hstack(self.b))), np.hstack((np.vstack(-self.gamma), -self.H.transpose())))))
         pn1 = np.arange(1, self.J + 1, dtype = np.int32)
         dn1 = np.arange(self.J + 1, self.J + self.I + 1, dtype = np.int32)
         return LP_formulation(DD1, pn1, dn1)

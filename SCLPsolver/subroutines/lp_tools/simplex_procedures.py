@@ -182,7 +182,7 @@ def unsigned_simplex(LP_form, tolerance = 0):
             mat = np.divide(-LP_form.simplex_dict[i + 1, 1:], LP_form.simplex_dict[0, 1:],
                             out=np.zeros_like(LP_form.simplex_dict[i + 1, 1:]), where=LP_form.simplex_dict[0, 1:]!=0)
             j = np.argmax(mat)
-            if mat[j] <= 0:
+            if mat[j] < 0:
                 LP_form.simplex_dict[0, 0] = -np.inf
                 err['result'] = 1
                 err['message'] = '***  problem is primal infeasible'
@@ -195,7 +195,7 @@ def unsigned_simplex(LP_form, tolerance = 0):
             mat = np.divide(LP_form.simplex_dict[1:, j + 1], LP_form.simplex_dict[1:, 0],
                             out=np.zeros_like(LP_form.simplex_dict[1:, j + 1]), where=LP_form.simplex_dict[1:, 0] != 0)
             i = np.argmax(mat)
-            if mat[i] <= 0:
+            if mat[i] < 0:
                 LP_form.simplex_dict[0, 0] = np.inf
                 err['result'] = 2
                 err['message'] = '***  problem is dual infeasible'
