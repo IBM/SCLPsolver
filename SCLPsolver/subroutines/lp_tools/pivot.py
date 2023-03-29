@@ -17,13 +17,23 @@ from .cy_lp_tools import cy_pivot, copy_pivot
 #from scipy.linalg.blas import dger
 
 def pivot_ij(dct, i, j, tmp_dict = None, counter: list = None):
+    if counter is not None:
+        counter[0] += 1
     if tmp_dict is None:
-        in_, out_ = cy_pivot(dct.simplex_dict, dct.prim_name, dct.dual_name, i, j)
+        out_ = dct.prim_name[i]
+        in_ = dct.dual_name[j]
+        dct.prim_name[i] = in_
+        dct.dual_name[j] = out_
+        cy_pivot(dct.simplex_dict, i, j)
         return dct, in_, out_
     else:
         tmp_dict.prim_name = dct.prim_name.copy()
         tmp_dict.dual_name = dct.dual_name.copy()
-        in_, out_ = copy_pivot(dct.simplex_dict, tmp_dict.prim_name, tmp_dict.dual_name, i, j, tmp_dict.simplex_dict)
+        out_ = tmp_dict.prim_name[i]
+        in_ = tmp_dict.dual_name[j]
+        tmp_dict.prim_name[i] = in_
+        tmp_dict.dual_name[j] = out_
+        copy_pivot(dct.simplex_dict, i, j, tmp_dict.simplex_dict)
         return tmp_dict, in_, out_
 
 def pivot_mn(dct, m, n, tmp_dict = None):
