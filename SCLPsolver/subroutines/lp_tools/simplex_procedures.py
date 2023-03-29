@@ -14,6 +14,7 @@
 
 import numpy as np
 from .matlab_utils import find
+from .LP_formulation import LP_formulation
 from .pivot import pivot_ij, signed_pivot_ij
 from .in_out_pivot import in_out_pivot
 from .cy_lp_tools import prim_ratio_test, dual_ratio_test, find_i
@@ -169,84 +170,80 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
         dct = LP_formulation(np.ascontiguousarray(dct2.simplex_dict[:-1,:-1]), dct2.prim_name, dct2.dual_name)
     return dct, ps, ds, pivots, err
 
-def unsigned_simplex(LP_form, tolerance = 0):
+def unsigned_simplex(lp: LP_formulation, tolerance: float = 1E-12, counter: list = None) -> (LP_formulation, dict):
 
     err = dict()
     err['result'] = 0
-    ptest = find(LP_form.simplex_dict[1:, 0] < 0)
-    dtest = find(LP_form.simplex_dict[0, 1:] < 0)
+    ptest = find(lp.simplex_dict[1:, 0] < -tolerance)
+    dtest = find(lp.simplex_dict[0, 1:] < -tolerance)
 
     if ptest.size > 0 and dtest.size == 0:
         while ptest.size > 0:
             i = ptest[0]
-            mat = np.divide(-LP_form.simplex_dict[i + 1, 1:], LP_form.simplex_dict[0, 1:],
-                            out=np.zeros_like(LP_form.simplex_dict[i + 1, 1:]), where=LP_form.simplex_dict[0, 1:]!=0)
-            j = np.argmax(mat)
-            if mat[j] < 0:
-                LP_form.simplex_dict[0, 0] = -np.inf
+            j = prim_ratio_test(lp.simplex_dict, i, tolerance=tolerance) - 1
+            if j < -1:
+                lp.simplex_dict[0, 0] = -np.inf
                 err['result'] = 1
                 err['message'] = '***  problem is primal infeasible'
-                return LP_form, err
-            LP_form, in_, out_ = pivot_ij(LP_form, i, j)
-            ptest = find(LP_form.simplex_dict[1:, 0] < 0)
+                return lp, err
+            lp, in_, out_ = pivot_ij(lp, i, int(j), counter=counter)
+            ptest = find(lp.simplex_dict[1:, 0] < -tolerance)
     elif ptest.size == 0 and dtest.size > 0:
         while dtest.size > 0:
             j = dtest[0]
-            mat = np.divide(LP_form.simplex_dict[1:, j + 1], LP_form.simplex_dict[1:, 0],
-                            out=np.zeros_like(LP_form.simplex_dict[1:, j + 1]), where=LP_form.simplex_dict[1:, 0] != 0)
-            i = np.argmax(mat)
-            if mat[i] < 0:
-                LP_form.simplex_dict[0, 0] = np.inf
+            i = dual_ratio_test(lp.simplex_dict, j, tolerance=tolerance) - 1
+            if i < -1:
+                lp.simplex_dict[0, 0] = np.inf
                 err['result'] = 2
                 err['message'] = '***  problem is dual infeasible'
-                return LP_form, err
-            LP_form, in_, out_ = pivot_ij(LP_form, i, j)
-            dtest = find(LP_form.simplex_dict[0, 1:] < 0)
+                return lp, err
+            lp, in_, out_ = pivot_ij(lp, int(i), j, counter=counter)
+            dtest = find(lp.simplex_dict[0, 1:] < -tolerance)
     elif ptest.size > 0 and dtest.size > 0:
-        mm = LP_form.simplex_dict.shape[0]
-        nn = LP_form.simplex_dict.shape[1]
+        mm, nn = lp.simplex_dict.shape
         B = np.zeros((mm+1,nn+1), order='C')
-        B[:-1,-1:] = np.random.rand(mm, 1) + 1
-        B[-1:,:-1] = np.random.rand(1, nn) + 1
-        B[:-1, :-1] = LP_form.simplex_dict
-        from .LP_formulation import LP_formulation
-        LP_form2 = LP_formulation(B,LP_form.prim_name,LP_form.dual_name)
-        mat = np.divide(-LP_form.simplex_dict[0, 1:], B[-1, 1:-1], out=np.zeros_like(LP_form.simplex_dict[0, 1:]), where=B[-1, 1:-1] > 0)
+        B[:-1, -1:] = np.random.rand(mm, 1) + 1
+        B[-1:, :-1] = np.random.rand(1, nn) + 1
+        B[:-1, :-1] = lp.simplex_dict
+        lp_form2 = LP_formulation(B, lp.prim_name, lp.dual_name)
+        mat = np.divide(-lp.simplex_dict[0, 1:], B[-1, 1:-1], out=np.zeros_like(lp.simplex_dict[0, 1:]), where=B[-1, 1:-1] > 0)
         j = np.argmax(mat)
         mu1 = mat[j]
-        mat = np.divide(-LP_form.simplex_dict[1:, 0], B[1:-1, -1], out=np.zeros_like(LP_form.simplex_dict[1:, 0]), where=B[1:-1, -1] > 0)
+        mat = np.divide(-lp.simplex_dict[1:, 0], B[1:-1, -1], out=np.zeros_like(lp.simplex_dict[1:, 0]), where=B[1:-1, -1] > 0)
         i = np.argmax(mat)
         mu2 = mat[i]
         mu = max(mu1,mu2)
         while mu > 0:
             if mu1 > mu2:
-                div = LP_form2.simplex_dict[1:-1, 0] + mu * LP_form2.simplex_dict[1:-1, -1]
-                mat = np.divide(LP_form2.simplex_dict[1:-1, j+1], div, out=np.zeros_like(LP_form2.simplex_dict[1:-1, j+1]), where= div !=0)
+                div = lp_form2.simplex_dict[1:-1, 0] + mu * lp_form2.simplex_dict[1:-1, -1]
+                mat = np.divide(lp_form2.simplex_dict[1:-1, j+1], div, out=np.zeros_like(lp_form2.simplex_dict[1:-1, j+1]), where= div !=0)
                 i = np.argmax(mat)
                 if mat[i] <= 0:
                     B[0, 0] = np.inf
                     err['result'] = 2
                     err['message'] = '***  problem is dual infeasible'
-                    LP_form.simplex_dict = np.ascontiguousarray(LP_form2.simplex_dict[:-1,:-1])
-                    return LP_form, err
+                    lp.simplex_dict = np.ascontiguousarray(lp_form2.simplex_dict[:-1, :-1])
+                    return lp, err
             else:
-                div = LP_form2.simplex_dict[0, 1:-1] + mu * LP_form2.simplex_dict[-1, 1:-1]
-                mat = np.divide(-LP_form2.simplex_dict[i + 1, 1:-1], div, out=np.zeros_like(LP_form2.simplex_dict[i + 1, 1:-1]), where= div !=0)
+                div = lp_form2.simplex_dict[0, 1:-1] + mu * lp_form2.simplex_dict[-1, 1:-1]
+                mat = np.divide(-lp_form2.simplex_dict[i + 1, 1:-1], div, out=np.zeros_like(lp_form2.simplex_dict[i + 1, 1:-1]), where= div !=0)
                 j = np.argmax(mat)
                 if mat[j] <= 0:
                     B[0, 0] = - np.inf
                     err['result'] = 1
                     err['message'] = '***  problem is primal infeasible'
-                    LP_form.simplex_dict = np.ascontiguousarray(LP_form2.simplex_dict[:-1, :-1])
-                    return LP_form, err
-            LP_form2, in_, out_  = pivot_ij(LP_form2, i, j)
-            mat = np.divide(-LP_form2.simplex_dict[0, 1:-1], LP_form2.simplex_dict[-1, 1:-1],
-                            out=np.zeros_like(LP_form2.simplex_dict[0, 1:-1]), where=LP_form2.simplex_dict[-1, 1:-1] > 0)
+                    lp.simplex_dict = np.ascontiguousarray(lp_form2.simplex_dict[:-1, :-1])
+                    return lp, err
+            lp_form2, in_, out_ = pivot_ij(lp_form2, int(i), int(j), counter=counter)
+            mat = np.divide(-lp_form2.simplex_dict[0, 1:-1], lp_form2.simplex_dict[-1, 1:-1],
+                            out=np.zeros_like(lp_form2.simplex_dict[0, 1:-1]), where=lp_form2.simplex_dict[-1, 1:-1] > 0)
             j = np.argmax(mat)
             mu1 = mat[j]
-            mat = np.divide(-LP_form2.simplex_dict[1:-1, 0], LP_form2.simplex_dict[1:-1, -1], out=np.zeros_like(B[1:-1, 0]), where=LP_form2.simplex_dict[1:-1, -1] > 0)
+            mat = np.divide(-lp_form2.simplex_dict[1:-1, 0], lp_form2.simplex_dict[1:-1, -1], out=np.zeros_like(B[1:-1, 0]), where=lp_form2.simplex_dict[1:-1, -1] > 0)
             i = np.argmax(mat)
             mu2 = mat[i]
             mu = max(mu1, mu2)
-        LP_form.simplex_dict = np.ascontiguousarray(LP_form2.simplex_dict[:-1, :-1])
-    return LP_form, err
+        lp.simplex_dict = np.ascontiguousarray(lp_form2.simplex_dict[:-1, :-1])
+        lp.prim_name = lp_form2.prim_name
+        lp.dual_name = lp_form2.dual_name
+    return lp, err

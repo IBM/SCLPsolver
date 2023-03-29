@@ -16,7 +16,7 @@ from .matlab_utils import find
 from .cy_lp_tools import cy_pivot, copy_pivot
 #from scipy.linalg.blas import dger
 
-def pivot_ij(dct, i, j, tmp_dict = None):
+def pivot_ij(dct, i, j, tmp_dict = None, counter: list = None):
     if tmp_dict is None:
         in_, out_ = cy_pivot(dct.simplex_dict, dct.prim_name, dct.dual_name, i, j)
         return dct, in_, out_

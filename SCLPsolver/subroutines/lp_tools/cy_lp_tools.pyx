@@ -118,12 +118,7 @@ def partial_ratio_test(double[:, ::1] dct, int[::1] dn, int[::1] ps, int v_in):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def cy_pivot(double[:, ::1] dct, int[::1] pn, int[::1] dn, int i, int j):
-    cdef int out_, in_
-    out_ = pn[i]
-    in_ = dn[j]
-    pn[i] = in_
-    dn[j] = out_
+def cy_pivot(double[:, ::1] dct, int i, int j):
     i += 1
     j += 1
     cdef double p
@@ -149,16 +144,11 @@ def cy_pivot(double[:, ::1] dct, int[::1] pn, int[::1] dn, int i, int j):
         for x in range(x_max):
             dct[x, j] /= -p
         dct[i, j] = 1. / p
-    return in_, out_
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def copy_pivot(double[:, ::1] dct, int[::1] pn, int[::1] dn, int i, int j, double[:, ::1] res):
-    cdef int out_, in_
-    out_ = pn[i]
-    in_ = dn[j]
-    pn[i] = in_
-    dn[j] = out_
+def copy_pivot(double[:, ::1] dct, int i, int j, double[:, ::1] res):
     x_max = dct.shape[0]
     y_max = dct.shape[1]
     cdef Py_ssize_t x, y
@@ -185,7 +175,7 @@ def copy_pivot(double[:, ::1] dct, int[::1] pn, int[::1] dn, int i, int j, doubl
         for x in range(x_max):
             res[x, j] = dct[x, j] / -p
         res[i, j] = 1. / p
-    return in_, out_
+
 
 import numpy as np
 @cython.boundscheck(False)
@@ -213,11 +203,6 @@ def get_sign(int[::1] name, int[::1] k_set, int[::1] nj_set, int sign):
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def get_sign1(int[::1] name, int[::1] k_set, int[::1] nj_set, int sign, int[::1] result_view):
-    """returns a vector of length the same as the variable-name vector, containing:
-        0 when the variable is positive
-        1 when the variable is non-restricted
-        -1 when the variable is 0
-    """
     x_max = name.shape[0]
     k_max = k_set.shape[0]
     j_max = nj_set.shape[0]
@@ -239,13 +224,32 @@ def get_sign1(int[::1] name, int[::1] k_set, int[::1] nj_set, int sign, int[::1]
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def prim_ratio_test(double[:, ::1] dct, int i, int[::1] ds):
+def signed_prim_ratio_test(double[:, ::1] dct, int i, int[::1] ds, double tolerance = 0):
     cdef int j, ind = -1
     cdef double val, amax = 0
     x_max = ds.shape[0] +1
     i+=1
     for j in range(1, x_max):
-        if ds[j-1]!= 1 and dct[i, j] < 0:
+        if ds[j-1]!= 1 and dct[i, j] < -tolerance:
+            if dct[0, j] == 0:
+                return j
+            else:
+                val = -dct[i, j]/dct[0, j]
+                if val > amax:
+                    amax = val
+                    ind = j
+    return ind
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def prim_ratio_test(double[:, ::1] dct, int i, double tolerance = 0):
+    cdef int j, ind = -1
+    cdef double val, amax = 0
+    x_max = dct.shape[1]
+    i+=1
+    for j in range(1, x_max):
+        if dct[i, j] < -tolerance:
             if dct[0, j] == 0:
                 return j
             else:
@@ -257,13 +261,31 @@ def prim_ratio_test(double[:, ::1] dct, int i, int[::1] ds):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def dual_ratio_test(double[:, ::1] dct, int j, int[::1] ps):
+def signed_dual_ratio_test(double[:, ::1] dct, int j, int[::1] ps, double tolerance = 0):
     cdef int i, ind = -1
     cdef double val, amax = 0
     x_max = ps.shape[0] +1
     j+=1
     for i in range(1, x_max):
-        if ps[i-1]!= 1 and dct[i, j] > 0:
+        if ps[i-1]!= 1 and dct[i, j] > tolerance:
+            if dct[i, 0] == 0:
+                return i
+            else:
+                val = dct[i, j]/dct[i, 0]
+                if val > amax:
+                    amax = val
+                    ind = i
+    return ind
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def dual_ratio_test(double[:, ::1] dct, int j, double tolerance = 0):
+    cdef int i, ind = -1
+    cdef double val, amax = 0
+    x_max = dct.shape[0]
+    j+=1
+    for i in range(1, x_max):
+        if dct[i, j] > tolerance:
             if dct[i, 0] == 0:
                 return i
             else:
