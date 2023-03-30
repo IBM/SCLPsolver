@@ -17,7 +17,7 @@ from .matlab_utils import find
 from .LP_formulation import LP_formulation
 from .pivot import pivot_ij, signed_pivot_ij
 from .in_out_pivot import in_out_pivot
-from .cy_lp_tools import prim_ratio_test, dual_ratio_test, find_i
+from .cy_lp_tools import prim_ratio_test, dual_ratio_test, find_i, signed_prim_ratio_test, signed_dual_ratio_test
 
 def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
 
@@ -101,7 +101,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
     if ptest.size > 0 and dtest.size == 0:
         while ptest.size > 0:
             i = ptest[0]
-            j = prim_ratio_test(dct.simplex_dict, i)-1
+            j = signed_prim_ratio_test(dct.simplex_dict, i, ds, tolerance) - 1
             if j < -1:
                 dct.simplex_dict[0, 0] = -np.inf
                 err['result'] = 1
@@ -114,7 +114,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
     elif ptest.size == 0 and dtest.size > 0:
         while dtest.size > 0:
             j = dtest[0]
-            i = dual_ratio_test(dct.simplex_dict, j, ps)-1
+            i = signed_dual_ratio_test(dct.simplex_dict, j, ps)-1
             if i < -1:
                 dct.simplex_dict[0, 0] = np.inf
                 err['result'] = 2
