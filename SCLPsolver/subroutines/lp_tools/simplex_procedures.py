@@ -101,7 +101,7 @@ def simplex_procedures(dct, ps, ds, tolerance = 0, res_dct = None):
     if ptest.size > 0 and dtest.size == 0:
         while ptest.size > 0:
             i = ptest[0]
-            j = prim_ratio_test(dct.simplex_dict, i, ds)-1
+            j = prim_ratio_test(dct.simplex_dict, i)-1
             if j < -1:
                 dct.simplex_dict[0, 0] = -np.inf
                 err['result'] = 1
